@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ============================================================
+       ACTUALIZAR: Nombre de agencia, número WhatsApp, URL del sitio
+       ============================================================ -->
+  <title>Habita Chile | Subsidio DS120 — Tu Primera Vivienda Sin Ahorro Previo</title>
+  <meta name="description" content="Accede a tu primera vivienda con el Subsidio Leasing Habitacional DS120 del MINVU. Sin ahorro previo. El Estado te ayuda. Postula gratis hoy.">
+
+  <!-- Open Graph (actualiza URL e imagen) -->
+  <meta property="og:title" content="Tu Primera Vivienda con el Subsidio DS120">
+  <meta property="og:description" content="Arrienda hoy, compra mañana. El Estado te da hasta 250 UF. Sin ahorro previo. Postula gratis.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tudominio.cl">
+
+  <!-- ============================================================
+       PÍXELES DE SEGUIMIENTO — descomenta y agrega tus IDs
+       ============================================================ -->
+  <!-- META PIXEL
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', 'TU_META_PIXEL_ID');
+    fbq('track', 'PageView');
+  </script>
+  -->
+
+  <!-- GOOGLE ANALYTICS
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  -->
+
+  <!-- TIKTOK PIXEL
+  <script>
+    !function (w, d, t) {
+      w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];
+      ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"];
+      ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};
+      for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);
+      ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e};
+      ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{};ttq._i[e]=[];ttq._i[e]._u=i;ttq._t=ttq._t||{};ttq._t[e]=+new Date;ttq._o=ttq._o||{};ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript";o.async=!0;o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+      ttq.load('TU_TIKTOK_PIXEL_ID');
+      ttq.page();
+    }(window, document, 'ttq');
+  </script>
+  -->
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- AOS Animate On Scroll -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+
+  <style>
+    /* ─── Variables ──────────────────────────────────────────── */
+    :root {
+      --navy:        #1A2B45;
+      --navy-dark:   #0F1A2E;
+      --navy-light:  #243D65;
+      --gold:        #C9891E;
+      --gold-light:  #E8A82A;
+      --gold-pale:   #FEF3D0;
+      --cream:       #FEF9F0;
+      --light:       #F7F9FC;
+      --white:       #FFFFFF;
+      --text:        #1A1F2E;
+      --text-mid:    #475569;
+      --text-soft:   #94A3B8;
+      --green:       #16A34A;
+      --green-light: #D1FAE5;
+      --border:      rgba(0,0,0,0.08);
+      --shadow-sm:   0 2px 8px rgba(0,0,0,0.06);
+      --shadow-md:   0 8px 28px rgba(0,0,0,0.10);
+      --shadow-lg:   0 20px 60px rgba(0,0,0,0.14);
+      --radius:      16px;
+      --radius-sm:   10px;
+      --radius-lg:   28px;
+      --transition:  all 0.32s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ─── Reset ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── Typography ─────────────────────────────────────────── */
+    .serif { font-family: 'Playfair Display', serif; }
+    h1,h2,h3 { font-family: 'Playfair Display', serif; line-height: 1.2; }
+
+    /* ─── Navbar ─────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 20px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: var(--transition);
+    }
+    nav.scrolled {
+      background: rgba(15,26,46,0.96);
+      backdrop-filter: blur(16px);
+      padding: 14px 40px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--gold-light); }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      background: var(--gold);
+      color: var(--white) !important;
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-weight: 600 !important;
+      transition: var(--transition) !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(201,137,30,0.4); }
+
+    /* ─── Hero ───────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      background: var(--navy-dark);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .hero-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .hero-blob-1 {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(201,137,30,0.18) 0%, transparent 70%);
+      top: -150px; right: -150px;
+      animation: blobFloat1 10s ease-in-out infinite;
+    }
+    .hero-blob-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(26,43,69,0.8) 0%, transparent 70%);
+      bottom: -100px; left: 5%;
+      animation: blobFloat2 13s ease-in-out infinite;
+    }
+    .hero-blob-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(201,137,30,0.12) 0%, transparent 70%);
+      top: 40%; left: 40%;
+      animation: blobFloat3 9s ease-in-out infinite;
+    }
+    .hero-grid-overlay {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 1200px; margin: 0 auto;
+      padding: 140px 40px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(201,137,30,0.15);
+      border: 1px solid rgba(201,137,30,0.3);
+      color: var(--gold-light);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero-title {
+      font-size: clamp(2.8rem, 5vw, 4.4rem);
+      color: var(--white);
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.1;
+    }
+    .hero-title .gold { color: var(--gold-light); }
+    .hero-subtitle {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.72);
+      margin-bottom: 36px;
+      line-height: 1.7;
+      max-width: 480px;
+    }
+    .hero-cta-group { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 40px; }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--white);
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(201,137,30,0.45);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: rgba(255,255,255,0.85);
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.4);
+    }
+    .hero-trust {
+      display: flex; flex-wrap: wrap; gap: 20px;
+    }
+    .hero-trust-item {
+      display: flex; align-items: center; gap: 8px;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.85rem;
+    }
+    .hero-trust-item .dot {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+
+    /* Hero card */
+    .hero-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+      animation: cardFloat 6s ease-in-out infinite;
+    }
+    .hero-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light), transparent);
+    }
+    .hero-card-tag {
+      display: inline-block;
+      background: rgba(201,137,30,0.2);
+      color: var(--gold-light);
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--white);
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+    .hero-card-amount {
+      background: rgba(201,137,30,0.12);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .hero-card-amount-label { color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-bottom: 4px; }
+    .hero-card-amount-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold-light);
+    }
+    .hero-card-amount-sub { color: rgba(255,255,255,0.5); font-size: 0.78rem; margin-top: 2px; }
+    .hero-card-features { display: flex; flex-direction: column; gap: 10px; }
+    .hero-card-feature {
+      display: flex; align-items: center; gap: 10px;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.88rem;
+    }
+    .hero-card-feature .check {
+      width: 20px; height: 20px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.65rem;
+      color: white;
+    }
+    /* House SVG illustration */
+    .house-svg-wrap {
+      position: absolute; bottom: -10px; right: 20px;
+      opacity: 0.06;
+    }
+
+    /* ─── Stats ──────────────────────────────────────────────── */
+    #stats {
+      background: var(--navy);
+      padding: 60px 40px;
+    }
+    .stats-grid {
+      max-width: 1000px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 20px;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      display: flex; align-items: baseline; justify-content: center; gap: 4px;
+    }
+    .stat-unit { font-size: 1.4rem; }
+    .stat-label { color: rgba(255,255,255,0.55); font-size: 0.85rem; margin-top: 6px; }
+
+    /* ─── Section Base ───────────────────────────────────────── */
+    section { padding: 100px 40px; }
+    .section-container { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      display: inline-block;
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-mid);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    /* ─── ¿Qué es? ───────────────────────────────────────────── */
+    #que-es { background: var(--cream); }
+    .que-es-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .que-es-visual {
+      background: var(--navy);
+      border-radius: var(--radius-lg);
+      padding: 48px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .que-es-visual::before {
+      content: '';
+      position: absolute; top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(201,137,30,0.3) 0%, transparent 70%);
+    }
+    .que-es-icon-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: 24px;
+    }
+    .que-es-icon-card {
+      background: rgba(255,255,255,0.06);
+      border-radius: var(--radius-sm);
+      padding: 20px 16px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: var(--transition);
+    }
+    .que-es-icon-card:hover { background: rgba(255,255,255,0.10); transform: translateY(-2px); }
+    .que-es-icon { font-size: 2rem; margin-bottom: 8px; }
+    .que-es-icon-label { color: rgba(255,255,255,0.6); font-size: 0.78rem; }
+    .que-es-icon-value { color: var(--gold-light); font-weight: 700; font-size: 1.1rem; font-family: 'Playfair Display', serif; }
+    .que-es-heading { color: var(--white); font-size: 1.1rem; margin-bottom: 8px; opacity: 0.9; }
+
+    /* ─── Beneficios ─────────────────────────────────────────── */
+    #beneficios { background: var(--white); }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 60px;
+    }
+    .benefit-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .benefit-card::before {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: var(--transition);
+    }
+    .benefit-card:hover {
+      border-color: rgba(201,137,30,0.2);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+    .benefit-card:hover::before { transform: scaleX(1); }
+    .benefit-icon-wrap {
+      width: 60px; height: 60px;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+    .benefit-card h3 { font-size: 1.25rem; margin-bottom: 10px; color: var(--text); }
+    .benefit-card p { color: var(--text-mid); font-size: 0.93rem; line-height: 1.65; }
+
+    /* ─── Cómo funciona ──────────────────────────────────────── */
+    #como-funciona { background: var(--light); }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 64px;
+      position: relative;
+    }
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 36px; left: calc(12.5% + 20px); right: calc(12.5% + 20px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+      z-index: 0;
+    }
+    .step-card {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .step-number {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      border: 4px solid var(--white);
+      box-shadow: 0 0 0 2px var(--gold);
+      transition: var(--transition);
+    }
+    .step-card:hover .step-number {
+      background: var(--gold);
+      box-shadow: 0 0 0 2px var(--gold), 0 8px 20px rgba(201,137,30,0.3);
+      transform: scale(1.05);
+    }
+    .step-card h3 { font-size: 1rem; margin-bottom: 8px; color: var(--text); }
+    .step-card p { color: var(--text-mid); font-size: 0.88rem; line-height: 1.6; }
+
+    /* ─── Requisitos ─────────────────────────────────────────── */
+    #requisitos { background: var(--white); }
+    .req-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 60px;
+    }
+    .req-box {
+      border-radius: var(--radius);
+      padding: 36px;
+    }
+    .req-box-dark { background: var(--navy); }
+    .req-box-light { background: var(--cream); border: 1px solid rgba(201,137,30,0.15); }
+    .req-box-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .req-box-dark .req-box-title { color: var(--gold-light); }
+    .req-box-light .req-box-title { color: var(--navy); }
+    .req-list { display: flex; flex-direction: column; gap: 14px; }
+    .req-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 0.93rem; line-height: 1.5;
+    }
+    .req-box-dark .req-item { color: rgba(255,255,255,0.8); }
+    .req-box-light .req-item { color: var(--text-mid); }
+    .req-check {
+      width: 22px; height: 22px; flex-shrink: 0;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; margin-top: 1px;
+    }
+    .req-box-dark .req-check { background: rgba(201,137,30,0.2); color: var(--gold-light); }
+    .req-box-light .req-check { background: var(--green-light); color: var(--green); }
+
+    /* ─── Viviendas ──────────────────────────────────────────── */
+    #viviendas { background: var(--navy-dark); padding: 80px 40px; }
+    .viviendas-grid {
+      max-width: 1100px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 48px;
+    }
+    .vivienda-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: var(--transition);
+    }
+    .vivienda-card:hover { background: rgba(255,255,255,0.09); transform: translateY(-3px); }
+    .vivienda-card .zone { color: var(--gold-light); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .vivienda-card .price {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .vivienda-card .price-unit { color: rgba(255,255,255,0.5); font-size: 1rem; }
+    .vivienda-card .description { color: rgba(255,255,255,0.55); font-size: 0.85rem; margin-top: 10px; line-height: 1.5; }
+
+    /* ─── Formulario ─────────────────────────────────────────── */
+    #aplica {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    #aplica::before {
+      content: '';
+      position: absolute; top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(201,137,30,0.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .form-container {
+      max-width: 680px; margin: 0 auto;
+      position: relative; z-index: 2;
+      text-align: center;
+    }
+    .form-container .section-title { color: var(--white); }
+    .form-container .section-subtitle { color: rgba(255,255,255,0.65); margin: 0 auto 40px; }
+    .lead-form {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-lg);
+      padding: 44px;
+      text-align: left;
+      backdrop-filter: blur(8px);
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      color: var(--white);
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      transition: var(--transition);
+      -webkit-appearance: none;
+    }
+    .form-group input::placeholder { color: rgba(255,255,255,0.3); }
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: rgba(255,255,255,0.1);
+      box-shadow: 0 0 0 3px rgba(201,137,30,0.15);
+    }
+    .form-group select option { background: var(--navy-dark); color: var(--white); }
+    .form-radios { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+    .radio-label {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50px;
+      padding: 10px 18px;
+      cursor: pointer;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.88rem;
+      transition: var(--transition);
+    }
+    .radio-label input { display: none; }
+    .radio-label.selected,
+    .radio-label:has(input:checked) {
+      background: rgba(201,137,30,0.2);
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+    .form-submit {
+      width: 100%;
+      background: var(--gold);
+      color: var(--white);
+      border: none;
+      padding: 18px 32px;
+      border-radius: 50px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 8px;
+    }
+    .form-submit:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(201,137,30,0.4); }
+    .form-privacy {
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.78rem;
+      margin-top: 14px;
+    }
+    /* Success state */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+    }
+    .form-success .success-icon {
+      width: 72px; height: 72px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 20px;
+    }
+    .form-success h3 { color: var(--white); font-size: 1.6rem; margin-bottom: 10px; }
+    .form-success p { color: rgba(255,255,255,0.6); margin-bottom: 28px; }
+    .form-success .whatsapp-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #25D366;
+      color: var(--white);
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+    .form-success .whatsapp-btn:hover { background: #20bc5a; transform: translateY(-1px); }
+
+    /* ─── FAQ ────────────────────────────────────────────────── */
+    #faq { background: var(--cream); }
+    .faq-container { max-width: 760px; margin: 0 auto; }
+    .faq-list { margin-top: 48px; display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .faq-item.open { border-color: rgba(201,137,30,0.2); box-shadow: var(--shadow-sm); }
+    .faq-question {
+      padding: 20px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.97rem;
+      color: var(--text);
+      gap: 16px;
+    }
+    .faq-question .faq-icon {
+      width: 28px; height: 28px; flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--gold-pale);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      font-size: 1.1rem;
+      font-weight: 700;
+      transition: var(--transition);
+    }
+    .faq-item.open .faq-icon { background: var(--gold); color: var(--white); transform: rotate(45deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.38s ease, padding 0.25s ease;
+    }
+    .faq-item.open .faq-answer { max-height: 300px; }
+    .faq-answer-inner {
+      padding: 0 24px 20px;
+      color: var(--text-mid);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────────── */
+    footer {
+      background: var(--navy-dark);
+      padding: 60px 40px 32px;
+    }
+    .footer-grid {
+      max-width: 1100px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 60px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 14px;
+    }
+    .footer-logo span { color: var(--gold-light); }
+    .footer-desc { color: rgba(255,255,255,0.45); font-size: 0.88rem; line-height: 1.7; max-width: 280px; }
+    .footer-col-title { color: var(--white); font-weight: 600; font-size: 0.88rem; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { color: rgba(255,255,255,0.45); font-size: 0.87rem; transition: var(--transition); }
+    .footer-links a:hover { color: var(--gold-light); }
+    .footer-bottom {
+      max-width: 1100px; margin: 0 auto;
+      padding-top: 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { color: rgba(255,255,255,0.3); font-size: 0.78rem; }
+
+    /* ─── WhatsApp flotante ──────────────────────────────────── */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      z-index: 9999;
+      width: 60px; height: 60px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 8px 28px rgba(37,211,102,0.5); }
+    .whatsapp-float svg { width: 30px; height: 30px; fill: white; }
+    .whatsapp-pulse {
+      position: absolute;
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      background: rgba(37,211,102,0.4);
+      animation: pulse 2s ease-out infinite;
+    }
+
+    /* ─── Animations ─────────────────────────────────────────── */
+    @keyframes blobFloat1 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33%  { transform: translate(40px,-40px) scale(1.06); }
+      66%  { transform: translate(-25px,25px) scale(0.94); }
+    }
+    @keyframes blobFloat2 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33%  { transform: translate(-30px,20px) scale(1.04); }
+      66%  { transform: translate(25px,-30px) scale(0.96); }
+    }
+    @keyframes blobFloat3 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50%  { transform: translate(15px,-20px) scale(1.08); }
+    }
+    @keyframes cardFloat {
+      0%,100% { transform: translateY(0px); }
+      50%  { transform: translateY(-10px); }
+    }
+    @keyframes pulse {
+      0%   { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-text-anim > * {
+      opacity: 0;
+      animation: fadeInUp 0.7s forwards;
+    }
+    .hero-text-anim > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero-text-anim > *:nth-child(2) { animation-delay: 0.25s; }
+    .hero-text-anim > *:nth-child(3) { animation-delay: 0.4s; }
+    .hero-text-anim > *:nth-child(4) { animation-delay: 0.55s; }
+    .hero-text-anim > *:nth-child(5) { animation-delay: 0.7s; }
+
+    /* ─── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .stat-item:nth-child(odd) { border-right: 1px solid rgba(255,255,255,0.08); }
+      .steps-grid { grid-template-columns: repeat(2,1fr); }
+      .steps-grid::before { display: none; }
+      .viviendas-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      nav.scrolled { padding: 12px 20px; }
+      .nav-links .hide-mobile { display: none; }
+      section { padding: 70px 20px; }
+      .hero-content { grid-template-columns: 1fr; gap: 40px; padding: 120px 20px 60px; }
+      .hero-card { animation: none; }
+      .que-es-grid { grid-template-columns: 1fr; gap: 40px; }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .req-grid { grid-template-columns: 1fr; }
+      .viviendas-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .lead-form { padding: 28px 20px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      #stats { padding: 40px 20px; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 480px) {
+      .hero-title { font-size: 2.4rem; }
+      .hero-cta-group { flex-direction: column; }
+      .btn-primary, .btn-secondary { justify-content: center; }
+      nav { padding: 14px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════════════════════════ -->
+  <nav id="navbar">
+    <a href="#inicio" class="nav-logo">HABITA <span>Chile</span></a>
+    <div class="nav-links">
+      <a href="#que-es" class="hide-mobile">¿Qué es DS120?</a>
+      <a href="#como-funciona" class="hide-mobile">Cómo funciona</a>
+      <a href="#requisitos" class="hide-mobile">Requisitos</a>
+      <a href="#aplica" class="nav-cta">Postula ahora</a>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section id="inicio" style="padding:0">
+    <div id="hero">
+      <div class="hero-blob hero-blob-1"></div>
+      <div class="hero-blob hero-blob-2"></div>
+      <div class="hero-blob hero-blob-3"></div>
+      <div class="hero-grid-overlay"></div>
+
+      <div class="hero-content">
+        <!-- Texto izquierda -->
+        <div class="hero-text-anim">
+          <div class="hero-badge">
+            <span class="dot"></span>
+            Programa MINVU · Subsidio DS120
+          </div>
+          <h1 class="hero-title">
+            Arrienda hoy,<br>
+            <span class="gold">compra mañana.</span>
+          </h1>
+          <p class="hero-subtitle">
+            El Estado chileno te entrega hasta <strong style="color:var(--gold-light)">250 UF</strong> para que tengas tu primera vivienda. Sin ahorro previo. Sin crédito hipotecario complejo.
+          </p>
+          <div class="hero-cta-group">
+            <a href="#aplica" class="btn-primary">
+              Quiero postular gratis
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#que-es" class="btn-secondary">
+              ¿Cómo funciona?
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            </a>
+          </div>
+          <div class="hero-trust">
+            <div class="hero-trust-item"><span class="dot"></span> Respaldado por MINVU</div>
+            <div class="hero-trust-item"><span class="dot"></span> Sin ahorro previo</div>
+            <div class="hero-trust-item"><span class="dot"></span> Para primeros propietarios</div>
+            <div class="hero-trust-item"><span class="dot"></span> Asesoría gratuita</div>
+          </div>
+        </div>
+
+        <!-- Card derecha -->
+        <div class="hero-card" style="animation-delay:0.3s">
+          <div class="hero-card-tag">Subsidio DS120</div>
+          <div class="hero-card-title">Tu primera vivienda con apoyo del Estado</div>
+
+          <div class="hero-card-amount">
+            <div class="hero-card-amount-label">Subsidio máximo del Estado</div>
+            <div class="hero-card-amount-value">250 <span style="font-size:1.4rem">UF</span></div>
+            <div class="hero-card-amount-sub">Que NO tienes que devolver</div>
+          </div>
+
+          <div class="hero-card-features">
+            <div class="hero-card-feature">
+              <span class="check">✓</span>
+              Sin ahorro previo obligatorio
+            </div>
+            <div class="hero-card-feature">
+              <span class="check">✓</span>
+              Viviendas nuevas o usadas hasta 2.000 UF
+            </div>
+            <div class="hero-card-feature">
+              <span class="check">✓</span>
+              Arriendas mientras pagas tu casa
+            </div>
+            <div class="hero-card-feature">
+              <span class="check">✓</span>
+              Al pagar el precio prometido, es tuya
+            </div>
+          </div>
+
+          <!-- House SVG watermark -->
+          <div class="house-svg-wrap">
+            <svg width="140" height="110" viewBox="0 0 140 110" fill="white">
+              <polygon points="70,5 135,55 5,55"/>
+              <rect x="20" y="55" width="100" height="55"/>
+              <rect x="55" y="78" width="30" height="32"/>
+              <rect x="30" y="65" width="22" height="16" rx="2"/>
+              <rect x="88" y="65" width="22" height="16" rx="2"/>
+              <rect x="96" y="25" width="12" height="22"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div style="position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:2;text-align:center">
+        <a href="#stats" style="color:rgba(255,255,255,0.3);font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:8px">Descubrir más</a>
+        <div style="width:1px;height:40px;background:linear-gradient(rgba(255,255,255,0.3),transparent);margin:0 auto"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       STATS
+  ══════════════════════════════════════════════════════════ -->
+  <div id="stats">
+    <div class="stats-grid">
+      <div class="stat-item" data-aos="fade-up" data-aos-delay="0">
+        <div class="stat-value"><span class="counter" data-target="250">0</span> <span class="stat-unit">UF</span></div>
+        <div class="stat-label">Subsidio máximo del Estado</div>
+      </div>
+      <div class="stat-item" data-aos="fade-up" data-aos-delay="80">
+        <div class="stat-value"><span class="counter" data-target="2000">0</span> <span class="stat-unit">UF</span></div>
+        <div class="stat-label">Valor máximo de la vivienda</div>
+      </div>
+      <div class="stat-item" data-aos="fade-up" data-aos-delay="160">
+        <div class="stat-value"><span class="counter" data-target="0">0</span> <span class="stat-unit">UF</span></div>
+        <div class="stat-label">Ahorro previo requerido</div>
+      </div>
+      <div class="stat-item" data-aos="fade-up" data-aos-delay="240">
+        <div class="stat-value" style="font-size:2rem">&lt; 24 <span class="stat-unit" style="font-size:1rem">hrs</span></div>
+        <div class="stat-label">Tiempo para saber si calificas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ¿QUÉ ES EL DS120?
+  ══════════════════════════════════════════════════════════ -->
+  <section id="que-es">
+    <div class="section-container">
+      <div class="que-es-grid">
+        <div data-aos="fade-right">
+          <span class="section-label">El programa</span>
+          <h2 class="section-title">¿Qué es el Leasing Habitacional DS120?</h2>
+          <p class="section-subtitle" style="margin-bottom:24px">
+            Es un programa del <strong>Ministerio de Vivienda y Urbanismo (MINVU)</strong> que te permite acceder a una vivienda mediante un contrato de <em>arrendamiento con promesa de compraventa</em>.
+          </p>
+          <p style="color:var(--text-mid);font-size:0.95rem;line-height:1.75;margin-bottom:28px">
+            Arriendes la vivienda que elegiste mientras vas pagando. Cuando completes el precio prometido, la propiedad pasa a ser tuya legalmente. Ideal para personas que pagan arriendo mensualmente pero no tienen suficiente ahorro para acceder a otros subsidios.
+          </p>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:flex-start;gap:12px">
+              <div style="width:8px;height:8px;background:var(--gold);border-radius:50%;margin-top:7px;flex-shrink:0"></div>
+              <span style="color:var(--text-mid);font-size:0.95rem">Válido para viviendas <strong>nuevas y usadas</strong></span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px">
+              <div style="width:8px;height:8px;background:var(--gold);border-radius:50%;margin-top:7px;flex-shrink:0"></div>
+              <span style="color:var(--text-mid);font-size:0.95rem">Postulación individual, disponible todo el año</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px">
+              <div style="width:8px;height:8px;background:var(--gold);border-radius:50%;margin-top:7px;flex-shrink:0"></div>
+              <span style="color:var(--text-mid);font-size:0.95rem">El subsidio lo paga SERVIU directamente, no tú</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px">
+              <div style="width:8px;height:8px;background:var(--gold);border-radius:50%;margin-top:7px;flex-shrink:0"></div>
+              <span style="color:var(--text-mid);font-size:0.95rem">Regulado por Ley N°19.281 y D.S. N°120</span>
+            </div>
+          </div>
+        </div>
+
+        <div data-aos="fade-left" data-aos-delay="100">
+          <div class="que-es-visual">
+            <p class="que-es-heading">El subsidio cubre</p>
+            <div class="que-es-icon-row">
+              <div class="que-es-icon-card">
+                <div class="que-es-icon">🏠</div>
+                <div class="que-es-icon-label">Valor vivienda</div>
+                <div class="que-es-icon-value">hasta 2.000 UF</div>
+              </div>
+              <div class="que-es-icon-card">
+                <div class="que-es-icon">🏛️</div>
+                <div class="que-es-icon-label">Subsidio Estado</div>
+                <div class="que-es-icon-value">hasta 250 UF</div>
+              </div>
+              <div class="que-es-icon-card">
+                <div class="que-es-icon">💰</div>
+                <div class="que-es-icon-label">Ahorro requerido</div>
+                <div class="que-es-icon-value">0 UF mínimo</div>
+              </div>
+              <div class="que-es-icon-card">
+                <div class="que-es-icon">📋</div>
+                <div class="que-es-icon-label">Postulación</div>
+                <div class="que-es-icon-value">Todo el año</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       BENEFICIOS
+  ══════════════════════════════════════════════════════════ -->
+  <section id="beneficios">
+    <div class="section-container">
+      <div style="text-align:center;max-width:600px;margin:0 auto 0" data-aos="fade-up">
+        <span class="section-label">Por qué DS120</span>
+        <h2 class="section-title">El camino más directo a tu primera vivienda</h2>
+        <p class="section-subtitle" style="margin:0 auto">Sin las barreras de ahorro de otros programas. Con el respaldo del Estado.</p>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="benefit-icon-wrap" style="background:#FEF3D0">🚀</div>
+          <h3>Sin ahorro previo</h3>
+          <p>A diferencia de otros subsidios habitacionales, el DS120 <strong>no exige un monto mínimo de ahorro</strong>. Si puedes pagar un arriendo, puedes acceder.</p>
+        </div>
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="80">
+          <div class="benefit-icon-wrap" style="background:#D1FAE5">💵</div>
+          <h3>Subsidio real del Estado</h3>
+          <p>SERVIU te entrega hasta <strong>250 UF que no tienes que devolver</strong>. Ese dinero se descuenta directamente del precio de tu vivienda.</p>
+        </div>
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="160">
+          <div class="benefit-icon-wrap" style="background:#EDE9FE">🤝</div>
+          <h3>Acompañamiento experto</h3>
+          <p>Te guiamos en cada etapa: desde verificar si calificas, hasta gestionar toda la <strong>documentación ante SERVIU</strong> sin costo.</p>
+        </div>
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="benefit-icon-wrap" style="background:#DBEAFE">🔑</div>
+          <h3>Arriendas y compras</h3>
+          <p>Entras a vivir en tu futura vivienda desde el primer día. Cada pago mensual es un paso hacia ser <strong>propietario legal</strong>.</p>
+        </div>
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="80">
+          <div class="benefit-icon-wrap" style="background:#FEE2E2">🏗️</div>
+          <h3>Nueva o usada</h3>
+          <p>El subsidio aplica para viviendas <strong>nuevas o usadas</strong>, lo que amplía enormemente tus opciones en el mercado inmobiliario.</p>
+        </div>
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="160">
+          <div class="benefit-icon-wrap" style="background:#ECFDF5">📅</div>
+          <h3>Postula todo el año</h3>
+          <p>No hay llamados ni plazos de cierre. Puedes postular <strong>en cualquier momento</strong> del año, directamente en SERVIU.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       CÓMO FUNCIONA
+  ══════════════════════════════════════════════════════════ -->
+  <section id="como-funciona">
+    <div class="section-container">
+      <div style="text-align:center;max-width:600px;margin:0 auto" data-aos="fade-up">
+        <span class="section-label">El proceso</span>
+        <h2 class="section-title">4 pasos hacia tu casa propia</h2>
+        <p class="section-subtitle" style="margin:0 auto">Simple, transparente. Nosotros te acompañamos en cada etapa.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="step-number">1</div>
+          <h3>Verifica si calificas</h3>
+          <p>Completa el formulario. Te contactamos en menos de 24 horas para revisar tu situación.</p>
+        </div>
+        <div class="step-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="step-number">2</div>
+          <h3>Inscripción en SERVIU</h3>
+          <p>Te ayudamos a inscribirte en el Registro Único de Inscritos y abrir la cuenta de arrendamiento.</p>
+        </div>
+        <div class="step-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="step-number">3</div>
+          <h3>Elige tu vivienda</h3>
+          <p>Con nuestro apoyo encuentras la propiedad ideal dentro del rango del subsidio DS120.</p>
+        </div>
+        <div class="step-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="step-number">4</div>
+          <h3>¡Entra a vivir!</h3>
+          <p>Firmado el contrato de leasing, recibes las llaves. Cada mes que pagas es avanzar hacia ser dueño.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       REQUISITOS
+  ══════════════════════════════════════════════════════════ -->
+  <section id="requisitos">
+    <div class="section-container">
+      <div style="text-align:center;max-width:600px;margin:0 auto" data-aos="fade-up">
+        <span class="section-label">Requisitos</span>
+        <h2 class="section-title">¿Puedo postular al DS120?</h2>
+        <p class="section-subtitle" style="margin:0 auto">Los requisitos son simples. Revisa si cumples con las condiciones básicas.</p>
+      </div>
+      <div class="req-grid">
+        <div class="req-box req-box-dark" data-aos="fade-right">
+          <div class="req-box-title">¿Quién puede postular?</div>
+          <div class="req-list">
+            <div class="req-item">
+              <div class="req-check">✓</div>
+              Ser mayor de 18 años
+            </div>
+            <div class="req-item">
+              <div class="req-check">✓</div>
+              No ser propietario de vivienda (ni tú ni tu cónyuge)
+            </div>
+            <div class="req-item">
+              <div class="req-check">✓</div>
+              No haber recibido subsidios o viviendas del Estado anteriormente
+            </div>
+            <div class="req-item">
+              <div class="req-check">✓</div>
+              Estar inscrito (o inscribirse) en el Registro de SERVIU
+            </div>
+            <div class="req-item">
+              <div class="req-check">✓</div>
+              No tener más de un contrato de leasing vigente
+            </div>
+            <div class="req-item">
+              <div class="req-check">✓</div>
+              Si estás casado/a, solo uno de los cónyuges puede postular
+            </div>
+          </div>
+        </div>
+
+        <div class="req-box req-box-light" data-aos="fade-left">
+          <div class="req-box-title" style="color:var(--navy)">¿Qué documentos necesitas?</div>
+          <div class="req-list">
+            <div class="req-item">
+              <div class="req-check">✓</div>
+              Cédula de identidad vigente (original y fotocopia)
+            </div>
+            <div class="req-item">
+              <div class="req-check">✓</div>
+              Cédula de identidad del cónyuge (si aplica)
+            </div>
+            <div class="req-item">
+              <div class="req-check">✓</div>
+              Cuenta de Ahorro para Arrendamiento de Viviendas (te ayudamos a abrirla)
+            </div>
+            <div class="req-item">
+              <div class="req-check">✓</div>
+              Certificado de inscripción en la red OIRS de SERVIU
+            </div>
+            <div class="req-item" style="margin-top:8px;padding-top:16px;border-top:1px solid rgba(201,137,30,0.15)">
+              <div style="color:var(--gold);font-size:0.9rem;font-weight:600">
+                Nosotros te orientamos paso a paso para reunir toda la documentación.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       VIVIENDAS / MONTOS
+  ══════════════════════════════════════════════════════════ -->
+  <div id="viviendas">
+    <div style="max-width:1100px;margin:0 auto;text-align:center" data-aos="fade-up">
+      <span class="section-label" style="color:rgba(255,255,255,0.4)">Valores de vivienda</span>
+      <h2 class="section-title" style="color:var(--white)">¿Cuánto puede valer tu vivienda?</h2>
+      <p style="color:rgba(255,255,255,0.55);font-size:1rem;max-width:500px;margin:0 auto">Los límites varían según la ubicación de la propiedad.</p>
+    </div>
+    <div class="viviendas-grid">
+      <div class="vivienda-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="zone">Zonas extremas norte y sur</div>
+        <div class="price">2.200 <span class="price-unit">UF</span></div>
+        <div class="description">Arica y Parinacota, Antofagasta, Atacama, Aysén, Magallanes, Isla de Pascua</div>
+      </div>
+      <div class="vivienda-card" data-aos="fade-up" data-aos-delay="80">
+        <div class="zone">Zonas de renovación urbana</div>
+        <div class="price">2.000 <span class="price-unit">UF</span></div>
+        <div class="description">Zonas de renovación urbana, desarrollo prioritario o inmuebles de conservación histórica</div>
+      </div>
+      <div class="vivienda-card" data-aos="fade-up" data-aos-delay="160">
+        <div class="zone">Resto del país</div>
+        <div class="price">1.000 <span class="price-unit">UF</span></div>
+        <div class="description">Aplica para la mayoría de comunas de Chile fuera de las zonas especiales indicadas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FORMULARIO DE POSTULACIÓN
+  ══════════════════════════════════════════════════════════ -->
+  <section id="aplica">
+    <div class="form-container" data-aos="fade-up">
+      <span class="section-label" style="color:rgba(201,137,30,0.7)">Postulación gratuita</span>
+      <h2 class="section-title">¿Cumples los requisitos?</h2>
+      <p class="section-subtitle">Déjanos tus datos y te contactamos en menos de 24 horas para orientarte sin costo.</p>
+
+      <div class="lead-form">
+        <div id="formContent">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombre">Nombre completo *</label>
+              <input type="text" id="nombre" placeholder="Ej: Ana García" required>
+            </div>
+            <div class="form-group">
+              <label for="telefono">WhatsApp *</label>
+              <input type="tel" id="telefono" placeholder="+56 9 XXXX XXXX" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Correo electrónico *</label>
+            <input type="email" id="email" placeholder="tucorreo@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="arriendo">¿Cuánto pagas de arriendo actualmente?</label>
+            <select id="arriendo">
+              <option value="">Selecciona un rango</option>
+              <option>Menos de $200.000</option>
+              <option>$200.000 – $350.000</option>
+              <option>$350.000 – $500.000</option>
+              <option>Más de $500.000</option>
+              <option>No pago arriendo actualmente</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>¿Tienes cuenta de ahorro?</label>
+            <div class="form-radios">
+              <label class="radio-label">
+                <input type="radio" name="ahorro" value="si"> Sí tengo
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="ahorro" value="no"> No tengo
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="ahorro" value="nosé"> No sé
+              </label>
+            </div>
+          </div>
+          <button class="form-submit" onclick="submitLead()">
+            Quiero postular gratis &rarr;
+          </button>
+          <p class="form-privacy">
+            Tu información es confidencial. Solo la usamos para contactarte.
+          </p>
+        </div>
+
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">✓</div>
+          <h3>¡Recibimos tu solicitud!</h3>
+          <p>Te contactaremos en menos de 24 horas al WhatsApp y correo que nos dejaste. También puedes escribirnos directamente:</p>
+          <a href="https://wa.me/56912345678?text=Hola!%20Vi%20el%20subsidio%20DS120%20y%20quiero%20saber%20si%20califico." class="whatsapp-btn" target="_blank" rel="noopener">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Escribir por WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FAQ
+  ══════════════════════════════════════════════════════════ -->
+  <section id="faq">
+    <div class="faq-container" data-aos="fade-up">
+      <div style="text-align:center;margin-bottom:0">
+        <span class="section-label">Preguntas frecuentes</span>
+        <h2 class="section-title">Todo lo que necesitas saber</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">
+            ¿Qué es exactamente el Subsidio DS120?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              El Subsidio Leasing Habitacional (Decreto Supremo N°120) es un programa del MINVU que permite arrendar una vivienda con promesa de compraventa. Es decir, vivís en la propiedad mientras la vas pagando, y cuando completas el precio prometido, la propiedad pasa a ser tuya legalmente. El Estado te entrega un subsidio directo (que no se devuelve) de hasta 250 UF.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            ¿Necesito ahorro previo para postular?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              No. A diferencia del FSEV u otros subsidios, el DS120 <strong>no exige un monto mínimo de ahorro previo</strong>. Sí necesitas abrir una Cuenta de Ahorro para Arrendamiento de Viviendas en un banco o caja de compensación, pero no con saldo mínimo obligatorio. Nosotros te explicamos cómo hacerlo.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            ¿Cuánto puede valer la vivienda que elija?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Depende de la ubicación: en la mayoría del país (fuera de zonas especiales) el límite es <strong>1.000 UF</strong>. En zonas de renovación urbana llega a <strong>2.000 UF</strong>. En zonas extremas norte y sur (Arica y Parinacota, Atacama, Magallanes, etc.) sube a <strong>2.200 UF</strong>. Podemos asesorarte sobre qué aplica en tu caso.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            ¿Cuánto tiempo demora todo el proceso?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Desde que completas tu formulario con nosotros hasta que estás inscrito en SERVIU puede tomar entre 1 a 4 semanas, dependiendo de tu documentación. Encontrar y firmar el contrato de la vivienda es un proceso adicional. En total, muchos postulantes logran entrar a vivir en su futura vivienda en 2 a 3 meses.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            ¿Tiene costo asesorarse con Habita Chile?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              La primera consulta y verificación de elegibilidad es completamente gratuita. Contáctanos sin compromiso y te explicamos todo el proceso. Si decides avanzar con nosotros, te informamos claramente sobre cualquier tarifa de gestión antes de comprometerte.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            ¿Puedo postular si tengo deudas o Dicom?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              El subsidio DS120 en sí no exige una evaluación crediticia de SERVIU. Sin embargo, la empresa inmobiliaria de leasing sí puede evaluar tu capacidad de pago. Tener deudas no te descalifica automáticamente, pero puede influir en la aprobación por parte de la inmobiliaria. Conversemos y evaluamos tu situación específica.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">HABITA <span>Chile</span></div>
+        <p class="footer-desc">Agencia especializada en Leasing Habitacional DS120. Te acompañamos a conseguir tu primera vivienda con el respaldo del Estado.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Navegación</div>
+        <div class="footer-links">
+          <a href="#que-es">¿Qué es DS120?</a>
+          <a href="#beneficios">Beneficios</a>
+          <a href="#como-funciona">Cómo funciona</a>
+          <a href="#requisitos">Requisitos</a>
+          <a href="#aplica">Postular</a>
+          <a href="#faq">Preguntas frecuentes</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Contacto</div>
+        <div class="footer-links">
+          <!-- ACTUALIZAR con datos reales -->
+          <a href="https://wa.me/56912345678" target="_blank" rel="noopener">WhatsApp: +56 9 XXXX XXXX</a>
+          <a href="mailto:contacto@habitachile.cl">contacto@habitachile.cl</a>
+          <a href="https://www.minvu.gob.cl" target="_blank" rel="noopener">MINVU oficial</a>
+          <a href="https://www.serviu.cl" target="_blank" rel="noopener">SERVIU.cl</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Habita Chile. Todos los derechos reservados.</p>
+      <p>Programa DS120 regulado por Ley N°19.281 · MINVU Chile</p>
+    </div>
+  </footer>
+
+  <!-- WhatsApp flotante -->
+  <!-- ACTUALIZAR número de WhatsApp: wa.me/56XXXXXXXXX -->
+  <a href="https://wa.me/56912345678?text=Hola!%20Vi%20el%20Subsidio%20DS120%20y%20quiero%20saber%20si%20califico." class="whatsapp-float" target="_blank" rel="noopener" title="Escribir por WhatsApp">
+    <span class="whatsapp-pulse"></span>
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <!-- AOS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // ─── Init AOS ───────────────────────────────────────────────
+    AOS.init({
+      duration: 700,
+      easing: 'ease-out-cubic',
+      once: true,
+      offset: 60
+    });
+
+    // ─── Navbar scroll effect ───────────────────────────────────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // ─── Counter animation ──────────────────────────────────────
+    function animateCounters() {
+      document.querySelectorAll('.counter').forEach(el => {
+        const target = parseInt(el.dataset.target);
+        const duration = 1800;
+        const step = target / (duration / 16);
+        let current = 0;
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) {
+            el.textContent = target.toLocaleString('es-CL');
+            clearInterval(timer);
+          } else {
+            el.textContent = Math.floor(current).toLocaleString('es-CL');
+          }
+        }, 16);
+      });
+    }
+
+    const statsSection = document.getElementById('stats');
+    const statsObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        animateCounters();
+        statsObserver.disconnect();
+      }
+    }, { threshold: 0.3 });
+    statsObserver.observe(statsSection);
+
+    // ─── FAQ accordion ──────────────────────────────────────────
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.querySelector('.faq-question').addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    // ─── Radio labels visual update ────────────────────────────
+    document.querySelectorAll('.radio-label input').forEach(input => {
+      input.addEventListener('change', () => {
+        document.querySelectorAll('.radio-label').forEach(l => l.classList.remove('selected'));
+        input.closest('.radio-label').classList.add('selected');
+      });
+    });
+
+    // ─── Form submit ────────────────────────────────────────────
+    function submitLead() {
+      const nombre   = document.getElementById('nombre').value.trim();
+      const telefono = document.getElementById('telefono').value.trim();
+      const email    = document.getElementById('email').value.trim();
+
+      if (!nombre || !telefono || !email) {
+        alert('Por favor completa tu nombre, teléfono y correo para continuar.');
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert('Por favor ingresa un correo válido.');
+        return;
+      }
+
+      // Guardar lead en localStorage (ampliar con Supabase o webhook)
+      const lead = {
+        nombre,
+        telefono,
+        email,
+        arriendo: document.getElementById('arriendo').value,
+        ahorro: document.querySelector('input[name="ahorro"]:checked')?.value || 'no indicado',
+        fecha: new Date().toISOString()
+      };
+      const leads = JSON.parse(localStorage.getItem('habita_leads') || '[]');
+      leads.push(lead);
+      localStorage.setItem('habita_leads', JSON.stringify(leads));
+
+      // ============================================================
+      // OPCIONAL: Enviar a tu backend/Supabase
+      // fetch('/api/leads', { method: 'POST', body: JSON.stringify(lead), headers: {'Content-Type':'application/json'} })
+      //
+      // META PIXEL: fbq('track', 'Lead');
+      // GOOGLE ADS: gtag('event', 'conversion', { send_to: 'AW-XXXXXXXX/XXXXXXXX' });
+      // TIKTOK:     ttq.track('SubmitForm');
+      // ============================================================
+
+      // Mostrar success state
+      document.getElementById('formContent').style.display = 'none';
+      const success = document.getElementById('formSuccess');
+      success.style.display = 'block';
+
+      // Actualizar link de WhatsApp con nombre
+      const waMsg = encodeURIComponent(
+        `Hola! Me llamo ${nombre}. Vi el Subsidio DS120 y quiero saber si califico. Mi teléfono es ${telefono}.`
+      );
+      success.querySelector('.whatsapp-btn').href = `https://wa.me/56912345678?text=${waMsg}`;
+    }
+
+    // ─── Smooth scroll para nav links ───────────────────────────
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
