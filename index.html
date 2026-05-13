@@ -51,8 +51,8 @@
 
     /* ── Reset ─────────────────────────────────────────────── */
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--bg);line-height:1.65;overflow-x:hidden}
+    html{scroll-behavior:smooth;overflow-x:hidden}
+    body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--bg);line-height:1.65;overflow-x:hidden;max-width:100vw}
     a{text-decoration:none;color:inherit}
     img{max-width:100%;display:block}
 
@@ -324,12 +324,12 @@
     /* ── Cómo funciona ──────────────────────────────────────── */
     #como-funciona{background:var(--white);}
     .steps-grid{
-      display:grid;grid-template-columns:repeat(4,1fr);
-      gap:32px;margin-top:64px;position:relative;
+      display:grid;grid-template-columns:repeat(5,1fr);
+      gap:24px;margin-top:64px;position:relative;
     }
     .steps-grid::before{
       content:'';position:absolute;
-      top:38px;left:calc(12.5% + 24px);right:calc(12.5% + 24px);
+      top:38px;left:calc(10% + 24px);right:calc(10% + 24px);
       height:1px;background:linear-gradient(90deg,var(--gold),var(--beige-3),var(--gold));
     }
     .step-card{text-align:center;position:relative;z-index:1;}
@@ -531,7 +531,7 @@
       .stats-inner{grid-template-columns:repeat(2,1fr);}
       .stat-item{border-right:none;border-bottom:1px solid var(--beige-3);}
       .stat-item:nth-child(odd){border-right:1px solid var(--beige-3);}
-      .steps-grid{grid-template-columns:repeat(2,1fr);}
+      .steps-grid{grid-template-columns:repeat(3,1fr)!important;}
       .steps-grid::before{display:none;}
       .viviendas-grid{grid-template-columns:1fr 1fr;}
     }
@@ -545,7 +545,7 @@
       .hero-inner{grid-template-columns:1fr;gap:36px;padding:120px 20px 60px;}
       .que-es-grid{grid-template-columns:1fr;gap:36px;}
       .benefits-grid{grid-template-columns:1fr;}
-      .steps-grid{grid-template-columns:1fr;}
+      .steps-grid{grid-template-columns:1fr!important;}
       .req-grid{grid-template-columns:1fr;}
       .viviendas-grid{grid-template-columns:1fr!important;}
       #viviendas [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important;}
@@ -720,7 +720,7 @@
           <div class="bullet-item"><div class="bullet-dot"></div><span>El subsidio del Estado funciona como el pie — lo pone SERVIU en tu nombre</span></div>
           <div class="bullet-item"><div class="bullet-dot"></div><span>Válido para viviendas nuevas y usadas en todo Chile</span></div>
           <div class="bullet-item"><div class="bullet-dot"></div><span>Puedes vivir en tu futura casa desde el primer día</span></div>
-          <div class="bullet-item"><div class="bullet-dot"></div><span>Postulación abierta todo el año, sin plazos ni llamados</span></div>
+          <div class="bullet-item"><div class="bullet-dot"></div><span>Sin puntaje ni competencia — opera por orden de llegada, todo el año</span></div>
         </div>
       </div>
       <div data-aos="fade-left" data-aos-delay="100">
@@ -776,8 +776,8 @@
       </div>
       <div class="benefit-card tilt" data-aos="fade-up" data-aos-delay="160">
         <div class="b-icon" style="background:#ECFDF5">📅</div>
-        <h3>Postula todo el año</h3>
-        <p>Sin llamados ni plazos de cierre. Puedes postular en cualquier momento del año.</p>
+        <h3>Sin puntaje ni competencia</h3>
+        <p>No hay llamados ni plazos. El DS120 no exige antigüedad en libreta — avanza por orden de llegada durante todo el año.</p>
       </div>
     </div>
   </div>
@@ -791,33 +791,39 @@
   <div class="sec-w">
     <div style="text-align:center;max-width:580px;margin:0 auto" data-aos="fade-up">
       <span class="sec-eyebrow">El proceso</span>
-      <h2 class="sec-title">4 pasos hacia tu casa propia</h2>
-      <p class="sec-sub" style="margin:0 auto">Simple y transparente. Te acompañamos en cada etapa.</p>
+      <h2 class="sec-title">5 pasos hacia tu casa propia</h2>
+      <p class="sec-sub" style="margin:0 auto">De aprobación a llaves en mano en 60 a 90 días. Te acompañamos en cada etapa.</p>
     </div>
-    <div class="steps-grid">
+    <div class="steps-grid" style="grid-template-columns:repeat(5,1fr)">
       <div class="step-card" data-aos="fade-up" data-aos-delay="0">
         <div class="step-bg-num">01</div>
         <div class="step-num">1</div>
         <h3>Verifica si calificas</h3>
-        <p>Completa el formulario. Te contactamos en menos de 24 horas para revisar tu situación sin costo.</p>
+        <p>Llena el formulario. Te contactamos en menos de 24 horas para revisar tu situación sin costo.</p>
       </div>
-      <div class="step-card" data-aos="fade-up" data-aos-delay="100">
+      <div class="step-card" data-aos="fade-up" data-aos-delay="80">
         <div class="step-bg-num">02</div>
         <div class="step-num">2</div>
-        <h3>Postula en SERVIU</h3>
-        <p>Te inscribimos en el Registro de SERVIU y gestionamos la aprobación de tu subsidio DS120.</p>
+        <h3>Abre tu cuenta y regístrate en SERVIU</h3>
+        <p>Abrimos tu Cuenta de Ahorro Leasing Habitacional (Banco Estado o Caja Los Andes) y te inscribimos en el Registro Único de SERVIU.</p>
       </div>
-      <div class="step-card" data-aos="fade-up" data-aos-delay="200">
+      <div class="step-card" data-aos="fade-up" data-aos-delay="160">
         <div class="step-bg-num">03</div>
         <div class="step-num">3</div>
-        <h3>La financiera compra tu vivienda</h3>
-        <p>Una sociedad de leasing adquiere la propiedad que elegiste. Tú firmas el contrato de arrendamiento con promesa de compra.</p>
+        <h3>Aprobación y búsqueda</h3>
+        <p>SERVIU revisa tus antecedentes y pre-aprueba tu subsidio. Con eso en mano, elegimos la vivienda que se ajusta a tu perfil.</p>
       </div>
-      <div class="step-card" data-aos="fade-up" data-aos-delay="300">
+      <div class="step-card" data-aos="fade-up" data-aos-delay="240">
         <div class="step-bg-num">04</div>
         <div class="step-num">4</div>
-        <h3>Cuotas hasta que es tuya</h3>
-        <p>Mes a mes abonas tus cuotas a la financiera. El subsidio del Estado se descuenta directamente. Al completar el precio, la propiedad se escritura a tu nombre.</p>
+        <h3>La financiera adquiere tu casa</h3>
+        <p>Una sociedad de leasing compra la propiedad. Tú firmas el contrato de arrendamiento con promesa de compraventa ante notario.</p>
+      </div>
+      <div class="step-card" data-aos="fade-up" data-aos-delay="320">
+        <div class="step-bg-num">05</div>
+        <div class="step-num">5</div>
+        <h3>Recibes las llaves y pagas cuotas</h3>
+        <p>Entras a vivir desde el día uno. Pagas cuotas mensuales hasta completar el precio — y la escritura queda a tu nombre.</p>
       </div>
     </div>
   </div>
@@ -835,23 +841,26 @@
       <div class="req-box req-dark" data-aos="fade-right">
         <div class="req-title">¿Quién puede postular?</div>
         <div class="req-list">
-          <div class="req-item"><div class="req-check">✓</div> Ser mayor de 18 años</div>
+          <div class="req-item"><div class="req-check">✓</div> Mayor de 18 años</div>
           <div class="req-item"><div class="req-check">✓</div> No ser propietario de vivienda (ni tú ni tu cónyuge)</div>
-          <div class="req-item"><div class="req-check">✓</div> No haber recibido subsidios o viviendas del Estado anteriormente</div>
-          <div class="req-item"><div class="req-check">✓</div> Estar inscrito (o inscribirse) en el Registro de SERVIU</div>
-          <div class="req-item"><div class="req-check">✓</div> No tener más de un contrato de leasing vigente</div>
-          <div class="req-item"><div class="req-check">✓</div> Si estás casado/a, solo uno de los cónyuges puede postular</div>
+          <div class="req-item"><div class="req-check">✓</div> No haber recibido subsidios habitacionales del Estado antes</div>
+          <div class="req-item"><div class="req-check">✓</div> Inscrito en el Registro Único de Inscritos de SERVIU</div>
+          <div class="req-item"><div class="req-check">✓</div> Ser sujeto de crédito — renta líquida desde $600.000 (complementable con otro ingreso)</div>
+          <div class="req-item"><div class="req-check">✓</div> Abrir Cuenta de Ahorro Leasing Habitacional en Banco Estado o Caja Los Andes</div>
+          <div class="req-item"><div class="req-check">✓</div> Extranjeros: Certificado de Residencia Definitiva en Chile</div>
         </div>
       </div>
       <div class="req-box req-light" data-aos="fade-left">
-        <div class="req-title">¿Qué documentos necesitas?</div>
+        <div class="req-title">Documentos que necesitas</div>
         <div class="req-list">
-          <div class="req-item"><div class="req-check">✓</div> Cédula de identidad vigente (original y fotocopia)</div>
-          <div class="req-item"><div class="req-check">✓</div> Cédula del cónyuge (si aplica)</div>
-          <div class="req-item"><div class="req-check">✓</div> Cuenta de Ahorro para Arrendamiento de Viviendas (te ayudamos a abrirla)</div>
-          <div class="req-item"><div class="req-check">✓</div> Certificado de inscripción en la red OIRS de SERVIU</div>
+          <div class="req-item"><div class="req-check">✓</div> Cédula de identidad vigente (ambos lados)</div>
+          <div class="req-item"><div class="req-check">✓</div> Cédula del cónyuge o conviviente civil (si aplica)</div>
+          <div class="req-item"><div class="req-check">✓</div> 6 últimas liquidaciones de sueldo</div>
+          <div class="req-item"><div class="req-check">✓</div> Certificado de Cotizaciones AFP (últimos 12 meses)</div>
+          <div class="req-item"><div class="req-check">✓</div> Certificado de Deuda CMF</div>
+          <div class="req-item"><div class="req-check">✓</div> Cartola de Cuenta de Ahorro Leasing Habitacional</div>
           <div class="req-item" style="margin-top:10px;padding-top:16px;border-top:1px solid var(--beige-2)">
-            <span style="color:var(--gold);font-size:0.88rem;font-weight:700">Nosotros te orientamos paso a paso para reunir toda la documentación sin costo.</span>
+            <span style="color:var(--gold);font-size:0.88rem;font-weight:700">Te acompañamos a reunir todo gratis. De aprobación a llaves en mano: 60 a 90 días.</span>
           </div>
         </div>
       </div>
@@ -990,7 +999,7 @@
       </div>
       <div class="faq-item">
         <div class="faq-q">¿Necesito ahorro previo para postular?<span class="faq-icon">+</span></div>
-        <div class="faq-a"><div class="faq-a-inner">No. El DS120 es uno de los pocos programas donde <strong>el pie lo pone el Estado</strong>. SERVIU aporta entre un 10% y 20% del valor de la vivienda directamente a la sociedad de leasing — sin que tú tengas que desembolsar nada. Solo necesitas abrir una Cuenta de Ahorro para Arrendamiento en un banco o caja de compensación (sin saldo mínimo). Nosotros te orientamos para abrirla.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">No. El DS120 es uno de los pocos programas donde <strong>el pie lo pone el Estado</strong>. SERVIU aporta entre un 10% y 20% del valor de la vivienda directamente a la sociedad de leasing, en tu nombre. Sí necesitas abrir una Cuenta de Ahorro Leasing Habitacional en Banco Estado o Caja Los Andes — sin saldo mínimo obligatorio. Nosotros te orientamos para abrirla sin costo.</div></div>
       </div>
       <div class="faq-item">
         <div class="faq-q">¿Cuánto puede valer la vivienda que elija?<span class="faq-icon">+</span></div>
@@ -998,11 +1007,15 @@
       </div>
       <div class="faq-item">
         <div class="faq-q">¿Cuánto tiempo demora el proceso completo?<span class="faq-icon">+</span></div>
-        <div class="faq-a"><div class="faq-a-inner">Desde que completas el formulario con nosotros hasta que estás inscrito en SERVIU puede tomar 1 a 4 semanas según tu documentación. Encontrar y firmar el contrato de la vivienda es un paso adicional. Muchos compradores logran mudarse a su nueva casa en 2 a 3 meses.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">Desde la aprobación hasta recibir las llaves son <strong>entre 60 y 90 días</strong>. El proceso incluye: abrir la cuenta de ahorro, inscribirte en SERVIU, obtener la pre-aprobación, seleccionar la vivienda y firmar ante notario. Nosotros coordinamos cada etapa para que no pierdas tiempo.</div></div>
       </div>
       <div class="faq-item">
         <div class="faq-q">¿Tiene costo asesorarse con Llave Propia?<span class="faq-icon">+</span></div>
         <div class="faq-a"><div class="faq-a-inner">La primera consulta y verificación de elegibilidad es completamente gratuita. Si decides avanzar con nosotros, te informamos claramente sobre cualquier tarifa de gestión antes de comprometerte.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿En qué se diferencia el DS120 del DS1?<span class="faq-icon">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">La diferencia clave es que el DS120 <strong>no exige antigüedad ni montos guardados en libreta</strong>. El DS1 funciona por puntaje y pone a todos a competir. El DS120 opera por orden de llegada durante todo el año — si cumples los requisitos, avanzas. Tampoco necesitas años ahorrando para calificar.</div></div>
       </div>
       <div class="faq-item">
         <div class="faq-q">¿Puedo postular si tengo deudas o Dicom?<span class="faq-icon">+</span></div>
