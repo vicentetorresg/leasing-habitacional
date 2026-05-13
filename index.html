@@ -6,12 +6,12 @@
   <title>Llave Propia | Subsidio DS120 — Tu Primera Vivienda Sin Pie</title>
   <meta name="description" content="Compra tu primera vivienda con el Subsidio DS120 del MINVU. Sin pie, sin ahorro previo. El Estado aporta directamente al precio de tu casa. Postula gratis.">
   <meta property="og:title" content="Llave Propia | Tu Primera Vivienda con DS120 — Sin Pie">
-  <meta property="og:description" content="Tu sueño de la casa propia está más cerca. El Estado te da hasta 250 UF. Sin ahorro previo.">
+  <meta property="og:description" content="Tu sueño de la casa propia está más cerca. El Estado reduce hasta 20% tus cuotas mensuales. Sin pie ni ahorro previo.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://llavepropia.cl">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2319273F'/%3E%3Cpolygon points='32,8 58,28 6,28' fill='%23CE9D30'/%3E%3Crect x='12' y='28' width='40' height='28' fill='white' opacity='.9'/%3E%3Crect x='25' y='38' width='14' height='18' fill='%2319273F'/%3E%3Crect x='15' y='32' width='10' height='8' rx='1' fill='%23CE9D30' opacity='.6'/%3E%3Crect x='39' y='32' width='10' height='8' rx='1' fill='%23CE9D30' opacity='.6'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231B3A6B'/%3E%3Cpath d='M32,8 L56,27 L56,54 L8,54 L8,27 Z' fill='none' stroke='white' stroke-width='3' stroke-linejoin='round'/%3E%3Ccircle cx='26' cy='36' r='6' fill='none' stroke='%232DB89E' stroke-width='2.5'/%3E%3Cline x1='32' y1='36' x2='44' y2='36' stroke='%232DB89E' stroke-width='2.5' stroke-linecap='round'/%3E%3Cline x1='41' y1='36' x2='41' y2='40' stroke='%232DB89E' stroke-width='2.5' stroke-linecap='round'/%3E%3Cline x1='38' y1='36' x2='38' y2='39' stroke='%232DB89E' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
 
   <!-- META PIXEL — descomenta y agrega tu ID
   <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','TU_META_PIXEL_ID');fbq('track','PageView');</script>
@@ -31,18 +31,18 @@
       --beige-1:     #F7F0E6;
       --beige-2:     #EDE3D4;
       --beige-3:     #DFD0BB;
-      --gold:        #B5831A;
-      --gold-mid:    #CE9D30;
-      --gold-pale:   #FDF3DC;
-      --navy:        #19273F;
-      --navy-mid:    #243455;
+      --gold:        #2DB89E;
+      --gold-mid:    #3ACFB8;
+      --gold-pale:   #E5F7F4;
+      --navy:        #1B3A6B;
+      --navy-mid:    #243870;
       --text:        #1A150F;
       --text-mid:    #5A4A38;
       --text-soft:   #9A8878;
       --white:       #FFFFFF;
       --green:       #2B7A4E;
       --green-light: #D5F5E3;
-      --shadow:      rgba(150,110,60,0.10);
+      --shadow:      rgba(27,58,107,0.10);
       --radius:      16px;
       --radius-sm:   10px;
       --radius-lg:   28px;
@@ -61,7 +61,7 @@
       position:fixed;top:0;left:0;height:3px;width:0%;
       background:linear-gradient(90deg,var(--gold),var(--gold-mid));
       z-index:9999;transition:width 0.1s linear;
-      box-shadow:0 0 8px rgba(181,131,26,0.5);
+      box-shadow:0 0 8px rgba(45,184,158,0.5);
     }
 
     /* ── Navbar ────────────────────────────────────────────── */
@@ -75,15 +75,17 @@
       background:rgba(254,252,247,0.96);
       backdrop-filter:blur(16px);
       padding:14px 48px;
-      box-shadow:0 2px 24px rgba(150,110,60,0.08);
+      box-shadow:0 2px 24px rgba(27,58,107,0.08);
       border-bottom:1px solid var(--beige-2);
     }
     .nav-logo{
-      font-family:'Cormorant Garamond',serif;
-      font-size:1.6rem;font-weight:700;color:var(--navy);
-      letter-spacing:-0.5px;
+      display:flex;align-items:center;gap:10px;
     }
-    .nav-logo span{color:var(--gold);}
+    .logo-wordmark{display:flex;flex-direction:column;line-height:1.1;}
+    .logo-wordmark .lw-main{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--navy);letter-spacing:-0.3px;line-height:1;}
+    .logo-wordmark .lw-sub{font-family:'Nunito',sans-serif;font-size:0.65rem;font-weight:800;color:var(--gold);letter-spacing:2px;text-transform:uppercase;line-height:1.2;}
+    .logo-icon-white .lw-main{color:var(--white);}
+    .logo-icon-white .lw-sub{color:var(--gold-mid);}
     .nav-links{display:flex;gap:32px;align-items:center}
     .nav-links a{color:var(--text-mid);font-size:0.88rem;font-weight:600;transition:var(--t)}
     .nav-links a:hover{color:var(--navy)}
@@ -93,7 +95,7 @@
       font-weight:700!important;font-size:0.88rem!important;
       transition:var(--t)!important;
     }
-    .nav-cta:hover{background:var(--navy-mid)!important;transform:translateY(-1px);box-shadow:0 4px 16px rgba(25,39,63,0.25);}
+    .nav-cta:hover{background:var(--navy-mid)!important;transform:translateY(-1px);box-shadow:0 4px 16px rgba(27,58,107,0.25);}
 
     /* ── Hero ──────────────────────────────────────────────── */
     #hero{
@@ -158,7 +160,7 @@
       font-size:0.95rem;border:none;cursor:pointer;
       transition:var(--t);display:inline-flex;align-items:center;gap:8px;
     }
-    .btn-dark:hover{background:var(--navy-mid);transform:translateY(-3px);box-shadow:0 10px 30px rgba(25,39,63,0.28);}
+    .btn-dark:hover{background:var(--navy-mid);transform:translateY(-3px);box-shadow:0 10px 30px rgba(27,58,107,0.28);}
     .btn-outline{
       background:transparent;color:var(--navy);
       padding:15px 30px;border-radius:50px;font-weight:700;
@@ -273,7 +275,7 @@
     .que-es-visual::after{
       content:'';position:absolute;bottom:-80px;right:-80px;
       width:220px;height:220px;
-      background:radial-gradient(circle,rgba(181,131,26,0.2) 0%,transparent 70%);
+      background:radial-gradient(circle,rgba(45,184,158,0.2) 0%,transparent 70%);
     }
     .qe-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px;}
     .qe-card{
@@ -350,7 +352,7 @@
     .step-card:hover .step-num{
       background:var(--navy);color:var(--white);
       border-color:var(--navy);transform:scale(1.08);
-      box-shadow:0 8px 24px rgba(25,39,63,0.22);
+      box-shadow:0 8px 24px rgba(27,58,107,0.22);
     }
     .step-card h3{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--navy);margin-bottom:8px;}
     .step-card p{font-size:0.86rem;color:var(--text-mid);line-height:1.6;}
@@ -412,7 +414,7 @@
     .form-group input:focus,
     .form-group select:focus{
       outline:none;border-color:var(--gold);background:var(--white);
-      box-shadow:0 0 0 3px rgba(181,131,26,0.12);
+      box-shadow:0 0 0 3px rgba(45,184,158,0.12);
     }
     .form-group select option{background:var(--white);color:var(--text);}
     .form-radios{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
@@ -436,7 +438,7 @@
       background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
       transition:left 0.5s;
     }
-    .form-submit:hover{background:var(--navy-mid);transform:translateY(-2px);box-shadow:0 10px 30px rgba(25,39,63,0.3);}
+    .form-submit:hover{background:var(--navy-mid);transform:translateY(-2px);box-shadow:0 10px 30px rgba(27,58,107,0.3);}
     .form-submit:hover::after{left:100%;}
     .form-privacy{text-align:center;color:var(--text-soft);font-size:0.76rem;margin-top:14px;}
     /* Success */
@@ -481,8 +483,7 @@
       display:grid;grid-template-columns:2fr 1fr 1fr;gap:64px;
       padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,0.07);
     }
-    .f-logo{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;color:var(--white);margin-bottom:12px;}
-    .f-logo span{color:var(--gold-mid);}
+    .f-logo{margin-bottom:12px;}
     .f-desc{color:rgba(255,255,255,0.4);font-size:0.86rem;line-height:1.7;max-width:280px;}
     .f-col-title{color:var(--white);font-weight:800;font-size:0.75rem;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;}
     .f-links{display:flex;flex-direction:column;gap:10px;}
@@ -567,7 +568,19 @@
 
 <!-- ══ NAVBAR ══════════════════════════════════════════════ -->
 <nav id="navbar">
-  <a href="#inicio" class="nav-logo">LLAVE <span>Propia</span></a>
+  <a href="#inicio" class="nav-logo">
+    <svg width="36" height="40" viewBox="0 0 38 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 3L35 16V39H3V16L19 3Z" stroke="#1B3A6B" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="15" cy="25" r="5.5" stroke="#2DB89E" stroke-width="2.5"/>
+      <line x1="20.5" y1="25" x2="31" y2="25" stroke="#2DB89E" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="28" y1="25" x2="28" y2="28.5" stroke="#2DB89E" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="25" y1="25" x2="25" y2="27.5" stroke="#2DB89E" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-wordmark">
+      <span class="lw-main">Llave</span>
+      <span class="lw-sub">Propia</span>
+    </span>
+  </a>
   <div class="nav-links">
     <a href="#que-es" class="hide-mob">¿Qué es DS120?</a>
     <a href="#como-funciona" class="hide-mob">Cómo funciona</a>
@@ -626,7 +639,7 @@
         </div>
         <div class="hero-features">
           <div class="hero-feature"><span class="ck">✓</span> Sin pie ni ahorro previo obligatorio</div>
-          <div class="hero-feature"><span class="ck">✓</span> Viviendas hasta 1.000 UF (o más en zonas especiales)</div>
+          <div class="hero-feature"><span class="ck">✓</span> Viviendas hasta 2.000 UF (2.200 UF en zonas extremas)</div>
           <div class="hero-feature"><span class="ck">✓</span> El Estado rebaja directamente tus cuotas mensuales</div>
           <div class="hero-feature"><span class="ck">✓</span> Al terminar de pagar, la escritura es tuya</div>
         </div>
@@ -658,14 +671,14 @@
     <span class="marquee-item">SIN ENTRADA INICIAL <span class="m-dot">·</span></span>
     <span class="marquee-item">RESPALDO DEL ESTADO <span class="m-dot">·</span></span>
     <span class="marquee-item">DA EL PRIMER PASO <span class="m-dot">·</span></span>
-    <span class="marquee-item">250 UF DE SUBSIDIO <span class="m-dot">·</span></span>
+    <span class="marquee-item">HASTA 20% DE DESCUENTO <span class="m-dot">·</span></span>
     <span class="marquee-item">CASA PROPIA HECHO POSIBLE <span class="m-dot">·</span></span>
     <span class="marquee-item">TU PRIMERA VIVIENDA <span class="m-dot">·</span></span>
     <span class="marquee-item">SUBSIDIO DS120 <span class="m-dot">·</span></span>
     <span class="marquee-item">SIN ENTRADA INICIAL <span class="m-dot">·</span></span>
     <span class="marquee-item">RESPALDO DEL ESTADO <span class="m-dot">·</span></span>
     <span class="marquee-item">DA EL PRIMER PASO <span class="m-dot">·</span></span>
-    <span class="marquee-item">250 UF DE SUBSIDIO <span class="m-dot">·</span></span>
+    <span class="marquee-item">HASTA 20% DE DESCUENTO <span class="m-dot">·</span></span>
     <span class="marquee-item">CASA PROPIA HECHO POSIBLE <span class="m-dot">·</span></span>
   </div>
 </div>
@@ -678,8 +691,8 @@
       <div class="stat-lbl">Descuento del Estado en tus cuotas</div>
     </div>
     <div class="stat-item" data-aos="fade-up" data-aos-delay="80">
-      <div class="stat-val"><span class="counter" data-target="1000">0</span><span class="stat-unit"> UF</span></div>
-      <div class="stat-lbl">Valor vivienda (resto del país)</div>
+      <div class="stat-val"><span class="counter" data-target="2000">0</span><span class="stat-unit"> UF</span></div>
+      <div class="stat-lbl">Valor máximo de tu vivienda</div>
     </div>
     <div class="stat-item" data-aos="fade-up" data-aos-delay="160">
       <div class="stat-val">$0</div>
@@ -700,7 +713,7 @@
         <span class="sec-eyebrow">El programa</span>
         <h2 class="sec-title">¿Qué es el Leasing<br>Habitacional DS120?</h2>
         <p class="sec-sub" style="margin-bottom:24px">
-          Un programa del <strong>MINVU</strong> donde una sociedad de leasing financia la compra de tu vivienda. Tú pagas cuotas mensuales y el Estado abona directamente hasta <strong>250 UF a tu favor</strong>. Cuando el precio total queda saldado, la propiedad se inscribe a tu nombre.
+          Un programa del <strong>MINVU</strong> donde una sociedad de leasing financia la compra de tu vivienda. Tú pagas cuotas mensuales y el Estado abona directamente entre un <strong>10% y 20% de cada cuota mensual</strong>. Cuando el precio total queda saldado, la propiedad se inscribe a tu nombre.
         </p>
         <div class="bullet-list">
           <div class="bullet-item"><div class="bullet-dot"></div><span>Financiamiento sin hipoteca bancaria tradicional ni pie inicial</span></div>
@@ -714,7 +727,7 @@
         <div class="que-es-visual">
           <p class="qe-heading">El subsidio cubre</p>
           <div class="qe-grid">
-            <div class="qe-card"><div class="qe-icon">🏠</div><div class="qe-lbl">Vivienda (mayoría país)</div><div class="qe-val">hasta 1.000 UF</div></div>
+            <div class="qe-card"><div class="qe-icon">🏠</div><div class="qe-lbl">Vivienda (mayoría país)</div><div class="qe-val">hasta 2.000 UF</div></div>
             <div class="qe-card"><div class="qe-icon">🏛️</div><div class="qe-lbl">Descuento Estado</div><div class="qe-val">10% a 20%</div></div>
             <div class="qe-card"><div class="qe-icon">💰</div><div class="qe-lbl">Pie requerido</div><div class="qe-val">$0</div></div>
             <div class="qe-card"><div class="qe-icon">📅</div><div class="qe-lbl">Postulación</div><div class="qe-val">Todo el año</div></div>
@@ -857,25 +870,15 @@
         <h2 class="sec-title" style="color:var(--white);margin-bottom:10px">¿Qué valor puede tener tu casa?</h2>
         <p style="color:rgba(255,255,255,0.45);font-size:0.92rem;margin-bottom:28px">El límite varía según dónde está ubicada la propiedad.</p>
         <div class="viviendas-grid" style="grid-template-columns:1fr 1fr;gap:14px">
-          <div class="v-card" data-aos="fade-up" data-aos-delay="0">
-            <div class="v-zone">Resto del país</div>
-            <div class="v-price">1.000 <span class="v-unit">UF</span></div>
-            <div class="v-desc">Aplica para la mayoría de comunas de Chile</div>
+          <div class="v-card" data-aos="fade-up" data-aos-delay="0" style="border-color:rgba(45,184,158,0.35)">
+            <div class="v-zone" style="color:#3ACFB8">Todo Chile</div>
+            <div class="v-price">2.000 <span class="v-unit">UF</span></div>
+            <div class="v-desc">Límite general para todo el territorio nacional</div>
           </div>
           <div class="v-card" data-aos="fade-up" data-aos-delay="60">
-            <div class="v-zone">Zonas aisladas</div>
-            <div class="v-price">1.200 <span class="v-unit">UF</span></div>
-            <div class="v-desc">Aysén, Magallanes, Palena, Chiloé, Isla de Pascua, Juan Fernández</div>
-          </div>
-          <div class="v-card" data-aos="fade-up" data-aos-delay="120">
-            <div class="v-zone">Renovación urbana</div>
-            <div class="v-price">2.000 <span class="v-unit">UF</span></div>
-            <div class="v-desc">Zonas de renovación urbana, desarrollo prioritario o conservación histórica</div>
-          </div>
-          <div class="v-card" data-aos="fade-up" data-aos-delay="180">
-            <div class="v-zone">Zonas extremas norte</div>
+            <div class="v-zone">Zonas extremas</div>
             <div class="v-price">2.200 <span class="v-unit">UF</span></div>
-            <div class="v-desc">Regiones de Arica y Parinacota, Antofagasta y Atacama</div>
+            <div class="v-desc">Norte y sur extremo: Arica, Antofagasta, Atacama, Aysén, Magallanes y territorios insulares</div>
           </div>
         </div>
       </div>
@@ -991,7 +994,7 @@
       </div>
       <div class="faq-item">
         <div class="faq-q">¿Cuánto puede valer la vivienda que elija?<span class="faq-icon">+</span></div>
-        <div class="faq-a"><div class="faq-a-inner">Depende de la ubicación: en la <strong>mayoría del país el límite es 1.000 UF</strong>. En Aysén, Magallanes, Palena, Chiloé, Isla de Pascua y Juan Fernández el límite es 1.200 UF. En zonas de renovación urbana o desarrollo prioritario sube a 2.000 UF. En zonas extremas norte (Arica y Parinacota, Antofagasta, Atacama) llega a 2.200 UF. Te asesoramos sobre qué aplica en tu zona.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">El límite general para <strong>todo Chile es 2.000 UF</strong>. En zonas extremas del norte y sur (Arica y Parinacota, Antofagasta, Atacama, Aysén, Magallanes y territorios insulares) el tope sube a 2.200 UF. Te asesoramos sobre qué aplica en tu zona.</div></div>
       </div>
       <div class="faq-item">
         <div class="faq-q">¿Cuánto tiempo demora el proceso completo?<span class="faq-icon">+</span></div>
@@ -1013,7 +1016,21 @@
 <footer>
   <div class="footer-grid">
     <div>
-      <div class="f-logo">LLAVE <span>Propia</span></div>
+      <div class="f-logo">
+        <a href="#inicio" class="nav-logo" style="display:flex;align-items:center;gap:10px">
+          <svg width="36" height="40" viewBox="0 0 38 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 3L35 16V39H3V16L19 3Z" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+            <circle cx="15" cy="25" r="5.5" stroke="#3ACFB8" stroke-width="2.5"/>
+            <line x1="20.5" y1="25" x2="31" y2="25" stroke="#3ACFB8" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="28" y1="25" x2="28" y2="28.5" stroke="#3ACFB8" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="25" y1="25" x2="25" y2="27.5" stroke="#3ACFB8" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <span class="logo-wordmark logo-icon-white">
+            <span class="lw-main">Llave</span>
+            <span class="lw-sub">Propia</span>
+          </span>
+        </a>
+      </div>
       <p class="f-desc">Agencia especializada en Leasing Habitacional DS120. Te acompañamos a conseguir tu primera vivienda con el respaldo del Estado.</p>
     </div>
     <div>
