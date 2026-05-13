@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Habita Chile | Subsidio DS120 — Tu Primera Vivienda Sin Ahorro Previo</title>
-  <meta name="description" content="Accede a tu primera vivienda con el Subsidio Leasing Habitacional DS120 del MINVU. Sin ahorro previo. El Estado te ayuda. Postula gratis hoy.">
-  <meta property="og:title" content="Tu Primera Vivienda con el Subsidio DS120">
+  <title>Llave Propia | Subsidio DS120 — Tu Primera Vivienda Sin Pie</title>
+  <meta name="description" content="Compra tu primera vivienda con el Subsidio DS120 del MINVU. Sin pie, sin ahorro previo. El Estado aporta directamente al precio de tu casa. Postula gratis.">
+  <meta property="og:title" content="Llave Propia | Tu Primera Vivienda con DS120 — Sin Pie">
   <meta property="og:description" content="Tu sueño de la casa propia está más cerca. El Estado te da hasta 250 UF. Sin ahorro previo.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://tudominio.cl">
+  <meta property="og:url" content="https://llavepropia.cl">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2319273F'/%3E%3Cpolygon points='32,8 58,28 6,28' fill='%23CE9D30'/%3E%3Crect x='12' y='28' width='40' height='28' fill='white' opacity='.9'/%3E%3Crect x='25' y='38' width='14' height='18' fill='%2319273F'/%3E%3Crect x='15' y='32' width='10' height='8' rx='1' fill='%23CE9D30' opacity='.6'/%3E%3Crect x='39' y='32' width='10' height='8' rx='1' fill='%23CE9D30' opacity='.6'/%3E%3C/svg%3E">
@@ -546,7 +546,8 @@
       .benefits-grid{grid-template-columns:1fr;}
       .steps-grid{grid-template-columns:1fr;}
       .req-grid{grid-template-columns:1fr;}
-      .viviendas-grid{grid-template-columns:1fr;}
+      .viviendas-grid{grid-template-columns:1fr!important;}
+      #viviendas [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important;}
       .form-row{grid-template-columns:1fr;}
       .form-card{padding:28px 20px;}
       .footer-grid{grid-template-columns:1fr;gap:36px;}
@@ -566,7 +567,7 @@
 
 <!-- ══ NAVBAR ══════════════════════════════════════════════ -->
 <nav id="navbar">
-  <a href="#inicio" class="nav-logo">HABITA <span>Chile</span></a>
+  <a href="#inicio" class="nav-logo">LLAVE <span>Propia</span></a>
   <div class="nav-links">
     <a href="#que-es" class="hide-mob">¿Qué es DS120?</a>
     <a href="#como-funciona" class="hide-mob">Cómo funciona</a>
@@ -587,10 +588,10 @@
 
     <div class="hero-inner">
       <div class="hero-text">
-        <div class="hero-eyebrow"><span class="dot"></span> Programa MINVU · Subsidio DS120</div>
+        <div class="hero-eyebrow"><span class="dot"></span> Programa MINVU · Subsidio DS120 · Sin Pie</div>
         <h1 class="hero-h1">Tu sueño de la<br><em>casa propia</em><br>está más cerca.</h1>
         <p class="hero-sub">
-          El Estado te ayuda a comprar tu primera vivienda. Sin entrada, sin ahorro previo. Solo pagas cuotas mensuales y al terminar, <strong>la casa es completamente tuya.</strong>
+          Compra tu primera vivienda <strong>sin pie ni ahorro previo</strong>. El Estado aporta directamente al precio de tu casa. Solo pagas cuotas mensuales hasta que la escritura es tuya.
         </p>
         <div class="hero-btns">
           <a href="#aplica" class="btn-dark">
@@ -616,18 +617,18 @@
       </div>
 
       <div class="hero-card tilt">
-        <div class="hero-card-tag">Subsidio DS120 · MINVU</div>
+        <div class="hero-card-tag">Subsidio DS120 · MINVU · Sin Pie</div>
         <h3>Tu primera vivienda con apoyo del Estado</h3>
         <div class="hero-amount-box">
-          <div class="lbl">Subsidio máximo del Estado</div>
-          <div class="val shimmer-text">250 UF</div>
-          <div class="sub">Que NO tienes que devolver</div>
+          <div class="lbl">El Estado reduce tus cuotas hasta un</div>
+          <div class="val shimmer-text">20%</div>
+          <div class="sub">Según el precio de tu vivienda y comuna</div>
         </div>
         <div class="hero-features">
-          <div class="hero-feature"><span class="ck">✓</span> Sin entrada ni ahorro mínimo requerido</div>
-          <div class="hero-feature"><span class="ck">✓</span> Viviendas nuevas o usadas hasta 2.000 UF</div>
-          <div class="hero-feature"><span class="ck">✓</span> El Estado abona hasta 250 UF a tu favor</div>
-          <div class="hero-feature"><span class="ck">✓</span> Cuotas mensuales — al terminar, es tuya</div>
+          <div class="hero-feature"><span class="ck">✓</span> Sin pie ni ahorro previo obligatorio</div>
+          <div class="hero-feature"><span class="ck">✓</span> Viviendas hasta 1.000 UF (o más en zonas especiales)</div>
+          <div class="hero-feature"><span class="ck">✓</span> El Estado rebaja directamente tus cuotas mensuales</div>
+          <div class="hero-feature"><span class="ck">✓</span> Al terminar de pagar, la escritura es tuya</div>
         </div>
         <div class="card-house">
           <svg width="130" height="100" viewBox="0 0 140 110" fill="#1A273F">
@@ -673,16 +674,16 @@
 <div id="stats">
   <div class="stats-inner">
     <div class="stat-item" data-aos="fade-up">
-      <div class="stat-val"><span class="counter" data-target="250">0</span><span class="stat-unit"> UF</span></div>
-      <div class="stat-lbl">Subsidio máximo del Estado</div>
+      <div class="stat-val">10–20<span class="stat-unit">%</span></div>
+      <div class="stat-lbl">Descuento del Estado en tus cuotas</div>
     </div>
     <div class="stat-item" data-aos="fade-up" data-aos-delay="80">
-      <div class="stat-val"><span class="counter" data-target="2000">0</span><span class="stat-unit"> UF</span></div>
-      <div class="stat-lbl">Valor máximo de la vivienda</div>
+      <div class="stat-val"><span class="counter" data-target="1000">0</span><span class="stat-unit"> UF</span></div>
+      <div class="stat-lbl">Valor vivienda (resto del país)</div>
     </div>
     <div class="stat-item" data-aos="fade-up" data-aos-delay="160">
-      <div class="stat-val">0 <span class="stat-unit">UF</span></div>
-      <div class="stat-lbl">Entrada inicial requerida</div>
+      <div class="stat-val">$0</div>
+      <div class="stat-lbl">Pie requerido para comprar</div>
     </div>
     <div class="stat-item" data-aos="fade-up" data-aos-delay="240">
       <div class="stat-val" style="font-size:2.4rem">&lt; 24<span class="stat-unit" style="font-size:1.1rem"> hrs</span></div>
@@ -713,9 +714,9 @@
         <div class="que-es-visual">
           <p class="qe-heading">El subsidio cubre</p>
           <div class="qe-grid">
-            <div class="qe-card"><div class="qe-icon">🏠</div><div class="qe-lbl">Vivienda</div><div class="qe-val">hasta 2.000 UF</div></div>
-            <div class="qe-card"><div class="qe-icon">🏛️</div><div class="qe-lbl">Subsidio Estado</div><div class="qe-val">hasta 250 UF</div></div>
-            <div class="qe-card"><div class="qe-icon">💰</div><div class="qe-lbl">Ahorro mínimo</div><div class="qe-val">0 UF</div></div>
+            <div class="qe-card"><div class="qe-icon">🏠</div><div class="qe-lbl">Vivienda (mayoría país)</div><div class="qe-val">hasta 1.000 UF</div></div>
+            <div class="qe-card"><div class="qe-icon">🏛️</div><div class="qe-lbl">Descuento Estado</div><div class="qe-val">10% a 20%</div></div>
+            <div class="qe-card"><div class="qe-icon">💰</div><div class="qe-lbl">Pie requerido</div><div class="qe-val">$0</div></div>
             <div class="qe-card"><div class="qe-icon">📅</div><div class="qe-lbl">Postulación</div><div class="qe-val">Todo el año</div></div>
           </div>
         </div>
@@ -737,13 +738,13 @@
     <div class="benefits-grid">
       <div class="benefit-card tilt" data-aos="fade-up" data-aos-delay="0">
         <div class="b-icon" style="background:#FEF3DC">🚀</div>
-        <h3>Sin ahorro previo</h3>
-        <p>No necesitas capital inicial. La sociedad de leasing financia la vivienda; tú pagas en cuotas mensuales.</p>
+        <h3>Sin pie ni ahorro previo</h3>
+        <p>No necesitas pie ni capital inicial. La sociedad de leasing financia la vivienda y tú pagas en cuotas mensuales.</p>
       </div>
       <div class="benefit-card tilt" data-aos="fade-up" data-aos-delay="80">
         <div class="b-icon" style="background:#D5F5E3">💵</div>
-        <h3>Subsidio directo del Estado</h3>
-        <p>SERVIU abona hasta <strong>250 UF directamente a la financiera</strong>, reduciendo el monto que debes pagar tú.</p>
+        <h3>El Estado rebaja tus cuotas</h3>
+        <p>SERVIU descuenta entre un <strong>10% y 20% de cada cuota mensual</strong>, según el precio de tu vivienda. A menor precio, mayor descuento.</p>
       </div>
       <div class="benefit-card tilt" data-aos="fade-up" data-aos-delay="160">
         <div class="b-icon" style="background:#EDE9FE">🤝</div>
@@ -848,27 +849,68 @@
 <!-- ══ VIVIENDAS ═════════════════════════════════════════════ -->
 <div id="viviendas">
   <div class="viviendas-inner">
-    <div style="text-align:center" data-aos="fade-up">
-      <span class="sec-eyebrow" style="color:rgba(206,157,48,0.7)">Valores de vivienda</span>
-      <h2 class="sec-title" style="color:var(--white)">¿Cuánto puede valer tu vivienda?</h2>
-      <p style="color:rgba(255,255,255,0.5);font-size:1rem;max-width:480px;margin:0 auto">Los límites varían según la ubicación de la propiedad en Chile.</p>
-    </div>
-    <div class="viviendas-grid">
-      <div class="v-card" data-aos="fade-up" data-aos-delay="0">
-        <div class="v-zone">Zonas extremas norte y sur</div>
-        <div class="v-price">2.200 <span class="v-unit">UF</span></div>
-        <div class="v-desc">Arica y Parinacota, Antofagasta, Atacama, Aysén, Magallanes, Isla de Pascua</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start" data-aos="fade-up">
+
+      <!-- Límites por zona -->
+      <div>
+        <span class="sec-eyebrow" style="color:rgba(206,157,48,0.7)">Valores máximos de vivienda</span>
+        <h2 class="sec-title" style="color:var(--white);margin-bottom:10px">¿Qué valor puede tener tu casa?</h2>
+        <p style="color:rgba(255,255,255,0.45);font-size:0.92rem;margin-bottom:28px">El límite varía según dónde está ubicada la propiedad.</p>
+        <div class="viviendas-grid" style="grid-template-columns:1fr 1fr;gap:14px">
+          <div class="v-card" data-aos="fade-up" data-aos-delay="0">
+            <div class="v-zone">Resto del país</div>
+            <div class="v-price">1.000 <span class="v-unit">UF</span></div>
+            <div class="v-desc">Aplica para la mayoría de comunas de Chile</div>
+          </div>
+          <div class="v-card" data-aos="fade-up" data-aos-delay="60">
+            <div class="v-zone">Zonas aisladas</div>
+            <div class="v-price">1.200 <span class="v-unit">UF</span></div>
+            <div class="v-desc">Aysén, Magallanes, Palena, Chiloé, Isla de Pascua, Juan Fernández</div>
+          </div>
+          <div class="v-card" data-aos="fade-up" data-aos-delay="120">
+            <div class="v-zone">Renovación urbana</div>
+            <div class="v-price">2.000 <span class="v-unit">UF</span></div>
+            <div class="v-desc">Zonas de renovación urbana, desarrollo prioritario o conservación histórica</div>
+          </div>
+          <div class="v-card" data-aos="fade-up" data-aos-delay="180">
+            <div class="v-zone">Zonas extremas norte</div>
+            <div class="v-price">2.200 <span class="v-unit">UF</span></div>
+            <div class="v-desc">Regiones de Arica y Parinacota, Antofagasta y Atacama</div>
+          </div>
+        </div>
       </div>
-      <div class="v-card" data-aos="fade-up" data-aos-delay="80">
-        <div class="v-zone">Zonas de renovación urbana</div>
-        <div class="v-price">2.000 <span class="v-unit">UF</span></div>
-        <div class="v-desc">Zonas de renovación urbana, desarrollo prioritario o inmuebles de conservación histórica</div>
+
+      <!-- Tabla descuentos subsidio -->
+      <div data-aos="fade-left" data-aos-delay="100">
+        <span class="sec-eyebrow" style="color:rgba(206,157,48,0.7)">Cómo funciona el subsidio</span>
+        <h2 class="sec-title" style="color:var(--white);margin-bottom:10px">El Estado rebaja tus cuotas</h2>
+        <p style="color:rgba(255,255,255,0.45);font-size:0.92rem;margin-bottom:28px">El subsidio DS120 reduce directamente el valor de tus cuotas mensuales. A menor precio de vivienda, mayor descuento.</p>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="color:var(--gold-mid);font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1px">Viviendas hasta 500 UF</div>
+              <div style="color:rgba(255,255,255,0.6);font-size:0.82rem;margin-top:3px">Mayor subsidio disponible</div>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:var(--white)">20%</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="color:var(--gold-mid);font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1px">Viviendas 500–900 UF</div>
+              <div style="color:rgba(255,255,255,0.6);font-size:0.82rem;margin-top:3px">Subsidio intermedio</div>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:var(--white)">15%</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="color:var(--gold-mid);font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1px">Viviendas 900–1.200 UF</div>
+              <div style="color:rgba(255,255,255,0.6);font-size:0.82rem;margin-top:3px">Subsidio base</div>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:var(--white)">10%</div>
+          </div>
+          <p style="color:rgba(255,255,255,0.3);font-size:0.75rem;margin-top:6px">Descuento aplicado sobre cuotas mensuales. Pagado directamente por SERVIU a la sociedad de leasing. Varía según comuna.</p>
+        </div>
       </div>
-      <div class="v-card" data-aos="fade-up" data-aos-delay="160">
-        <div class="v-zone">Resto del país</div>
-        <div class="v-price">1.000 <span class="v-unit">UF</span></div>
-        <div class="v-desc">Aplica para la mayoría de comunas de Chile fuera de las zonas especiales indicadas</div>
-      </div>
+
     </div>
   </div>
 </div>
@@ -941,22 +983,22 @@
     <div class="faq-list">
       <div class="faq-item">
         <div class="faq-q">¿Qué es exactamente el Subsidio DS120?<span class="faq-icon">+</span></div>
-        <div class="faq-a"><div class="faq-a-inner">El Subsidio Leasing Habitacional (D.S. N°120) es un programa del MINVU. Una <strong>sociedad inmobiliaria de leasing</strong> financia y adquiere la vivienda. Tú firmas un contrato de arrendamiento con promesa de compraventa y pagas cuotas mensuales a esa financiera. SERVIU abona el subsidio (hasta 250 UF, no reembolsable) directamente a la financiera. Cuando el precio total queda saldado, la propiedad se inscribe a tu nombre.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">El Subsidio Leasing Habitacional (D.S. N°120) es un programa del MINVU. Una <strong>sociedad inmobiliaria de leasing</strong> financia y adquiere la vivienda. Tú firmas un contrato de arrendamiento con promesa de compraventa y pagas cuotas mensuales. SERVIU abona un subsidio que reduce entre un 10% y 20% cada cuota, directamente a la financiera. Cuando el precio total queda saldado, la propiedad se inscribe a tu nombre. Sin pie ni ahorro previo requerido.</div></div>
       </div>
       <div class="faq-item">
         <div class="faq-q">¿Necesito ahorro previo para postular?<span class="faq-icon">+</span></div>
-        <div class="faq-a"><div class="faq-a-inner">No. A diferencia del FSEV u otros subsidios, el DS120 no exige monto mínimo de ahorro previo. La financiera de leasing es quien pone el capital para comprar la vivienda; tú la vas pagando mes a mes con tus cuotas. SERVIU exige que tengas una Cuenta de Ahorro para Arrendamiento abierta en un banco o caja de compensación, pero sin saldo mínimo obligatorio. Nosotros te orientamos para abrirla.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">No. El DS120 es uno de los pocos programas que <strong>no exige pie ni ahorro previo</strong>. La financiera de leasing pone el capital; tú la vas pagando en cuotas mensuales. SERVIU sí requiere que tengas una Cuenta de Ahorro para Arrendamiento abierta en un banco o caja de compensación, pero sin saldo mínimo obligatorio. Nosotros te orientamos para abrirla.</div></div>
       </div>
       <div class="faq-item">
         <div class="faq-q">¿Cuánto puede valer la vivienda que elija?<span class="faq-icon">+</span></div>
-        <div class="faq-a"><div class="faq-a-inner">Depende de la ubicación: en la mayoría del país el límite es 1.000 UF. En zonas de renovación urbana llega a 2.000 UF. En zonas extremas norte y sur sube a 2.200 UF. Podemos asesorarte sobre qué aplica en tu zona específica.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">Depende de la ubicación: en la <strong>mayoría del país el límite es 1.000 UF</strong>. En Aysén, Magallanes, Palena, Chiloé, Isla de Pascua y Juan Fernández el límite es 1.200 UF. En zonas de renovación urbana o desarrollo prioritario sube a 2.000 UF. En zonas extremas norte (Arica y Parinacota, Antofagasta, Atacama) llega a 2.200 UF. Te asesoramos sobre qué aplica en tu zona.</div></div>
       </div>
       <div class="faq-item">
         <div class="faq-q">¿Cuánto tiempo demora el proceso completo?<span class="faq-icon">+</span></div>
         <div class="faq-a"><div class="faq-a-inner">Desde que completas el formulario con nosotros hasta que estás inscrito en SERVIU puede tomar 1 a 4 semanas según tu documentación. Encontrar y firmar el contrato de la vivienda es un paso adicional. Muchos compradores logran mudarse a su nueva casa en 2 a 3 meses.</div></div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">¿Tiene costo asesorarse con Habita Chile?<span class="faq-icon">+</span></div>
+        <div class="faq-q">¿Tiene costo asesorarse con Llave Propia?<span class="faq-icon">+</span></div>
         <div class="faq-a"><div class="faq-a-inner">La primera consulta y verificación de elegibilidad es completamente gratuita. Si decides avanzar con nosotros, te informamos claramente sobre cualquier tarifa de gestión antes de comprometerte.</div></div>
       </div>
       <div class="faq-item">
@@ -971,7 +1013,7 @@
 <footer>
   <div class="footer-grid">
     <div>
-      <div class="f-logo">HABITA <span>Chile</span></div>
+      <div class="f-logo">LLAVE <span>Propia</span></div>
       <p class="f-desc">Agencia especializada en Leasing Habitacional DS120. Te acompañamos a conseguir tu primera vivienda con el respaldo del Estado.</p>
     </div>
     <div>
@@ -996,7 +1038,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <p>&copy; 2026 Habita Chile. Todos los derechos reservados.</p>
+    <p>&copy; 2026 Llave Propia. Todos los derechos reservados.</p>
     <p>Programa DS120 regulado por Ley N°19.281 · MINVU Chile</p>
   </div>
 </footer>
