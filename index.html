@@ -806,26 +806,26 @@ footer{background:var(--navy);padding:56px 40px 28px}
   });
 
   // save lead
-  // ── Reemplaza esta URL con la de tu Apps Script desplegado ──
-  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxNXYnodMMbxbskImAA9o9zDis49LVwwerqbepyN0rdKPPKcUSk2mcPSMjUMIO0QPSHoQ/exec';
+  const SUPA_URL = 'https://bzmzuoxapedvxmqcnhqq.supabase.co/rest/v1/leasing_leads';
+  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6bXp1b3hhcGVkdnhtcWNuaHFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyMTQzNzUsImV4cCI6MjA5MDc5MDM3NX0.reGucjWzfeFfliYBLXWucYt6vBlLgUtbhTntSU25zXA';
 
   function saveLead(data) {
-    const payload = { ...data, fecha: new Date().toISOString() };
-
-    // Guardar localmente como respaldo
+    // Backup local
     const leads = JSON.parse(localStorage.getItem('habita_leads') || '[]');
-    leads.push(payload);
+    leads.push({ ...data, fecha: new Date().toISOString() });
     localStorage.setItem('habita_leads', JSON.stringify(leads));
 
-    // Enviar a Google Sheets
-    if (SHEET_URL && SHEET_URL !== 'PEGA_AQUI_TU_APPS_SCRIPT_URL') {
-      fetch(SHEET_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(payload)
-      }).catch(() => {}); // silencioso si falla
-    }
+    // Enviar a Supabase
+    fetch(SUPA_URL, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(data)
+    }).catch(() => {});
 
     // fbq && fbq('track', 'Lead');
   }
