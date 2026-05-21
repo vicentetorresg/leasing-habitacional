@@ -331,6 +331,10 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
   .lfs-fc .f-row{grid-template-columns:1fr}
 }
   </style>
+<!-- Meta Pixel -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1672155134115626');fbq('track','PageView');</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1672155134115626&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel -->
 </head>
 <body>
 <div id="prog"></div>
@@ -778,6 +782,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
       headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
       body: JSON.stringify(data)
     }).catch(function(){});
+    if (typeof fbq !== 'undefined') fbq('track', 'Lead');
   }
 
   function doForm(prefix, src) {
@@ -803,6 +808,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
     document.getElementById(id+'-row').style.display = 'none';
     document.getElementById(id+'-ok').style.display = 'block';
     var msg = encodeURIComponent('Hola, quiero evaluarme para obtener un Mutuo Hipotecario. Mi WhatsApp es ' + t + '.');
+    if (typeof fbq !== 'undefined') fbq('track', 'Contact');
     setTimeout(function() { window.open('https://wa.me/56957823672?text=' + msg, '_blank'); }, 800);
   }
 
@@ -841,6 +847,12 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
       });
     });
   });
+</script>
+<script>
+document.addEventListener('click', function(e) {
+  var a = e.target.closest('a[href*="wa.me"]');
+  if (a && typeof fbq !== 'undefined') fbq('track', 'Contact');
+});
 </script>
 </body>
 </html>

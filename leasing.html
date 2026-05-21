@@ -23,9 +23,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  <!-- META PIXEL — descomenta y reemplaza TU_ID
-  <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','TU_ID');fbq('track','PageView');</script>
-  -->
+  <!-- Meta Pixel -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1672155134115626');fbq('track','PageView');</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1672155134115626&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel -->
   <style>
 :root{
   --navy:#1B3A6B;--navy-d:#122850;--navy-m:#243870;
@@ -849,7 +850,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
       body: JSON.stringify(data)
     }).catch(() => {});
 
-    // fbq && fbq('track', 'Lead');
+    if (typeof fbq !== 'undefined') fbq('track', 'Lead');
   }
 
   // generic form handler (nombre, telefono, email, arriendo)
@@ -895,6 +896,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     document.getElementById(id+'-row').style.display = 'none';
     document.getElementById(id+'-ok').style.display = 'block';
     const msg = encodeURIComponent(`Hola, quiero evaluarme para obtener un crédito DS120. Mi WhatsApp es ${t}.`);
+    if (typeof fbq !== 'undefined') fbq('track', 'Contact');
     setTimeout(() => window.open(`https://wa.me/56957823672?text=${msg}`, '_blank'), 800);
   }
 
@@ -928,6 +930,12 @@ footer{background:var(--navy);padding:56px 40px 28px}
   }
 
   document.addEventListener('DOMContentLoaded', function() { fillFields(); watchFields(); });
+</script>
+<script>
+document.addEventListener('click', function(e) {
+  var a = e.target.closest('a[href*="wa.me"]');
+  if (a && typeof fbq !== 'undefined') fbq('track', 'Contact');
+});
 </script>
 </body>
 </html>

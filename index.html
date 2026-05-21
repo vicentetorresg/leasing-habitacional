@@ -156,6 +156,10 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
   .hero-ctas{flex-direction:column;align-items:center}
 }
   </style>
+<!-- Meta Pixel -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1672155134115626');fbq('track','PageView');</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1672155134115626&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel -->
 </head>
 <body>
 <div id="prog"></div>
@@ -384,6 +388,12 @@ window.addEventListener('scroll', function() {
   var h = document.documentElement.scrollHeight - window.innerHeight;
   document.getElementById('prog').style.width = (s/h*100) + '%';
   document.getElementById('nav').classList.toggle('sc', window.scrollY > 40);
+});
+</script>
+<script>
+document.addEventListener('click', function(e) {
+  var a = e.target.closest('a[href*="wa.me"]');
+  if (a && typeof fbq !== 'undefined') fbq('track', 'Contact');
 });
 </script>
 </body>
