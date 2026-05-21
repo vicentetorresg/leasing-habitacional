@@ -392,13 +392,13 @@ footer{background:var(--navy);padding:56px 40px 28px}
         <h3>¿Califico para el<br>DS120?</h3>
         <p class="sub">Déjanos tus datos y te contactamos hoy.</p>
         <div id="hf-content">
-          <div class="f-stack">
+          <form class="f-stack" autocomplete="on" onsubmit="return false;">
             <input class="f-input" type="text" id="hf-n" placeholder="Nombre completo *" autocomplete="name">
             <input class="f-input" type="tel" id="hf-t" placeholder="WhatsApp * (+56 9 XXXX XXXX)" name="tel" autocomplete="tel">
             <input class="f-input" type="email" id="hf-e" placeholder="Correo electrónico *" autocomplete="email">
             <select class="f-input" id="hf-a"><option value="">¿Cuánto pagas de arriendo?</option><option>Menos de $200.000</option><option>$200.000 – $350.000</option><option>$350.000 – $500.000</option><option>Más de $500.000</option><option>No pago arriendo</option></select>
             <button class="f-btn f-btn-navy" onclick="doForm('hf','Leasing - Hero')">Quiero mi casa propia &rarr;</button>
-          </div>
+          </form>
           <div class="fc-trust">
             <div class="fc-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Sin pie</div>
             <div class="fc-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Asesoría gratis</div>
@@ -479,10 +479,10 @@ footer{background:var(--navy);padding:56px 40px 28px}
 <!-- ══ QUICK STRIP 1 ══════════════════════════════════════════ -->
 <div class="qs qs-teal">
   <div class="qs-label">¿Quieres saber si calificas?<span>Déjanos tu WhatsApp — te respondemos en minutos</span></div>
-  <div class="qs-row" id="qs1-row">
+  <form autocomplete="on" onsubmit="return false;"><div class="qs-row" id="qs1-row">
     <input class="qs-input" type="tel" id="qs1-t" placeholder="+56 9 XXXX XXXX" name="tel" autocomplete="tel">
     <button class="qs-btn" onclick="doQuick('qs1','Leasing - Strip 1')">¡Quiero saber!</button>
-  </div>
+  </div></form>
   <div class="qs-success" id="qs1-ok">✓ ¡Listo! Te contactamos muy pronto por WhatsApp.</div>
 </div>
 
@@ -523,13 +523,13 @@ footer{background:var(--navy);padding:56px 40px 28px}
       <div class="dfs-fc" id="f2c">
         <h3>Verificar si califico gratis</h3>
         <div id="f2-content">
-          <div class="f-stack">
+          <form class="f-stack" autocomplete="on" onsubmit="return false;">
             <input class="f-input f-input-d" type="text" id="f2-n" placeholder="Nombre completo *" autocomplete="name">
             <input class="f-input f-input-d" type="tel" id="f2-t" placeholder="WhatsApp *" name="tel" autocomplete="tel">
             <input class="f-input f-input-d" type="email" id="f2-e" placeholder="Correo electrónico *" autocomplete="email">
             <select class="f-input f-input-d" id="f2-a"><option value="">¿Cuánto pagas de arriendo?</option><option>Menos de $200.000</option><option>$200.000 – $350.000</option><option>$350.000 – $500.000</option><option>Más de $500.000</option><option>No pago arriendo</option></select>
             <button class="f-btn f-btn-teal" onclick="doForm('f2','Leasing - Formulario central')">Quiero verificar ahora &rarr;</button>
-          </div>
+          </form>
           <p class="f-privacy">Sin compromiso &middot; Te respondemos en &lt;24 hrs</p>
         </div>
         <div class="f-success f-success-d" id="f2-ok">
@@ -565,10 +565,10 @@ footer{background:var(--navy);padding:56px 40px 28px}
 <!-- ══ QUICK STRIP 2 ══════════════════════════════════════════ -->
 <div class="qs qs-gold">
   <div class="qs-label">Tu casa está a 60 días.<span>Empieza hoy — es completamente gratis</span></div>
-  <div class="qs-row" id="qs2-row">
+  <form autocomplete="on" onsubmit="return false;"><div class="qs-row" id="qs2-row">
     <input class="qs-input" type="tel" id="qs2-t" placeholder="+56 9 XXXX XXXX" name="tel" autocomplete="tel">
     <button class="qs-btn" onclick="doQuick('qs2','Leasing - Strip 2')">Empezar ahora</button>
-  </div>
+  </div></form>
   <div class="qs-success" id="qs2-ok">✓ ¡Excelente! Te contactamos en breve.</div>
 </div>
 
@@ -617,7 +617,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     <h2 class="sec-title">¿Cumples los requisitos?<br>Verifícalo ahora sin costo</h2>
     <p class="sec-sub" style="margin:0 auto 32px">No hay trampa. Solo te pedimos tus datos para verificar si puedes acceder al DS120 hoy mismo.</p>
     <div class="lfs-fc" id="f3c">
-      <div id="f3-content">
+      <form autocomplete="on" onsubmit="return false;"><div id="f3-content">
         <div class="f-row">
           <div class="f-group"><label>Nombre completo *</label><input class="f-input" type="text" id="f3-n" placeholder="Ana García" autocomplete="name"></div>
           <div class="f-group"><label>WhatsApp *</label><input class="f-input" type="tel" id="f3-t" placeholder="+56 9 XXXX XXXX" name="tel" autocomplete="tel"></div>
@@ -635,7 +635,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
         </div>
         <button class="f-btn f-btn-navy" onclick="doFormFull('f3','Leasing - Aplica')">Verificar si califico gratis &rarr;</button>
         <p class="f-privacy f-privacy-d" style="margin-top:12px">Tu información es confidencial. Solo la usamos para contactarte.</p>
-      </div>
+      </div></form>
       <div class="f-success f-success-l" id="f3-ok">
         <div class="f-success-icon">✓</div>
         <h3>¡Tu casa propia está en camino!</h3>
@@ -686,12 +686,12 @@ footer{background:var(--navy);padding:56px 40px 28px}
       <div class="fps-fc" id="f4c">
         <h3>Déjanos tus datos — te contactamos hoy</h3>
         <div id="f4-content">
-          <div class="f-stack">
+          <form class="f-stack" autocomplete="on" onsubmit="return false;">
             <input class="f-input f-input-d" type="text" id="f4-n" placeholder="Nombre completo *" autocomplete="name">
             <input class="f-input f-input-d" type="tel" id="f4-t" placeholder="WhatsApp *" name="tel" autocomplete="tel">
             <input class="f-input f-input-d" type="email" id="f4-e" placeholder="Correo electrónico *" autocomplete="email">
             <button class="f-btn f-btn-teal" onclick="doForm('f4','Leasing - Formulario final')">Quiero mi casa propia &rarr;</button>
-          </div>
+          </form>
           <p class="f-privacy">Gratis &middot; Sin compromiso &middot; Respuesta en &lt;24 hrs</p>
         </div>
         <div class="f-success f-success-d" id="f4-ok">
