@@ -875,6 +875,37 @@ footer{background:var(--navy);padding:56px 40px 28px}
     const msg = encodeURIComponent(`Hola! Vi el DS120 y quiero saber si califico. Mi WhatsApp es ${t}.`);
     setTimeout(() => window.open(`https://wa.me/56957823672?text=${msg}`, '_blank'), 800);
   }
+
+  // autofill desde localStorage
+  const PHONE_IDS = ['hf-t','f2-t','f3-t','f4-t','qs1-t','qs2-t'];
+  const NAME_IDS  = ['hf-n','f2-n','f3-n','f4-n'];
+  const EMAIL_IDS = ['hf-e','f2-e','f3-e','f4-e'];
+
+  function fillFields() {
+    var phone = localStorage.getItem('habita_phone') || '';
+    var name  = localStorage.getItem('habita_name')  || '';
+    var email = localStorage.getItem('habita_email') || '';
+    PHONE_IDS.forEach(function(id) { var el = document.getElementById(id); if (el && !el.value) el.value = phone; });
+    NAME_IDS.forEach(function(id)  { var el = document.getElementById(id); if (el && !el.value) el.value = name;  });
+    EMAIL_IDS.forEach(function(id) { var el = document.getElementById(id); if (el && !el.value) el.value = email; });
+  }
+
+  function watchFields() {
+    PHONE_IDS.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('input', function() { localStorage.setItem('habita_phone', this.value); PHONE_IDS.forEach(function(oid) { var o = document.getElementById(oid); if (o && o !== el) o.value = el.value; }); });
+    });
+    NAME_IDS.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('input', function() { localStorage.setItem('habita_name', this.value); NAME_IDS.forEach(function(oid) { var o = document.getElementById(oid); if (o && o !== el) o.value = el.value; }); });
+    });
+    EMAIL_IDS.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('input', function() { localStorage.setItem('habita_email', this.value); EMAIL_IDS.forEach(function(oid) { var o = document.getElementById(oid); if (o && o !== el) o.value = el.value; }); });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() { fillFields(); watchFields(); });
 </script>
 </body>
 </html>
