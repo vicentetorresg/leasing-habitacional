@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Llave Propia | Mutuo Hipotecario DS01 y DS19</title>
+  <meta name="description" content="Accede a tu primera vivienda con Mutuo Hipotecario y subsidios DS01 o DS19. Pie reducido, plazos flexibles hasta 30 años. Asesoría gratuita en menos de 24 horas.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+:root{
+  --navy:#1B3A6B;--navy-d:#122850;--navy-m:#243870;
+  --teal:#2DB89E;--teal-m:#3ACFB8;--teal-pale:#E5F7F4;
+  --gold:#C9871A;--gold-pale:#FFF8EC;
+  --beige:#FEFCF7;--beige-1:#F7F0E6;--beige-2:#EDE3D4;--beige-3:#DFD0BB;
+  --text:#1A150F;--text-m:#5A4A38;--text-s:#9A8878;
+  --white:#fff;--green:#2B7A4E;--green-l:#D5F5E3;
+  --shadow:rgba(27,58,107,0.10);
+  --r:16px;--rs:10px;--rl:28px;
+  --t:all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige);line-height:1.65;overflow-x:hidden;padding-bottom:72px}
+a{text-decoration:none;color:inherit}
+
+/* progress */
+#prog{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--teal),var(--teal-m));z-index:9999;transition:width .1s linear}
+
+/* nav */
+nav{position:fixed;top:3px;left:0;right:0;z-index:1000;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;transition:var(--t)}
+nav.sc{background:rgba(254,252,247,0.97);backdrop-filter:blur(16px);padding:12px 40px;box-shadow:0 2px 20px rgba(27,58,107,0.08);border-bottom:1px solid var(--beige-2)}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.lw{display:flex;flex-direction:column;line-height:1.1}
+.lw-a{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--navy);line-height:1}
+.lw-b{font-size:0.6rem;font-weight:800;color:var(--teal);letter-spacing:2px;text-transform:uppercase}
+.lw-w .lw-a{color:#fff}.lw-w .lw-b{color:var(--teal-m)}
+.nav-r{display:flex;gap:24px;align-items:center}
+.nav-r a{color:var(--text-m);font-size:0.87rem;font-weight:600;transition:var(--t)}
+.nav-r a:hover{color:var(--navy)}
+.nav-btn{background:var(--navy);color:#fff!important;padding:10px 22px;border-radius:50px;font-weight:700!important;font-size:0.85rem!important}
+.nav-btn:hover{background:var(--navy-m)!important}
+.nav-pill{background:var(--teal-pale);color:var(--teal)!important;padding:8px 16px;border-radius:50px;font-size:0.78rem!important;font-weight:800!important;border:1px solid rgba(45,184,158,0.3)}
+.hide-mob{display:none}
+@media(min-width:768px){.hide-mob{display:block}}
+
+/* hero */
+#hero{min-height:100vh;background:linear-gradient(150deg,var(--navy-d) 0%,var(--navy) 60%,#1e4a7a 100%);position:relative;overflow:hidden;display:flex;align-items:center}
+.hero-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:36px 36px}
+.dc{position:absolute;border-radius:50%;pointer-events:none}
+.dc1{width:600px;height:600px;border:1px solid rgba(45,184,158,0.1);top:-150px;right:-150px;animation:spin 50s linear infinite}
+.dc2{width:350px;height:350px;border:1px solid rgba(45,184,158,0.08);top:-60px;right:0;animation:spin 35s linear infinite reverse}
+.dc3{width:200px;height:200px;background:radial-gradient(circle,rgba(45,184,158,0.08),transparent);bottom:100px;left:5%}
+.hero-inner{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:130px 40px 70px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;width:100%}
+.hero-text>*{opacity:0;transform:translateY(24px);animation:fadeUp .7s forwards cubic-bezier(0.22,1,0.36,1)}
+.hero-text>*:nth-child(1){animation-delay:.1s}
+.hero-text>*:nth-child(2){animation-delay:.22s}
+.hero-text>*:nth-child(3){animation-delay:.36s}
+.hero-text>*:nth-child(4){animation-delay:.5s}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(45,184,158,0.15);border:1px solid rgba(45,184,158,0.3);color:var(--teal-m);padding:5px 14px;border-radius:50px;font-size:0.72rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:18px}
+.hero-badge .dot{width:6px;height:6px;background:var(--teal-m);border-radius:50%;animation:pulse 2s ease-out infinite}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,5vw,4.4rem);font-weight:700;line-height:1.05;color:#fff;margin-bottom:18px}
+.hero-h1 em{font-style:italic;color:var(--teal-m)}
+.hero-sub{font-size:1rem;color:rgba(255,255,255,0.6);line-height:1.75;max-width:440px;margin-bottom:28px}
+.hero-sub strong{color:#fff}
+.hero-trust{display:flex;flex-wrap:wrap;gap:14px}
+.ht-item{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.5);font-size:0.8rem;font-weight:600}
+.ht-item svg{stroke:var(--teal-m);fill:none;stroke-width:2.5;width:12px;height:12px}
+
+/* forms */
+.f-input{width:100%;background:var(--beige);border:1.5px solid var(--beige-3);border-radius:var(--rs);padding:0 16px;height:52px;color:var(--text);font-size:16px;font-family:'Nunito',sans-serif;transition:var(--t);-webkit-appearance:none;display:block}
+.f-input::placeholder{color:var(--text-s)}
+.f-input:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px rgba(45,184,158,0.12)}
+.f-input-d{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15);color:#fff}
+.f-input-d::placeholder{color:rgba(255,255,255,0.4)}
+.f-input-d:focus{background:rgba(255,255,255,0.12);border-color:var(--teal)}
+.f-input-d option{background:#1B3A6B;color:#fff}
+.f-btn{width:100%;height:58px;border:none;border-radius:50px;font-size:1rem;font-weight:900;font-family:'Nunito',sans-serif;cursor:pointer;transition:var(--t);display:flex;align-items:center;justify-content:center;gap:8px}
+.f-btn-navy{background:var(--navy);color:#fff}
+.f-btn-navy:hover{background:var(--navy-d);box-shadow:0 10px 28px rgba(27,58,107,0.35);transform:translateY(-2px)}
+.f-btn-teal{background:var(--teal);color:var(--navy)}
+.f-btn-teal:hover{background:var(--teal-m);box-shadow:0 10px 28px rgba(45,184,158,0.4);transform:translateY(-2px)}
+.f-stack{display:flex;flex-direction:column;gap:10px}
+.f-privacy{text-align:center;color:rgba(255,255,255,0.35);font-size:0.72rem;margin-top:8px}
+.f-privacy-d{color:var(--text-s)}
+.f-success{display:none;text-align:center;padding:28px 16px}
+.f-success-icon{width:60px;height:60px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin:0 auto 14px}
+.f-success-icon-teal{background:var(--teal)}
+.f-success h3{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;margin-bottom:8px}
+.f-success p{font-size:0.88rem;margin-bottom:20px;line-height:1.6}
+.f-success-d h3{color:#fff}.f-success-d p{color:rgba(255,255,255,0.6)}
+.f-success-l h3{color:var(--navy)}.f-success-l p{color:var(--text-m)}
+.f-wa-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#25D366;color:#fff;padding:14px 28px;border-radius:50px;font-weight:800;font-size:0.92rem;transition:var(--t)}
+.f-wa-btn:hover{background:#1fba58;transform:translateY(-1px)}
+
+/* hero form card */
+.hero-fc{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:var(--rl);padding:32px 28px;backdrop-filter:blur(12px);position:relative;overflow:hidden;opacity:0;transform:translateY(36px) scale(0.97);animation:fadeUp .8s .4s forwards cubic-bezier(0.22,1,0.36,1)}
+.hero-fc::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--teal),var(--teal-m),var(--navy))}
+.hero-fc-tag{display:inline-block;background:rgba(45,184,158,0.15);color:var(--teal-m);border:1px solid rgba(45,184,158,0.3);padding:4px 12px;border-radius:50px;font-size:0.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.hero-fc h3{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.2}
+.hero-fc .sub{font-size:0.8rem;color:rgba(255,255,255,0.5);margin-bottom:18px}
+.fc-trust{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.fc-trust-item{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.45);font-size:0.72rem;font-weight:700}
+.fc-trust-item svg{stroke:var(--teal-m);fill:none;stroke-width:2.5;width:11px;height:11px}
+
+/* quick strip */
+.qs{padding:28px 40px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+.qs-teal{background:linear-gradient(90deg,var(--teal),var(--teal-m))}
+.qs-gold{background:linear-gradient(90deg,#C9871A,#E09A22)}
+.qs-label{color:#fff;font-size:1.05rem;font-weight:800;flex-shrink:0;text-align:center}
+.qs-label span{display:block;font-size:0.75rem;font-weight:600;opacity:0.85;margin-top:2px}
+.qs-row{display:flex;gap:10px;align-items:center;flex:1;max-width:480px}
+.qs-input{flex:1;height:52px;background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.5);border-radius:50px;padding:0 20px;color:#fff;font-size:16px;font-family:'Nunito',sans-serif;font-weight:700;min-width:0}
+.qs-input::placeholder{color:rgba(255,255,255,0.7)}
+.qs-input:focus{outline:none;background:rgba(255,255,255,0.3);border-color:#fff}
+.qs-btn{height:52px;padding:0 24px;background:#fff;border:none;border-radius:50px;font-size:0.92rem;font-weight:900;font-family:'Nunito',sans-serif;cursor:pointer;transition:var(--t);white-space:nowrap;flex-shrink:0}
+.qs-teal .qs-btn{color:var(--teal)}
+.qs-gold .qs-btn{color:var(--gold)}
+.qs-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.2)}
+.qs-success{display:none;color:#fff;font-size:1rem;font-weight:700;text-align:center;padding:8px 0}
+
+/* marquee */
+.mq{background:var(--navy);padding:14px 0;overflow:hidden}
+.mq-track{display:flex;white-space:nowrap;animation:mq 22s linear infinite}
+.mq-item{display:inline-flex;align-items:center;gap:18px;padding:0 28px;font-size:0.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4)}
+.mq-item .md{color:var(--teal-m);font-size:0.55rem}
+
+/* stats */
+#stats{background:var(--beige-1);padding:60px 40px}
+.st-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.st-item{text-align:center;padding:18px;border-right:1px solid var(--beige-3)}
+.st-item:last-child{border-right:none}
+.st-val{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:700;color:var(--navy);line-height:1;margin-bottom:6px;display:flex;align-items:baseline;justify-content:center;gap:4px}
+.st-u{font-size:1.4rem}
+.st-lbl{color:var(--text-s);font-size:0.8rem;font-weight:600}
+
+/* sections */
+.sec{padding:90px 40px}
+.sw{max-width:1100px;margin:0 auto}
+.eyebrow{display:inline-block;color:var(--teal);font-size:0.7rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:12px}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,3.5vw,3rem);font-weight:700;color:var(--navy);margin-bottom:14px;line-height:1.15}
+.sec-sub{font-size:1rem;color:var(--text-m);line-height:1.75;max-width:580px}
+.wave{display:block;width:100%;line-height:0}
+.wave svg{display:block;width:100%}
+
+/* que es grid */
+.qe-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.qe-vis{background:var(--navy);border-radius:var(--rl);padding:40px 32px;position:relative;overflow:hidden}
+.qe-vis::after{content:'';position:absolute;bottom:-60px;right:-60px;width:180px;height:180px;background:radial-gradient(circle,rgba(45,184,158,0.18),transparent 70%)}
+.qe-sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.qe-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:var(--rs);padding:16px;text-align:center;transition:var(--t)}
+.qe-card:hover{background:rgba(255,255,255,0.1)}
+.qe-h{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#fff;font-weight:700;margin-bottom:4px}
+.qe-icon{font-size:1.6rem;margin-bottom:4px}
+.qe-lbl{color:rgba(255,255,255,0.45);font-size:0.72rem;font-weight:600;margin-bottom:4px}
+.qe-val{color:#fff;font-size:0.95rem;font-weight:800}
+
+/* tipos */
+.tipos-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+.tipo-card{border-radius:var(--rl);padding:36px 32px;position:relative;overflow:hidden}
+.tipo-navy{background:var(--navy)}
+.tipo-light{background:#fff;border:1.5px solid var(--beige-2)}
+.tipo-tag{display:inline-block;padding:4px 14px;border-radius:50px;font-size:0.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.tipo-navy .tipo-tag{background:rgba(45,184,158,0.15);color:var(--teal-m);border:1px solid rgba(45,184,158,0.3)}
+.tipo-light .tipo-tag{background:var(--teal-pale);color:var(--teal);border:1px solid rgba(45,184,158,0.2)}
+.tipo-card h3{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;margin-bottom:10px;line-height:1.1}
+.tipo-navy h3{color:#fff}
+.tipo-light h3{color:var(--navy)}
+.tipo-card p{font-size:0.9rem;line-height:1.7;margin-bottom:20px}
+.tipo-navy p{color:rgba(255,255,255,0.55)}
+.tipo-light p{color:var(--text-m)}
+.tipo-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.tipo-list li{display:flex;align-items:flex-start;gap:8px;font-size:0.87rem}
+.tipo-navy .tipo-list li{color:rgba(255,255,255,0.7)}
+.tipo-light .tipo-list li{color:var(--text-m)}
+.tipo-list li::before{content:'✓';color:var(--teal-m);font-weight:900;flex-shrink:0;margin-top:1px}
+
+/* subsidios */
+.subs-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+.sub-card{border-radius:var(--rl);padding:36px 32px;border:1.5px solid var(--beige-2);background:#fff;transition:var(--t)}
+.sub-card:hover{border-color:var(--teal);box-shadow:0 16px 48px var(--shadow)}
+.sub-num{font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:700;color:var(--navy);line-height:1;margin-bottom:4px}
+.sub-name{font-size:0.7rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+.sub-card h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--navy);margin-bottom:10px;line-height:1.2}
+.sub-card p{font-size:0.88rem;color:var(--text-m);line-height:1.7;margin-bottom:16px}
+.sub-pill{display:inline-block;background:var(--teal-pale);color:var(--teal);border-radius:50px;padding:5px 14px;font-size:0.76rem;font-weight:800;margin:3px 3px 3px 0}
+
+/* beneficios */
+.bens-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.ben-card{background:#fff;border:1px solid var(--beige-2);border-radius:var(--r);padding:28px 24px;transition:var(--t)}
+.ben-card:hover{border-color:var(--teal);box-shadow:0 8px 32px var(--shadow);transform:translateY(-3px)}
+.b-icon{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:16px}
+.ben-card h3{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:8px}
+.ben-card p{font-size:0.87rem;color:var(--text-m);line-height:1.65}
+
+/* steps */
+.steps-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:48px;position:relative}
+.steps-grid::before{content:'';position:absolute;top:26px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,var(--teal),var(--navy));z-index:0}
+.step{text-align:center;position:relative;z-index:1;padding:0 16px}
+.step-n{width:52px;height:52px;border-radius:50%;background:var(--navy);color:#fff;font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;border:3px solid var(--beige);box-shadow:0 0 0 3px var(--navy)}
+.step h3{font-size:0.9rem;font-weight:800;color:var(--navy);margin-bottom:6px}
+.step p{font-size:0.8rem;color:var(--text-s);line-height:1.6}
+
+/* req */
+.req-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+.req-box{border-radius:var(--rl);padding:36px 32px}
+.req-dark{background:var(--navy)}
+.req-light{background:#fff;border:1.5px solid var(--beige-2)}
+.req-t{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;margin-bottom:20px}
+.req-dark .req-t{color:#fff}
+.req-light .req-t{color:var(--navy)}
+.req-list{display:flex;flex-direction:column;gap:10px}
+.req-item{display:flex;align-items:flex-start;gap:10px;font-size:0.9rem}
+.req-dark .req-item{color:rgba(255,255,255,0.7)}
+.req-light .req-item{color:var(--text-m)}
+.req-ck{width:22px;height:22px;border-radius:50%;background:rgba(45,184,158,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--teal-m);font-size:0.75rem;font-weight:900}
+
+/* dark form section */
+.dfs{background:var(--navy);padding:80px 40px;position:relative;overflow:hidden}
+.dfs::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(45,184,158,0.1),transparent 70%);top:-150px;right:-150px;pointer-events:none}
+.dfs-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.dfs-text h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3vw,2.7rem);font-weight:700;color:#fff;line-height:1.1;margin-bottom:14px;margin-top:14px}
+.dfs-text p{color:rgba(255,255,255,0.5);font-size:0.95rem;line-height:1.75;margin-bottom:26px}
+.dfs-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(45,184,158,0.15);border:1px solid rgba(45,184,158,0.3);border-radius:50px;padding:7px 16px;color:var(--teal-m);font-size:0.73rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
+.dfs-badge .dot2{width:6px;height:6px;background:var(--teal-m);border-radius:50%;animation:pulse 1.5s ease-out infinite}
+.dfs-check{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.7);font-size:0.9rem;margin-bottom:10px}
+.dfs-check-icon{width:20px;height:20px;background:rgba(45,184,158,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--teal-m)}
+.dfs-fc{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--rl);padding:32px 28px;backdrop-filter:blur(8px)}
+.dfs-fc h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:18px}
+
+/* light form section */
+.lfs{background:var(--beige-1);padding:80px 40px}
+.lfs-inner{max-width:700px;margin:0 auto;text-align:center}
+.lfs-fc{background:#fff;border-radius:var(--rl);padding:40px 36px;text-align:left;border:1px solid var(--beige-2);box-shadow:0 16px 48px var(--shadow);position:relative;overflow:hidden}
+.lfs-fc::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--teal),var(--teal-m),transparent)}
+.lfs-fc .f-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.lfs-fc .f-group{margin-bottom:14px}
+.lfs-fc label{display:block;color:var(--navy);font-size:0.78rem;font-weight:800;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.7px}
+
+/* faq */
+.faq-w{max-width:720px;margin:0 auto}
+.faq-list{margin-top:40px;display:flex;flex-direction:column;gap:0}
+.faq-item{border-bottom:1px solid var(--beige-2)}
+.faq-q{padding:20px 0;font-size:0.97rem;font-weight:700;color:var(--navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;transition:var(--t)}
+.faq-q:hover{color:var(--teal)}
+.faq-ic{font-size:1.3rem;font-weight:300;color:var(--teal);flex-shrink:0;transition:var(--t)}
+.faq-item.open .faq-ic{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(0.4,0,0.2,1)}
+.faq-item.open .faq-a{max-height:300px}
+.faq-ai{padding:0 0 20px;font-size:0.9rem;color:var(--text-m);line-height:1.75}
+
+/* footer */
+footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32px}
+.f-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:40px}
+.f-desc{font-size:0.85rem;line-height:1.7;margin-top:14px;max-width:280px}
+.f-col-t{font-size:0.7rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:14px}
+.f-links{display:flex;flex-direction:column;gap:10px}
+.f-links a{font-size:0.87rem;transition:var(--t)}
+.f-links a:hover{color:#fff}
+.f-bot{max-width:1100px;margin:0 auto;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:gap;font-size:0.78rem;gap:12px}
+
+/* WA float */
+.wa-float{position:fixed;bottom:96px;right:24px;width:60px;height:60px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:900;box-shadow:0 8px 24px rgba(37,211,102,0.45);transition:var(--t)}
+.wa-float:hover{transform:scale(1.1)}
+.wa-pulse{position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(37,211,102,0.4);animation:waPulse 2s ease-out infinite}
+
+/* sticky bar */
+.sticky-bar{position:fixed;bottom:0;left:0;right:0;z-index:800;display:flex;height:68px;box-shadow:0 -4px 24px rgba(27,58,107,0.18)}
+.sb-form{flex:1;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.9rem;gap:8px}
+.sb-wa{flex:0 0 68px;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center}
+.sb-wa svg{width:22px;height:22px;fill:#fff}
+@media(min-width:768px){.sticky-bar{display:none}}
+
+/* bullet list */
+.bullet{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.b-item{display:flex;align-items:flex-start;gap:10px;font-size:0.9rem;color:var(--text-m)}
+.b-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:7px}
+
+/* comparacion */
+.comp-table{width:100%;border-collapse:collapse;margin-top:32px;border-radius:var(--r);overflow:hidden;box-shadow:0 8px 32px var(--shadow)}
+.comp-table th{background:var(--navy);color:#fff;padding:16px 20px;text-align:left;font-size:0.82rem;font-weight:800;letter-spacing:0.5px}
+.comp-table td{padding:14px 20px;font-size:0.87rem;border-bottom:1px solid var(--beige-2);color:var(--text-m)}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table tr:nth-child(even) td{background:var(--beige-1)}
+.comp-table td:first-child{font-weight:700;color:var(--navy)}
+.comp-check{color:var(--green);font-weight:800}
+.comp-x{color:#e55}
+
+/* animations */
+@keyframes fadeUp{to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+@keyframes waPulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.5);opacity:0}}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* responsive */
+@media(max-width:900px){
+  .hero-inner,.qe-grid,.dfs-inner,.tipos-grid,.subs-grid,.req-grid{grid-template-columns:1fr}
+  nav{padding:16px 20px}
+  nav.sc{padding:10px 20px}
+  .sec{padding:60px 20px}
+  .qs{padding:20px}
+  .steps-grid{grid-template-columns:1fr 1fr;gap:24px}
+  .steps-grid::before{display:none}
+  .bens-grid{grid-template-columns:1fr}
+  footer .f-grid{grid-template-columns:1fr}
+  .hero-inner{padding:100px 20px 50px}
+  .f-grid{gap:24px}
+  .f-bot{flex-direction:column;text-align:center}
+  .comp-table{font-size:0.8rem}
+  .comp-table th,.comp-table td{padding:12px 14px}
+}
+@media(max-width:600px){
+  .steps-grid{grid-template-columns:1fr}
+  .lfs-fc .f-row{grid-template-columns:1fr}
+}
+  </style>
+</head>
+<body>
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="/" class="nav-logo">
+    <svg width="34" height="38" viewBox="0 0 38 42" fill="none"><path d="M19 3L35 16V39H3V16L19 3Z" stroke="#1B3A6B" stroke-width="3" stroke-linejoin="round"/><circle cx="15" cy="25" r="5.5" stroke="#2DB89E" stroke-width="2.5"/><line x1="20.5" y1="25" x2="31" y2="25" stroke="#2DB89E" stroke-width="2.5" stroke-linecap="round"/></svg>
+    <span class="lw"><span class="lw-a">Llave</span><span class="lw-b">Propia</span></span>
+  </a>
+  <div class="nav-r">
+    <a href="/" class="hide-mob nav-pill">← Leasing DS120</a>
+    <a href="#tipos" class="hide-mob">Tipos de mutuo</a>
+    <a href="#subsidios" class="hide-mob">Subsidios</a>
+    <a href="#aplica" class="nav-btn">Verificar gratis</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="inicio" style="padding:0">
+  <div id="hero">
+    <div class="dc dc1"></div><div class="dc dc2"></div><div class="dc dc3"></div>
+    <div class="hero-dots"></div>
+    <div class="hero-inner">
+
+      <!-- FORM HERO -->
+      <div class="hero-fc" id="hfc">
+        <div class="hero-fc-tag">✓ Gratuito &middot; Sin compromiso &middot; &lt;24 hrs</div>
+        <h3>¿Califico para el<br>Mutuo Hipotecario?</h3>
+        <p class="sub">Déjanos tus datos y te contactamos hoy.</p>
+        <div id="hf-content">
+          <div class="f-stack">
+            <input class="f-input f-input-d" type="text" id="hf-n" placeholder="Nombre completo *" autocomplete="name">
+            <input class="f-input f-input-d" type="tel" id="hf-t" placeholder="WhatsApp * (+56 9 XXXX XXXX)" autocomplete="tel">
+            <input class="f-input f-input-d" type="email" id="hf-e" placeholder="Correo electrónico *" autocomplete="email">
+            <select class="f-input f-input-d" id="hf-a">
+              <option value="">¿Renta mensual aproximada?</option>
+              <option>Menos de $600.000</option>
+              <option>$600.000 – $900.000</option>
+              <option>$900.000 – $1.500.000</option>
+              <option>Más de $1.500.000</option>
+            </select>
+            <button class="f-btn f-btn-teal" onclick="doForm('hf','mutuo_hero')">Quiero mi casa propia &rarr;</button>
+          </div>
+          <div class="fc-trust" style="margin-top:14px">
+            <div class="fc-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Pie reducido</div>
+            <div class="fc-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Asesoría gratis</div>
+            <div class="fc-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> DS01 y DS19</div>
+          </div>
+        </div>
+        <div class="f-success f-success-d" id="hf-ok">
+          <div class="f-success-icon f-success-icon-teal">✓</div>
+          <h3>¡Recibimos tus datos!</h3>
+          <p>Te contactamos en menos de 24 horas. También puedes escribirnos ahora:</p>
+          <a href="https://wa.me/56957823672?text=Hola!%20Me%20interesa%20el%20Mutuo%20Hipotecario.%20%C2%BFPueden%20orientarme%3F" class="f-wa-btn" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Escribir por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="hero-text">
+        <div class="hero-badge"><span class="dot"></span>Subsidio DS01 &middot; DS19 &middot; Pie Reducido</div>
+        <h1 class="hero-h1">Tu vivienda con<br><em>Mutuo Hipotecario</em><br>y subsidio del Estado.</h1>
+        <p class="hero-sub">Compra tu primera vivienda con <strong>pie reducido y subsidio estatal</strong>. Plazos flexibles hasta 30 años. La financiera compra la propiedad y tú pagas cuotas fijas en UF.</p>
+        <div class="hero-trust">
+          <div class="ht-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> DS01 y DS19 disponibles</div>
+          <div class="ht-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Extranjeros sin historial</div>
+          <div class="ht-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Asesoría gratuita</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq"><div class="mq-track">
+  <span class="mq-item">MUTUO HIPOTECARIO <span class="md">·</span></span>
+  <span class="mq-item">SUBSIDIO DS01 <span class="md">·</span></span>
+  <span class="mq-item">SUBSIDIO DS19 <span class="md">·</span></span>
+  <span class="mq-item">PIE REDUCIDO <span class="md">·</span></span>
+  <span class="mq-item">HASTA 30 AÑOS <span class="md">·</span></span>
+  <span class="mq-item">EXTRANJEROS BIENVENIDOS <span class="md">·</span></span>
+  <span class="mq-item">MUTUO HIPOTECARIO <span class="md">·</span></span>
+  <span class="mq-item">SUBSIDIO DS01 <span class="md">·</span></span>
+  <span class="mq-item">SUBSIDIO DS19 <span class="md">·</span></span>
+  <span class="mq-item">PIE REDUCIDO <span class="md">·</span></span>
+  <span class="mq-item">HASTA 30 AÑOS <span class="md">·</span></span>
+  <span class="mq-item">EXTRANJEROS BIENVENIDOS <span class="md">·</span></span>
+</div></div>
+
+<!-- STATS -->
+<div id="stats"><div class="st-inner">
+  <div class="st-item"><div class="st-val">1.000<span class="st-u" style="font-size:1.4rem">–2.200 UF</span></div><div class="st-lbl">Rango de viviendas</div></div>
+  <div class="st-item"><div class="st-val">Hasta<span class="st-u" style="font-size:1.4rem"> 30</span></div><div class="st-lbl">Años de plazo</div></div>
+  <div class="st-item"><div class="st-val">DS01<span class="st-u" style="font-size:1.4rem"> + DS19</span></div><div class="st-lbl">Subsidios disponibles</div></div>
+  <div class="st-item"><div class="st-val">&lt;24<span class="st-u" style="font-size:1rem"> hrs</span></div><div class="st-lbl">Para saber si calificas</div></div>
+</div></div>
+
+<!-- QUÉ ES -->
+<section id="que-es" class="sec" style="background:#fff">
+  <div class="sw">
+    <div class="qe-grid">
+      <div>
+        <span class="eyebrow">El producto</span>
+        <h2 class="sec-title">¿Qué es el Mutuo<br>Hipotecario?</h2>
+        <p class="sec-sub" style="margin-bottom:20px">Es un <strong>préstamo en UF</strong> respaldado por la propiedad que compras. La financiera adquiere la vivienda y tú pagas cuotas mensuales durante el plazo acordado. El contrato tiene carácter de escritura pública.</p>
+        <div class="bullet">
+          <div class="b-item"><div class="b-dot"></div><span>Tasas fijas en UF — cuotas predecibles durante todo el plazo</span></div>
+          <div class="b-item"><div class="b-dot"></div><span>El contrato puede ser endosado o vendido a terceros para financiamiento</span></div>
+          <div class="b-item"><div class="b-dot"></div><span>Compatible con subsidios estatales DS01 y DS19 para reducir el pie</span></div>
+          <div class="b-item"><div class="b-dot"></div><span>Viviendas nuevas y usadas entre 1.000 y 2.200 UF</span></div>
+          <div class="b-item"><div class="b-dot"></div><span>Accesible para extranjeros sin historial crediticio en Chile</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="qe-vis">
+          <p class="qe-h">El mutuo en números</p>
+          <div class="qe-sub-grid">
+            <div class="qe-card"><div class="qe-icon">🏠</div><div class="qe-lbl">Vivienda</div><div class="qe-val">1.000–2.200 UF</div></div>
+            <div class="qe-card"><div class="qe-icon">📅</div><div class="qe-lbl">Plazo</div><div class="qe-val">Hasta 30 años</div></div>
+            <div class="qe-card"><div class="qe-icon">🏛️</div><div class="qe-lbl">Subsidio</div><div class="qe-val">DS01 o DS19</div></div>
+            <div class="qe-card"><div class="qe-icon">💰</div><div class="qe-lbl">Pie reducido</div><div class="qe-val">Con subsidio</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK STRIP 1 -->
+<div class="qs qs-teal">
+  <div class="qs-label">¿Quieres saber si calificas?<span>Déjanos tu WhatsApp — te respondemos en minutos</span></div>
+  <div class="qs-row" id="qs1-row">
+    <input class="qs-input" type="tel" id="qs1-t" placeholder="+56 9 XXXX XXXX" autocomplete="tel">
+    <button class="qs-btn" onclick="doQuick('qs1')">¡Quiero saber!</button>
+  </div>
+  <div class="qs-success" id="qs1-ok">✓ ¡Listo! Te contactamos muy pronto.</div>
+</div>
+
+<!-- TIPOS -->
+<section id="tipos" class="sec" style="background:var(--beige-1)">
+  <div class="sw">
+    <div style="text-align:center;max-width:560px;margin:0 auto">
+      <span class="eyebrow">Modalidades</span>
+      <h2 class="sec-title">Dos tipos de<br>Mutuo Hipotecario</h2>
+      <p class="sec-sub" style="margin:0 auto">Elige el que mejor se adapta a tu situación. Nosotros te orientamos.</p>
+    </div>
+    <div class="tipos-grid">
+      <div class="tipo-card tipo-navy">
+        <div class="tipo-tag">Más habitual</div>
+        <h3>Mutuo Endosable</h3>
+        <p>La financiera puede vender o ceder el crédito a un banco u otra institución. Esto le permite ofrecer tasas más competitivas y plazos más largos.</p>
+        <ul class="tipo-list">
+          <li>Compatible con subsidios DS01 y DS19</li>
+          <li>Tasas más competitivas en el mercado</li>
+          <li>Plazos de hasta 30 años</li>
+          <li>Mayor acceso a personas sin historial bancario</li>
+          <li>Escritura pública ante notario</li>
+        </ul>
+      </div>
+      <div class="tipo-card tipo-light">
+        <div class="tipo-tag">Alternativa</div>
+        <h3>Mutuo No Endosable</h3>
+        <p>El crédito permanece en la institución que lo otorga durante toda su vigencia. Más flexible en evaluación crediticia.</p>
+        <ul class="tipo-list">
+          <li>Evaluación más flexible para casos especiales</li>
+          <li>No requiere inscripción en Conservador de Bienes Raíces endosable</li>
+          <li>Plazos adaptables según institución</li>
+          <li>Opción para quienes no califican en hipoteca bancaria</li>
+          <li>Proceso más ágil en algunos casos</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:var(--beige-1)"><svg viewBox="0 0 1440 48" preserveAspectRatio="none" style="height:40px" fill="var(--navy)"><path d="M0,0 C360,48 1080,48 1440,0 L1440,48 L0,48 Z"/></svg></div>
+
+<!-- DARK FORM -->
+<section class="dfs" id="form2">
+  <div class="dfs-inner">
+    <div class="dfs-text">
+      <div class="dfs-badge"><span class="dot2"></span>&nbsp;Subsidios disponibles todo el año</div>
+      <h2>¿Listo para dejar<br>de pagar arriendo?</h2>
+      <p>Con el Mutuo Hipotecario y los subsidios DS01 o DS19, accedes a tu primera vivienda con pie reducido y cuotas predecibles en UF.</p>
+      <div class="dfs-check"><span class="dfs-check-icon">✓</span>Pie reducido con subsidio estatal</div>
+      <div class="dfs-check"><span class="dfs-check-icon">✓</span>Plazos hasta 30 años</div>
+      <div class="dfs-check"><span class="dfs-check-icon">✓</span>Válido para dependientes e independientes</div>
+      <div class="dfs-check"><span class="dfs-check-icon">✓</span>Gestionamos todos los trámites gratis</div>
+    </div>
+    <div>
+      <div class="dfs-fc">
+        <h3>Verificar si califico gratis</h3>
+        <div id="f2-content">
+          <div class="f-stack">
+            <input class="f-input f-input-d" type="text" id="f2-n" placeholder="Nombre completo *" autocomplete="name">
+            <input class="f-input f-input-d" type="tel" id="f2-t" placeholder="WhatsApp *" autocomplete="tel">
+            <input class="f-input f-input-d" type="email" id="f2-e" placeholder="Correo electrónico *" autocomplete="email">
+            <select class="f-input f-input-d" id="f2-a">
+              <option value="">¿Renta mensual aproximada?</option>
+              <option>Menos de $600.000</option>
+              <option>$600.000 – $900.000</option>
+              <option>$900.000 – $1.500.000</option>
+              <option>Más de $1.500.000</option>
+            </select>
+            <button class="f-btn f-btn-teal" onclick="doForm('f2','mutuo_dark')">Quiero verificar ahora &rarr;</button>
+          </div>
+          <p class="f-privacy">Sin compromiso &middot; Respuesta en &lt;24 hrs</p>
+        </div>
+        <div class="f-success f-success-d" id="f2-ok">
+          <div class="f-success-icon f-success-icon-teal">✓</div>
+          <h3>¡Listo!</h3>
+          <p>Recibimos tu solicitud. Te contactamos pronto.</p>
+          <a href="https://wa.me/56957823672?text=Hola!%20Me%20interesa%20el%20Mutuo%20Hipotecario.%20%C2%BFPueden%20orientarme%3F" class="f-wa-btn" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="wave" style="background:var(--navy)"><svg viewBox="0 0 1440 48" preserveAspectRatio="none" style="height:40px" fill="#fff"><path d="M0,48 C360,0 1080,0 1440,48 L1440,0 L0,0 Z"/></svg></div>
+
+<!-- SUBSIDIOS -->
+<section id="subsidios" class="sec" style="background:#fff">
+  <div class="sw">
+    <div style="text-align:center;max-width:560px;margin:0 auto">
+      <span class="eyebrow">Apoyo estatal</span>
+      <h2 class="sec-title">Subsidios disponibles<br>para tu mutuo</h2>
+      <p class="sec-sub" style="margin:0 auto">El Estado aporta parte del pie a través de dos programas según tu renta. Nosotros determinamos cuál aplica en tu caso.</p>
+    </div>
+    <div class="subs-grid">
+      <div class="sub-card">
+        <div class="sub-num">DS01</div>
+        <div class="sub-name">Decreto Supremo 1</div>
+        <h3>Subsidio para sectores<br>bajos y medios</h3>
+        <p>Dirigido a familias de menores recursos que buscan su primera vivienda. El subsidio cubre parte significativa del pie, reduciendo la deuda hipotecaria.</p>
+        <div>
+          <span class="sub-pill">Primera vivienda</span>
+          <span class="sub-pill">Renta media-baja</span>
+          <span class="sub-pill">Viviendas hasta 1.000 UF</span>
+          <span class="sub-pill">Sin postulación por puntaje</span>
+        </div>
+      </div>
+      <div class="sub-card">
+        <div class="sub-num">DS19</div>
+        <div class="sub-name">Decreto Supremo 19</div>
+        <h3>Subsidio para sectores<br>medios</h3>
+        <p>Para familias de ingresos medios que no califican al DS01. Permite acceder a viviendas de mayor valor con un subsidio que reduce el pie requerido.</p>
+        <div>
+          <span class="sub-pill">Primera vivienda</span>
+          <span class="sub-pill">Renta media</span>
+          <span class="sub-pill">Viviendas hasta 2.200 UF</span>
+          <span class="sub-pill">Disponible todo el año</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK STRIP 2 -->
+<div class="qs qs-gold">
+  <div class="qs-label">Tu casa está a 60–90 días.<span>Empieza hoy — asesoría completamente gratis</span></div>
+  <div class="qs-row" id="qs2-row">
+    <input class="qs-input" type="tel" id="qs2-t" placeholder="+56 9 XXXX XXXX" autocomplete="tel">
+    <button class="qs-btn" onclick="doQuick('qs2')">Empezar ahora</button>
+  </div>
+  <div class="qs-success" id="qs2-ok">✓ ¡Excelente! Te contactamos en breve.</div>
+</div>
+
+<!-- BENEFICIOS -->
+<div class="wave" style="background:var(--beige-1)"><svg viewBox="0 0 1440 48" preserveAspectRatio="none" style="height:40px" fill="#fff"><path d="M0,0 C360,48 1080,48 1440,0 L1440,48 L0,48 Z"/></svg></div>
+<section id="bens" class="sec" style="background:var(--beige-1);padding-top:50px">
+  <div class="sw">
+    <div style="text-align:center;max-width:560px;margin:0 auto">
+      <span class="eyebrow">Por qué elegirnos</span>
+      <h2 class="sec-title">Ventajas del Mutuo<br>Hipotecario con Llave Propia</h2>
+    </div>
+    <div class="bens-grid">
+      <div class="ben-card"><div class="b-icon" style="background:#FEF3DC">💰</div><h3>Pie reducido con subsidio</h3><p>Los subsidios DS01 y DS19 cubren parte del pie. Tú pones menos de tu bolsillo y accedes antes a tu vivienda.</p></div>
+      <div class="ben-card"><div class="b-icon" style="background:#D5F5E3">📅</div><h3>Plazos hasta 30 años</h3><p>Elige el plazo que se ajusta a tu capacidad de pago. Cuotas fijas en UF durante toda la vigencia del crédito.</p></div>
+      <div class="ben-card"><div class="b-icon" style="background:#DBEAFE">🌎</div><h3>Accesible para extranjeros</h3><p>No necesitas historial crediticio en Chile. Extranjeros con residencia acceden en igualdad de condiciones.</p></div>
+      <div class="ben-card"><div class="b-icon" style="background:#EDE9FE">🤝</div><h3>Acompañamiento experto</h3><p>Te guiamos desde la evaluación hasta la firma ante notario. Sin costo adicional en toda la gestión.</p></div>
+      <div class="ben-card"><div class="b-icon" style="background:#FEE2E2">🏗️</div><h3>Nueva o usada</h3><p>Aplica para viviendas nuevas y usadas entre 1.000 y 2.200 UF en todo el territorio nacional.</p></div>
+      <div class="ben-card"><div class="b-icon" style="background:#ECFDF5">📝</div><h3>Independientes bienvenidos</h3><p>Trabajadores a honorarios y cuenta propia pueden postular acreditando renta con boletas o declaración de renta.</p></div>
+    </div>
+  </div>
+</section>
+<div class="wave" style="background:var(--beige-1)"><svg viewBox="0 0 1440 48" preserveAspectRatio="none" style="height:40px" fill="var(--navy)"><path d="M0,0 C360,48 1080,48 1440,0 L1440,48 L0,48 Z"/></svg></div>
+
+<!-- CÓMO FUNCIONA -->
+<section id="steps" class="sec" style="background:var(--navy);padding-top:80px;padding-bottom:80px">
+  <div class="sw">
+    <div style="text-align:center;max-width:560px;margin:0 auto">
+      <span class="eyebrow" style="color:var(--teal-m)">El proceso</span>
+      <h2 class="sec-title" style="color:#fff">4 pasos hacia tu casa propia</h2>
+      <p class="sec-sub" style="color:rgba(255,255,255,0.5);margin:0 auto">De aprobación a llaves en 60 a 90 días.</p>
+    </div>
+    <div class="steps-grid" style="margin-top:48px">
+      <div class="step"><div class="step-n" style="background:var(--teal);box-shadow:none;border-color:var(--navy)">1</div><h3 style="color:#fff">Verifica si calificas</h3><p style="color:rgba(255,255,255,0.45)">Llena el formulario. Te contactamos en menos de 24 horas sin costo ni compromiso.</p></div>
+      <div class="step"><div class="step-n" style="background:var(--teal);box-shadow:none;border-color:var(--navy)">2</div><h3 style="color:#fff">Evaluación y subsidio</h3><p style="color:rgba(255,255,255,0.45)">Determinamos si aplica DS01 o DS19. Reunimos la documentación y tramitamos el subsidio.</p></div>
+      <div class="step"><div class="step-n" style="background:var(--teal);box-shadow:none;border-color:var(--navy)">3</div><h3 style="color:#fff">Elegimos tu vivienda</h3><p style="color:rgba(255,255,255,0.45)">Con la pre-aprobación en mano, seleccionas la propiedad. Te acompañamos en la búsqueda.</p></div>
+      <div class="step"><div class="step-n" style="background:var(--teal);box-shadow:none;border-color:var(--navy)">4</div><h3 style="color:#fff">Firma y llaves</h3><p style="color:rgba(255,255,255,0.45)">Firma el contrato ante notario. Entras a vivir y pagas cuotas mensuales hasta completar el precio.</p></div>
+    </div>
+  </div>
+</section>
+<div class="wave" style="background:var(--navy)"><svg viewBox="0 0 1440 48" preserveAspectRatio="none" style="height:40px" fill="var(--beige-1)"><path d="M0,48 C360,0 1080,0 1440,48 L1440,0 L0,0 Z"/></svg></div>
+
+<!-- REQUISITOS -->
+<section id="req" class="sec" style="background:var(--beige-1)">
+  <div class="sw">
+    <div style="text-align:center;max-width:560px;margin:0 auto">
+      <span class="eyebrow">Requisitos</span>
+      <h2 class="sec-title">¿Califico para el<br>Mutuo Hipotecario?</h2>
+      <p class="sec-sub" style="margin:0 auto">Revisa los requisitos básicos. Si tienes dudas, te orientamos gratis.</p>
+    </div>
+    <div class="req-grid">
+      <div class="req-box req-dark">
+        <div class="req-t">¿Quién califica?</div>
+        <div class="req-list">
+          <div class="req-item"><div class="req-ck">✓</div>Entre 21 y 65 años</div>
+          <div class="req-item"><div class="req-ck">✓</div>No ser propietario de vivienda (ni cónyuge)</div>
+          <div class="req-item"><div class="req-ck">✓</div>No haber recibido subsidios habitacionales antes</div>
+          <div class="req-item"><div class="req-ck">✓</div>Renta líquida estable (dependiente o independiente)</div>
+          <div class="req-item"><div class="req-ck">✓</div>Sin deudas impagas ni protestos activos</div>
+          <div class="req-item"><div class="req-ck">✓</div>Inscrito en el Registro Único de SERVIU</div>
+          <div class="req-item"><div class="req-ck">✓</div>Extranjeros con residencia: mismas condiciones</div>
+        </div>
+      </div>
+      <div class="req-box req-light">
+        <div class="req-t">Documentos que necesitas</div>
+        <div class="req-list">
+          <div class="req-item"><div class="req-ck">✓</div>Cédula de identidad vigente</div>
+          <div class="req-item"><div class="req-ck">✓</div>6 últimas liquidaciones de sueldo (dependientes)</div>
+          <div class="req-item"><div class="req-ck">✓</div>Boletas de honorarios o declaración de renta (independientes)</div>
+          <div class="req-item"><div class="req-ck">✓</div>Certificado de antigüedad laboral</div>
+          <div class="req-item"><div class="req-ck">✓</div>Certificado de Cotizaciones AFP (12 meses)</div>
+          <div class="req-item"><div class="req-ck">✓</div>Certificado de Deuda CMF</div>
+          <div class="req-item"><div class="req-ck">✓</div>Certificado de matrimonio (si aplica)</div>
+          <div class="req-item" style="margin-top:8px;padding-top:14px;border-top:1px solid var(--beige-2)"><span style="color:var(--teal);font-weight:700;font-size:0.86rem">Te acompañamos a reunir todo, gratis.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM LIGHT -->
+<section id="aplica" class="lfs">
+  <div class="lfs-inner">
+    <span class="eyebrow">Asesoría gratuita</span>
+    <h2 class="sec-title">Verifica si calificas<br>ahora sin costo</h2>
+    <p class="sec-sub" style="margin:0 auto 32px">Completa el formulario y te contactamos en menos de 24 horas con los siguientes pasos.</p>
+    <div class="lfs-fc">
+      <div id="f3-content">
+        <div class="f-row">
+          <div class="f-group"><label>Nombre completo *</label><input class="f-input" type="text" id="f3-n" placeholder="Ana García" autocomplete="name"></div>
+          <div class="f-group"><label>WhatsApp *</label><input class="f-input" type="tel" id="f3-t" placeholder="+56 9 XXXX XXXX" autocomplete="tel"></div>
+        </div>
+        <div class="f-group"><label>Correo electrónico *</label><input class="f-input" type="email" id="f3-e" placeholder="tucorreo@email.com" autocomplete="email"></div>
+        <div class="f-group"><label>Renta mensual aproximada</label>
+          <select class="f-input" id="f3-a">
+            <option value="">Selecciona un rango</option>
+            <option>Menos de $600.000</option>
+            <option>$600.000 – $900.000</option>
+            <option>$900.000 – $1.500.000</option>
+            <option>Más de $1.500.000</option>
+          </select>
+        </div>
+        <button class="f-btn f-btn-navy" onclick="doForm('f3','mutuo_aplica')">Verificar si califico gratis &rarr;</button>
+        <p class="f-privacy f-privacy-d" style="margin-top:12px">Tu información es confidencial. Solo la usamos para contactarte.</p>
+      </div>
+      <div class="f-success f-success-l" id="f3-ok">
+        <div class="f-success-icon">✓</div>
+        <h3>¡Tu casa propia está en camino!</h3>
+        <p>Te contactamos en menos de 24 horas. También puedes escribirnos directo:</p>
+        <a href="https://wa.me/56957823672?text=Hola!%20Me%20interesa%20el%20Mutuo%20Hipotecario.%20%C2%BFPueden%20orientarme%3F" class="f-wa-btn" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Hablar por WhatsApp</a>
+      </div>
+    </div>
+    <div style="margin-top:24px;text-align:center">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px"><div style="flex:1;height:1px;background:var(--beige-3)"></div><span style="color:var(--text-s);font-size:0.78rem;font-weight:700;white-space:nowrap">o habla directo con un asesor</span><div style="flex:1;height:1px;background:var(--beige-3)"></div></div>
+      <a href="https://wa.me/56957823672?text=Hola!%20Me%20interesa%20el%20Mutuo%20Hipotecario.%20%C2%BFPueden%20orientarme%3F" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:12px;width:100%;max-width:400px;margin:0 auto;background:#25D366;color:#fff;padding:17px 28px;border-radius:50px;font-weight:900;font-size:1rem;box-shadow:0 8px 24px rgba(37,211,102,0.35)"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Hablar por WhatsApp ahora</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<div class="wave" style="background:var(--beige-1)"><svg viewBox="0 0 1440 48" preserveAspectRatio="none" style="height:40px" fill="var(--navy-d)"><path d="M0,48 C360,0 1080,0 1440,48 L1440,0 L0,0 Z"/></svg></div>
+<section id="faq" class="sec" style="background:#fff">
+  <div class="faq-w">
+    <div style="text-align:center;margin-bottom:0"><span class="eyebrow">Dudas frecuentes</span><h2 class="sec-title">Todo lo que necesitas saber</h2></div>
+    <div class="faq-list">
+      <div class="faq-item"><div class="faq-q">¿Qué es exactamente el Mutuo Hipotecario?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">Es un préstamo en UF respaldado por la propiedad que compras. La financiera adquiere la vivienda, tú pagas cuotas mensuales y al terminar el plazo, la escritura queda a tu nombre. El contrato tiene carácter de escritura pública y puede ser endosado o vendido a otras instituciones.</div></div></div>
+      <div class="faq-item"><div class="faq-q">¿Cuál es la diferencia entre DS01 y DS19?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">El <strong>DS01</strong> está pensado para familias de menores recursos y permite acceder a viviendas de menor valor con mayor porcentaje de subsidio. El <strong>DS19</strong> es para sectores medios, con tope de vivienda hasta 2.200 UF. Nosotros determinamos cuál aplica en tu caso según tu renta y situación.</div></div></div>
+      <div class="faq-item"><div class="faq-q">¿Cuánto pie debo tener?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">El subsidio estatal (DS01 o DS19) cubre parte del pie. Dependiendo del valor de la vivienda y tu situación, el aporte de tu bolsillo puede ser muy reducido o incluso cero en algunos casos. Te damos el detalle exacto en la evaluación gratuita.</div></div></div>
+      <div class="faq-item"><div class="faq-q">¿Pueden acceder trabajadores independientes?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">Sí. Los trabajadores a honorarios y cuenta propia pueden postular acreditando renta con <strong>boletas de honorarios, declaración de renta o estados financieros</strong>. Se requiere continuidad laboral documentada. La renta puede complementarse con la del cónyuge.</div></div></div>
+      <div class="faq-item"><div class="faq-q">¿Pueden acceder extranjeros?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">Sí. Extranjeros con residencia en Chile pueden acceder al Mutuo Hipotecario <strong>sin necesidad de historial crediticio previo</strong> en el país. Los requisitos son los mismos que para chilenos.</div></div></div>
+      <div class="faq-item"><div class="faq-q">¿Cuánto demora el proceso?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">De aprobación a llaves: <strong>60 a 90 días</strong>. El proceso incluye evaluación, tramitación del subsidio, elección de vivienda y firma ante notario. Te acompañamos en cada paso.</div></div></div>
+      <div class="faq-item"><div class="faq-q">¿En qué se diferencia del Leasing Habitacional DS120?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">En el <strong>Leasing DS120</strong> el Estado pone el pie directamente (sin que tengas que reunirlo tú). En el <strong>Mutuo Hipotecario</strong> con DS01/DS19, el subsidio reduce el pie pero puede requerirse un aporte propio. El leasing no exige historial bancario; el mutuo puede ser más conveniente para rentas más altas. <a href="/" style="color:var(--teal);font-weight:700">Ver Leasing DS120 &rarr;</a></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-grid">
+    <div>
+      <a href="/" class="nav-logo" style="display:inline-flex">
+        <svg width="32" height="36" viewBox="0 0 38 42" fill="none"><path d="M19 3L35 16V39H3V16L19 3Z" stroke="white" stroke-width="3" stroke-linejoin="round"/><circle cx="15" cy="25" r="5.5" stroke="#3ACFB8" stroke-width="2.5"/><line x1="20.5" y1="25" x2="31" y2="25" stroke="#3ACFB8" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <span class="lw lw-w"><span class="lw-a">Llave</span><span class="lw-b">Propia</span></span>
+      </a>
+      <p class="f-desc">Especialistas en soluciones habitacionales con respaldo del Estado. DS120, DS01 y DS19.</p>
+    </div>
+    <div>
+      <div class="f-col-t">Páginas</div>
+      <div class="f-links">
+        <a href="/">Leasing Habitacional DS120</a>
+        <a href="/mutuo">Mutuo Hipotecario</a>
+        <a href="#tipos">Tipos de mutuo</a>
+        <a href="#subsidios">Subsidios DS01 y DS19</a>
+        <a href="#req">Requisitos</a>
+        <a href="#faq">Preguntas frecuentes</a>
+      </div>
+    </div>
+    <div>
+      <div class="f-col-t">Contacto</div>
+      <div class="f-links">
+        <a href="https://wa.me/56957823672?text=Hola!%20Me%20interesa%20el%20Mutuo%20Hipotecario.%20%C2%BFPueden%20orientarme%3F" target="_blank" rel="noopener">WhatsApp: +56 9 5782 3672</a>
+        <a href="https://www.minvu.gob.cl" target="_blank" rel="noopener">MINVU oficial</a>
+        <a href="https://www.serviu.cl" target="_blank" rel="noopener">SERVIU.cl</a>
+      </div>
+    </div>
+  </div>
+  <div class="f-bot">
+    <p>&copy; 2026 Llave Propia. Todos los derechos reservados.</p>
+    <p>DS01 &middot; DS19 &middot; Ley N&deg;19.281 &middot; MINVU Chile</p>
+  </div>
+</footer>
+
+<!-- WA FLOAT -->
+<a href="https://wa.me/56957823672?text=Hola!%20Me%20interesa%20el%20Mutuo%20Hipotecario.%20%C2%BFPueden%20orientarme%3F" class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <span class="wa-pulse"></span>
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- STICKY MOBILE BAR -->
+<div class="sticky-bar">
+  <a href="#aplica" class="sb-form">Verificar si califico gratis</a>
+  <a href="https://wa.me/56957823672?text=Hola!%20Me%20interesa%20el%20Mutuo%20Hipotecario.%20%C2%BFPueden%20orientarme%3F" target="_blank" rel="noopener" class="sb-wa">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
+<script>
+  // progress bar
+  window.addEventListener('scroll', function() {
+    var s = document.documentElement.scrollTop;
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('prog').style.width = (s/h*100) + '%';
+  });
+
+  // nav scroll
+  window.addEventListener('scroll', function() {
+    document.getElementById('nav').classList.toggle('sc', window.scrollY > 40);
+  });
+
+  // faq
+  document.querySelectorAll('.faq-q').forEach(function(q) {
+    q.addEventListener('click', function() {
+      var item = this.parentElement;
+      var wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // supabase
+  var SUPA_URL = 'https://unptkiyggkuxtkzedluv.supabase.co/rest/v1/leasing_leads';
+  var SUPA_KEY = 'sb_publishable_PBDA1EmrPJuzgK_qIEjsTA_eIjuUF5s';
+
+  function saveLead(data) {
+    var leads = JSON.parse(localStorage.getItem('habita_leads') || '[]');
+    leads.push(Object.assign({}, data, { fecha: new Date().toISOString() }));
+    localStorage.setItem('habita_leads', JSON.stringify(leads));
+    fetch(SUPA_URL, {
+      method: 'POST',
+      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify(data)
+    }).catch(function(){});
+  }
+
+  function doForm(prefix, src) {
+    var n = document.getElementById(prefix+'-n').value.trim();
+    var t = document.getElementById(prefix+'-t').value.trim();
+    var e = document.getElementById(prefix+'-e').value.trim();
+    if (!n||!t||!e) { alert('Por favor completa nombre, teléfono y correo.'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { alert('Ingresa un correo válido.'); return; }
+    var a = document.getElementById(prefix+'-a');
+    saveLead({ nombre:n, telefono:t, email:e, arriendo:a?a.value:'', fuente:src });
+    document.getElementById(prefix+'-content').style.display = 'none';
+    var ok = document.getElementById(prefix+'-ok');
+    ok.style.display = 'block';
+    var msg = encodeURIComponent('Hola! Me llamo ' + n + '. Vi el Mutuo Hipotecario y quiero saber si califico. Mi WhatsApp es ' + t + '.');
+    var waLink = ok.querySelector('.f-wa-btn');
+    if (waLink) waLink.href = 'https://wa.me/56957823672?text=' + msg;
+  }
+
+  function doQuick(id) {
+    var t = document.getElementById(id+'-t').value.trim();
+    if (!t) { alert('Por favor ingresa tu número de WhatsApp.'); return; }
+    saveLead({ telefono:t, fuente:'mutuo_qs_'+id });
+    document.getElementById(id+'-row').style.display = 'none';
+    document.getElementById(id+'-ok').style.display = 'block';
+    var msg = encodeURIComponent('Hola! Vi el Mutuo Hipotecario y quiero saber si califico. Mi WhatsApp es ' + t + '.');
+    setTimeout(function() { window.open('https://wa.me/56957823672?text=' + msg, '_blank'); }, 800);
+  }
+
+  // autofill
+  var PHONE_IDS = ['hf-t','f2-t','f3-t','qs1-t','qs2-t'];
+  var NAME_IDS  = ['hf-n','f2-n','f3-n'];
+  var EMAIL_IDS = ['hf-e','f2-e','f3-e'];
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var phone = localStorage.getItem('habita_phone') || '';
+    var name  = localStorage.getItem('habita_name')  || '';
+    var email = localStorage.getItem('habita_email') || '';
+    PHONE_IDS.forEach(function(id) { var el = document.getElementById(id); if (el && !el.value) el.value = phone; });
+    NAME_IDS.forEach(function(id)  { var el = document.getElementById(id); if (el && !el.value) el.value = name; });
+    EMAIL_IDS.forEach(function(id) { var el = document.getElementById(id); if (el && !el.value) el.value = email; });
+
+    PHONE_IDS.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('input', function() {
+        localStorage.setItem('habita_phone', this.value);
+        PHONE_IDS.forEach(function(oid) { var o = document.getElementById(oid); if (o && o.id !== id) o.value = el.value; });
+      });
+    });
+    NAME_IDS.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('input', function() {
+        localStorage.setItem('habita_name', this.value);
+        NAME_IDS.forEach(function(oid) { var o = document.getElementById(oid); if (o && o.id !== id) o.value = el.value; });
+      });
+    });
+    EMAIL_IDS.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('input', function() {
+        localStorage.setItem('habita_email', this.value);
+        EMAIL_IDS.forEach(function(oid) { var o = document.getElementById(oid); if (o && o.id !== id) o.value = el.value; });
+      });
+    });
+  });
+</script>
+</body>
+</html>
