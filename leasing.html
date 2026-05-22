@@ -842,10 +842,17 @@ footer{background:var(--navy);padding:56px 40px 28px}
     var btn = document.getElementById(formId + '-btn');
     if (val === 'si') {
       if (err) err.style.display = 'flex';
-      if (btn) btn.disabled = true;
+      if (btn) {
+        if (!btn.dataset.orig) btn.dataset.orig = btn.innerHTML;
+        btn.innerHTML = '🚫 No puedes continuar — estás en DICOM';
+        btn.disabled = true;
+      }
     } else {
       if (err) err.style.display = 'none';
-      if (btn) btn.disabled = false;
+      if (btn) {
+        if (btn.dataset.orig) btn.innerHTML = btn.dataset.orig;
+        btn.disabled = false;
+      }
     }
   }
   function saveLead(data) {
