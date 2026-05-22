@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin — Llave Propia</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f4f2ee;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+
+    /* LOGIN */
+    .login-card{background:#fff;border-radius:16px;padding:48px 40px;width:100%;max-width:400px;box-shadow:0 8px 32px rgba(0,0,0,0.1)}
+    .login-logo{text-align:center;margin-bottom:32px}
+    .login-logo .lw-a{color:#1B2B5E;font-weight:900;font-size:1.6rem;letter-spacing:-0.5px}
+    .login-logo .lw-b{color:#2BA89C;font-weight:900;font-size:1.6rem;letter-spacing:-0.5px}
+    .login-logo p{color:#888;font-size:0.82rem;margin-top:4px}
+    .login-card h2{font-size:1.1rem;font-weight:700;color:#1B2B5E;margin-bottom:24px;text-align:center}
+    .login-err{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-size:0.82rem;padding:10px 14px;border-radius:8px;margin-bottom:16px;display:none}
+
+    /* ADMIN PANEL */
+    .admin-wrap{width:100%;max-width:600px}
+    .admin-header{background:linear-gradient(135deg,#1B2B5E 0%,#162244 100%);border-radius:16px;padding:28px 36px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .admin-header-text .lw-a{color:#fff;font-weight:900;font-size:1.3rem}
+    .admin-header-text .lw-b{color:#2BA89C;font-weight:900;font-size:1.3rem}
+    .admin-header-text p{color:rgba(255,255,255,0.55);font-size:0.78rem;margin-top:2px}
+    .logout-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:0.78rem;font-weight:700;padding:8px 16px;border-radius:8px;cursor:pointer;white-space:nowrap}
+    .logout-btn:hover{background:rgba(255,255,255,0.18)}
+
+    .admin-card{background:#fff;border-radius:16px;padding:36px 40px;box-shadow:0 4px 20px rgba(0,0,0,0.07)}
+    .admin-card h2{font-size:1.1rem;font-weight:700;color:#1B2B5E;margin-bottom:6px}
+    .admin-card .sub{color:#888;font-size:0.85rem;margin-bottom:28px}
+
+    label{display:block;font-size:0.82rem;font-weight:700;color:#555;margin-bottom:6px}
+    input,select{width:100%;padding:13px 16px;border:1.5px solid #ddd;border-radius:10px;font-size:0.95rem;color:#1B2B5E;background:#fff;outline:none;transition:border-color .2s}
+    input:focus,select:focus{border-color:#2BA89C}
+    .f-group{margin-bottom:20px}
+
+    .producto-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+    .prod-opt{position:relative}
+    .prod-opt input[type=radio]{position:absolute;opacity:0;width:0;height:0}
+    .prod-card{border:2px solid #e8e4dc;border-radius:12px;padding:18px 16px;cursor:pointer;transition:all .2s;text-align:center}
+    .prod-opt input:checked + .prod-card{border-color:#2BA89C;background:#f0fdf9}
+    .prod-opt input:checked + .prod-card .prod-name{color:#1B2B5E}
+    .prod-icon{font-size:1.6rem;margin-bottom:6px}
+    .prod-name{font-size:0.88rem;font-weight:700;color:#888;transition:color .2s}
+    .prod-desc{font-size:0.72rem;color:#aaa;margin-top:2px}
+
+    .send-btn{width:100%;padding:15px;background:#1B2B5E;color:#fff;font-size:1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;transition:background .2s;margin-top:8px}
+    .send-btn:hover{background:#162244}
+    .send-btn:disabled{opacity:0.5;cursor:not-allowed}
+
+    .alert{padding:14px 18px;border-radius:10px;font-size:0.88rem;font-weight:600;margin-top:16px;display:none}
+    .alert-ok{background:#ecfdf5;border:1px solid #6ee7b7;color:#065f46}
+    .alert-err{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c}
+
+    @media(max-width:480px){
+      .admin-card{padding:24px 20px}
+      .login-card{padding:36px 24px}
+      .admin-header{padding:20px 24px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-card" id="login-view">
+  <div class="login-logo">
+    <div><span class="lw-a">Llave</span><span class="lw-b">Propia</span></div>
+    <p>Panel de administración</p>
+  </div>
+  <h2>Iniciar sesión</h2>
+  <div class="login-err" id="login-err">Usuario o contraseña incorrectos.</div>
+  <div class="f-group">
+    <label>Usuario</label>
+    <input type="text" id="login-user" autocomplete="username" placeholder="rcanas">
+  </div>
+  <div class="f-group">
+    <label>Contraseña</label>
+    <input type="password" id="login-pass" autocomplete="current-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+  </div>
+  <button class="send-btn" onclick="doLogin()">Entrar</button>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-wrap" id="admin-view" style="display:none">
+  <div class="admin-header">
+    <div class="admin-header-text">
+      <div><span class="lw-a">Llave</span><span class="lw-b">Propia</span></div>
+      <p>Hola, Rodrigo — Panel de bienvenida</p>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">Cerrar sesión</button>
+  </div>
+
+  <div class="admin-card">
+    <h2>Enviar correo de bienvenida</h2>
+    <p class="sub">Se enviará la documentación requerida al cliente. Rodrigo en CC, Vicente en CCO.</p>
+
+    <div class="f-group">
+      <label>Nombre del cliente *</label>
+      <input type="text" id="cli-nombre" placeholder="Ana García" autocomplete="off">
+    </div>
+    <div class="f-group">
+      <label>Correo electrónico del cliente *</label>
+      <input type="email" id="cli-email" placeholder="cliente@email.com" autocomplete="off">
+    </div>
+
+    <label style="margin-bottom:10px">Producto *</label>
+    <div class="producto-grid">
+      <label class="prod-opt">
+        <input type="radio" name="producto" value="leasing" checked>
+        <div class="prod-card">
+          <div class="prod-icon">🏠</div>
+          <div class="prod-name">Leasing DS120</div>
+          <div class="prod-desc">Subsidio MINVU · Sin pie</div>
+        </div>
+      </label>
+      <label class="prod-opt">
+        <input type="radio" name="producto" value="mutuo">
+        <div class="prod-card">
+          <div class="prod-icon">🏦</div>
+          <div class="prod-name">Mutuo Hipotecario</div>
+          <div class="prod-desc">Crédito en UF · Hasta 30 años</div>
+        </div>
+      </label>
+    </div>
+
+    <button class="send-btn" id="send-btn" onclick="doSend()">Enviar correo de bienvenida</button>
+    <div class="alert alert-ok" id="alert-ok">Correo enviado correctamente. El cliente recibirá la información en su bandeja de entrada.</div>
+    <div class="alert alert-err" id="alert-err">Error al enviar el correo. Intenta nuevamente.</div>
+  </div>
+</div>
+
+<script>
+  function doLogin() {
+    var u = document.getElementById('login-user').value.trim();
+    var p = document.getElementById('login-pass').value;
+    if (u === 'rcanas' && p === 'rcanas') {
+      document.getElementById('login-view').style.display = 'none';
+      document.getElementById('admin-view').style.display = 'block';
+      document.getElementById('login-err').style.display = 'none';
+    } else {
+      document.getElementById('login-err').style.display = 'block';
+    }
+  }
+
+  function doLogout() {
+    document.getElementById('admin-view').style.display = 'none';
+    document.getElementById('login-view').style.display = 'block';
+    document.getElementById('login-pass').value = '';
+  }
+
+  async function doSend() {
+    var nombre  = document.getElementById('cli-nombre').value.trim();
+    var email   = document.getElementById('cli-email').value.trim();
+    var producto = document.querySelector('input[name="producto"]:checked').value;
+    var alertOk  = document.getElementById('alert-ok');
+    var alertErr = document.getElementById('alert-err');
+    var btn      = document.getElementById('send-btn');
+
+    alertOk.style.display = 'none';
+    alertErr.style.display = 'none';
+
+    if (!nombre || !email) { alert('Por favor completa nombre y correo del cliente.'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Ingresa un correo válido.'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    try {
+      var res = await fetch('/api/send-welcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, email, producto })
+      });
+      if (res.ok) {
+        alertOk.style.display = 'block';
+        document.getElementById('cli-nombre').value = '';
+        document.getElementById('cli-email').value = '';
+      } else {
+        alertErr.style.display = 'block';
+      }
+    } catch(e) {
+      alertErr.style.display = 'block';
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Enviar correo de bienvenida';
+  }
+</script>
+</body>
+</html>
