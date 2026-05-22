@@ -878,7 +878,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (!n||!t||!e) { alert('Por favor completa nombre, teléfono y correo.'); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { alert('Ingresa un correo válido.'); return; }
     const a = document.getElementById(prefix+'-a');
-    const r = document.querySelector(`input[name="ahorro${prefix.replace('f','')}"):checked`);
+    const r = document.querySelector(`input[name="ahorro${prefix.replace('f','')}"]` + ':checked');
     saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', ahorro:r?r.value:'no indicado', fuente:src||prefix});
     document.getElementById(prefix+'-content').style.display = 'none';
     const ok = document.getElementById(prefix+'-ok');
