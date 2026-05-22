@@ -92,9 +92,9 @@ nav.sc{background:rgba(254,252,247,0.97);backdrop-filter:blur(16px);padding:12px
 .f-input-d:focus{background:rgba(255,255,255,0.12);border-color:var(--teal)}
 .f-input-d option{background:#1B3A6B;color:#fff}.f-radio-lbl-d{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.2);border-radius:50px;padding:8px 16px;cursor:pointer;color:rgba(255,255,255,0.85);font-size:0.84rem;font-weight:600;transition:var(--t)}.f-radio-lbl-d input{display:none}.f-radio-lbl-d:has(input:checked){background:rgba(45,184,158,0.2);border-color:var(--teal);color:#fff}.f-radios{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}.dicom-block{background:rgba(220,38,38,0.08);border:1.5px solid rgba(220,38,38,0.35);border-radius:10px;padding:10px 14px;margin-top:6px;color:#dc2626;font-size:0.83rem;font-weight:600;line-height:1.45;display:flex;align-items:flex-start;gap:7px}.dicom-block-d{background:rgba(220,38,38,0.15);border-color:rgba(248,113,113,0.45);color:#fca5a5}.qs-dicom-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:8px}
 .f-btn:disabled,.qs-btn:disabled{opacity:0.38;cursor:not-allowed;filter:grayscale(0.25);transform:none!important;box-shadow:none!important}.f-btn{width:100%;height:58px;border:none;border-radius:50px;font-size:1rem;font-weight:900;font-family:'Nunito',sans-serif;cursor:pointer;transition:var(--t);display:flex;align-items:center;justify-content:center;gap:8px}
-.f-btn-navy{background:var(--navy);color:#fff}
+
 .f-btn-navy:hover{background:var(--navy-d);box-shadow:0 10px 28px rgba(27,58,107,0.35);transform:translateY(-2px)}
-.f-btn-teal{background:var(--teal);color:var(--navy)}
+
 .f-btn-teal:hover{background:var(--teal-m);box-shadow:0 10px 28px rgba(45,184,158,0.4);transform:translateY(-2px)}
 .f-stack{display:flex;flex-direction:column;gap:10px}
 .f-privacy{text-align:center;color:rgba(255,255,255,0.35);font-size:0.72rem;margin-top:8px}
@@ -239,8 +239,8 @@ nav.sc{background:rgba(254,252,247,0.97);backdrop-filter:blur(16px);padding:12px
 .dfs-text p{color:rgba(255,255,255,0.5);font-size:0.95rem;line-height:1.75;margin-bottom:26px}
 .dfs-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(45,184,158,0.15);border:1px solid rgba(45,184,158,0.3);border-radius:50px;padding:7px 16px;color:var(--teal-m);font-size:0.73rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
 .dfs-badge .dot2{width:6px;height:6px;background:var(--teal-m);border-radius:50%;animation:pulse 1.5s ease-out infinite}
-.dfs-check{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.7);font-size:0.9rem;margin-bottom:10px}
-.dfs-check-icon{width:20px;height:20px;background:rgba(45,184,158,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--teal-m)}
+
+
 .dfs-fc{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--rl);padding:32px 28px;backdrop-filter:blur(8px)}
 .dfs-fc h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:18px}
 
@@ -330,7 +330,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
   .steps-grid{grid-template-columns:1fr}
   .lfs-fc .f-row{grid-template-columns:1fr}
 }
-  </style>
+  .hi{color:var(--teal);font-weight:900;font-style:normal}.hero-sub strong{color:#fff;font-weight:900;background:linear-gradient(180deg,transparent 55%,rgba(45,184,158,0.25) 55%);padding-bottom:1px}@keyframes btnGlow{0%,100%{box-shadow:0 8px 28px rgba(27,58,107,0.28)}55%{box-shadow:0 10px 40px rgba(27,58,107,0.45),0 0 0 5px rgba(27,58,107,0.07)}}.f-btn-navy{background:var(--navy);color:#fff;animation:btnGlow 3.2s ease-in-out infinite}@keyframes tealGlow{0%,100%{box-shadow:0 8px 24px rgba(45,184,158,0.32)}55%{box-shadow:0 10px 36px rgba(45,184,158,0.52),0 0 0 5px rgba(45,184,158,0.1)}}.f-btn-teal{background:var(--teal);color:var(--navy);animation:tealGlow 3.2s ease-in-out infinite}.ben-card:hover{transform:translateY(-8px);box-shadow:0 20px 52px rgba(27,58,107,0.14);border-color:rgba(45,184,158,0.25)}.dfs-check{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.82);font-size:0.92rem;margin-bottom:12px;font-weight:600}.dfs-check-icon{width:22px;height:22px;background:rgba(45,184,158,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--teal-m);font-size:0.62rem;font-weight:900}</style>
 <!-- Meta Pixel -->
 <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1672155134115626');fbq('track','PageView');</script>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1672155134115626&ev=PageView&noscript=1"/></noscript>
@@ -347,7 +347,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
   </a>
   <div class="nav-r">
     <a href="/leasing" class="hide-mob nav-pill">← Leasing DS120</a>
-    <a href="#tipos" class="hide-mob">Tipos de mutuo</a>
+    <a href="#tipos" class="hide-mob">¿Para quién aplica?</a>
     <a href="#req" class="hide-mob">Requisitos</a>
     <a href="#aplica" class="nav-btn">Verificar gratis</a>
   </div>
@@ -364,21 +364,21 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
       <div class="hero-fc" id="hfc">
         <div class="hero-fc-tag">✓ Gratuito &middot; Sin compromiso &middot; &lt;24 hrs</div>
         <h3>¿Califico para el<br>Mutuo Hipotecario?</h3>
-        <p class="sub">Déjanos tus datos y te contactamos hoy.</p>
+        <p class="sub">Déjanos tus datos. Verificamos en <strong>menos de 24 horas</strong> — sin costo.</p>
         <div id="hf-content">
           <form class="f-stack" autocomplete="on" onsubmit="return false;">
             <input class="f-input f-input-d" type="text" id="hf-n" placeholder="Nombre completo *" autocomplete="name">
             <input class="f-input f-input-d" type="tel" id="hf-t" placeholder="WhatsApp * (+56 9 XXXX XXXX)" name="phone" autocomplete="tel">
             <input class="f-input f-input-d" type="email" id="hf-e" placeholder="Correo electrónico *" autocomplete="email">
             <select class="f-input f-input-d" id="hf-a">
-              <option value="">¿Renta mensual aproximada?</option>
+              <option value="">¿Cuánto es tu renta mensual?</option>
               <option>Menos de $600.000</option>
               <option>$600.000 – $900.000</option>
               <option>$900.000 – $1.500.000</option>
               <option>Más de $1.500.000</option>
             </select>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Estás en DICOM? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="dicom-hf" value="no" onchange="handleDicom('hf','no')"> No estoy en DICOM</label><label class="f-radio-lbl-d"><input type="radio" name="dicom-hf" value="si" onchange="handleDicom('hf','si')"> Sí estoy en DICOM</label></div><div class="dicom-block dicom-block-d" id="hf-dicom-err" style="display:none">❌ Mientras figures en DICOM no es posible acceder al Mutuo Hipotecario. El botón de envío está deshabilitado — regulariza tu situación y vuelve cuando estés listo.</div></div>
-            <button id="hf-btn" class="f-btn f-btn-teal" onclick="doForm('hf','Mutuo - Hero')">Quiero mi casa propia &rarr;</button>
+            <button id="hf-btn" class="f-btn f-btn-teal" onclick="doForm('hf','Mutuo - Hero')">Verificar si califico — gratis &rarr;</button>
           </form>
           <div class="fc-trust" style="margin-top:14px">
             <div class="fc-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Pie reducido</div>
@@ -396,8 +396,8 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
 
       <div class="hero-text">
         <div class="hero-badge"><span class="dot"></span>Mutuo Hipotecario &middot; Plazos hasta 30 años &middot; Sin subsidio requerido</div>
-        <h1 class="hero-h1">Tu vivienda con<br><em>Mutuo Hipotecario</em>.</h1>
-        <p class="hero-sub">Compra tu primera vivienda con <strong>plazos hasta 30 años y cuotas fijas en UF</strong>. Sin requisito de subsidio estatal. La financiera adquiere la propiedad y tú pagas cuotas mensuales.</p>
+        <h1 class="hero-h1">Deja el arriendo atrás.<br>Tu vivienda con<br><em>Mutuo Hipotecario.</em></h1>
+        <p class="hero-sub">Financia tu primera vivienda con <strong>plazos hasta 30 años y cuotas fijas en UF</strong>. Para casas y departamentos, nuevas y usadas. Sin requisito de subsidio estatal.</p>
         <div class="hero-trust">
           <div class="ht-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Sin subsidio estatal requerido</div>
           <div class="ht-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Extranjeros sin historial</div>
@@ -429,7 +429,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
 <div id="stats"><div class="st-inner">
   <div class="st-item"><div class="st-val">Sin<span class="st-u" style="font-size:1.4rem"> tope</span></div><div class="st-lbl">De valor de vivienda</div></div>
   <div class="st-item"><div class="st-val">Hasta<span class="st-u" style="font-size:1.4rem"> 30</span></div><div class="st-lbl">Años de plazo</div></div>
-  <div class="st-item"><div class="st-val">2<span class="st-u" style="font-size:1.4rem"> modalidades</span></div><div class="st-lbl">Endosable y no endosable</div></div>
+  <div class="st-item"><div class="st-val">Casas<span class="st-u" style="font-size:1.4rem"> y deptos</span></div><div class="st-lbl">Nuevas y usadas</div></div>
   <div class="st-item"><div class="st-val">&lt;24<span class="st-u" style="font-size:1rem"> hrs</span></div><div class="st-lbl">Para saber si calificas</div></div>
 </div></div>
 
@@ -440,10 +440,10 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
       <div>
         <span class="eyebrow">El producto</span>
         <h2 class="sec-title">¿Qué es el Mutuo<br>Hipotecario?</h2>
-        <p class="sec-sub" style="margin-bottom:20px">Es un <strong>préstamo en UF</strong> respaldado por la propiedad que compras. La financiera adquiere la vivienda y tú pagas cuotas mensuales durante el plazo acordado. El contrato tiene carácter de escritura pública.</p>
+        <p class="sec-sub" style="margin-bottom:20px">Es un <strong>crédito hipotecario en UF</strong> equivalente al crédito bancario tradicional. La vivienda queda a tu nombre desde el inicio, respaldada con hipoteca. El contrato tiene carácter de escritura pública.</p>
         <div class="bullet">
           <div class="b-item"><div class="b-dot"></div><span>Tasas fijas en UF — cuotas predecibles durante todo el plazo</span></div>
-          <div class="b-item"><div class="b-dot"></div><span>El contrato puede ser endosado o vendido a terceros para financiamiento</span></div>
+          <div class="b-item"><div class="b-dot"></div><span>Para casas y departamentos, nuevas y usadas — sin límite de valor</span></div>
           <div class="b-item"><div class="b-dot"></div><span>Sin requisito de subsidio estatal — acceso directo para dependientes e independientes</span></div>
           <div class="b-item"><div class="b-dot"></div><span>Sin límite de valor de vivienda — nuevas y usadas</span></div>
           <div class="b-item"><div class="b-dot"></div><span>Accesible para extranjeros sin historial crediticio en Chile</span></div>
@@ -466,7 +466,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
 
 <!-- QUICK STRIP 1 -->
 <div class="qs qs-teal">
-  <div class="qs-label">¿Quieres saber si calificas?<span>Déjanos tu WhatsApp — te respondemos en minutos</span></div>
+  <div class="qs-label">¿Crees que calificas para Mutuo?<span>Déjanos tu WhatsApp — verificamos en menos de 24 hrs</span></div>
   <form autocomplete="on" onsubmit="return false;"><div class="qs-dicom-row"><span style="color:rgba(255,255,255,0.9);font-size:0.82rem;font-weight:700;white-space:nowrap">¿Estás en DICOM?</span><label class="f-radio-lbl-d" style="padding:6px 14px;font-size:0.8rem"><input type="radio" name="dicom-qs1" value="no" onchange="handleDicom('qs1','no')"> No</label><label class="f-radio-lbl-d" style="padding:6px 14px;font-size:0.8rem"><input type="radio" name="dicom-qs1" value="si" onchange="handleDicom('qs1','si')"> Sí</label></div><div class="dicom-block dicom-block-d" id="qs1-dicom-err" style="display:none;margin-bottom:6px">❌ Mientras figures en DICOM no es posible acceder al Mutuo Hipotecario. El botón de envío está deshabilitado — regulariza tu situación y vuelve cuando estés listo.</div><div class="qs-row" id="qs1-row">
     <input class="qs-input" type="tel" id="qs1-t" placeholder="+56 9 XXXX XXXX" name="phone" autocomplete="tel">
     <button id="qs1-btn" class="qs-btn" onclick="doQuick('qs1','Mutuo - Strip 1')">¡Quiero saber!</button>
@@ -478,33 +478,33 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
 <section id="tipos" class="sec" style="background:var(--beige-1)">
   <div class="sw">
     <div style="text-align:center;max-width:560px;margin:0 auto">
-      <span class="eyebrow">Modalidades</span>
-      <h2 class="sec-title">Dos tipos de<br>Mutuo Hipotecario</h2>
-      <p class="sec-sub" style="margin:0 auto">Elige el que mejor se adapta a tu situación. Nosotros te orientamos.</p>
+      <span class="eyebrow">¿Para quién aplica?</span>
+      <h2 class="sec-title">Dependientes e<br>independientes</h2>
+      <p class="sec-sub" style="margin:0 auto">Ya seas asalariado o trabajador a honorarios, puedes acceder. Te orientamos sin costo.</p>
     </div>
     <div class="tipos-grid">
       <div class="tipo-card tipo-navy">
-        <div class="tipo-tag">Más habitual</div>
-        <h3>Mutuo Endosable</h3>
-        <p>La financiera puede vender o ceder el crédito a un banco u otra institución. Esto le permite ofrecer tasas más competitivas y plazos más largos.</p>
+        <div class="tipo-tag">Dependiente</div>
+        <h3>Trabajador con contrato</h3>
+        <p>Accede con tu contrato de trabajo y liquidaciones de sueldo. La alternativa más habitual para llegar a tu primera vivienda.</p>
         <ul class="tipo-list">
-          <li>Sin requisito de subsidio estatal previo</li>
-          <li>Tasas más competitivas en el mercado</li>
-          <li>Plazos de hasta 30 años</li>
-          <li>Mayor acceso a personas sin historial bancario</li>
-          <li>Escritura pública ante notario</li>
+          <li>Contrato vigente con antigüedad de 6+ meses</li>
+          <li>Liquidaciones de sueldo como respaldo</li>
+          <li>Renta complementable con cónyuge o co-deudor</li>
+          <li>Sin subsidio estatal requerido</li>
+          <li>Para casas y departamentos, nuevos y usados</li>
         </ul>
       </div>
       <div class="tipo-card tipo-light">
-        <div class="tipo-tag">Alternativa</div>
-        <h3>Mutuo No Endosable</h3>
-        <p>El crédito permanece en la institución que lo otorga durante toda su vigencia. Más flexible en evaluación crediticia.</p>
+        <div class="tipo-tag">Independiente</div>
+        <h3>Honorarios o cuenta propia</h3>
+        <p>Freelancers, emprendedores y trabajadores a boleta también pueden calificar. Evaluamos tu renta real.</p>
         <ul class="tipo-list">
-          <li>Evaluación más flexible para casos especiales</li>
-          <li>No requiere inscripción en Conservador de Bienes Raíces endosable</li>
-          <li>Plazos adaptables según institución</li>
-          <li>Opción para quienes no califican en hipoteca bancaria</li>
-          <li>Proceso más ágil en algunos casos</li>
+          <li>Boletas de honorarios o declaración de renta</li>
+          <li>Estados financieros o carpeta tributaria</li>
+          <li>Continuidad laboral documentada</li>
+          <li>Renta complementable con cónyuge</li>
+          <li>Para casas y departamentos, nuevos y usados</li>
         </ul>
       </div>
     </div>
@@ -518,7 +518,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
   <div class="dfs-inner">
     <div class="dfs-text">
       <div class="dfs-badge"><span class="dot2"></span>&nbsp;Asesoría gratuita en menos de 24 hrs</div>
-      <h2>¿Listo para dejar<br>de pagar arriendo?</h2>
+      <h2>Deja de pagar<br>arriendo para siempre.</h2>
       <p>Con el Mutuo Hipotecario accedes a tu primera vivienda con cuotas predecibles en UF y plazos hasta 30 años. Sin requisito de subsidio estatal.</p>
       <div class="dfs-check"><span class="dfs-check-icon">✓</span>Sin subsidio estatal requerido</div>
       <div class="dfs-check"><span class="dfs-check-icon">✓</span>Plazos hasta 30 años</div>
@@ -534,7 +534,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
             <input class="f-input f-input-d" type="tel" id="f2-t" placeholder="WhatsApp *" name="phone" autocomplete="tel">
             <input class="f-input f-input-d" type="email" id="f2-e" placeholder="Correo electrónico *" autocomplete="email">
             <select class="f-input f-input-d" id="f2-a">
-              <option value="">¿Renta mensual aproximada?</option>
+              <option value="">¿Cuánto es tu renta mensual?</option>
               <option>Menos de $600.000</option>
               <option>$600.000 – $900.000</option>
               <option>$900.000 – $1.500.000</option>
@@ -648,7 +648,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
   <div class="lfs-inner">
     <span class="eyebrow">Asesoría gratuita</span>
     <h2 class="sec-title">Verifica si calificas<br>ahora sin costo</h2>
-    <p class="sec-sub" style="margin:0 auto 32px">Completa el formulario y te contactamos en menos de 24 horas con los siguientes pasos.</p>
+    <p class="sec-sub" style="margin:0 auto 32px">Sin compromiso. Verificamos tu caso y te contactamos en <strong>menos de 24 horas</strong> con los siguientes pasos.</p>
     <div class="lfs-fc">
       <form autocomplete="on" onsubmit="return false;"><div id="f3-content">
         <div class="f-row">
@@ -689,7 +689,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
   <div class="faq-w">
     <div style="text-align:center;margin-bottom:0"><span class="eyebrow">Dudas frecuentes</span><h2 class="sec-title">Todo lo que necesitas saber</h2></div>
     <div class="faq-list">
-      <div class="faq-item"><div class="faq-q">¿Qué es exactamente el Mutuo Hipotecario?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">Es un préstamo en UF respaldado por la propiedad que compras. La financiera adquiere la vivienda, tú pagas cuotas mensuales y al terminar el plazo, la escritura queda a tu nombre. El contrato tiene carácter de escritura pública y puede ser endosado o vendido a otras instituciones.</div></div></div>
+      <div class="faq-item"><div class="faq-q">¿Qué es exactamente el Mutuo Hipotecario?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">Es un préstamo en UF respaldado por la propiedad que compras. La financiera adquiere la vivienda, tú pagas cuotas mensuales y al terminar el plazo, la escritura queda a tu nombre. El contrato tiene carácter de escritura pública. La vivienda queda a tu nombre desde el inicio.</div></div></div>
       
       <div class="faq-item"><div class="faq-q">¿Cuánto pie debo tener?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">El pie requerido depende del valor de la vivienda y tu evaluación crediticia. No se requiere subsidio estatal previo. Te damos el detalle exacto en la evaluación gratuita sin costo.</div></div></div>
       <div class="faq-item"><div class="faq-q">¿Pueden acceder trabajadores independientes?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">Sí. Los trabajadores a honorarios y cuenta propia pueden postular acreditando renta con <strong>boletas de honorarios, declaración de renta o estados financieros</strong>. Se requiere continuidad laboral documentada. La renta puede complementarse con la del cónyuge.</div></div></div>
@@ -715,7 +715,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
       <div class="f-links">
         <a href="/leasing">Leasing Habitacional DS120</a>
         <a href="/mutuos">Mutuo Hipotecario</a>
-        <a href="#tipos">Tipos de mutuo</a>
+        <a href="#tipos">¿Para quién aplica?</a>
         <a href="#req">Requisitos</a>
         <a href="#faq">Preguntas frecuentes</a>
       </div>
