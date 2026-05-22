@@ -848,6 +848,32 @@ footer{background:var(--navy);padding:56px 40px 28px}
       }
     }
   }
+
+  function handleRenta(formId, val) {
+    var err = document.getElementById(formId + '-renta-err');
+    var btn = document.getElementById(formId + '-btn');
+    if (val === 'Menos de $700.000') {
+      if (err) err.style.display = 'flex';
+      if (btn) {
+        btn.dataset.rentaBlock = '1';
+        if (!btn.dataset.orig) {
+          if (!btn.dataset.rentaOrig) btn.dataset.rentaOrig = btn.innerHTML;
+          btn.innerHTML = '🚫 La renta mínima requerida es $700.000';
+          btn.disabled = true;
+        }
+      }
+    } else {
+      if (err) err.style.display = 'none';
+      if (btn) {
+        btn.dataset.rentaBlock = '';
+        if (btn.dataset.rentaOrig && !btn.dataset.orig) {
+          btn.innerHTML = btn.dataset.rentaOrig;
+          btn.dataset.rentaOrig = '';
+          btn.disabled = false;
+        }
+      }
+    }
+  }
   function saveLead(data) {
     // Backup local
     const leads = JSON.parse(localStorage.getItem('habita_leads') || '[]');
@@ -880,7 +906,9 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (!d) { alert('Por favor indica si estás o no en DICOM.'); return; }
     if (d.value === 'si') { document.getElementById(prefix+'-dicom-err').style.display = 'flex'; return; }
     const a = document.getElementById(prefix+'-a');
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', dicom:d.value, fuente:src});
+    const r = document.getElementById(prefix+'-r');
+    if (r && (!r.value || r.value === 'Menos de $700.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $700.000).'); return; }
+    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, fuente:src});
     document.getElementById(prefix+'-content').style.display = 'none';
     const ok = document.getElementById(prefix+'-ok');
     ok.style.display = 'block';
@@ -900,7 +928,9 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (!d) { alert('Por favor indica si estás o no en DICOM.'); return; }
     if (d.value === 'si') { document.getElementById(prefix+'-dicom-err').style.display = 'flex'; return; }
     const a = document.getElementById(prefix+'-a');
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', dicom:d.value, fuente:src||prefix});
+    const r = document.getElementById(prefix+'-r');
+    if (r && (!r.value || r.value === 'Menos de $700.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $700.000).'); return; }
+    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, fuente:src||prefix});
     document.getElementById(prefix+'-content').style.display = 'none';
     const ok = document.getElementById(prefix+'-ok');
     ok.style.display = 'block';
