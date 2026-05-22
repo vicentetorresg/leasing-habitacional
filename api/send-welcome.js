@@ -106,7 +106,7 @@ export default async function handler(req, res) {
             </td>
             <td>
               <p style="margin:0;font-size:14px;font-weight:700;color:#1B2B5E">Rodrigo Cañas</p>
-              <p style="margin:2px 0 0;font-size:12px;color:#888">Asesor · Llave Propia</p>
+              <p style="margin:2px 0 0;font-size:12px;color:#888">Fundador · Llave Propia</p>
               <p style="margin:2px 0 0;font-size:12px;color:#888">rodrigo.canas@llavepropia.cl</p>
             </td>
           </tr>
