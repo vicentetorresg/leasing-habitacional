@@ -862,22 +862,16 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (val === 'Menos de $700.000') {
       if (err) err.style.display = 'flex';
       if (btn) {
-        btn.dataset.rentaBlock = '1';
-        if (!btn.dataset.orig) {
-          if (!btn.dataset.rentaOrig) btn.dataset.rentaOrig = btn.innerHTML;
-          btn.innerHTML = '🚫 La renta mínima requerida es $700.000';
-          btn.disabled = true;
-        }
+        if (!btn.dataset.rentaOrig) btn.dataset.rentaOrig = btn.innerHTML;
+        btn.innerHTML = '🚫 No puedes continuar — renta mínima $700.000';
+        btn.disabled = true;
       }
     } else {
       if (err) err.style.display = 'none';
       if (btn) {
-        btn.dataset.rentaBlock = '';
-        if (btn.dataset.rentaOrig && !btn.dataset.orig) {
-          btn.innerHTML = btn.dataset.rentaOrig;
-          btn.dataset.rentaOrig = '';
-          btn.disabled = false;
-        }
+        if (btn.dataset.rentaOrig) btn.innerHTML = btn.dataset.rentaOrig;
+        btn.dataset.rentaOrig = '';
+        btn.disabled = false;
       }
     }
   }
