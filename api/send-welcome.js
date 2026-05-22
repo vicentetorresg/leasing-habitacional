@@ -130,7 +130,7 @@ export default async function handler(req, res) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      from:    'Rodrigo Cañas · Llave Propia <notificaciones@llavepropia.cl>',
+      from:    'Llave Propia <notificaciones@llavepropia.cl>',
       to:      [email],
       cc:      ['rodrigo.canas@llavepropia.cl'],
       bcc:     ['vicente@llavepropia.cl'],
