@@ -137,10 +137,11 @@ export default async function handler(req, res) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      from:    'Llave Propia <notificaciones@llavepropia.cl>',
-      to:      [email],
-      cc:      ['rodrigo.canas@llavepropia.cl'],
-      bcc:     ['vicente@llavepropia.cl'],
+      from:     'Llave Propia <notificaciones@llavepropia.cl>',
+      to:       [email],
+      cc:       ['rodrigo.canas@llavepropia.cl'],
+      bcc:      ['vicente@llavepropia.cl'],
+      reply_to: ['rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl'],
       subject: `Documentación para tu ${productoLabel} — Llave Propia`,
       html
     })
