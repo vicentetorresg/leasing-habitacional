@@ -2,7 +2,7 @@ var SHEET_ID   = '1-4P46BFU5AdixaNDn-5YCA79oCYndtv3XcRRbDKXMZ4';
 var SHEET_NAME = 'Leads Web';
 var SUPA_URL   = 'https://unptkiyggkuxtkzedluv.supabase.co/rest/v1/leasing_leads';
 var SUPA_KEY   = 'sb_publishable_PBDA1EmrPJuzgK_qIEjsTA_eIjuUF5s';
-var HEADERS    = ['Fecha/Hora', 'Nombre', 'Telefono', 'Email', 'Arriendo', 'Fuente', 'Ahorro', 'DICOM'];
+var HEADERS    = ['Fecha/Hora', 'Nombre', 'Telefono', 'Email', 'Arriendo', 'Fuente', 'DICOM'];
 
 function syncLeads() {
   var sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName(SHEET_NAME);
@@ -39,7 +39,7 @@ function syncLeads() {
     var r  = rows[i];
     var ts = Utilities.formatDate(new Date(r.created_at), 'America/Santiago', 'dd/MM/yyyy HH:mm:ss');
     var dicomLabel = r.dicom === 'si' ? 'Sí (DICOM)' : r.dicom === 'no' ? 'No' : '';
-    sheet.appendRow([ts, r.nombre || '', r.telefono || '', r.email || '', r.arriendo || '', r.fuente || '', r.ahorro || '', dicomLabel]);
+    sheet.appendRow([ts, r.nombre || '', r.telefono || '', r.email || '', r.arriendo || '', r.fuente || '', dicomLabel]);
   }
 
   // Guardar el último timestamp en formato Z para evitar el + en la URL

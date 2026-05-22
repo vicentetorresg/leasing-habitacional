@@ -556,7 +556,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     </div>
     <div class="steps-grid">
       <div class="step"><div class="step-n">1</div><h3>Verifica si calificas</h3><p>Llena el formulario. Te contactamos en menos de 24 horas sin costo.</p></div>
-      <div class="step"><div class="step-n">2</div><h3>Abre tu cuenta SERVIU</h3><p>Abrimos tu Cuenta de Ahorro Leasing en Banco Estado o Caja Los Andes y te inscribimos en SERVIU.</p></div>
+      <div class="step"><div class="step-n">2</div><h3>Apertura de cuenta y SERVIU</h3><p>Te ayudamos a abrir tu Cuenta de Ahorro Leasing en BancoEstado o Caja Los Andes e inscribirte en el Registro SERVIU.</p></div>
       <div class="step"><div class="step-n">3</div><h3>Pre-aprobación</h3><p>SERVIU revisa tus antecedentes y pre-aprueba tu subsidio. Con eso elegimos tu vivienda.</p></div>
       <div class="step"><div class="step-n">4</div><h3>La financiera compra</h3><p>Una sociedad de leasing adquiere la propiedad. Tú firmas el contrato ante notario.</p></div>
       <div class="step"><div class="step-n">5</div><h3>Llaves y cuotas</h3><p>Entras a vivir desde el día uno. Pagas cuotas hasta completar el precio — escritura a tu nombre.</p></div>
@@ -629,13 +629,6 @@ footer{background:var(--navy);padding:56px 40px 28px}
           <select class="f-input" id="f3-a"><option value="">Selecciona un rango</option><option>Menos de $200.000</option><option>$200.000 – $350.000</option><option>$350.000 – $500.000</option><option>Más de $500.000</option><option>No pago arriendo actualmente</option></select>
         </div>
         <div class="f-group"><label>¿Estás en DICOM? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="dicom-f3" value="no" onchange="handleDicom('f3','no')"> No estoy en DICOM</label><label class="f-radio-lbl"><input type="radio" name="dicom-f3" value="si" onchange="handleDicom('f3','si')"> Sí estoy en DICOM</label></div><div class="dicom-block" id="f3-dicom-err" style="display:none">❌ Mientras figures en DICOM no es posible acceder a este producto. El botón de envío está deshabilitado — regulariza tu situación y vuelve cuando estés listo.</div></div>
-        <div class="f-group"><label>¿Tienes cuenta de ahorro?</label>
-          <div class="f-radios">
-            <label class="f-radio-lbl"><input type="radio" name="ahorro3" value="si"> Sí tengo</label>
-            <label class="f-radio-lbl"><input type="radio" name="ahorro3" value="no"> No tengo</label>
-            <label class="f-radio-lbl"><input type="radio" name="ahorro3" value="nose"> No sé</label>
-          </div>
-        </div>
         <button id="f3-btn" class="f-btn f-btn-navy" onclick="doFormFull('f3','Leasing - Aplica')">Verificar si califico gratis &rarr;</button>
         <p class="f-privacy f-privacy-d" style="margin-top:12px">Tu información es confidencial. Solo la usamos para contactarte.</p>
       </div></form>
@@ -907,8 +900,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (!d) { alert('Por favor indica si estás o no en DICOM.'); return; }
     if (d.value === 'si') { document.getElementById(prefix+'-dicom-err').style.display = 'flex'; return; }
     const a = document.getElementById(prefix+'-a');
-    const r = document.querySelector(`input[name="ahorro${prefix.replace('f','')}"]` + ':checked');
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', ahorro:r?r.value:'no indicado', dicom:d.value, fuente:src||prefix});
+    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', dicom:d.value, fuente:src||prefix});
     document.getElementById(prefix+'-content').style.display = 'none';
     const ok = document.getElementById(prefix+'-ok');
     ok.style.display = 'block';
