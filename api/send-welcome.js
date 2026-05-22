@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   const accentColor = isLeasing ? '#2BA89C' : '#C9871A';
   const badge       = isLeasing ? 'Programa DS120 · MINVU' : 'Crédito Hipotecario · UF';
   const intro       = isLeasing
-    ? 'Estás a un paso de tu primera vivienda con el subsidio DS120. Para avanzar con tu pre-evaluación necesitamos la siguiente documentación:'
+    ? 'Estás más cerca de lo que crees de tener tu primera casa o departamento. Con el subsidio DS120 el Estado pone el pie por ti — solo necesitamos verificar que calificas. Para avanzar con tu pre-evaluación, envíanos la siguiente documentación:'
     : 'Estás comenzando el proceso para tu Mutuo Hipotecario. Para avanzar con tu pre-evaluación necesitamos la siguiente documentación:';
 
   const html = `<!DOCTYPE html>
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
 
       <!-- GREETING -->
       <tr><td style="padding:36px 40px 0">
-        <p style="margin:0 0 6px;font-size:20px;font-weight:700;color:#1B2B5E">Hola, ${nombre}!</p>
+        <p style="margin:0 0 6px;font-size:20px;font-weight:700;color:#1B2B5E">Hola, ${nombre}! ${isLeasing ? '🏠' : ''}</p>
         <p style="margin:0;font-size:15px;color:#555;line-height:1.7">${intro}</p>
       </td></tr>
 
@@ -99,7 +99,10 @@ export default async function handler(req, res) {
       <!-- FOOTER -->
       <tr><td style="padding:32px 40px 36px">
         <p style="margin:0 0 16px;font-size:14px;color:#555;line-height:1.7">
-          Cualquier consulta estoy disponible para orientarte en cada paso del proceso. ¡Nos ponemos en contacto muy pronto!
+          ${isLeasing
+            ? 'Con esta documentación damos inicio formal a tu proceso. Recuerda que el subsidio DS120 <strong style="color:#1B2B5E">no requiere postulación ni sorteo</strong> — si calificas, avanzamos de inmediato. ¡Estás a muy poco de tener tu propia llave!'
+            : 'Cualquier consulta estoy disponible para orientarte en cada paso del proceso. ¡Nos ponemos en contacto muy pronto!'
+          }
         </p>
         <table cellpadding="0" cellspacing="0">
           <tr>
