@@ -21,11 +21,15 @@ export default async function handler(req, res) {
   <tr><td align="center">
     <table width="100%" style="max-width:580px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08)">
 
+      <!-- LOGO BAR -->
+      <tr><td style="background:#ffffff;padding:24px 40px;border-bottom:1px solid #f0ece4">
+        <img src="https://www.llavepropia.cl/logo-lp.png" alt="Llave Propia" width="160" style="display:block;height:auto;max-width:160px">
+      </td></tr>
+
       <!-- HEADER -->
-      <tr><td style="background:${headerBg};padding:36px 40px 32px">
-        <p style="margin:0 0 6px;color:rgba(255,255,255,0.65);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase">${badge}</p>
-        <h1 style="margin:0 0 4px;color:#fff;font-size:26px;font-weight:700;line-height:1.2">Llave Propia</h1>
-        <p style="margin:0;color:rgba(255,255,255,0.7);font-size:13px">${productoLabel}</p>
+      <tr><td style="background:${headerBg};padding:28px 40px 24px">
+        <p style="margin:0 0 4px;color:rgba(255,255,255,0.65);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase">${badge}</p>
+        <p style="margin:0;color:rgba(255,255,255,0.9);font-size:15px;font-weight:600">${productoLabel}</p>
       </td></tr>
 
       <!-- GREETING -->
