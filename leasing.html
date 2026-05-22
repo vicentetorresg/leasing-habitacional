@@ -884,7 +884,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     document.getElementById(prefix+'-content').style.display = 'none';
     const ok = document.getElementById(prefix+'-ok');
     ok.style.display = 'block';
-    const msg = encodeURIComponent(`Hola, quiero evaluarme para obtener un crédito y comprar una casa con subsidio DS120. Me llamo ${n} y mi WhatsApp es ${t}.`);
+    const msg = encodeURIComponent(`Hola, quiero evaluarme para el DS120. Me llamo ${n} y mi correo es ${e}.`);
     const waLink = ok.querySelector('.f-wa-btn');
     if (waLink) waLink.href = `https://wa.me/56957823672?text=${msg}`;
   }
@@ -904,7 +904,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     document.getElementById(prefix+'-content').style.display = 'none';
     const ok = document.getElementById(prefix+'-ok');
     ok.style.display = 'block';
-    const msg = encodeURIComponent(`Hola, quiero evaluarme para obtener un crédito y comprar una casa con subsidio DS120. Me llamo ${n} y mi WhatsApp es ${t}.`);
+    const msg = encodeURIComponent(`Hola, quiero evaluarme para el DS120. Me llamo ${n} y mi correo es ${e}.`);
     const waLink = ok.querySelector('.f-wa-btn');
     if (waLink) waLink.href = `https://wa.me/56957823672?text=${msg}`;
   }
@@ -919,7 +919,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     saveLead({telefono:t, dicom:d.value, fuente:fuente||id});
     document.getElementById(id+'-row').style.display = 'none';
     document.getElementById(id+'-ok').style.display = 'block';
-    const msg = encodeURIComponent(`Hola, quiero evaluarme para obtener un crédito DS120. Mi WhatsApp es ${t}.`);
+    const msg = encodeURIComponent(`Hola, quiero evaluarme para el DS120.`);
     if (typeof fbq !== 'undefined') fbq('track', 'Contact');
     setTimeout(() => window.open(`https://wa.me/56957823672?text=${msg}`, '_blank'), 800);
   }

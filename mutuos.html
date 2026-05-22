@@ -821,7 +821,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
     document.getElementById(prefix+'-content').style.display = 'none';
     var ok = document.getElementById(prefix+'-ok');
     ok.style.display = 'block';
-    var msg = encodeURIComponent('Hola, quiero evaluarme para obtener un Mutuo Hipotecario. Me llamo ' + n + ' y mi WhatsApp es ' + t + '.');
+    var msg = encodeURIComponent('Hola, quiero evaluarme para el Mutuo Hipotecario. Me llamo ' + n + ' y mi correo es ' + e + '.');
     var waLink = ok.querySelector('.f-wa-btn');
     if (waLink) waLink.href = 'https://wa.me/56957823672?text=' + msg;
   }
@@ -835,7 +835,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
     saveLead({ telefono:t, dicom:d.value, fuente:fuente||id });
     document.getElementById(id+'-row').style.display = 'none';
     document.getElementById(id+'-ok').style.display = 'block';
-    var msg = encodeURIComponent('Hola, quiero evaluarme para obtener un Mutuo Hipotecario. Mi WhatsApp es ' + t + '.');
+    var msg = encodeURIComponent('Hola, quiero evaluarme para el Mutuo Hipotecario.');
     if (typeof fbq !== 'undefined') fbq('track', 'Contact');
     setTimeout(function() { window.open('https://wa.me/56957823672?text=' + msg, '_blank'); }, 800);
   }
