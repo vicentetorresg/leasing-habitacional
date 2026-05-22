@@ -90,7 +90,7 @@ nav.sc{background:rgba(254,252,247,0.97);backdrop-filter:blur(16px);padding:12px
 .f-input-d{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15);color:#fff}
 .f-input-d::placeholder{color:rgba(255,255,255,0.4)}
 .f-input-d:focus{background:rgba(255,255,255,0.12);border-color:var(--teal)}
-.f-input-d option{background:#1B3A6B;color:#fff}
+.f-input-d option{background:#1B3A6B;color:#fff}.f-radio-lbl-d{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.2);border-radius:50px;padding:8px 16px;cursor:pointer;color:rgba(255,255,255,0.85);font-size:0.84rem;font-weight:600;transition:var(--t)}.f-radio-lbl-d input{display:none}.f-radio-lbl-d:has(input:checked){background:rgba(45,184,158,0.2);border-color:var(--teal);color:#fff}.f-radios{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}.dicom-block{background:rgba(220,38,38,0.08);border:1.5px solid rgba(220,38,38,0.35);border-radius:10px;padding:10px 14px;margin-top:6px;color:#dc2626;font-size:0.83rem;font-weight:600;line-height:1.45;display:flex;align-items:flex-start;gap:7px}.dicom-block-d{background:rgba(220,38,38,0.15);border-color:rgba(248,113,113,0.45);color:#fca5a5}.qs-dicom-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:8px}
 .f-btn{width:100%;height:58px;border:none;border-radius:50px;font-size:1rem;font-weight:900;font-family:'Nunito',sans-serif;cursor:pointer;transition:var(--t);display:flex;align-items:center;justify-content:center;gap:8px}
 .f-btn-navy{background:var(--navy);color:#fff}
 .f-btn-navy:hover{background:var(--navy-d);box-shadow:0 10px 28px rgba(27,58,107,0.35);transform:translateY(-2px)}
@@ -377,6 +377,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
               <option>$900.000 – $1.500.000</option>
               <option>Más de $1.500.000</option>
             </select>
+            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Estás en DICOM? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="dicom-hf" value="no" onchange="document.getElementById('hf-dicom-err').style.display='none'"> No estoy en DICOM</label><label class="f-radio-lbl-d"><input type="radio" name="dicom-hf" value="si" onchange="document.getElementById('hf-dicom-err').style.display='flex'"> Sí estoy en DICOM</label></div><div class="dicom-block dicom-block-d" id="hf-dicom-err" style="display:none">❌ Lo sentimos — estar en DICOM impide acceder al Mutuo Hipotecario. Cuando lo regularices, con gusto te ayudamos.</div></div>
             <button class="f-btn f-btn-teal" onclick="doForm('hf','Mutuo - Hero')">Quiero mi casa propia &rarr;</button>
           </form>
           <div class="fc-trust" style="margin-top:14px">
@@ -466,7 +467,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
 <!-- QUICK STRIP 1 -->
 <div class="qs qs-teal">
   <div class="qs-label">¿Quieres saber si calificas?<span>Déjanos tu WhatsApp — te respondemos en minutos</span></div>
-  <form autocomplete="on" onsubmit="return false;"><div class="qs-row" id="qs1-row">
+  <form autocomplete="on" onsubmit="return false;"><div class="qs-dicom-row"><span style="color:rgba(255,255,255,0.9);font-size:0.82rem;font-weight:700;white-space:nowrap">¿Estás en DICOM?</span><label class="f-radio-lbl-d" style="padding:6px 14px;font-size:0.8rem"><input type="radio" name="dicom-qs1" value="no" onchange="document.getElementById('qs1-dicom-err').style.display='none'"> No</label><label class="f-radio-lbl-d" style="padding:6px 14px;font-size:0.8rem"><input type="radio" name="dicom-qs1" value="si" onchange="document.getElementById('qs1-dicom-err').style.display='flex'"> Sí</label></div><div class="dicom-block dicom-block-d" id="qs1-dicom-err" style="display:none;margin-bottom:6px">❌ Lo sentimos — estar en DICOM impide acceder al Mutuo Hipotecario. Cuando lo regularices, con gusto te ayudamos.</div><div class="qs-row" id="qs1-row">
     <input class="qs-input" type="tel" id="qs1-t" placeholder="+56 9 XXXX XXXX" name="phone" autocomplete="tel">
     <button class="qs-btn" onclick="doQuick('qs1','Mutuo - Strip 1')">¡Quiero saber!</button>
   </div></form>
@@ -539,6 +540,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
               <option>$900.000 – $1.500.000</option>
               <option>Más de $1.500.000</option>
             </select>
+            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Estás en DICOM? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="dicom-f2" value="no" onchange="document.getElementById('f2-dicom-err').style.display='none'"> No estoy en DICOM</label><label class="f-radio-lbl-d"><input type="radio" name="dicom-f2" value="si" onchange="document.getElementById('f2-dicom-err').style.display='flex'"> Sí estoy en DICOM</label></div><div class="dicom-block dicom-block-d" id="f2-dicom-err" style="display:none">❌ Lo sentimos — estar en DICOM impide acceder al Mutuo Hipotecario. Cuando lo regularices, con gusto te ayudamos.</div></div>
             <button class="f-btn f-btn-teal" onclick="doForm('f2','Mutuo - Formulario central')">Quiero verificar ahora &rarr;</button>
           </form>
           <p class="f-privacy">Sin compromiso &middot; Respuesta en &lt;24 hrs</p>
@@ -558,7 +560,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
 <!-- QUICK STRIP 2 -->
 <div class="qs qs-gold">
   <div class="qs-label">Tu casa está a 60–90 días.<span>Empieza hoy — asesoría completamente gratis</span></div>
-  <form autocomplete="on" onsubmit="return false;"><div class="qs-row" id="qs2-row">
+  <form autocomplete="on" onsubmit="return false;"><div class="qs-dicom-row"><span style="color:rgba(255,255,255,0.9);font-size:0.82rem;font-weight:700;white-space:nowrap">¿Estás en DICOM?</span><label class="f-radio-lbl-d" style="padding:6px 14px;font-size:0.8rem"><input type="radio" name="dicom-qs2" value="no" onchange="document.getElementById('qs2-dicom-err').style.display='none'"> No</label><label class="f-radio-lbl-d" style="padding:6px 14px;font-size:0.8rem"><input type="radio" name="dicom-qs2" value="si" onchange="document.getElementById('qs2-dicom-err').style.display='flex'"> Sí</label></div><div class="dicom-block dicom-block-d" id="qs2-dicom-err" style="display:none;margin-bottom:6px">❌ Lo sentimos — estar en DICOM impide acceder al Mutuo Hipotecario. Cuando lo regularices, con gusto te ayudamos.</div><div class="qs-row" id="qs2-row">
     <input class="qs-input" type="tel" id="qs2-t" placeholder="+56 9 XXXX XXXX" name="phone" autocomplete="tel">
     <button class="qs-btn" onclick="doQuick('qs2','Mutuo - Strip 2')">Empezar ahora</button>
   </div></form>
@@ -663,6 +665,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
             <option>Más de $1.500.000</option>
           </select>
         </div>
+        <div class="f-group"><label>¿Estás en DICOM? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="dicom-f3" value="no" onchange="document.getElementById('f3-dicom-err').style.display='none'"> No estoy en DICOM</label><label class="f-radio-lbl"><input type="radio" name="dicom-f3" value="si" onchange="document.getElementById('f3-dicom-err').style.display='flex'"> Sí estoy en DICOM</label></div><div class="dicom-block" id="f3-dicom-err" style="display:none">❌ Lo sentimos — estar en DICOM impide acceder al Mutuo Hipotecario. Cuando lo regularices, con gusto te ayudamos.</div></div>
         <button class="f-btn f-btn-navy" onclick="doForm('f3','Mutuo - Aplica')">Verificar si califico gratis &rarr;</button>
         <p class="f-privacy f-privacy-d" style="margin-top:12px">Tu información es confidencial. Solo la usamos para contactarte.</p>
       </div></form>
@@ -791,8 +794,11 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
     var e = document.getElementById(prefix+'-e').value.trim();
     if (!n||!t||!e) { alert('Por favor completa nombre, teléfono y correo.'); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { alert('Ingresa un correo válido.'); return; }
+    var d = document.querySelector('input[name="dicom-' + prefix + '"]:checked');
+    if (!d) { alert('Por favor indica si estás o no en DICOM.'); return; }
+    if (d.value === 'si') { document.getElementById(prefix+'-dicom-err').style.display = 'flex'; return; }
     var a = document.getElementById(prefix+'-a');
-    saveLead({ nombre:n, telefono:t, email:e, arriendo:a?a.value:'', fuente:src });
+    saveLead({ nombre:n, telefono:t, email:e, arriendo:a?a.value:'', dicom:d.value, fuente:src });
     document.getElementById(prefix+'-content').style.display = 'none';
     var ok = document.getElementById(prefix+'-ok');
     ok.style.display = 'block';
@@ -802,9 +808,12 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
   }
 
   function doQuick(id, fuente) {
+    var d = document.querySelector('input[name="dicom-' + id + '"]:checked');
+    if (!d) { alert('Por favor indica si estás o no en DICOM.'); return; }
+    if (d.value === 'si') { document.getElementById(id+'-dicom-err').style.display = 'flex'; return; }
     var t = document.getElementById(id+'-t').value.trim();
     if (!t) { alert('Por favor ingresa tu número de WhatsApp.'); return; }
-    saveLead({ telefono:t, fuente:fuente||id });
+    saveLead({ telefono:t, dicom:d.value, fuente:fuente||id });
     document.getElementById(id+'-row').style.display = 'none';
     document.getElementById(id+'-ok').style.display = 'block';
     var msg = encodeURIComponent('Hola, quiero evaluarme para obtener un Mutuo Hipotecario. Mi WhatsApp es ' + t + '.');
