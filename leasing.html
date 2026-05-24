@@ -964,8 +964,6 @@ footer{background:var(--navy);padding:56px 40px 28px}
     const t = document.getElementById(id+'-t').value.trim();
     if (!t) { alert('Por favor ingresa tu número de WhatsApp.'); return; }
     saveLead({telefono:t, dicom:d.value, fuente:fuente||id});
-    localStorage.setItem('lp_submitted', '1');
-    markAllFormsSubmitted('1');
     document.getElementById(id+'-row').style.display = 'none';
     document.getElementById(id+'-ok').style.display = 'block';
     const msg = encodeURIComponent(`Hola, quiero evaluarme para el DS120.`);
