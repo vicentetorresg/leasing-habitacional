@@ -392,7 +392,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
         <h3>¿Califico para el<br>DS120?</h3>
         <p class="sub">Déjanos tus datos. Verificamos en <strong>menos de 24 horas</strong> — sin costo.</p>
         <div id="hf-content">
-          <p style="margin:0 0 10px;font-size:0.75rem;font-weight:700;color:var(--text-s);letter-spacing:0.5px;text-transform:uppercase">Responde estas preguntas para ver si calificas</p>
+          <div style="display:flex;align-items:center;gap:10px;margin:0 0 14px"><div style="flex:1;height:1px;background:var(--beige-2)"></div><span style="font-size:0.72rem;font-weight:800;color:var(--teal);letter-spacing:1px;text-transform:uppercase;white-space:nowrap">Responde y descubre si calificas</span><div style="flex:1;height:1px;background:var(--beige-2)"></div></div>
           <form class="f-stack" autocomplete="on" onsubmit="return false;">
             <input class="f-input" type="text" id="hf-n" placeholder="Nombre completo *" autocomplete="name">
             <input class="f-input" type="tel" id="hf-t" placeholder="WhatsApp * (+56 9 XXXX XXXX)" name="phone" autocomplete="tel">
@@ -529,7 +529,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
       <div class="dfs-fc" id="f2c">
         <h3>Verifica ahora — es completamente gratis</h3>
         <div id="f2-content">
-          <p style="margin:0 0 10px;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:0.5px;text-transform:uppercase">Responde estas preguntas para ver si calificas</p>
+          <div style="display:flex;align-items:center;gap:10px;margin:0 0 14px"><div style="flex:1;height:1px;background:rgba(255,255,255,0.12)"></div><span style="font-size:0.72rem;font-weight:800;color:#2DB89E;letter-spacing:1px;text-transform:uppercase;white-space:nowrap">Responde y descubre si calificas</span><div style="flex:1;height:1px;background:rgba(255,255,255,0.12)"></div></div>
           <form class="f-stack" autocomplete="on" onsubmit="return false;">
             <input class="f-input f-input-d" type="text" id="f2-n" placeholder="Nombre completo *" autocomplete="name">
             <input class="f-input f-input-d" type="tel" id="f2-t" placeholder="WhatsApp *" name="phone" autocomplete="tel">
@@ -630,7 +630,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     <p class="sec-sub" style="margin:0 auto 32px">Sin compromiso. Verificamos si puedes acceder al DS120 y te contactamos en <strong>menos de 24 horas</strong>.</p>
     <div class="lfs-fc" id="f3c">
       <form autocomplete="on" onsubmit="return false;"><div id="f3-content">
-        <p style="margin:0 0 10px;font-size:0.75rem;font-weight:700;color:var(--text-s);letter-spacing:0.5px;text-transform:uppercase">Responde estas preguntas para ver si calificas</p>
+        <div style="display:flex;align-items:center;gap:10px;margin:0 0 14px"><div style="flex:1;height:1px;background:var(--beige-2)"></div><span style="font-size:0.72rem;font-weight:800;color:var(--teal);letter-spacing:1px;text-transform:uppercase;white-space:nowrap">Responde y descubre si calificas</span><div style="flex:1;height:1px;background:var(--beige-2)"></div></div>
         <div class="f-row">
           <div class="f-group"><label>Nombre completo *</label><input class="f-input" type="text" id="f3-n" placeholder="Ana García" autocomplete="name"></div>
           <div class="f-group"><label>WhatsApp *</label><input class="f-input" type="tel" id="f3-t" placeholder="+56 9 XXXX XXXX" name="phone" autocomplete="tel"></div>
@@ -696,7 +696,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
       <div class="fps-fc" id="f4c">
         <h3>Un paso y te contactamos hoy</h3>
         <div id="f4-content">
-          <p style="margin:0 0 10px;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:0.5px;text-transform:uppercase">Responde estas preguntas para ver si calificas</p>
+          <div style="display:flex;align-items:center;gap:10px;margin:0 0 14px"><div style="flex:1;height:1px;background:rgba(255,255,255,0.12)"></div><span style="font-size:0.72rem;font-weight:800;color:#2DB89E;letter-spacing:1px;text-transform:uppercase;white-space:nowrap">Responde y descubre si calificas</span><div style="flex:1;height:1px;background:rgba(255,255,255,0.12)"></div></div>
           <form class="f-stack" autocomplete="on" onsubmit="return false;">
             <input class="f-input f-input-d" type="text" id="f4-n" placeholder="Nombre completo *" autocomplete="name">
             <input class="f-input f-input-d" type="tel" id="f4-t" placeholder="WhatsApp *" name="phone" autocomplete="tel">
@@ -846,83 +846,50 @@ footer{background:var(--navy);padding:56px 40px 28px}
 
   // save lead
 
+  function updateButtonState(formId) {
+    var btn = document.getElementById(formId + '-btn');
+    if (!btn) return;
+    var dicom    = document.querySelector('input[name="dicom-'    + formId + '"]:checked');
+    var contrato = document.querySelector('input[name="contrato-' + formId + '"]:checked');
+    var vivienda = document.querySelector('input[name="vivienda-' + formId + '"]:checked');
+    var rentaEl  = document.getElementById(formId + '-r');
+    var blocked = false, msg = '';
+    if      (dicom    && dicom.value    === 'si')              { blocked = true; msg = '🚫 No puedes continuar — estás en DICOM'; }
+    else if (rentaEl  && rentaEl.value  === 'Menos de $700.000'){ blocked = true; msg = '🚫 No puedes continuar — renta mínima $700.000'; }
+    else if (contrato && contrato.value === 'no')              { blocked = true; msg = '🚫 Se requiere contrato indefinido para continuar'; }
+    else if (vivienda && vivienda.value === 'si')              { blocked = true; msg = '🚫 El DS120 es solo para personas sin vivienda propia'; }
+    if (blocked) {
+      if (!btn.dataset.origText) btn.dataset.origText = btn.innerHTML;
+      btn.innerHTML = msg;
+      btn.disabled = true;
+    } else {
+      if (btn.dataset.origText) { btn.innerHTML = btn.dataset.origText; btn.dataset.origText = ''; }
+      btn.disabled = false;
+    }
+  }
+
   function handleDicom(formId, val) {
     var err = document.getElementById(formId + '-dicom-err');
-    var btn = document.getElementById(formId + '-btn');
-    if (val === 'si') {
-      if (err) err.style.display = 'flex';
-      if (btn) {
-        if (!btn.dataset.orig) btn.dataset.orig = btn.innerHTML;
-        btn.innerHTML = '🚫 No puedes continuar — estás en DICOM';
-        btn.disabled = true;
-      }
-    } else {
-      if (err) err.style.display = 'none';
-      if (btn) {
-        if (btn.dataset.orig) btn.innerHTML = btn.dataset.orig;
-        btn.disabled = false;
-      }
-    }
+    if (err) err.style.display = val === 'si' ? 'flex' : 'none';
+    updateButtonState(formId);
   }
 
   function handleRenta(formId, val) {
     var err = document.getElementById(formId + '-renta-err');
-    var btn = document.getElementById(formId + '-btn');
-    if (val === 'Menos de $700.000') {
-      if (err) err.style.display = 'flex';
-      if (btn) {
-        if (!btn.dataset.rentaOrig) btn.dataset.rentaOrig = btn.innerHTML;
-        btn.innerHTML = '🚫 No puedes continuar — renta mínima $700.000';
-        btn.disabled = true;
-      }
-    } else {
-      if (err) err.style.display = 'none';
-      if (btn) {
-        if (btn.dataset.rentaOrig) btn.innerHTML = btn.dataset.rentaOrig;
-        btn.dataset.rentaOrig = '';
-        btn.disabled = false;
-      }
-    }
+    if (err) err.style.display = val === 'Menos de $700.000' ? 'flex' : 'none';
+    updateButtonState(formId);
   }
 
   function handleContrato(formId, val) {
     var err = document.getElementById(formId + '-contrato-err');
-    var btn = document.getElementById(formId + '-btn');
-    if (val === 'no') {
-      if (err) err.style.display = 'flex';
-      if (btn) {
-        if (!btn.dataset.contratoOrig) btn.dataset.contratoOrig = btn.innerHTML;
-        btn.innerHTML = '🚫 Se requiere contrato indefinido para continuar';
-        btn.disabled = true;
-      }
-    } else {
-      if (err) err.style.display = 'none';
-      if (btn) {
-        if (btn.dataset.contratoOrig) btn.innerHTML = btn.dataset.contratoOrig;
-        btn.dataset.contratoOrig = '';
-        btn.disabled = false;
-      }
-    }
+    if (err) err.style.display = val === 'no' ? 'flex' : 'none';
+    updateButtonState(formId);
   }
 
   function handleVivienda(formId, val) {
     var err = document.getElementById(formId + '-vivienda-err');
-    var btn = document.getElementById(formId + '-btn');
-    if (val === 'si') {
-      if (err) err.style.display = 'flex';
-      if (btn) {
-        if (!btn.dataset.viviendaOrig) btn.dataset.viviendaOrig = btn.innerHTML;
-        btn.innerHTML = '🚫 El DS120 es solo para personas sin vivienda propia';
-        btn.disabled = true;
-      }
-    } else {
-      if (err) err.style.display = 'none';
-      if (btn) {
-        if (btn.dataset.viviendaOrig) btn.innerHTML = btn.dataset.viviendaOrig;
-        btn.dataset.viviendaOrig = '';
-        btn.disabled = false;
-      }
-    }
+    if (err) err.style.display = val === 'si' ? 'flex' : 'none';
+    updateButtonState(formId);
   }
 
   function saveLead(data) {
