@@ -75,6 +75,9 @@ function syncLeads() {
       viviendaVal,
       r.ahorro   || ''
     ]);
+    // Force phone cell as plain text to avoid +56... being parsed as formula
+    var newRow = sheet.getLastRow();
+    sheet.getRange(newRow, 3).setNumberFormat('@').setValue(r.telefono || '');
   }
 
   var lastTs = rows[rows.length - 1].created_at;
