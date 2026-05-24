@@ -13,6 +13,7 @@ var HEADERS = [
   'Arriendo Actual',
   'DICOM',
   'Contrato Indefinido',
+  'Tiene Vivienda',
   'Ahorro'
 ];
 
@@ -59,6 +60,7 @@ function syncLeads() {
 
     var dicomVal    = r.dicom    === 'si' ? 'Sí' : r.dicom    === 'no' ? 'No' : '';
     var contratoVal = r.contrato === 'si' ? 'Sí' : r.contrato === 'no' ? 'No' : '';
+    var viviendaVal = r.vivienda === 'si' ? 'Sí' : r.vivienda === 'no' ? 'No' : '';
 
     sheet.appendRow([
       ts,
@@ -70,6 +72,7 @@ function syncLeads() {
       r.arriendo || '',
       dicomVal,
       contratoVal,
+      viviendaVal,
       r.ahorro   || ''
     ]);
   }

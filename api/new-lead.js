@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { nombre, telefono, email, arriendo, renta, dicom, contrato, fuente } = req.body || {};
+  const { nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, fuente } = req.body || {};
   if (!nombre || !telefono) return res.status(400).json({ error: 'Faltan campos' });
 
   const SUPA_URL = 'https://unptkiyggkuxtkzedluv.supabase.co/rest/v1/leasing_leads';
@@ -21,15 +21,13 @@ export default async function handler(req, res) {
   };
 
   let saved = false;
-  // Try with contrato column
-  if (contrato) {
-    const r = await fetch(SUPA_URL, {
-      method: 'POST', headers: supaHeaders,
-      body: JSON.stringify({ nombre, telefono, email, arriendo, renta, dicom, contrato, fuente })
-    });
-    if (r.ok) { saved = true; }
-  }
-  // Fallback without contrato (column may not exist yet)
+  // Try with contrato + vivienda columns
+  const r1 = await fetch(SUPA_URL, {
+    method: 'POST', headers: supaHeaders,
+    body: JSON.stringify({ nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, fuente })
+  });
+  if (r1.ok) { saved = true; }
+  // Fallback without new columns (if not yet added in Supabase)
   if (!saved) {
     const r = await fetch(SUPA_URL, {
       method: 'POST', headers: supaHeaders,
@@ -39,8 +37,9 @@ export default async function handler(req, res) {
   }
 
   // 2. Notification email to team
-  const contratoLabel = contrato === 'si' ? '✅ Sí' : contrato === 'no' ? '❌ No' : '—';
-  const dicomLabel    = dicom === 'si' ? '❌ Sí (en DICOM)' : dicom === 'no' ? '✅ No' : '—';
+  const contratoLabel  = contrato === 'si' ? '✅ Sí' : contrato === 'no' ? '❌ No' : '—';
+  const viviendaLabel  = vivienda === 'si' ? '❌ Sí (tiene vivienda)' : vivienda === 'no' ? '✅ No' : '—';
+  const dicomLabel     = dicom === 'si' ? '❌ Sí (en DICOM)' : dicom === 'no' ? '✅ No' : '—';
   const now = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
   const producto = (fuente || '').toLowerCase().includes('mutuo') ? 'Mutuo Hipotecario' : 'Leasing DS120';
   const waPhone = (telefono || '').replace(/\D/g, '').replace(/^0/, '56');
@@ -65,6 +64,7 @@ export default async function handler(req, res) {
         ['💰 Renta mensual',        renta    || '—'],
         ['🏠 Arriendo actual',      arriendo || '—'],
         ['📋 Contrato indefinido',  contratoLabel],
+        ...(vivienda ? [['🏡 Tiene vivienda propia', viviendaLabel]] : []),
         ['⚠️ En DICOM',             dicomLabel],
         ['📌 Fuente',               fuente   || '—'],
       ].map(([label, val]) => `

@@ -401,6 +401,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
             <div class="dicom-block" id="hf-renta-err" style="display:none">🚫 La renta mínima requerida es $700.000 mensual. El envío está deshabilitado.</div>
             <div class="f-group"><label>¿Estás en DICOM? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="dicom-hf" value="no" onchange="handleDicom('hf','no')"> No estoy en DICOM</label><label class="f-radio-lbl"><input type="radio" name="dicom-hf" value="si" onchange="handleDicom('hf','si')"> Sí estoy en DICOM</label></div><div class="dicom-block" id="hf-dicom-err" style="display:none">❌ Mientras figures en DICOM no es posible acceder a este producto. El botón de envío está deshabilitado — regulariza tu situación y vuelve cuando estés listo.</div></div>
             <div class="f-group"><label>¿Tienes contrato indefinido? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="contrato-hf" value="si" onchange="handleContrato('hf','si')"> Sí, tengo contrato indefinido</label><label class="f-radio-lbl"><input type="radio" name="contrato-hf" value="no" onchange="handleContrato('hf','no')"> No tengo contrato indefinido</label></div><div class="dicom-block" id="hf-contrato-err" style="display:none">⚠️ Solo puedes continuar si tienes contrato indefinido. Este es un requisito del producto financiero.</div></div>
+            <div class="f-group"><label>¿Tú o tu cónyuge tiene una vivienda actualmente? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="vivienda-hf" value="no" onchange="handleVivienda('hf','no')"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl"><input type="radio" name="vivienda-hf" value="si" onchange="handleVivienda('hf','si')"> Sí, tengo una vivienda</label></div><div class="dicom-block" id="hf-vivienda-err" style="display:none">❌ El DS120 está destinado solo a personas sin vivienda propia. El envío está deshabilitado.</div></div>
             <button id="hf-btn" class="f-btn f-btn-navy" onclick="doForm('hf','Leasing - Hero')">Verificar si califico — gratis &rarr;</button>
           </form>
           <div class="fc-trust">
@@ -420,7 +421,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
 
       <div class="hero-text">
         <div class="hero-badge"><span class="dot"></span>Programa MINVU &middot; DS120 &middot; Sin Pie</div>
-        <h1 class="hero-h1">Cambia tu arriendo<br>por tu primera vivienda<br><em>sin pie — con DS120.</em></h1>
+        <h1 class="hero-h1">Deja de pagar arriendo<br>y compra tu vivienda<br><em>sin pie — con DS120.</em></h1>
         <p class="hero-sub">El subsidio DS120 es <strong>automático</strong> y cubre en promedio el <strong>30% del valor</strong> de tu vivienda. Accede a tu primera vivienda <strong>sin pie</strong> — contáctanos y te ayudamos a acceder a tu llave propia.</p>
         <div class="hero-trust">
           <div class="ht-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Respaldado por MINVU</div>
@@ -536,6 +537,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
             <div class="dicom-block dicom-block-d" id="f2-renta-err" style="display:none">🚫 La renta mínima requerida es $700.000 mensual. El envío está deshabilitado.</div>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Estás en DICOM? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="dicom-f2" value="no" onchange="handleDicom('f2','no')"> No estoy en DICOM</label><label class="f-radio-lbl-d"><input type="radio" name="dicom-f2" value="si" onchange="handleDicom('f2','si')"> Sí estoy en DICOM</label></div><div class="dicom-block dicom-block-d" id="f2-dicom-err" style="display:none">❌ Mientras figures en DICOM no es posible acceder a este producto. El botón de envío está deshabilitado — regulariza tu situación y vuelve cuando estés listo.</div></div>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Tienes contrato indefinido? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="contrato-f2" value="si" onchange="handleContrato('f2','si')"> Sí, tengo contrato indefinido</label><label class="f-radio-lbl-d"><input type="radio" name="contrato-f2" value="no" onchange="handleContrato('f2','no')"> No, no tengo contrato indefinido</label></div><div class="dicom-block dicom-block-d" id="f2-contrato-err" style="display:none">⚠️ Solo puedes continuar si tienes contrato indefinido. Este es un requisito del producto financiero.</div></div>
+            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Tú o tu cónyuge tiene una vivienda actualmente? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="vivienda-f2" value="no" onchange="handleVivienda('f2','no')"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl-d"><input type="radio" name="vivienda-f2" value="si" onchange="handleVivienda('f2','si')"> Sí, tengo una vivienda</label></div><div class="dicom-block dicom-block-d" id="f2-vivienda-err" style="display:none">❌ El DS120 está destinado solo a personas sin vivienda propia. El envío está deshabilitado.</div></div>
             <button id="f2-btn" class="f-btn f-btn-teal" onclick="doForm('f2','Leasing - Formulario central')">Verificar si califico gratis &rarr;</button>
           </form>
           <p class="f-privacy">Sin compromiso &middot; Te respondemos en &lt;24 hrs</p>
@@ -637,6 +639,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
         <div class="f-group"><label>Sueldo líquido mensual *</label><select class="f-input" id="f3-r" onchange="handleRenta('f3',this.value)"><option value="">Selecciona un rango</option><option value="Menos de $700.000">Menos de $700.000</option><option value="$700.000 – $900.000">$700.000 – $900.000</option><option value="$900.000 – $1.200.000">$900.000 – $1.200.000</option><option value="$1.200.000 – $1.500.000">$1.200.000 – $1.500.000</option><option value="$1.500.000 – $2.000.000">$1.500.000 – $2.000.000</option><option value="$2.000.000 o más">$2.000.000 o más</option></select><div class="dicom-block" id="f3-renta-err" style="display:none">🚫 La renta mínima requerida es $700.000 mensual.</div></div>
         <div class="f-group"><label>¿Estás en DICOM? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="dicom-f3" value="no" onchange="handleDicom('f3','no')"> No estoy en DICOM</label><label class="f-radio-lbl"><input type="radio" name="dicom-f3" value="si" onchange="handleDicom('f3','si')"> Sí estoy en DICOM</label></div><div class="dicom-block" id="f3-dicom-err" style="display:none">❌ Mientras figures en DICOM no es posible acceder a este producto. El botón de envío está deshabilitado — regulariza tu situación y vuelve cuando estés listo.</div></div>
         <div class="f-group"><label>¿Tienes contrato indefinido? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="contrato-f3" value="si" onchange="handleContrato('f3','si')"> Sí, tengo contrato indefinido</label><label class="f-radio-lbl"><input type="radio" name="contrato-f3" value="no" onchange="handleContrato('f3','no')"> No tengo contrato indefinido</label></div><div class="dicom-block" id="f3-contrato-err" style="display:none">⚠️ Solo puedes continuar si tienes contrato indefinido. Este es un requisito del producto financiero.</div></div>
+        <div class="f-group"><label>¿Tú o tu cónyuge tiene una vivienda actualmente? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="vivienda-f3" value="no" onchange="handleVivienda('f3','no')"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl"><input type="radio" name="vivienda-f3" value="si" onchange="handleVivienda('f3','si')"> Sí, tengo una vivienda</label></div><div class="dicom-block" id="f3-vivienda-err" style="display:none">❌ El DS120 está destinado solo a personas sin vivienda propia. El envío está deshabilitado.</div></div>
             <button id="f3-btn" class="f-btn f-btn-navy" onclick="doFormFull('f3','Leasing - Aplica')">Verificar si califico gratis &rarr;</button>
         <p class="f-privacy f-privacy-d" style="margin-top:12px">Tu información es confidencial. Solo la usamos para contactarte.</p>
       </div></form>
@@ -698,6 +701,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
             <select class="f-input f-input-d" id="f4-r" onchange="handleRenta('f4',this.value)"><option value="">Sueldo líquido mensual *</option><option value="Menos de $700.000">Menos de $700.000</option><option value="$700.000 – $900.000">$700.000 – $900.000</option><option value="$900.000 – $1.200.000">$900.000 – $1.200.000</option><option value="$1.200.000 – $1.500.000">$1.200.000 – $1.500.000</option><option value="$1.500.000 – $2.000.000">$1.500.000 – $2.000.000</option><option value="$2.000.000 o más">$2.000.000 o más</option></select>
             <div class="dicom-block dicom-block-d" id="f4-renta-err" style="display:none">🚫 La renta mínima requerida es $700.000 mensual. El envío está deshabilitado.</div>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Tienes contrato indefinido? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="contrato-f4" value="si" onchange="handleContrato('f4','si')"> Sí, tengo contrato indefinido</label><label class="f-radio-lbl-d"><input type="radio" name="contrato-f4" value="no" onchange="handleContrato('f4','no')"> No, no tengo contrato indefinido</label></div><div class="dicom-block dicom-block-d" id="f4-contrato-err" style="display:none">⚠️ Solo puedes continuar si tienes contrato indefinido. Este es un requisito del producto financiero.</div></div>
+            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Tú o tu cónyuge tiene una vivienda actualmente? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="vivienda-f4" value="no" onchange="handleVivienda('f4','no')"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl-d"><input type="radio" name="vivienda-f4" value="si" onchange="handleVivienda('f4','si')"> Sí, tengo una vivienda</label></div><div class="dicom-block dicom-block-d" id="f4-vivienda-err" style="display:none">❌ El DS120 está destinado solo a personas sin vivienda propia. El envío está deshabilitado.</div></div>
             <button id="f4-btn" class="f-btn f-btn-teal" onclick="doForm('f4','Leasing - Formulario final')">Quiero mi vivienda propia — es gratis &rarr;</button>
           </form>
           <p class="f-privacy">Gratis &middot; Sin compromiso &middot; Respuesta en &lt;24 hrs</p>
@@ -896,6 +900,27 @@ footer{background:var(--navy);padding:56px 40px 28px}
       }
     }
   }
+
+  function handleVivienda(formId, val) {
+    var err = document.getElementById(formId + '-vivienda-err');
+    var btn = document.getElementById(formId + '-btn');
+    if (val === 'si') {
+      if (err) err.style.display = 'flex';
+      if (btn) {
+        if (!btn.dataset.viviendaOrig) btn.dataset.viviendaOrig = btn.innerHTML;
+        btn.innerHTML = '🚫 El DS120 es solo para personas sin vivienda propia';
+        btn.disabled = true;
+      }
+    } else {
+      if (err) err.style.display = 'none';
+      if (btn) {
+        if (btn.dataset.viviendaOrig) btn.innerHTML = btn.dataset.viviendaOrig;
+        btn.dataset.viviendaOrig = '';
+        btn.disabled = false;
+      }
+    }
+  }
+
   function saveLead(data) {
     // Backup local
     const leads = JSON.parse(localStorage.getItem('habita_leads') || '[]');
@@ -925,10 +950,13 @@ footer{background:var(--navy);padding:56px 40px 28px}
     const c = document.querySelector(`input[name="contrato-${prefix}"]:checked`);
     if (!c) { alert('Por favor indica si tienes contrato indefinido.'); return; }
     if (c.value === 'no') { document.getElementById(prefix+'-contrato-err').style.display = 'flex'; return; }
+    const viv = document.querySelector(`input[name="vivienda-${prefix}"]:checked`);
+    if (!viv) { alert('Por favor indica si tú o tu cónyuge tiene una vivienda actualmente.'); return; }
+    if (viv.value === 'si') { document.getElementById(prefix+'-vivienda-err').style.display = 'flex'; return; }
     const a = document.getElementById(prefix+'-a');
     const r = document.getElementById(prefix+'-r');
     if (r && (!r.value || r.value === 'Menos de $700.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $700.000).'); return; }
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:c.value, fuente:src});
+    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, fuente:src});
     document.getElementById(prefix+'-content').style.display = 'none';
     const ok = document.getElementById(prefix+'-ok');
     ok.style.display = 'block';
@@ -950,10 +978,13 @@ footer{background:var(--navy);padding:56px 40px 28px}
     const cf = document.querySelector(`input[name="contrato-${prefix}"]:checked`);
     if (!cf) { alert('Por favor indica si tienes contrato indefinido.'); return; }
     if (cf.value === 'no') { document.getElementById(prefix+'-contrato-err').style.display = 'flex'; return; }
+    const viv = document.querySelector(`input[name="vivienda-${prefix}"]:checked`);
+    if (!viv) { alert('Por favor indica si tú o tu cónyuge tiene una vivienda actualmente.'); return; }
+    if (viv.value === 'si') { document.getElementById(prefix+'-vivienda-err').style.display = 'flex'; return; }
     const a = document.getElementById(prefix+'-a');
     const r = document.getElementById(prefix+'-r');
     if (r && (!r.value || r.value === 'Menos de $700.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $700.000).'); return; }
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:cf.value, fuente:src||prefix});
+    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:cf.value, vivienda:viv.value, fuente:src||prefix});
     document.getElementById(prefix+'-content').style.display = 'none';
     const ok = document.getElementById(prefix+'-ok');
     ok.style.display = 'block';
