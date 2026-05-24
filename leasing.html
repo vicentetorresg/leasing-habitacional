@@ -965,6 +965,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (!t) { alert('Por favor ingresa tu número de WhatsApp.'); return; }
     saveLead({telefono:t, dicom:d.value, fuente:fuente||id});
     localStorage.setItem('lp_submitted', '1');
+    markAllFormsSubmitted('1');
     document.getElementById(id+'-row').style.display = 'none';
     document.getElementById(id+'-ok').style.display = 'block';
     const msg = encodeURIComponent(`Hola, quiero evaluarme para el DS120.`);
@@ -1021,10 +1022,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
       var ok      = document.getElementById(f.ok);
       if (content) content.style.display = 'none';
       if (!ok) return;
-      // Rewrite success block content
-      var iconCls   = f.dark ? 'f-success-icon f-success-icon-teal' : 'f-success-icon';
-      var h3Cls     = f.dark ? '' : '';
-      var textColor = f.dark ? 'rgba(255,255,255,0.65)' : '';
+      var iconCls = f.dark ? 'f-success-icon f-success-icon-teal' : 'f-success-icon';
       ok.innerHTML =
         '<div class="' + iconCls + '">✓</div>' +
         '<h3 style="' + (f.dark ? 'color:#fff' : '') + '">¡' + (firstName ? firstName + ', ya' : 'Ya') + ' recibimos tus datos!</h3>' +
