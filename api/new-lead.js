@@ -211,26 +211,5 @@ export default async function handler(req, res) {
     })
   });
 
-  // 2b. Welcome email to lead (only if email provided)
-  let welcomed = false;
-  if (email) {
-    const isLeasing = !fuente || !fuente.toLowerCase().includes('mutuo');
-    const productoLabel = isLeasing ? 'Leasing Habitacional DS120' : 'Mutuo Hipotecario';
-    const welcomeHtml = buildWelcomeHtml(nombre, isLeasing);
-    const welcomeRes = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from:     'Llave Propia Vivienda <notificaciones@llavepropia.cl>',
-        to:       [email],
-        cc:       ['rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl'],
-        reply_to: ['rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl'],
-        subject:  `Documentación para tu ${productoLabel} — Llave Propia`,
-        html:     welcomeHtml
-      })
-    });
-    welcomed = welcomeRes.ok;
-  }
-
-  return res.status(200).json({ saved, emailed: emailRes.ok, welcomed });
+  return res.status(200).json({ saved, emailed: emailRes.ok });
 }
