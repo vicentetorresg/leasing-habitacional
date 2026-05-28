@@ -337,7 +337,7 @@ function doLogin(){
   var u=document.getElementById('lu').value.trim();
   var p=document.getElementById('lp').value;
   if(u==='rcanas'&&p==='rcanas'){
-    sessionStorage.setItem('lp_auth','1');
+    localStorage.setItem('lp_auth','1');
     document.getElementById('login-err').style.display='none';
     showApp();
   }else{
@@ -345,14 +345,14 @@ function doLogin(){
   }
 }
 function doLogout(){
-  sessionStorage.removeItem('lp_auth');
+  localStorage.removeItem('lp_auth');
   document.getElementById('eval-view').style.display='none';
   document.body.classList.remove('app');
   document.getElementById('login-view').style.display='flex';
   document.getElementById('lp').value='';
 }
 // Auto-login si hay sesion guardada
-if(sessionStorage.getItem('lp_auth')==='1') showApp();
+if(localStorage.getItem('lp_auth')==='1') showApp();
 
 /* ── REACTIVE ── */
 function onDicom(){document.getElementById('dicom-sub').classList.toggle('on',document.querySelector('input[name="dicom"]:checked').value==='si');}
