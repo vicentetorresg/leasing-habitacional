@@ -9,13 +9,12 @@
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
     body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f4f2ee;display:flex;align-items:center;justify-content:center}
-    body.app{display:block;align-items:unset;justify-content:unset;padding:16px}
+    body.app{display:block;padding:16px}
 
     :root{
       --navy:#1B2B5E;--teal:#2BA89C;--teal-l:#eefaf9;
       --red:#dc2626;--red-l:#fef2f2;--green:#059669;--green-l:#ecfdf5;
-      --amber:#d97706;--amber-l:#fffbeb;
-      --border:#e2ddd5;--bg:#f4f2ee;--muted:#6b7280;--text:#1a1d2e
+      --border:#e2ddd5;--muted:#6b7280;--text:#1a1d2e
     }
 
     /* ─── LOGIN ─── */
@@ -39,70 +38,72 @@
     .btn-login:hover{background:#162244}
 
     /* ─── APP ─── */
-    #eval-view{display:none;width:100%;max-width:1280px;margin:0 auto}
-
+    #eval-view{display:none;width:100%;max-width:1300px;margin:0 auto}
     .app-hdr{background:linear-gradient(135deg,var(--navy),#162244);border-radius:16px;padding:16px 28px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
     .app-hdr .la{color:#fff;font-weight:900;font-size:1.15rem}
     .app-hdr .lb{color:var(--teal);font-weight:900;font-size:1.15rem}
     .app-hdr p{color:rgba(255,255,255,.45);font-size:.74rem;margin-top:2px}
-    .logout-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);font-size:.75rem;font-weight:700;padding:7px 14px;border-radius:8px;cursor:pointer;white-space:nowrap}
+    .logout-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);font-size:.75rem;font-weight:700;padding:7px 14px;border-radius:8px;cursor:pointer}
     .logout-btn:hover{background:rgba(255,255,255,.18)}
 
-    /* ─── DOS COLUMNAS ─── */
-    .cols{display:grid;grid-template-columns:1.05fr 1fr;gap:16px;align-items:start}
+    /* ─── COLUMNAS ─── */
+    .cols{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:start}
 
-    /* ─── FORM PANEL ─── */
+    /* ─── FORM ─── */
     .form-panel{background:#fff;border-radius:18px;padding:24px 28px;box-shadow:0 4px 20px rgba(0,0,0,.07)}
-    .fsect{font-size:.65rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:18px 0 12px;display:flex;align-items:center;gap:8px}
+    .fsect{font-size:.65rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:16px 0 11px;display:flex;align-items:center;gap:8px}
     .fsect::after{content:'';flex:1;height:1px;background:var(--border)}
     .fsect:first-child{margin-top:0}
     .g2f{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .g3f{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-    .ff{margin-bottom:12px}
+    .ff{margin-bottom:11px}
     .ff label{display:block;font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
     .ff input,.ff select{padding:10px 12px;font-size:.88rem;border-radius:9px}
+    .note{font-size:.7rem;color:var(--muted);margin-top:4px;line-height:1.3}
 
-    /* ─── RADIO TABS COMPACTOS ─── */
+    /* ─── RADIOS ─── */
     .rtabs{display:flex;gap:7px}
     .rtab{position:relative;flex:1}
     .rtab input{position:absolute;opacity:0;width:0;height:0}
     .rtab-lbl{border:1.5px solid var(--border);border-radius:8px;padding:9px 10px;cursor:pointer;text-align:center;font-size:.8rem;font-weight:700;color:var(--muted);transition:all .2s;display:block;white-space:nowrap}
     .rtab input:checked ~ .rtab-lbl{border-color:var(--teal);background:var(--teal-l);color:var(--navy)}
 
-    .note{font-size:.71rem;color:var(--muted);margin-top:4px;line-height:1.3}
-
-    /* subseccion inline */
     .inline-sub{display:none;margin-top:8px}
     .inline-sub.on{display:block}
 
-    /* ─── RESULTADO PANEL ─── */
+    /* ─── RESULTADO ─── */
     .result-panel{background:#fff;border-radius:18px;padding:24px 28px;box-shadow:0 4px 20px rgba(0,0,0,.07);position:sticky;top:16px}
 
-    /* veredicto */
-    .v-box{border-radius:14px;padding:20px 22px;text-align:center;margin-bottom:16px;transition:all .3s}
+    .v-box{border-radius:14px;padding:18px 20px;text-align:center;margin-bottom:14px;transition:all .3s}
     .v-box.pendiente{background:#f3f4f6;border:2px solid #d1d5db}
     .v-box.ok{background:var(--green-l);border:2px solid #6ee7b7}
     .v-box.no{background:var(--red-l);border:2px solid #fca5a5}
-    .v-ico{font-size:2.2rem;margin-bottom:6px}
-    .v-tit{font-size:1.6rem;font-weight:900;margin-bottom:4px}
+    .v-ico{font-size:2rem;margin-bottom:5px}
+    .v-tit{font-size:1.5rem;font-weight:900;margin-bottom:3px}
     .v-box.pendiente .v-tit{color:#9ca3af}
     .v-box.ok .v-tit{color:var(--green)}
     .v-box.no .v-tit{color:var(--red)}
-    .v-sub{font-size:.8rem;color:var(--muted)}
+    .v-sub{font-size:.78rem;color:var(--muted)}
 
-    /* criterios */
-    .crit-list{display:flex;flex-direction:column;gap:0}
-    .crit{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+    /* financiamiento box */
+    .fin-box{background:linear-gradient(135deg,var(--navy),#162244);border-radius:12px;padding:16px 20px;margin-bottom:14px;display:none}
+    .fin-box.visible{display:block}
+    .fin-title{font-size:.65rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:12px}
+    .fin-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+    .fin-row:last-child{border-bottom:none}
+    .fin-label{font-size:.76rem;color:rgba(255,255,255,.6)}
+    .fin-value{font-size:.92rem;font-weight:800;color:#fff}
+    .fin-value.accent{color:var(--teal)}
+
+    .crit{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
     .crit:last-child{border-bottom:none}
-    .crit-ico{font-size:.95rem;flex-shrink:0;width:20px;text-align:center}
-    .crit-body{flex:1}
-    .crit-nom{font-size:.82rem;font-weight:700;color:var(--text);line-height:1.2}
-    .crit-det{font-size:.74rem;color:var(--muted);margin-top:2px;line-height:1.3}
+    .crit-ico{font-size:.9rem;flex-shrink:0;width:18px;text-align:center;margin-top:1px}
+    .crit-nom{font-size:.81rem;font-weight:700;color:var(--text);line-height:1.2}
+    .crit-det{font-size:.73rem;color:var(--muted);margin-top:2px;line-height:1.3}
     .crit-det.bad{color:var(--red)}
 
-    /* contadores */
-    .resumen{display:flex;gap:8px;margin-top:14px}
-    .tag{flex:1;text-align:center;border-radius:8px;padding:8px 6px;font-size:.72rem;font-weight:800}
+    .resumen{display:flex;gap:8px;margin-top:12px}
+    .tag{flex:1;text-align:center;border-radius:8px;padding:7px 4px;font-size:.7rem;font-weight:800}
     .tag-ok{background:var(--green-l);color:var(--green)}
     .tag-no{background:var(--red-l);color:var(--red)}
     .tag-pend{background:#f3f4f6;color:#9ca3af}
@@ -123,11 +124,11 @@
     <h2>Iniciar sesi&oacute;n</h2>
     <div class="login-err" id="login-err">Usuario o contrase&ntilde;a incorrectos.</div>
     <div class="lf">
-      <label for="lu">Usuario</label>
+      <label>Usuario</label>
       <input type="text" id="lu" autocomplete="username" placeholder="Usuario">
     </div>
     <div class="lf">
-      <label for="lp">Contrase&ntilde;a</label>
+      <label>Contrase&ntilde;a</label>
       <input type="password" id="lp" autocomplete="current-password" placeholder="Contrase&ntilde;a" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
     <button class="btn-login" onclick="doLogin()">Entrar</button>
@@ -147,27 +148,24 @@
 
   <div class="cols">
 
-    <!-- ─────────── FORMULARIO ─────────── -->
+    <!-- FORMULARIO -->
     <div class="form-panel">
 
       <div class="fsect">Datos del solicitante</div>
-      <div class="g2f">
-        <div class="ff">
-          <label>Nombre</label>
-          <input type="text" id="nombre" placeholder="Juan P&eacute;rez" autocomplete="off" oninput="liveEval()">
-        </div>
+      <div class="g3f">
         <div class="ff">
           <label>Edad (a&ntilde;os)</label>
           <input type="number" id="edad" min="0" max="100" placeholder="35" oninput="liveEval()">
         </div>
-      </div>
-      <div class="g2f">
         <div class="ff">
-          <label>Plazo del contrato</label>
+          <label>Plazo <span id="plazo-hint" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)"></span></label>
           <select id="plazo" onchange="liveEval()">
             <option value="">&#8212; Seleccionar &#8212;</option>
+            <option value="8">8 a&ntilde;os</option>
             <option value="10">10 a&ntilde;os</option>
+            <option value="12">12 a&ntilde;os</option>
             <option value="15">15 a&ntilde;os</option>
+            <option value="18">18 a&ntilde;os</option>
             <option value="20">20 a&ntilde;os</option>
             <option value="25">25 a&ntilde;os</option>
             <option value="30">30 a&ntilde;os</option>
@@ -178,8 +176,8 @@
           <select id="nacionalidad" onchange="liveEval()">
             <option value="">&#8212; Seleccionar &#8212;</option>
             <option value="chileno">Chileno/a</option>
-            <option value="extranjero_def">Extranjero con permanencia definitiva</option>
-            <option value="extranjero_sin">Extranjero sin permanencia definitiva</option>
+            <option value="extranjero_def">Extranjero — perm. definitiva</option>
+            <option value="extranjero_sin">Extranjero — sin perm. definitiva</option>
           </select>
         </div>
       </div>
@@ -208,16 +206,15 @@
       <div class="fsect">Ingresos y deudas</div>
       <div class="g2f">
         <div class="ff">
-          <label>Renta l&iacute;quida mensual (CLP) <span id="renta-hint" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)"></span></label>
+          <label>Renta l&iacute;quida mensual <span id="renta-hint" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)"></span></label>
           <input type="text" id="renta" placeholder="$ 1.200.000" oninput="fmtMonto(this);liveEval()">
         </div>
         <div class="ff">
-          <label>Otras cuotas mensuales (CLP)</label>
+          <label>Otras cuotas mensuales</label>
           <input type="text" id="otras-deudas" placeholder="$ 0" oninput="fmtMonto(this);liveEval()">
-          <div class="note">Cr&eacute;dito consumo, auto, tarjetas, etc.</div>
+          <div class="note">Consumo, auto, tarjetas, etc.</div>
         </div>
       </div>
-
       <div class="g2f">
         <div class="ff">
           <label>&iquest;Tiene deuda vigente en DICOM?</label>
@@ -232,7 +229,7 @@
                 <input type="number" id="dicom-monto" min="0" step="0.01" placeholder="0.00" oninput="liveEval()">
               </div>
               <div class="ff" style="margin-bottom:0">
-                <label>Valor UF actual <span id="uf-fecha" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)">cargando...</span></label>
+                <label>UF hoy <span id="uf-fecha" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)">cargando&hellip;</span></label>
                 <input type="number" id="uf-clp" min="1" placeholder="37900" value="37900" oninput="liveEval()">
               </div>
             </div>
@@ -248,17 +245,24 @@
         </div>
       </div>
 
-      <div class="fsect">Propiedad</div>
-      <div class="ff" style="max-width:360px">
-        <label>Dividendo mensual total (CLP)</label>
-        <input type="text" id="dividendo" placeholder="$ 350.000" oninput="fmtMonto(this);liveEval()">
-        <div class="note">Cuota completa incluyendo seguros y gastos</div>
+      <div class="fsect">Financiamiento</div>
+      <div class="g2f">
+        <div class="ff" style="margin-bottom:0">
+          <label>Tasa anual del leasing (%)</label>
+          <input type="number" id="tasa" min="0" step="0.01" placeholder="10.50" value="10.50" oninput="liveEval()" onkeydown="ajustarTasa(event)">
+          <div class="note">UF + tasa anual &mdash; &uarr;&darr; en 0,25% &bull; default: 10,50%</div>
+        </div>
+        <div class="ff" style="margin-bottom:0">
+          <label>Valor UF (CLP) <span id="uf-fecha2" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)">cargando&hellip;</span></label>
+          <input type="number" id="uf-clp2" min="1" placeholder="37900" value="37900" oninput="liveEval()">
+          <div class="note">Actualizado autom&aacute;ticamente</div>
+        </div>
       </div>
 
       <div class="fsect">Codeudor solidario (opcional)</div>
       <div class="ff" style="margin-bottom:0">
         <label>&iquest;Agrega codeudor?</label>
-        <div class="rtabs" style="max-width:400px">
+        <div class="rtabs" style="max-width:420px">
           <label class="rtab"><input type="radio" name="cod" value="no" checked onchange="onCod();liveEval()"><div class="rtab-lbl">Sin codeudor</div></label>
           <label class="rtab"><input type="radio" name="cod" value="familiar" onchange="onCod();liveEval()"><div class="rtab-lbl">Familiar*</div></label>
           <label class="rtab"><input type="radio" name="cod" value="otro" onchange="onCod();liveEval()"><div class="rtab-lbl">Otro</div></label>
@@ -266,7 +270,7 @@
         <div class="note" style="margin-top:5px">*C&oacute;nyuge, conviviente civil, pareja con hijos, padre o hijo</div>
         <div class="inline-sub" id="cod-sub">
           <div class="ff" style="margin-top:10px;margin-bottom:0;max-width:280px">
-            <label>Renta l&iacute;quida codeudor (CLP)</label>
+            <label>Renta l&iacute;quida codeudor</label>
             <input type="text" id="renta-cod" placeholder="$ 800.000" oninput="fmtMonto(this);liveEval()">
           </div>
         </div>
@@ -274,16 +278,37 @@
 
     </div><!-- /form-panel -->
 
-    <!-- ─────────── RESULTADO EN VIVO ─────────── -->
+    <!-- RESULTADO EN VIVO -->
     <div class="result-panel">
 
       <div class="v-box pendiente" id="v-box">
         <div class="v-ico" id="v-ico">&#8211;</div>
         <div class="v-tit" id="v-tit">EN ESPERA</div>
-        <div class="v-sub" id="v-sub">Complete el formulario para ver el resultado</div>
+        <div class="v-sub" id="v-sub">Complete el formulario para ver la evaluaci&oacute;n</div>
       </div>
 
-      <div class="crit-list" id="crit-lista"></div>
+      <!-- M&aacute;ximo financiamiento -->
+      <div class="fin-box" id="fin-box">
+        <div class="fin-title">M&aacute;ximo financiamiento estimado</div>
+        <div class="fin-row">
+          <span class="fin-label">M&aacute;ximo propiedad</span>
+          <span class="fin-value accent" id="fin-uf">— UF</span>
+        </div>
+        <div class="fin-row">
+          <span class="fin-label">Equivalente en pesos</span>
+          <span class="fin-value" id="fin-clp">—</span>
+        </div>
+        <div class="fin-row">
+          <span class="fin-label">Dividendo m&aacute;x. mensual</span>
+          <span class="fin-value" id="fin-div">—</span>
+        </div>
+        <div class="fin-row">
+          <span class="fin-label">Plazo / Tasa</span>
+          <span class="fin-value" id="fin-params">—</span>
+        </div>
+      </div>
+
+      <div id="crit-lista"></div>
 
       <div class="resumen" id="resumen" style="display:none">
         <div class="tag tag-ok" id="tag-ok"></div>
@@ -291,10 +316,9 @@
         <div class="tag tag-pend" id="tag-pend"></div>
       </div>
 
-    </div><!-- /result-panel -->
+    </div>
 
   </div><!-- /cols -->
-
 </div><!-- /eval-view -->
 
 <script>
@@ -319,58 +343,49 @@ function doLogout(){
   document.getElementById('login-err').style.display='none';
 }
 
-/* ── REACTIVE FORM ── */
+/* ── REACTIVE ── */
 function onDicom(){
-  var v=document.querySelector('input[name="dicom"]:checked').value;
-  document.getElementById('dicom-sub').classList.toggle('on',v==='si');
+  document.getElementById('dicom-sub').classList.toggle('on',document.querySelector('input[name="dicom"]:checked').value==='si');
 }
 function onCod(){
-  var v=document.querySelector('input[name="cod"]:checked').value;
-  document.getElementById('cod-sub').classList.toggle('on',v!=='no');
+  document.getElementById('cod-sub').classList.toggle('on',document.querySelector('input[name="cod"]:checked').value!=='no');
 }
 function onTipoTrab(){
   var t=document.getElementById('tipo-trab').value;
-  var hints={
-    indefinido_fija:'(m\u00edn. 3 meses)',
-    indefinido_variable:'(m\u00edn. 6 meses)',
-    obra_contrata:'(m\u00edn. 6 meses)',
-    independiente_honorarios:'(m\u00edn. 12 meses)',
-    independiente_comercial:'(m\u00edn. 12 meses)',
-    socio_empresa:'(m\u00edn. 12 meses)',
-    pensionado:''
-  };
-  var rHints={
-    indefinido_fija:'prom. 3 \u00faltimas liquidaciones',
-    indefinido_variable:'prom. 6 \u00faltimas liquidaciones',
-    obra_contrata:'prom. \u00faltimas liquidaciones',
-    independiente_honorarios:'prom. honorarios (m\u00edn. 6 meses)',
-    independiente_comercial:'30% prom. ventas (m\u00edn. 6 meses)',
-    socio_empresa:'prom. retiros acreditados',
-    pensionado:'prom. 3 \u00faltimos pagos'
-  };
-  document.getElementById('antig-hint').textContent=hints[t]||'';
-  document.getElementById('renta-hint').textContent=rHints[t]?'['+rHints[t]+']':'';
+  var ah={indefinido_fija:'(m\u00edn.3m)',indefinido_variable:'(m\u00edn.6m)',obra_contrata:'(m\u00edn.6m)',
+           independiente_honorarios:'(m\u00edn.12m)',independiente_comercial:'(m\u00edn.12m)',socio_empresa:'(m\u00edn.12m)',pensionado:''};
+  var rh={indefinido_fija:'prom. 3 liq.',indefinido_variable:'prom. 6 liq.',obra_contrata:'prom. liq.',
+          independiente_honorarios:'prom. honorarios',independiente_comercial:'30% prom. ventas',
+          socio_empresa:'prom. retiros',pensionado:'prom. 3 pagos'};
+  document.getElementById('antig-hint').textContent=ah[t]||'';
+  document.getElementById('renta-hint').textContent=rh[t]?'['+rh[t]+']':'';
   document.getElementById('antig-wrap').style.opacity=t==='pensionado'?'0.4':'1';
 }
 
-/* ── FORMATO MONEDA ── */
-function fmtMonto(el){
-  var raw=el.value.replace(/\D/g,'');
-  el.value=raw?'$ '+parseInt(raw).toLocaleString('es-CL'):'';
-}
+/* ── FORMATO ── */
+function fmtMonto(el){var r=el.value.replace(/\D/g,'');el.value=r?'$ '+parseInt(r).toLocaleString('es-CL'):'';}
 function parseMonto(v){return parseInt(String(v||'').replace(/\D/g,''))||0;}
 function fmt(n){return '$ '+Math.round(n).toLocaleString('es-CL');}
+function fmtUF(n){return n.toFixed(0)+' UF';}
 function pct(r){return (r*100).toFixed(1)+'%';}
-function getMinAntig(t){
-  return {indefinido_fija:3,indefinido_variable:6,obra_contrata:6,
-          independiente_honorarios:12,independiente_comercial:12,socio_empresa:12,pensionado:0}[t]||0;
+function getMinAntig(t){return {indefinido_fija:3,indefinido_variable:6,obra_contrata:6,independiente_honorarios:12,independiente_comercial:12,socio_empresa:12,pensionado:0}[t]||0;}
+
+function ajustarTasa(e){
+  if(e.key==='ArrowUp'||e.key==='ArrowDown'){
+    e.preventDefault();
+    var el=document.getElementById('tasa');
+    var v=parseFloat(el.value)||10.50;
+    v=e.key==='ArrowUp'?v+0.25:v-0.25;
+    if(v<0)v=0;
+    el.value=v.toFixed(2);
+    liveEval();
+  }
 }
 
-/* ── EVALUACION EN VIVO ── */
 var ICONS={ok:'\u2705',no:'\u274C',pend:'\u26AA'};
 
+/* ── EVALUACION EN VIVO ── */
 function liveEval(){
-  var nombre   =document.getElementById('nombre').value.trim()||'Solicitante';
   var edad     =parseInt(document.getElementById('edad').value)||0;
   var plazo    =parseInt(document.getElementById('plazo').value)||0;
   var nac      =document.getElementById('nacionalidad').value;
@@ -380,32 +395,37 @@ function liveEval(){
   var otras    =parseMonto(document.getElementById('otras-deudas').value);
   var dicomOpt =document.querySelector('input[name="dicom"]:checked').value;
   var dicomUF  =parseFloat(document.getElementById('dicom-monto').value)||0;
-  var ufClp    =parseFloat(document.getElementById('uf-clp').value)||37900;
+  var ufDicom  =parseFloat(document.getElementById('uf-clp').value)||37900;
   var cmfOpt   =document.querySelector('input[name="cmf"]:checked').value;
-  var dividendo=parseMonto(document.getElementById('dividendo').value);
+  var tasa     =parseFloat(document.getElementById('tasa').value)||6.5;
+  var ufClp    =parseFloat(document.getElementById('uf-clp2').value)||37900;
   var codOpt   =document.querySelector('input[name="cod"]:checked').value;
   var rentaCod =parseMonto(document.getElementById('renta-cod').value);
 
-  // Cada criterio: {n, state:'ok'|'no'|'pend', d}
+  // Plazo hint
+  if(edad>0){
+    var maxPlazo=80-edad;
+    document.getElementById('plazo-hint').textContent=maxPlazo>0?'(m\u00e1x. '+maxPlazo+' a\u00f1os)':'';
+  }
+
   var crit=[];
 
   // 1. Edad minima
   if(!edad){
     crit.push({n:'Edad m\u00ednima (18 a\u00f1os)',s:'pend',d:'Ingrese la edad del solicitante.'});
   }else{
-    var ok=edad>=18;
-    crit.push({n:'Edad m\u00ednima (18 a\u00f1os)',s:ok?'ok':'no',
-      d:ok?edad+' a\u00f1os \u2014 cumple el m\u00ednimo.':edad+' a\u00f1os \u2014 se requieren m\u00ednimo 18 a\u00f1os.'});
+    crit.push({n:'Edad m\u00ednima (18 a\u00f1os)',s:edad>=18?'ok':'no',
+      d:edad>=18?edad+' a\u00f1os \u2014 cumple.':edad+' a\u00f1os \u2014 m\u00ednimo 18 a\u00f1os.'});
   }
 
   // 2. Edad al termino
   if(!edad||!plazo){
-    crit.push({n:'Edad al t\u00e9rmino (m\u00e1x. 80 a\u00f1os)',s:'pend',d:'Ingrese edad y plazo.'});
+    crit.push({n:'Edad al t\u00e9rmino del contrato',s:'pend',d:'Ingrese edad y plazo.'});
   }else{
-    var edFin=edad+plazo, ok2=edFin<=80;
-    crit.push({n:'Edad al t\u00e9rmino (m\u00e1x. 80 a\u00f1os)',s:ok2?'ok':'no',
-      d:ok2?edad+' + '+plazo+' = '+edFin+' a\u00f1os al t\u00e9rmino.':
-             edad+' + '+plazo+' = '+edFin+' a\u00f1os al t\u00e9rmino \u2014 supera el m\u00e1ximo de 80.'});
+    var fin=edad+plazo;
+    crit.push({n:'Edad al t\u00e9rmino (m\u00e1x. 80 a\u00f1os)',s:fin<=80?'ok':'no',
+      d:fin<=80?edad+' + '+plazo+' = '+fin+' a\u00f1os al t\u00e9rmino.':
+                edad+' + '+plazo+' = '+fin+' a\u00f1os \u2014 supera el m\u00e1ximo de 80.'});
   }
 
   // 3. Nacionalidad
@@ -413,21 +433,21 @@ function liveEval(){
     crit.push({n:'Nacionalidad habilitada',s:'pend',d:'Seleccione la nacionalidad.'});
   }else{
     var okN=nac==='chileno'||nac==='extranjero_def';
-    var nacTexts={chileno:'Chileno/a',extranjero_def:'Extranjero/a con permanencia definitiva',extranjero_sin:'Extranjero/a sin permanencia definitiva'};
+    var nT={chileno:'Chileno/a',extranjero_def:'Extranjero/a con permanencia definitiva',extranjero_sin:'Extranjero/a sin permanencia definitiva'};
     crit.push({n:'Nacionalidad habilitada',s:okN?'ok':'no',
-      d:okN?nacTexts[nac]+' \u2014 califica.':'Extranjero sin permanencia definitiva \u2014 no califica.'});
+      d:okN?nT[nac]+'.':'Extranjero sin permanencia definitiva \u2014 no califica.'});
   }
 
   // 4. DICOM
   if(dicomOpt==='no'){
     crit.push({n:'DICOM (m\u00e1x. 3,5 UF / 25% sueldo)',s:'ok',d:'Sin deuda vigente en DICOM.'});
   }else{
-    var dCLP=dicomUF*ufClp, ok1=dicomUF<=3.5, ok2r=renta>0?dCLP<=0.25*renta:true;
-    var okD=ok1&&ok2r;
-    crit.push({n:'DICOM (m\u00e1x. 3,5 UF / 25% sueldo)',s:okD?'ok':'no',
+    var dCLP=dicomUF*ufDicom;
+    var ok1=dicomUF<=3.5, ok2=renta>0?dCLP<=0.25*renta:true;
+    crit.push({n:'DICOM (m\u00e1x. 3,5 UF / 25% sueldo)',s:(ok1&&ok2)?'ok':'no',
       d:!ok1?'DICOM '+dicomUF.toFixed(2)+' UF \u2014 supera el m\u00e1ximo de 3,5 UF.':
-         !ok2r?'DICOM '+fmt(dCLP)+' supera 25% del sueldo base ('+fmt(0.25*renta)+').':
-               'DICOM '+dicomUF.toFixed(2)+' UF \u2014 dentro de l\u00edmites.'});
+         !ok2?'DICOM '+fmt(dCLP)+' supera 25% del sueldo base ('+fmt(0.25*renta)+').':
+              'DICOM '+dicomUF.toFixed(2)+' UF \u2014 dentro de l\u00edmites.'});
   }
 
   // 5. CMF
@@ -440,122 +460,122 @@ function liveEval(){
   }else if(tipo==='pensionado'){
     crit.push({n:'Antig\u00fcedad laboral',s:'ok',d:'Pensionado/a \u2014 no aplica requisito de antig\u00fcedad.'});
   }else{
-    var minM=getMinAntig(tipo), okA=antig>=minM;
-    crit.push({n:'Antig\u00fcedad laboral (m\u00edn. '+minM+' meses)',s:okA?'ok':'no',
-      d:okA?antig+' meses \u2014 cumple el m\u00ednimo de '+minM+'.':
-             antig+' meses \u2014 se requieren '+minM+' meses.'});
+    var minM=getMinAntig(tipo),okA=antig>=minM;
+    crit.push({n:'Antig\u00fcedad (m\u00edn. '+minM+' meses)',s:okA?'ok':'no',
+      d:okA?antig+' meses.':antig+' meses \u2014 se requieren '+minM+' meses.'});
   }
 
-  // 7. Relacion dividendo / renta
-  if(!renta||!dividendo){
-    crit.push({n:'Dividendo / renta (m\u00e1x. 25%)',s:'pend',d:'Ingrese renta y dividendo.'});
+  // 7. Capacidad financiera (calcula maximo)
+  var finVisible=false;
+  if(!renta||!plazo||tasa<=0){
+    crit.push({n:'Capacidad de financiamiento',s:'pend',d:'Ingrese renta, plazo y tasa.'});
   }else{
-    var rentaT=(codOpt!=='no'&&rentaCod>0)?renta+rentaCod:renta;
     var esFam=codOpt==='familiar';
-    var okDR,detDR;
+    var rentaT=(codOpt!=='no'&&rentaCod>0)?renta+rentaCod:renta;
+
+    // Maximo dividendo segun regla 25% (politica: < 25% sin codeudor, <= 25% con codeudor)
+    var maxDiv25;
     if(codOpt==='no'){
-      var rd=dividendo/renta; okDR=rd<0.25;
-      detDR=okDR?'Dividendo es '+pct(rd)+' de la renta.':'Dividendo '+pct(rd)+' de la renta '+fmt(renta)+' \u2014 m\u00e1ximo 25%.';
+      maxDiv25=renta*0.25; // se verificara que sea ESTRICTAMENTE menor al usar < en el check
     }else if(esFam){
-      var rd2=dividendo/rentaT; okDR=rd2<=0.25;
-      detDR=okDR?'Dividendo '+pct(rd2)+' de renta combinada ('+fmt(rentaT)+').':
-                 'Dividendo '+pct(rd2)+' de renta combinada \u2014 m\u00e1ximo 25%.';
+      maxDiv25=rentaT*0.25;
     }else{
-      var ra=dividendo/rentaT, rb=dividendo/renta;
-      okDR=ra<=0.25&&rb<=0.50;
-      detDR=okDR?'Dividendo '+pct(ra)+' renta combinada, '+pct(rb)+' renta titular.':
-                 ra>0.25?'Dividendo '+pct(ra)+' de renta combinada \u2014 m\u00e1ximo 25%.':
-                         'Dividendo '+pct(rb)+' de renta titular \u2014 m\u00e1ximo 50% con codeudor no familiar.';
+      // codeudor no familiar: min(25% combinada, 50% titular)
+      maxDiv25=Math.min(rentaT*0.25, renta*0.50);
     }
-    crit.push({n:'Dividendo / renta (m\u00e1x. 25%)',s:okDR?'ok':'no',d:detDR});
-  }
 
-  // 8. Carga financiera
-  if(!renta||!dividendo){
-    crit.push({n:'Carga financiera total (m\u00e1x. 50%)',s:'pend',d:'Ingrese renta y dividendo.'});
-  }else{
-    var cargaT=dividendo+otras;
-    var rentaT2=(codOpt!=='no'&&rentaCod>0)?renta+rentaCod:renta;
-    var esFam2=codOpt==='familiar';
-    var okCF,detCF;
+    // Maximo dividendo segun regla 50% carga financiera
+    var maxDiv50;
     if(codOpt==='no'){
-      var rc=cargaT/renta; okCF=rc<=0.50;
-      detCF=okCF?'Carga total '+pct(rc)+' de la renta.':'Carga total '+fmt(cargaT)+' es '+pct(rc)+' de la renta \u2014 m\u00e1ximo 50%.';
-    }else if(esFam2){
-      var rc2=cargaT/rentaT2; okCF=rc2<=0.50;
-      detCF=okCF?'Carga total '+pct(rc2)+' de renta combinada.':'Carga total '+fmt(cargaT)+' es '+pct(rc2)+' de renta combinada \u2014 m\u00e1ximo 50%.';
+      maxDiv50=renta*0.50-otras;
+    }else if(esFam){
+      maxDiv50=rentaT*0.50-otras;
     }else{
-      var rca=cargaT/rentaT2, rcb=cargaT/renta;
-      okCF=rca<=0.50&&rcb<=0.60;
-      detCF=okCF?'Carga '+pct(rca)+' renta combinada, '+pct(rcb)+' renta titular.':
-                 rca>0.50?'Carga '+pct(rca)+' de renta combinada \u2014 m\u00e1ximo 50%.':
-                          'Carga '+pct(rcb)+' de renta titular \u2014 m\u00e1ximo 60%.';
+      // min(50% combinada, 60% titular) - otras
+      maxDiv50=Math.min(rentaT*0.50, renta*0.60)-otras;
     }
-    crit.push({n:'Carga financiera total (m\u00e1x. 50%)',s:okCF?'ok':'no',d:detCF});
+
+    var maxDiv=Math.min(maxDiv25,maxDiv50);
+
+    if(maxDiv<=0){
+      crit.push({n:'Capacidad de financiamiento',s:'no',
+        d:'Las deudas actuales ('+fmt(otras)+') agotan la capacidad de pago. No puede asumir un leasing.'});
+    }else{
+      // Calcular maximo UF
+      var r=tasa/100/12, n=plazo*12;
+      var maxUF=maxDiv/ufClp/((r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1));
+      var maxCLP=maxUF*ufClp;
+
+      var detFin='Dividendo m\u00e1x. '+fmt(maxDiv)+' \u2192 financia hasta '+maxUF.toFixed(0)+' UF ('+fmt(maxCLP)+').';
+      crit.push({n:'Capacidad de financiamiento',s:'ok',d:detFin});
+
+      // Actualizar caja de financiamiento
+      document.getElementById('fin-uf').textContent=maxUF.toFixed(0)+' UF';
+      document.getElementById('fin-clp').textContent=fmt(maxCLP);
+      document.getElementById('fin-div').textContent=fmt(maxDiv)+' / mes';
+      document.getElementById('fin-params').textContent=plazo+' a\u00f1os \u2022 '+tasa+'% anual';
+      finVisible=true;
+    }
   }
 
-  /* ── RENDER ── */
+  // Mostrar/ocultar caja financiamiento
+  document.getElementById('fin-box').classList.toggle('visible',finVisible);
+
+  // Render criterios
   var lista=document.getElementById('crit-lista');
   lista.innerHTML='';
   crit.forEach(function(c){
-    lista.innerHTML+=
-      '<div class="crit">'+
-        '<div class="crit-ico">'+ICONS[c.s]+'</div>'+
-        '<div class="crit-body">'+
-          '<div class="crit-nom">'+c.n+'</div>'+
-          '<div class="crit-det'+(c.s==='no'?' bad':'')+'">'+c.d+'</div>'+
-        '</div>'+
-      '</div>';
+    lista.innerHTML+='<div class="crit"><div class="crit-ico">'+ICONS[c.s]+'</div><div><div class="crit-nom">'+c.n+'</div><div class="crit-det'+(c.s==='no'?' bad':'')+'">'+c.d+'</div></div></div>';
   });
 
-  var nOk  =crit.filter(function(c){return c.s==='ok';}).length;
-  var nNo  =crit.filter(function(c){return c.s==='no';}).length;
+  var nOk=crit.filter(function(c){return c.s==='ok';}).length;
+  var nNo=crit.filter(function(c){return c.s==='no';}).length;
   var nPend=crit.filter(function(c){return c.s==='pend';}).length;
-
-  document.getElementById('tag-ok').textContent=nOk+' criterio'+(nOk!==1?'s':'')+' OK';
-  document.getElementById('tag-no').textContent=nNo+' criterio'+(nNo!==1?'s':'')+' falla'+(nNo!==1?'n':'');
+  document.getElementById('tag-ok').textContent=nOk+' OK';
+  document.getElementById('tag-no').textContent=nNo+' falla'+(nNo!==1?'n':'');
   document.getElementById('tag-pend').textContent=nPend+' pendiente'+(nPend!==1?'s':'');
   document.getElementById('resumen').style.display='flex';
 
   // Veredicto
   var vBox=document.getElementById('v-box');
-  var vIco =document.getElementById('v-ico');
-  var vTit =document.getElementById('v-tit');
-  var vSub =document.getElementById('v-sub');
-
+  var finUF=document.getElementById('fin-uf').textContent;
   if(nPend>0){
     vBox.className='v-box pendiente';
-    vIco.textContent='\u270D\uFE0F';
-    vTit.textContent='INCOMPLETO';
-    vSub.textContent='Faltan '+nPend+' campo'+(nPend>1?'s':'')+' por completar.';
+    document.getElementById('v-ico').textContent='\u270D\uFE0F';
+    document.getElementById('v-tit').textContent='INCOMPLETO';
+    document.getElementById('v-sub').textContent='Faltan '+nPend+' campo'+(nPend>1?'s':'')+' por completar.';
   }else if(nNo===0){
     vBox.className='v-box ok';
-    vIco.textContent='\u2705';
-    vTit.textContent='CALIFICA';
-    vSub.textContent=(nombre!=='Solicitante'?nombre+' \u2014 ':'')+'Cumple todos los requisitos de la Pol\u00edtica de Otorgamiento.';
+    document.getElementById('v-ico').textContent='\u2705';
+    document.getElementById('v-tit').textContent='CALIFICA';
+    document.getElementById('v-sub').textContent='M\u00e1ximo financiamiento: '+finUF;
   }else{
     vBox.className='v-box no';
-    vIco.textContent='\u274C';
-    vTit.textContent='NO CALIFICA';
-    vSub.textContent=(nombre!=='Solicitante'?nombre+' \u2014 ':'')+nNo+' criterio'+(nNo>1?'s':'')+' no cumplido'+(nNo>1?'s':'')+'.';
+    document.getElementById('v-ico').textContent='\u274C';
+    document.getElementById('v-tit').textContent='NO CALIFICA';
+    document.getElementById('v-sub').textContent=nNo+' criterio'+(nNo>1?'s':'')+' no cumplido'+(nNo>1?'s':'')+'.';
   }
 }
 
 liveEval();
 
-/* ── UF EN VIVO (mindicador.cl) ── */
+/* ── UF EN VIVO ── */
 async function fetchUF(){
   try{
     var res=await fetch('https://mindicador.cl/api/uf');
     var data=await res.json();
     var val=data.serie[0].valor;
     var fecha=new Date(data.serie[0].fecha);
-    var dia=fecha.toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric'});
+    var dia=fecha.toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit'});
+    var label='('+dia+': '+fmt(val)+')';
     document.getElementById('uf-clp').value=Math.round(val);
-    document.getElementById('uf-fecha').textContent='('+dia+': '+fmt(val)+')';
+    document.getElementById('uf-clp2').value=Math.round(val);
+    document.getElementById('uf-fecha').textContent=label;
+    document.getElementById('uf-fecha2').textContent=label;
     liveEval();
   }catch(e){
     document.getElementById('uf-fecha').textContent='(sin conexi\u00f3n)';
+    document.getElementById('uf-fecha2').textContent='(sin conexi\u00f3n)';
   }
 }
 fetchUF();
