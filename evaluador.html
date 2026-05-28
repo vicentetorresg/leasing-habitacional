@@ -87,29 +87,21 @@
     .main-card.no  .estado-badge{background:rgba(255,255,255,.15);color:rgba(255,255,255,.8)}
 
     /* numero UF grande */
-    .uf-big{font-size:3.6rem;font-weight:900;line-height:1;letter-spacing:-2px;margin-bottom:4px}
-    .main-card.pend .uf-big{color:#d1d5db}
-    .main-card.ok   .uf-big{color:var(--teal)}
-    .main-card.no   .uf-big{color:rgba(255,255,255,.3)}
+    .uf-big{font-size:4rem;font-weight:900;line-height:1;letter-spacing:-2px;margin-bottom:2px}
+    .main-card.ok .uf-big{color:var(--teal)}
 
-    .uf-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
-    .main-card.pend .uf-label{color:var(--muted)}
-    .main-card.ok   .uf-label{color:rgba(255,255,255,.4)}
-    .main-card.no   .uf-label{color:rgba(255,255,255,.35)}
+    .uf-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px}
+    .main-card.ok .uf-label{color:rgba(255,255,255,.45)}
 
-    .clp-big{font-size:1.35rem;font-weight:800;margin-bottom:6px}
-    .main-card.pend .clp-big{color:#9ca3af}
+    .clp-big{font-size:1.25rem;font-weight:800;margin-bottom:6px;line-height:1.3}
+    .main-card.pend .clp-big{color:var(--muted);font-size:.92rem;font-weight:500}
     .main-card.ok   .clp-big{color:#fff}
-    .main-card.no   .clp-big{color:rgba(255,255,255,.3)}
+    .main-card.no   .clp-big{color:rgba(255,255,255,.8);font-size:.92rem;font-weight:500}
 
-    .fin-meta{font-size:.76rem}
-    .main-card.pend .fin-meta{color:var(--muted)}
-    .main-card.ok   .fin-meta{color:rgba(255,255,255,.5)}
-    .main-card.no   .fin-meta{color:rgba(255,255,255,.35)}
-
-    .status-msg{font-size:.86rem;font-weight:600;margin-top:4px}
-    .main-card.pend .status-msg{color:var(--muted)}
-    .main-card.no   .status-msg{color:rgba(255,255,255,.75)}
+    .fin-meta{font-size:.76rem;line-height:1.5}
+    .main-card.pend .fin-meta{color:#bbb;font-size:.75rem}
+    .main-card.ok   .fin-meta{color:rgba(255,255,255,.55)}
+    .main-card.no   .fin-meta{color:rgba(255,255,255,.5)}
 
     /* CRITERIOS */
     .crit-card{background:#fff;border-radius:16px;padding:18px 22px;box-shadow:0 4px 20px rgba(0,0,0,.07)}
@@ -302,11 +294,11 @@
 
       <!-- CARD PRINCIPAL -->
       <div class="main-card pend" id="main-card">
-        <div class="estado-badge" id="estado-badge">&#9679; En espera</div>
-        <div class="uf-big" id="uf-big">&#8212;</div>
-        <div class="uf-label" id="uf-label">m&aacute;ximo cr&eacute;dito a financiar (no valor propiedad)</div>
-        <div class="clp-big" id="clp-big">&nbsp;</div>
-        <div class="fin-meta" id="fin-meta">&nbsp;</div>
+        <div class="estado-badge" id="estado-badge">&#9679; Datos incompletos</div>
+        <div class="uf-big" id="uf-big"></div>
+        <div class="uf-label" id="uf-label"></div>
+        <div class="clp-big" id="clp-big">Completa el formulario para calcular el cr&eacute;dito m&aacute;ximo.</div>
+        <div class="fin-meta" id="fin-meta"></div>
         <div class="status-msg" id="status-msg"></div>
       </div>
 
@@ -479,8 +471,9 @@ function liveEval(){
 
   // Render criterios
   var lista=document.getElementById('crit-lista');
-  lista.innerHTML='';
-  crit.forEach(function(c){lista.innerHTML+='<div class="crit"><div class="crit-ico">'+ICONS[c.s]+'</div><div><div class="crit-nom">'+c.n+'</div><div class="crit-det'+(c.s==='no'?' bad':'')+'">'+c.d+'</div></div></div>';});
+  lista.innerHTML=crit.map(function(c){
+    return '<div class="crit"><div class="crit-ico">'+ICONS[c.s]+'</div><div><div class="crit-nom">'+c.n+'</div><div class="crit-det'+(c.s==='no'?' bad':'')+'">'+c.d+'</div></div></div>';
+  }).join('');
 
   var nOk=crit.filter(function(c){return c.s==='ok';}).length;
   var nNo=crit.filter(function(c){return c.s==='no';}).length;
@@ -501,28 +494,28 @@ function liveEval(){
 
   if(nPend>0){
     card.className='main-card pend';
-    badge.textContent='\u25CF Incompleto';
-    ufBig.textContent='\u2014';
-    ufLbl.textContent='m\u00e1ximo cr\u00e9dito a financiar (no valor propiedad)';
-    clpBig.innerHTML='&nbsp;';
-    finMeta.innerHTML='&nbsp;';
-    statusMsg.textContent='Faltan '+nPend+' campo'+(nPend>1?'s':'')+' por completar.';
+    badge.textContent='\u25CF Datos incompletos';
+    ufBig.innerHTML='';
+    ufLbl.textContent='';
+    clpBig.textContent='Completa el formulario para calcular el cr\u00e9dito m\u00e1ximo.';
+    finMeta.textContent=nPend+' campo'+(nPend>1?'s':'')+' pendiente'+(nPend>1?'s':'')+'...';
+    statusMsg.textContent='';
   }else if(nNo===0){
     card.className='main-card ok';
     badge.textContent='\u2714 Califica';
-    ufBig.textContent=maxUFval>0?fmtUF(maxUFval):'\u2014';
-    ufLbl.textContent='m\u00e1ximo cr\u00e9dito a financiar (no valor propiedad)';
+    ufBig.textContent=maxUFval>0?Math.round(maxUFval).toLocaleString(LOC):'--';
+    ufLbl.textContent='UF de cr\u00e9dito m\u00e1ximo';
     clpBig.textContent=maxCLPval>0?fmt(maxCLPval):'';
-    finMeta.textContent=maxDivVal>0?'Dividendo m\u00e1x. '+fmt(maxDivVal)+'/mes \u00b7 '+plazo+' a\u00f1os \u00b7 '+fmtTasa(tasa)+'% anual':'';
+    finMeta.innerHTML=(maxDivVal>0?'Div. m\u00e1x. '+fmt(maxDivVal)+'/mes \u00b7 '+plazo+' a\u00f1os \u00b7 '+fmtTasa(tasa)+'%':'')+'<br><span style="font-size:.69rem;opacity:.5;font-weight:400">Valor cr\u00e9dito \u2260 valor propiedad</span>';
     statusMsg.textContent='';
   }else{
     card.className='main-card no';
     badge.textContent='\u2716 No califica';
-    ufBig.textContent='\u2014';
-    ufLbl.textContent='m\u00e1ximo cr\u00e9dito a financiar (no valor propiedad)';
-    clpBig.innerHTML='&nbsp;';
-    finMeta.innerHTML='&nbsp;';
-    statusMsg.textContent=nNo+' criterio'+(nNo>1?'s':'')+' no cumplido'+(nNo>1?'s':'')+'.';
+    ufBig.innerHTML='';
+    ufLbl.textContent='';
+    clpBig.textContent=nNo+' criterio'+(nNo>1?'s':'')+' no cumplido'+(nNo>1?'s':'')+'.';
+    finMeta.textContent='Revisa los requisitos en detalle.';
+    statusMsg.textContent='';
   }
 }
 
