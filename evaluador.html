@@ -471,9 +471,17 @@ function liveEval(){
 
   // Render criterios
   var lista=document.getElementById('crit-lista');
-  lista.innerHTML=crit.map(function(c){
-    return '<div class="crit"><div class="crit-ico">'+ICONS[c.s]+'</div><div><div class="crit-nom">'+c.n+'</div><div class="crit-det'+(c.s==='no'?' bad':'')+'">'+c.d+'</div></div></div>';
-  }).join('');
+  while(lista.firstChild){lista.removeChild(lista.firstChild);}
+  crit.forEach(function(c){
+    var row=document.createElement('div'); row.className='crit';
+    var ico=document.createElement('div'); ico.className='crit-ico'; ico.textContent=ICONS[c.s];
+    var wrap=document.createElement('div');
+    var nom=document.createElement('div'); nom.className='crit-nom'; nom.textContent=c.n;
+    var det=document.createElement('div'); det.className='crit-det'+(c.s==='no'?' bad':''); det.textContent=c.d;
+    wrap.appendChild(nom); wrap.appendChild(det);
+    row.appendChild(ico); row.appendChild(wrap);
+    lista.appendChild(row);
+  });
 
   var nOk=crit.filter(function(c){return c.s==='ok';}).length;
   var nNo=crit.filter(function(c){return c.s==='no';}).length;
