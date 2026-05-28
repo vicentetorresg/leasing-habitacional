@@ -328,7 +328,7 @@ function showApp(){
 function doLogin(){
   var u=document.getElementById('lu').value.trim();
   var p=document.getElementById('lp').value;
-  if(u==='rcanas'&&p==='rcanas'){
+  if((u==='rcanas'&&p==='rcanas')||(u==='kdehnhardt'&&p==='kdehnhardt')){
     localStorage.setItem('lp_auth','1');
     document.getElementById('login-err').style.display='none';
     showApp();
