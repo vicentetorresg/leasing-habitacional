@@ -17,7 +17,7 @@
       --border:#e2ddd5;--muted:#6b7280;--text:#1a1d2e
     }
 
-    /* ─── LOGIN ─── */
+    /* LOGIN */
     #login-view{width:100%;display:flex;align-items:center;justify-content:center;min-height:100vh}
     .login-card{background:#fff;border-radius:20px;padding:52px 44px;width:100%;max-width:420px;box-shadow:0 16px 48px rgba(0,0,0,.12)}
     .brand{text-align:center;margin-bottom:40px}
@@ -37,7 +37,7 @@
     .btn-login{width:100%;padding:15px;background:var(--navy);color:#fff;font-size:1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;transition:background .2s}
     .btn-login:hover{background:#162244}
 
-    /* ─── APP ─── */
+    /* APP */
     #eval-view{display:none;width:100%;max-width:1300px;margin:0 auto}
     .app-hdr{background:linear-gradient(135deg,var(--navy),#162244);border-radius:16px;padding:16px 28px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
     .app-hdr .la{color:#fff;font-weight:900;font-size:1.15rem}
@@ -46,10 +46,10 @@
     .logout-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);font-size:.75rem;font-weight:700;padding:7px 14px;border-radius:8px;cursor:pointer}
     .logout-btn:hover{background:rgba(255,255,255,.18)}
 
-    /* ─── COLUMNAS ─── */
+    /* LAYOUT */
     .cols{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:start}
 
-    /* ─── FORM ─── */
+    /* FORM */
     .form-panel{background:#fff;border-radius:18px;padding:24px 28px;box-shadow:0 4px 20px rgba(0,0,0,.07)}
     .fsect{font-size:.65rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:16px 0 11px;display:flex;align-items:center;gap:8px}
     .fsect::after{content:'';flex:1;height:1px;background:var(--border)}
@@ -61,7 +61,7 @@
     .ff input,.ff select{padding:10px 12px;font-size:.88rem;border-radius:9px}
     .note{font-size:.7rem;color:var(--muted);margin-top:4px;line-height:1.3}
 
-    /* ─── RADIOS ─── */
+    /* RADIOS */
     .rtabs{display:flex;gap:7px}
     .rtab{position:relative;flex:1}
     .rtab input{position:absolute;opacity:0;width:0;height:0}
@@ -71,30 +71,48 @@
     .inline-sub{display:none;margin-top:8px}
     .inline-sub.on{display:block}
 
-    /* ─── RESULTADO ─── */
-    .result-panel{background:#fff;border-radius:18px;padding:24px 28px;box-shadow:0 4px 20px rgba(0,0,0,.07);position:sticky;top:16px}
+    /* RESULTADO */
+    .result-panel{border-radius:18px;position:sticky;top:16px;display:flex;flex-direction:column;gap:12px}
 
-    .v-box{border-radius:14px;padding:18px 20px;text-align:center;margin-bottom:14px;transition:all .3s}
-    .v-box.pendiente{background:#f3f4f6;border:2px solid #d1d5db}
-    .v-box.ok{background:var(--green-l);border:2px solid #6ee7b7}
-    .v-box.no{background:var(--red-l);border:2px solid #fca5a5}
-    .v-ico{font-size:2rem;margin-bottom:5px}
-    .v-tit{font-size:1.5rem;font-weight:900;margin-bottom:3px}
-    .v-box.pendiente .v-tit{color:#9ca3af}
-    .v-box.ok .v-tit{color:var(--green)}
-    .v-box.no .v-tit{color:var(--red)}
-    .v-sub{font-size:.78rem;color:var(--muted)}
+    /* CARD PRINCIPAL: estado + UF grande */
+    .main-card{border-radius:16px;padding:24px 26px;transition:all .3s}
+    .main-card.pend{background:#fff;box-shadow:0 4px 20px rgba(0,0,0,.07);border:2px solid var(--border)}
+    .main-card.ok{background:linear-gradient(145deg,#1B2B5E,#162244);box-shadow:0 8px 32px rgba(27,43,94,.35)}
+    .main-card.no{background:linear-gradient(145deg,#7f1d1d,#991b1b);box-shadow:0 8px 32px rgba(127,29,29,.35)}
 
-    /* financiamiento box */
-    .fin-box{background:linear-gradient(135deg,var(--navy),#162244);border-radius:12px;padding:16px 20px;margin-bottom:14px;display:none}
-    .fin-box.visible{display:block}
-    .fin-title{font-size:.65rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:12px}
-    .fin-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.1)}
-    .fin-row:last-child{border-bottom:none}
-    .fin-label{font-size:.76rem;color:rgba(255,255,255,.6)}
-    .fin-value{font-size:.92rem;font-weight:800;color:#fff}
-    .fin-value.accent{color:var(--teal)}
+    /* badge de estado */
+    .estado-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:99px;margin-bottom:14px}
+    .main-card.pend .estado-badge{background:rgba(0,0,0,.06);color:var(--muted)}
+    .main-card.ok  .estado-badge{background:rgba(43,168,156,.2);color:var(--teal)}
+    .main-card.no  .estado-badge{background:rgba(255,255,255,.15);color:rgba(255,255,255,.8)}
 
+    /* numero UF grande */
+    .uf-big{font-size:3.6rem;font-weight:900;line-height:1;letter-spacing:-2px;margin-bottom:4px}
+    .main-card.pend .uf-big{color:#d1d5db}
+    .main-card.ok   .uf-big{color:var(--teal)}
+    .main-card.no   .uf-big{color:rgba(255,255,255,.3)}
+
+    .uf-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
+    .main-card.pend .uf-label{color:var(--muted)}
+    .main-card.ok   .uf-label{color:rgba(255,255,255,.4)}
+    .main-card.no   .uf-label{color:rgba(255,255,255,.35)}
+
+    .clp-big{font-size:1.35rem;font-weight:800;margin-bottom:6px}
+    .main-card.pend .clp-big{color:#9ca3af}
+    .main-card.ok   .clp-big{color:#fff}
+    .main-card.no   .clp-big{color:rgba(255,255,255,.3)}
+
+    .fin-meta{font-size:.76rem}
+    .main-card.pend .fin-meta{color:var(--muted)}
+    .main-card.ok   .fin-meta{color:rgba(255,255,255,.5)}
+    .main-card.no   .fin-meta{color:rgba(255,255,255,.35)}
+
+    .status-msg{font-size:.86rem;font-weight:600;margin-top:4px}
+    .main-card.pend .status-msg{color:var(--muted)}
+    .main-card.no   .status-msg{color:rgba(255,255,255,.75)}
+
+    /* CRITERIOS */
+    .crit-card{background:#fff;border-radius:16px;padding:18px 22px;box-shadow:0 4px 20px rgba(0,0,0,.07)}
     .crit{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
     .crit:last-child{border-bottom:none}
     .crit-ico{font-size:.9rem;flex-shrink:0;width:18px;text-align:center;margin-top:1px}
@@ -102,7 +120,8 @@
     .crit-det{font-size:.73rem;color:var(--muted);margin-top:2px;line-height:1.3}
     .crit-det.bad{color:var(--red)}
 
-    .resumen{display:flex;gap:8px;margin-top:12px}
+    /* RESUMEN TAGS */
+    .resumen{display:flex;gap:8px}
     .tag{flex:1;text-align:center;border-radius:8px;padding:7px 4px;font-size:.7rem;font-weight:800}
     .tag-ok{background:var(--green-l);color:var(--green)}
     .tag-no{background:var(--red-l);color:var(--red)}
@@ -114,7 +133,7 @@
 </head>
 <body>
 
-<!-- ═══ LOGIN ═══ -->
+<!-- LOGIN -->
 <div id="login-view">
   <div class="login-card">
     <div class="brand">
@@ -135,7 +154,7 @@
   </div>
 </div>
 
-<!-- ═══ APP ═══ -->
+<!-- APP -->
 <div id="eval-view">
 
   <div class="app-hdr">
@@ -176,8 +195,8 @@
           <select id="nacionalidad" onchange="liveEval()">
             <option value="">&#8212; Seleccionar &#8212;</option>
             <option value="chileno">Chileno/a</option>
-            <option value="extranjero_def">Extranjero — perm. definitiva</option>
-            <option value="extranjero_sin">Extranjero — sin perm. definitiva</option>
+            <option value="extranjero_def">Extranjero &mdash; perm. definitiva</option>
+            <option value="extranjero_sin">Extranjero &mdash; sin perm. definitiva</option>
           </select>
         </div>
       </div>
@@ -226,11 +245,11 @@
             <div class="g2f" style="margin-top:8px">
               <div class="ff" style="margin-bottom:0">
                 <label>Monto DICOM (UF)</label>
-                <input type="number" id="dicom-monto" min="0" step="0.01" placeholder="0.00" oninput="liveEval()">
+                <input type="number" id="dicom-monto" min="0" step="0.01" placeholder="0,00" oninput="liveEval()">
               </div>
               <div class="ff" style="margin-bottom:0">
                 <label>UF hoy <span id="uf-fecha" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)">cargando&hellip;</span></label>
-                <input type="number" id="uf-clp" min="1" placeholder="37900" value="37900" oninput="liveEval()">
+                <input type="text" id="uf-clp" placeholder="37.900" value="37.900" oninput="fmtNumero(this);liveEval()">
               </div>
             </div>
           </div>
@@ -248,13 +267,13 @@
       <div class="fsect">Financiamiento</div>
       <div class="g2f">
         <div class="ff" style="margin-bottom:0">
-          <label>Tasa anual del leasing (%)</label>
-          <input type="number" id="tasa" min="0" step="0.01" placeholder="10.50" value="10.50" oninput="liveEval()" onkeydown="ajustarTasa(event)">
-          <div class="note">UF + tasa anual &mdash; &uarr;&darr; en 0,25% &bull; default: 10,50%</div>
+          <label>Tasa anual (%)</label>
+          <input type="text" id="tasa" placeholder="10,50" value="10,50" oninput="liveEval()" onkeydown="ajustarTasa(event)">
+          <div class="note">UF + tasa &mdash; &uarr;&darr; ajusta 0,25% &bull; default 10,50%</div>
         </div>
         <div class="ff" style="margin-bottom:0">
           <label>Valor UF (CLP) <span id="uf-fecha2" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)">cargando&hellip;</span></label>
-          <input type="number" id="uf-clp2" min="1" placeholder="37900" value="37900" oninput="liveEval()">
+          <input type="text" id="uf-clp2" placeholder="37.900" value="37.900" oninput="fmtNumero(this);liveEval()">
           <div class="note">Actualizado autom&aacute;ticamente</div>
         </div>
       </div>
@@ -281,39 +300,24 @@
     <!-- RESULTADO EN VIVO -->
     <div class="result-panel">
 
-      <div class="v-box pendiente" id="v-box">
-        <div class="v-ico" id="v-ico">&#8211;</div>
-        <div class="v-tit" id="v-tit">EN ESPERA</div>
-        <div class="v-sub" id="v-sub">Complete el formulario para ver la evaluaci&oacute;n</div>
+      <!-- CARD PRINCIPAL -->
+      <div class="main-card pend" id="main-card">
+        <div class="estado-badge" id="estado-badge">&#9679; En espera</div>
+        <div class="uf-big" id="uf-big">&#8212;</div>
+        <div class="uf-label" id="uf-label">m&aacute;ximo a financiar</div>
+        <div class="clp-big" id="clp-big">&nbsp;</div>
+        <div class="fin-meta" id="fin-meta">&nbsp;</div>
+        <div class="status-msg" id="status-msg"></div>
       </div>
 
-      <!-- M&aacute;ximo financiamiento -->
-      <div class="fin-box" id="fin-box">
-        <div class="fin-title">M&aacute;ximo financiamiento estimado</div>
-        <div class="fin-row">
-          <span class="fin-label">M&aacute;ximo propiedad</span>
-          <span class="fin-value accent" id="fin-uf">— UF</span>
+      <!-- CRITERIOS -->
+      <div class="crit-card">
+        <div id="crit-lista"></div>
+        <div class="resumen" id="resumen" style="display:none;margin-top:12px">
+          <div class="tag tag-ok" id="tag-ok"></div>
+          <div class="tag tag-no" id="tag-no"></div>
+          <div class="tag tag-pend" id="tag-pend"></div>
         </div>
-        <div class="fin-row">
-          <span class="fin-label">Equivalente en pesos</span>
-          <span class="fin-value" id="fin-clp">—</span>
-        </div>
-        <div class="fin-row">
-          <span class="fin-label">Dividendo m&aacute;x. mensual</span>
-          <span class="fin-value" id="fin-div">—</span>
-        </div>
-        <div class="fin-row">
-          <span class="fin-label">Plazo / Tasa</span>
-          <span class="fin-value" id="fin-params">—</span>
-        </div>
-      </div>
-
-      <div id="crit-lista"></div>
-
-      <div class="resumen" id="resumen" style="display:none">
-        <div class="tag tag-ok" id="tag-ok"></div>
-        <div class="tag tag-no" id="tag-no"></div>
-        <div class="tag tag-pend" id="tag-pend"></div>
       </div>
 
     </div>
@@ -322,38 +326,41 @@
 </div><!-- /eval-view -->
 
 <script>
-/* ── AUTH ── */
+/* ── SESSION ── */
+function showApp(){
+  document.getElementById('login-view').style.display='none';
+  document.body.classList.add('app');
+  document.getElementById('eval-view').style.display='block';
+  liveEval();
+}
 function doLogin(){
   var u=document.getElementById('lu').value.trim();
   var p=document.getElementById('lp').value;
   if(u==='rcanas'&&p==='rcanas'){
-    document.getElementById('login-view').style.display='none';
-    document.body.classList.add('app');
-    document.getElementById('eval-view').style.display='block';
-    liveEval();
+    sessionStorage.setItem('lp_auth','1');
+    document.getElementById('login-err').style.display='none';
+    showApp();
   }else{
     document.getElementById('login-err').style.display='block';
   }
 }
 function doLogout(){
+  sessionStorage.removeItem('lp_auth');
   document.getElementById('eval-view').style.display='none';
   document.body.classList.remove('app');
   document.getElementById('login-view').style.display='flex';
   document.getElementById('lp').value='';
-  document.getElementById('login-err').style.display='none';
 }
+// Auto-login si hay sesion guardada
+if(sessionStorage.getItem('lp_auth')==='1') showApp();
 
 /* ── REACTIVE ── */
-function onDicom(){
-  document.getElementById('dicom-sub').classList.toggle('on',document.querySelector('input[name="dicom"]:checked').value==='si');
-}
-function onCod(){
-  document.getElementById('cod-sub').classList.toggle('on',document.querySelector('input[name="cod"]:checked').value!=='no');
-}
+function onDicom(){document.getElementById('dicom-sub').classList.toggle('on',document.querySelector('input[name="dicom"]:checked').value==='si');}
+function onCod(){document.getElementById('cod-sub').classList.toggle('on',document.querySelector('input[name="cod"]:checked').value!=='no');}
 function onTipoTrab(){
   var t=document.getElementById('tipo-trab').value;
-  var ah={indefinido_fija:'(m\u00edn.3m)',indefinido_variable:'(m\u00edn.6m)',obra_contrata:'(m\u00edn.6m)',
-           independiente_honorarios:'(m\u00edn.12m)',independiente_comercial:'(m\u00edn.12m)',socio_empresa:'(m\u00edn.12m)',pensionado:''};
+  var ah={indefinido_fija:'(m\u00edn. 3m)',indefinido_variable:'(m\u00edn. 6m)',obra_contrata:'(m\u00edn. 6m)',
+          independiente_honorarios:'(m\u00edn. 12m)',independiente_comercial:'(m\u00edn. 12m)',socio_empresa:'(m\u00edn. 12m)',pensionado:''};
   var rh={indefinido_fija:'prom. 3 liq.',indefinido_variable:'prom. 6 liq.',obra_contrata:'prom. liq.',
           independiente_honorarios:'prom. honorarios',independiente_comercial:'30% prom. ventas',
           socio_empresa:'prom. retiros',pensionado:'prom. 3 pagos'};
@@ -362,171 +369,118 @@ function onTipoTrab(){
   document.getElementById('antig-wrap').style.opacity=t==='pensionado'?'0.4':'1';
 }
 
-/* ── FORMATO ── */
-function fmtMonto(el){var r=el.value.replace(/\D/g,'');el.value=r?'$ '+parseInt(r).toLocaleString('es-CL'):'';}
-function parseMonto(v){return parseInt(String(v||'').replace(/\D/g,''))||0;}
-function fmt(n){return '$ '+Math.round(n).toLocaleString('es-CL');}
-function fmtUF(n){return n.toFixed(0)+' UF';}
-function pct(r){return (r*100).toFixed(1)+'%';}
-function getMinAntig(t){return {indefinido_fija:3,indefinido_variable:6,obra_contrata:6,independiente_honorarios:12,independiente_comercial:12,socio_empresa:12,pensionado:0}[t]||0;}
-
+/* ── TASA CON COMA ── */
+function parseTasa(){
+  var raw=document.getElementById('tasa').value||'10,50';
+  return parseFloat(raw.replace(',','.'))||10.50;
+}
+function fmtTasa(v){return v.toFixed(2).replace('.',',');}
 function ajustarTasa(e){
   if(e.key==='ArrowUp'||e.key==='ArrowDown'){
     e.preventDefault();
-    var el=document.getElementById('tasa');
-    var v=parseFloat(el.value)||10.50;
-    v=e.key==='ArrowUp'?v+0.25:v-0.25;
-    if(v<0)v=0;
-    el.value=v.toFixed(2);
+    var v=parseTasa();
+    v=e.key==='ArrowUp'?v+0.25:Math.max(0,v-0.25);
+    document.getElementById('tasa').value=fmtTasa(v);
     liveEval();
   }
 }
+
+/* ── FORMATO ── */
+var LOC='es-CL';
+function fmtMonto(el){var r=el.value.replace(/\D/g,'');el.value=r?'$ '+parseInt(r).toLocaleString(LOC):'';}
+function fmtNumero(el){var r=el.value.replace(/\D/g,'');el.value=r?parseInt(r).toLocaleString(LOC):'';}
+function parseMonto(v){return parseInt(String(v||'').replace(/\D/g,''))||0;}
+function parseNumero(id){return parseInt((document.getElementById(id).value||'0').replace(/\D/g,''))||0;}
+function fmt(n){return '$ '+Math.round(n).toLocaleString(LOC);}
+function fmtUF(n){return Math.round(n).toLocaleString(LOC)+' UF';}
+function pct(r){return (r*100).toLocaleString(LOC,{minimumFractionDigits:1,maximumFractionDigits:1})+'%';}
+function getMinAntig(t){return {indefinido_fija:3,indefinido_variable:6,obra_contrata:6,independiente_honorarios:12,independiente_comercial:12,socio_empresa:12,pensionado:0}[t]||0;}
 
 var ICONS={ok:'\u2705',no:'\u274C',pend:'\u26AA'};
 
 /* ── EVALUACION EN VIVO ── */
 function liveEval(){
-  var edad     =parseInt(document.getElementById('edad').value)||0;
-  var plazo    =parseInt(document.getElementById('plazo').value)||0;
-  var nac      =document.getElementById('nacionalidad').value;
-  var tipo     =document.getElementById('tipo-trab').value;
-  var antig    =parseInt(document.getElementById('antiguedad').value)||0;
-  var renta    =parseMonto(document.getElementById('renta').value);
-  var otras    =parseMonto(document.getElementById('otras-deudas').value);
-  var dicomOpt =document.querySelector('input[name="dicom"]:checked').value;
-  var dicomUF  =parseFloat(document.getElementById('dicom-monto').value)||0;
-  var ufDicom  =parseFloat(document.getElementById('uf-clp').value)||37900;
-  var cmfOpt   =document.querySelector('input[name="cmf"]:checked').value;
-  var tasa     =parseFloat(document.getElementById('tasa').value)||6.5;
-  var ufClp    =parseFloat(document.getElementById('uf-clp2').value)||37900;
-  var codOpt   =document.querySelector('input[name="cod"]:checked').value;
-  var rentaCod =parseMonto(document.getElementById('renta-cod').value);
+  var edad    =parseInt(document.getElementById('edad').value)||0;
+  var plazo   =parseInt(document.getElementById('plazo').value)||0;
+  var nac     =document.getElementById('nacionalidad').value;
+  var tipo    =document.getElementById('tipo-trab').value;
+  var antig   =parseInt(document.getElementById('antiguedad').value)||0;
+  var renta   =parseMonto(document.getElementById('renta').value);
+  var otras   =parseMonto(document.getElementById('otras-deudas').value);
+  var dicomOpt=document.querySelector('input[name="dicom"]:checked').value;
+  var dicomUF =parseFloat(document.getElementById('dicom-monto').value)||0;
+  var ufDicom =parseNumero('uf-clp')||37900;
+  var cmfOpt  =document.querySelector('input[name="cmf"]:checked').value;
+  var tasa    =parseTasa();
+  var ufClp   =parseNumero('uf-clp2')||37900;
+  var codOpt  =document.querySelector('input[name="cod"]:checked').value;
+  var rentaCod=parseMonto(document.getElementById('renta-cod').value);
 
-  // Plazo hint
-  if(edad>0){
-    var maxPlazo=80-edad;
-    document.getElementById('plazo-hint').textContent=maxPlazo>0?'(m\u00e1x. '+maxPlazo+' a\u00f1os)':'';
-  }
+  // Hint plazo maximo segun edad
+  document.getElementById('plazo-hint').textContent=edad>0?'(m\u00e1x. '+(80-edad)+' a\u00f1os)':'';
 
   var crit=[];
 
   // 1. Edad minima
-  if(!edad){
-    crit.push({n:'Edad m\u00ednima (18 a\u00f1os)',s:'pend',d:'Ingrese la edad del solicitante.'});
-  }else{
-    crit.push({n:'Edad m\u00ednima (18 a\u00f1os)',s:edad>=18?'ok':'no',
-      d:edad>=18?edad+' a\u00f1os \u2014 cumple.':edad+' a\u00f1os \u2014 m\u00ednimo 18 a\u00f1os.'});
-  }
+  if(!edad) crit.push({n:'Edad m\u00ednima (18 a\u00f1os)',s:'pend',d:'Ingrese la edad del solicitante.'});
+  else crit.push({n:'Edad m\u00ednima (18 a\u00f1os)',s:edad>=18?'ok':'no',
+    d:edad>=18?edad+' a\u00f1os.':edad+' a\u00f1os \u2014 m\u00ednimo 18.'});
 
   // 2. Edad al termino
-  if(!edad||!plazo){
-    crit.push({n:'Edad al t\u00e9rmino del contrato',s:'pend',d:'Ingrese edad y plazo.'});
-  }else{
-    var fin=edad+plazo;
-    crit.push({n:'Edad al t\u00e9rmino (m\u00e1x. 80 a\u00f1os)',s:fin<=80?'ok':'no',
-      d:fin<=80?edad+' + '+plazo+' = '+fin+' a\u00f1os al t\u00e9rmino.':
-                edad+' + '+plazo+' = '+fin+' a\u00f1os \u2014 supera el m\u00e1ximo de 80.'});
-  }
+  if(!edad||!plazo) crit.push({n:'Edad al t\u00e9rmino (m\u00e1x. 80 a\u00f1os)',s:'pend',d:'Ingrese edad y plazo.'});
+  else{var f=edad+plazo;crit.push({n:'Edad al t\u00e9rmino (m\u00e1x. 80 a\u00f1os)',s:f<=80?'ok':'no',
+    d:f<=80?edad+' + '+plazo+' = '+f+' a\u00f1os al t\u00e9rmino.':edad+' + '+plazo+' = '+f+' a\u00f1os \u2014 supera el m\u00e1ximo de 80.'});}
 
   // 3. Nacionalidad
-  if(!nac){
-    crit.push({n:'Nacionalidad habilitada',s:'pend',d:'Seleccione la nacionalidad.'});
-  }else{
-    var okN=nac==='chileno'||nac==='extranjero_def';
-    var nT={chileno:'Chileno/a',extranjero_def:'Extranjero/a con permanencia definitiva',extranjero_sin:'Extranjero/a sin permanencia definitiva'};
+  if(!nac) crit.push({n:'Nacionalidad habilitada',s:'pend',d:'Seleccione la nacionalidad.'});
+  else{var okN=nac==='chileno'||nac==='extranjero_def';
     crit.push({n:'Nacionalidad habilitada',s:okN?'ok':'no',
-      d:okN?nT[nac]+'.':'Extranjero sin permanencia definitiva \u2014 no califica.'});
-  }
+      d:okN?{chileno:'Chileno/a',extranjero_def:'Extranjero/a con permanencia definitiva'}[nac]+'.':'Extranjero sin permanencia definitiva \u2014 no califica.'});}
 
   // 4. DICOM
-  if(dicomOpt==='no'){
-    crit.push({n:'DICOM (m\u00e1x. 3,5 UF / 25% sueldo)',s:'ok',d:'Sin deuda vigente en DICOM.'});
-  }else{
-    var dCLP=dicomUF*ufDicom;
-    var ok1=dicomUF<=3.5, ok2=renta>0?dCLP<=0.25*renta:true;
+  if(dicomOpt==='no') crit.push({n:'DICOM (m\u00e1x. 3,5 UF / 25% sueldo)',s:'ok',d:'Sin deuda vigente en DICOM.'});
+  else{var dCLP=dicomUF*ufDicom,ok1=dicomUF<=3.5,ok2=renta>0?dCLP<=0.25*renta:true;
     crit.push({n:'DICOM (m\u00e1x. 3,5 UF / 25% sueldo)',s:(ok1&&ok2)?'ok':'no',
-      d:!ok1?'DICOM '+dicomUF.toFixed(2)+' UF \u2014 supera el m\u00e1ximo de 3,5 UF.':
-         !ok2?'DICOM '+fmt(dCLP)+' supera 25% del sueldo base ('+fmt(0.25*renta)+').':
-              'DICOM '+dicomUF.toFixed(2)+' UF \u2014 dentro de l\u00edmites.'});
-  }
+      d:!ok1?'DICOM '+dicomUF.toFixed(2).replace('.',',')+' UF \u2014 supera el m\u00e1ximo de 3,5 UF.':
+         !ok2?'DICOM '+fmt(dCLP)+' supera 25% del sueldo ('+fmt(0.25*renta)+').':
+              'DICOM '+dicomUF.toFixed(2).replace('.',',')+' UF \u2014 dentro de l\u00edmites.'});}
 
   // 5. CMF
   crit.push({n:'Sin deudas morosas en CMF',s:cmfOpt==='no'?'ok':'no',
     d:cmfOpt==='si'?'Registra deudas morosas, vencidas o castigadas en CMF.':'Sin deudas morosas en CMF.'});
 
   // 6. Antiguedad
-  if(!tipo){
-    crit.push({n:'Antig\u00fcedad laboral',s:'pend',d:'Seleccione tipo de trabajador.'});
-  }else if(tipo==='pensionado'){
-    crit.push({n:'Antig\u00fcedad laboral',s:'ok',d:'Pensionado/a \u2014 no aplica requisito de antig\u00fcedad.'});
-  }else{
-    var minM=getMinAntig(tipo),okA=antig>=minM;
-    crit.push({n:'Antig\u00fcedad (m\u00edn. '+minM+' meses)',s:okA?'ok':'no',
-      d:okA?antig+' meses.':antig+' meses \u2014 se requieren '+minM+' meses.'});
-  }
+  if(!tipo) crit.push({n:'Antig\u00fcedad laboral',s:'pend',d:'Seleccione tipo de trabajador.'});
+  else if(tipo==='pensionado') crit.push({n:'Antig\u00fcedad laboral',s:'ok',d:'Pensionado/a \u2014 no aplica.'});
+  else{var minM=getMinAntig(tipo);crit.push({n:'Antig\u00fcedad (m\u00edn. '+minM+' meses)',s:antig>=minM?'ok':'no',
+    d:antig>=minM?antig+' meses.':antig+' meses \u2014 se requieren '+minM+'.'});}
 
-  // 7. Capacidad financiera (calcula maximo)
-  var finVisible=false;
+  // 7. Capacidad financiera
+  var maxUFval=0,maxCLPval=0,maxDivVal=0;
   if(!renta||!plazo||tasa<=0){
     crit.push({n:'Capacidad de financiamiento',s:'pend',d:'Ingrese renta, plazo y tasa.'});
   }else{
     var esFam=codOpt==='familiar';
     var rentaT=(codOpt!=='no'&&rentaCod>0)?renta+rentaCod:renta;
-
-    // Maximo dividendo segun regla 25% (politica: < 25% sin codeudor, <= 25% con codeudor)
-    var maxDiv25;
-    if(codOpt==='no'){
-      maxDiv25=renta*0.25; // se verificara que sea ESTRICTAMENTE menor al usar < en el check
-    }else if(esFam){
-      maxDiv25=rentaT*0.25;
-    }else{
-      // codeudor no familiar: min(25% combinada, 50% titular)
-      maxDiv25=Math.min(rentaT*0.25, renta*0.50);
-    }
-
-    // Maximo dividendo segun regla 50% carga financiera
-    var maxDiv50;
-    if(codOpt==='no'){
-      maxDiv50=renta*0.50-otras;
-    }else if(esFam){
-      maxDiv50=rentaT*0.50-otras;
-    }else{
-      // min(50% combinada, 60% titular) - otras
-      maxDiv50=Math.min(rentaT*0.50, renta*0.60)-otras;
-    }
-
+    var maxDiv25=codOpt==='no'?renta*0.25:esFam?rentaT*0.25:Math.min(rentaT*0.25,renta*0.50);
+    var maxDiv50=codOpt==='no'?renta*0.50-otras:esFam?rentaT*0.50-otras:Math.min(rentaT*0.50,renta*0.60)-otras;
     var maxDiv=Math.min(maxDiv25,maxDiv50);
-
     if(maxDiv<=0){
-      crit.push({n:'Capacidad de financiamiento',s:'no',
-        d:'Las deudas actuales ('+fmt(otras)+') agotan la capacidad de pago. No puede asumir un leasing.'});
+      crit.push({n:'Capacidad de financiamiento',s:'no',d:'Las deudas actuales ('+fmt(otras)+') agotan la capacidad de pago.'});
     }else{
-      // Calcular maximo UF
-      var r=tasa/100/12, n=plazo*12;
-      var maxUF=maxDiv/ufClp/((r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1));
-      var maxCLP=maxUF*ufClp;
-
-      var detFin='Dividendo m\u00e1x. '+fmt(maxDiv)+' \u2192 financia hasta '+maxUF.toFixed(0)+' UF ('+fmt(maxCLP)+').';
-      crit.push({n:'Capacidad de financiamiento',s:'ok',d:detFin});
-
-      // Actualizar caja de financiamiento
-      document.getElementById('fin-uf').textContent=maxUF.toFixed(0)+' UF';
-      document.getElementById('fin-clp').textContent=fmt(maxCLP);
-      document.getElementById('fin-div').textContent=fmt(maxDiv)+' / mes';
-      document.getElementById('fin-params').textContent=plazo+' a\u00f1os \u2022 '+tasa+'% anual';
-      finVisible=true;
+      var r=tasa/100/12,n=plazo*12;
+      maxUFval=maxDiv/ufClp/((r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1));
+      maxCLPval=maxUFval*ufClp;
+      maxDivVal=maxDiv;
+      crit.push({n:'Capacidad de financiamiento',s:'ok',
+        d:'Div. m\u00e1x. '+fmt(maxDiv)+' \u2192 financia hasta '+fmtUF(maxUFval)+' ('+fmt(maxCLPval)+').'});
     }
   }
-
-  // Mostrar/ocultar caja financiamiento
-  document.getElementById('fin-box').classList.toggle('visible',finVisible);
 
   // Render criterios
   var lista=document.getElementById('crit-lista');
   lista.innerHTML='';
-  crit.forEach(function(c){
-    lista.innerHTML+='<div class="crit"><div class="crit-ico">'+ICONS[c.s]+'</div><div><div class="crit-nom">'+c.n+'</div><div class="crit-det'+(c.s==='no'?' bad':'')+'">'+c.d+'</div></div></div>';
-  });
+  crit.forEach(function(c){lista.innerHTML+='<div class="crit"><div class="crit-ico">'+ICONS[c.s]+'</div><div><div class="crit-nom">'+c.n+'</div><div class="crit-det'+(c.s==='no'?' bad':'')+'">'+c.d+'</div></div></div>';});
 
   var nOk=crit.filter(function(c){return c.s==='ok';}).length;
   var nNo=crit.filter(function(c){return c.s==='no';}).length;
@@ -536,24 +490,39 @@ function liveEval(){
   document.getElementById('tag-pend').textContent=nPend+' pendiente'+(nPend!==1?'s':'');
   document.getElementById('resumen').style.display='flex';
 
-  // Veredicto
-  var vBox=document.getElementById('v-box');
-  var finUF=document.getElementById('fin-uf').textContent;
+  // Card principal
+  var card=document.getElementById('main-card');
+  var badge=document.getElementById('estado-badge');
+  var ufBig=document.getElementById('uf-big');
+  var ufLbl=document.getElementById('uf-label');
+  var clpBig=document.getElementById('clp-big');
+  var finMeta=document.getElementById('fin-meta');
+  var statusMsg=document.getElementById('status-msg');
+
   if(nPend>0){
-    vBox.className='v-box pendiente';
-    document.getElementById('v-ico').textContent='\u270D\uFE0F';
-    document.getElementById('v-tit').textContent='INCOMPLETO';
-    document.getElementById('v-sub').textContent='Faltan '+nPend+' campo'+(nPend>1?'s':'')+' por completar.';
+    card.className='main-card pend';
+    badge.textContent='\u25CF Incompleto';
+    ufBig.textContent='\u2014';
+    ufLbl.textContent='m\u00e1ximo a financiar';
+    clpBig.innerHTML='&nbsp;';
+    finMeta.innerHTML='&nbsp;';
+    statusMsg.textContent='Faltan '+nPend+' campo'+(nPend>1?'s':'')+' por completar.';
   }else if(nNo===0){
-    vBox.className='v-box ok';
-    document.getElementById('v-ico').textContent='\u2705';
-    document.getElementById('v-tit').textContent='CALIFICA';
-    document.getElementById('v-sub').textContent='M\u00e1ximo financiamiento: '+finUF;
+    card.className='main-card ok';
+    badge.textContent='\u2714 Califica';
+    ufBig.textContent=maxUFval>0?fmtUF(maxUFval):'\u2014';
+    ufLbl.textContent='m\u00e1ximo a financiar';
+    clpBig.textContent=maxCLPval>0?fmt(maxCLPval):'';
+    finMeta.textContent=maxDivVal>0?'Dividendo m\u00e1x. '+fmt(maxDivVal)+'/mes \u00b7 '+plazo+' a\u00f1os \u00b7 '+fmtTasa(tasa)+'% anual':'';
+    statusMsg.textContent='';
   }else{
-    vBox.className='v-box no';
-    document.getElementById('v-ico').textContent='\u274C';
-    document.getElementById('v-tit').textContent='NO CALIFICA';
-    document.getElementById('v-sub').textContent=nNo+' criterio'+(nNo>1?'s':'')+' no cumplido'+(nNo>1?'s':'')+'.';
+    card.className='main-card no';
+    badge.textContent='\u2716 No califica';
+    ufBig.textContent='\u2014';
+    ufLbl.textContent='m\u00e1ximo a financiar';
+    clpBig.innerHTML='&nbsp;';
+    finMeta.innerHTML='&nbsp;';
+    statusMsg.textContent=nNo+' criterio'+(nNo>1?'s':'')+' no cumplido'+(nNo>1?'s':'')+'.';
   }
 }
 
@@ -566,10 +535,10 @@ async function fetchUF(){
     var data=await res.json();
     var val=data.serie[0].valor;
     var fecha=new Date(data.serie[0].fecha);
-    var dia=fecha.toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit'});
+    var dia=fecha.toLocaleDateString(LOC,{day:'2-digit',month:'2-digit'});
     var label='('+dia+': '+fmt(val)+')';
-    document.getElementById('uf-clp').value=Math.round(val);
-    document.getElementById('uf-clp2').value=Math.round(val);
+    document.getElementById('uf-clp').value=Math.round(val).toLocaleString(LOC);
+    document.getElementById('uf-clp2').value=Math.round(val).toLocaleString(LOC);
     document.getElementById('uf-fecha').textContent=label;
     document.getElementById('uf-fecha2').textContent=label;
     liveEval();
