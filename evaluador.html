@@ -3,189 +3,193 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Evaluador de Leasing — Llave Propia</title>
+  <title>Evaluador Leasing &mdash; Llave Propia</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f4f2ee;min-height:100vh;padding:24px}
-    body.center{display:flex;align-items:center;justify-content:center}
+    html,body{height:100%}
+    body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f4f2ee;display:flex;align-items:center;justify-content:center}
+    body.app{display:block;align-items:unset;justify-content:unset;padding:16px}
 
     :root{
-      --navy:#1B2B5E;--teal:#2BA89C;--teal-l:#f0fdf9;
+      --navy:#1B2B5E;--teal:#2BA89C;--teal-l:#eefaf9;
       --red:#dc2626;--red-l:#fef2f2;--green:#059669;--green-l:#ecfdf5;
-      --border:#e4e0d8;--text:#22253a;--muted:#6b7280
+      --amber:#d97706;--amber-l:#fffbeb;
+      --border:#e2ddd5;--bg:#f4f2ee;--muted:#6b7280;--text:#1a1d2e
     }
 
-    /* LOGIN */
-    .login-card{background:#fff;border-radius:20px;padding:52px 44px;width:100%;max-width:400px;box-shadow:0 12px 40px rgba(0,0,0,.10)}
-    .brand{text-align:center;margin-bottom:36px}
-    .brand .a{color:var(--navy);font-weight:900;font-size:1.8rem;letter-spacing:-.5px}
-    .brand .b{color:var(--teal);font-weight:900;font-size:1.8rem;letter-spacing:-.5px}
-    .brand p{color:var(--muted);font-size:.82rem;margin-top:4px}
-    .login-card h2{font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:24px;text-align:center}
-    .login-err{background:var(--red-l);border:1px solid #fecaca;color:var(--red);font-size:.82rem;padding:10px 14px;border-radius:8px;margin-bottom:16px;display:none}
+    /* ─── LOGIN ─── */
+    #login-view{width:100%;display:flex;align-items:center;justify-content:center;min-height:100vh}
+    .login-card{background:#fff;border-radius:20px;padding:52px 44px;width:100%;max-width:420px;box-shadow:0 16px 48px rgba(0,0,0,.12)}
+    .brand{text-align:center;margin-bottom:40px}
+    .brand .la{color:var(--navy);font-weight:900;font-size:2rem;letter-spacing:-.5px}
+    .brand .lb{color:var(--teal);font-weight:900;font-size:2rem;letter-spacing:-.5px}
+    .brand p{color:var(--muted);font-size:.85rem;margin-top:6px}
+    .login-card h2{font-size:1.05rem;font-weight:700;color:var(--navy);margin-bottom:28px;text-align:center}
+    .login-err{background:var(--red-l);border:1px solid #fecaca;color:var(--red);font-size:.82rem;padding:10px 14px;border-radius:8px;margin-bottom:18px;display:none}
+    .lf{margin-bottom:20px}
+    .lf label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px}
+    input[type=text],input[type=number],input[type=password],select{
+      width:100%;padding:13px 15px;border:1.5px solid var(--border);border-radius:11px;
+      font-size:.95rem;color:var(--navy);background:#fff;outline:none;transition:border-color .2s;
+      font-family:inherit;-webkit-appearance:none
+    }
+    input:focus,select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(43,168,156,.1)}
+    .btn-login{width:100%;padding:15px;background:var(--navy);color:#fff;font-size:1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;transition:background .2s}
+    .btn-login:hover{background:#162244}
 
-    /* LAYOUT */
-    .wrap{width:100%;max-width:780px;margin:0 auto}
-    .page-header{background:linear-gradient(135deg,var(--navy) 0%,#162244 100%);border-radius:18px;padding:28px 36px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .page-header .a{color:#fff;font-weight:900;font-size:1.25rem}
-    .page-header .b{color:var(--teal);font-weight:900;font-size:1.25rem}
-    .page-header p{color:rgba(255,255,255,.5);font-size:.78rem;margin-top:3px}
-    .logout-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);font-size:.78rem;font-weight:700;padding:8px 16px;border-radius:8px;cursor:pointer;white-space:nowrap}
+    /* ─── APP ─── */
+    #eval-view{display:none;width:100%;max-width:1280px;margin:0 auto}
+
+    .app-hdr{background:linear-gradient(135deg,var(--navy),#162244);border-radius:16px;padding:16px 28px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+    .app-hdr .la{color:#fff;font-weight:900;font-size:1.15rem}
+    .app-hdr .lb{color:var(--teal);font-weight:900;font-size:1.15rem}
+    .app-hdr p{color:rgba(255,255,255,.45);font-size:.74rem;margin-top:2px}
+    .logout-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);font-size:.75rem;font-weight:700;padding:7px 14px;border-radius:8px;cursor:pointer;white-space:nowrap}
     .logout-btn:hover{background:rgba(255,255,255,.18)}
 
-    /* CARD */
-    .card{background:#fff;border-radius:18px;padding:36px 40px;box-shadow:0 4px 20px rgba(0,0,0,.07);margin-bottom:20px}
-    .card-title{font-size:.72rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:20px;display:flex;align-items:center;gap:8px}
-    .card-title::after{content:'';flex:1;height:1px;background:var(--border)}
+    /* ─── DOS COLUMNAS ─── */
+    .cols{display:grid;grid-template-columns:1.05fr 1fr;gap:16px;align-items:start}
 
-    /* FORM */
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-    .f{margin-bottom:18px}
-    label.lbl{display:block;font-size:.8rem;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
-    input[type=text],input[type=number],select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;color:var(--navy);background:#fff;outline:none;transition:border-color .2s}
-    input:focus,select:focus{border-color:var(--teal)}
+    /* ─── FORM PANEL ─── */
+    .form-panel{background:#fff;border-radius:18px;padding:24px 28px;box-shadow:0 4px 20px rgba(0,0,0,.07)}
+    .fsect{font-size:.65rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin:18px 0 12px;display:flex;align-items:center;gap:8px}
+    .fsect::after{content:'';flex:1;height:1px;background:var(--border)}
+    .fsect:first-child{margin-top:0}
+    .g2f{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .g3f{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .ff{margin-bottom:12px}
+    .ff label{display:block;font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+    .ff input,.ff select{padding:10px 12px;font-size:.88rem;border-radius:9px}
 
-    .radio-group{display:flex;gap:10px}
-    .radio-opt{position:relative;flex:1}
-    .radio-opt input{position:absolute;opacity:0;width:0;height:0}
-    .radio-card{border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;cursor:pointer;text-align:center;font-size:.88rem;font-weight:700;color:var(--muted);transition:all .2s;display:block}
-    .radio-opt input:checked + .radio-card{border-color:var(--teal);background:var(--teal-l);color:var(--navy)}
+    /* ─── RADIO TABS COMPACTOS ─── */
+    .rtabs{display:flex;gap:7px}
+    .rtab{position:relative;flex:1}
+    .rtab input{position:absolute;opacity:0;width:0;height:0}
+    .rtab-lbl{border:1.5px solid var(--border);border-radius:8px;padding:9px 10px;cursor:pointer;text-align:center;font-size:.8rem;font-weight:700;color:var(--muted);transition:all .2s;display:block;white-space:nowrap}
+    .rtab input:checked ~ .rtab-lbl{border-color:var(--teal);background:var(--teal-l);color:var(--navy)}
 
-    .note{font-size:.78rem;color:var(--muted);margin-top:5px}
-    .sub-section{background:#f9f8f6;border-radius:12px;padding:18px 20px;margin-top:4px;display:none}
-    .sub-section.visible{display:block}
+    .note{font-size:.71rem;color:var(--muted);margin-top:4px;line-height:1.3}
 
-    /* CALCULADORA */
-    .calc-box{background:var(--teal-l);border:1.5px dashed var(--teal);border-radius:12px;padding:18px 20px;margin-bottom:18px}
-    .calc-box .calc-title{font-size:.72rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
-    .calc-result{background:var(--teal);color:#fff;border-radius:8px;padding:10px 14px;font-size:.9rem;font-weight:700;margin-top:12px;text-align:center}
+    /* subseccion inline */
+    .inline-sub{display:none;margin-top:8px}
+    .inline-sub.on{display:block}
 
-    /* BOTONES */
-    .btn-primary{width:100%;padding:16px;background:var(--navy);color:#fff;font-size:1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;transition:background .2s;margin-top:4px}
-    .btn-primary:hover{background:#162244}
-    .btn-secondary{flex:1;padding:14px;background:#fff;color:var(--navy);font-size:.9rem;font-weight:700;border:1.5px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s}
-    .btn-secondary:hover{border-color:var(--navy)}
-    .btn-calc{background:var(--teal);color:#fff;font-size:.82rem;font-weight:700;border:none;border-radius:8px;padding:10px 18px;cursor:pointer;margin-top:8px}
-    .btn-calc:hover{background:#239e93}
+    /* ─── RESULTADO PANEL ─── */
+    .result-panel{background:#fff;border-radius:18px;padding:24px 28px;box-shadow:0 4px 20px rgba(0,0,0,.07);position:sticky;top:16px}
 
-    /* RESULTADO */
-    #resultado{display:none}
-    .veredicto{border-radius:16px;padding:28px 32px;text-align:center;margin-bottom:20px}
-    .veredicto.ok{background:var(--green-l);border:2px solid #6ee7b7}
-    .veredicto.no{background:var(--red-l);border:2px solid #fca5a5}
-    .v-icon{font-size:3rem;margin-bottom:8px}
-    .v-titulo{font-size:1.8rem;font-weight:900;margin-bottom:6px}
-    .veredicto.ok .v-titulo{color:var(--green)}
-    .veredicto.no .v-titulo{color:var(--red)}
-    .v-sub{font-size:.9rem;color:var(--muted)}
-    .v-nombre{font-weight:700;color:var(--text)}
+    /* veredicto */
+    .v-box{border-radius:14px;padding:20px 22px;text-align:center;margin-bottom:16px;transition:all .3s}
+    .v-box.pendiente{background:#f3f4f6;border:2px solid #d1d5db}
+    .v-box.ok{background:var(--green-l);border:2px solid #6ee7b7}
+    .v-box.no{background:var(--red-l);border:2px solid #fca5a5}
+    .v-ico{font-size:2.2rem;margin-bottom:6px}
+    .v-tit{font-size:1.6rem;font-weight:900;margin-bottom:4px}
+    .v-box.pendiente .v-tit{color:#9ca3af}
+    .v-box.ok .v-tit{color:var(--green)}
+    .v-box.no .v-tit{color:var(--red)}
+    .v-sub{font-size:.8rem;color:var(--muted)}
 
-    .criterio{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
-    .criterio:last-child{border-bottom:none}
-    .c-icon{font-size:1.1rem;flex-shrink:0;margin-top:2px}
-    .c-nombre{font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:2px}
-    .c-detalle{font-size:.82rem;color:var(--muted)}
-    .c-detalle.bad{color:var(--red)}
+    /* criterios */
+    .crit-list{display:flex;flex-direction:column;gap:0}
+    .crit{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+    .crit:last-child{border-bottom:none}
+    .crit-ico{font-size:.95rem;flex-shrink:0;width:20px;text-align:center}
+    .crit-body{flex:1}
+    .crit-nom{font-size:.82rem;font-weight:700;color:var(--text);line-height:1.2}
+    .crit-det{font-size:.74rem;color:var(--muted);margin-top:2px;line-height:1.3}
+    .crit-det.bad{color:var(--red)}
 
-    /* PRINT */
-    @media print{
-      body{background:#fff;padding:0}
-      .no-print{display:none!important}
-      .card{box-shadow:none;border-radius:0;padding:20px}
-      .page-header{background:var(--navy)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;border-radius:0}
-    }
+    /* contadores */
+    .resumen{display:flex;gap:8px;margin-top:14px}
+    .tag{flex:1;text-align:center;border-radius:8px;padding:8px 6px;font-size:.72rem;font-weight:800}
+    .tag-ok{background:var(--green-l);color:var(--green)}
+    .tag-no{background:var(--red-l);color:var(--red)}
+    .tag-pend{background:#f3f4f6;color:#9ca3af}
 
-    /* MOBILE */
-    @media(max-width:600px){
-      .card{padding:24px 20px}
-      .login-card{padding:36px 24px}
-      .page-header{padding:20px 24px}
-      .grid-2,.grid-3{grid-template-columns:1fr}
-    }
+    @media(max-width:960px){.cols{grid-template-columns:1fr}.result-panel{position:static}}
+    @media(max-width:500px){.login-card{padding:36px 24px}.g2f,.g3f{grid-template-columns:1fr}}
   </style>
 </head>
-<body class="center">
+<body>
 
-<!-- LOGIN -->
-<div class="login-card" id="login-view">
-  <div class="brand">
-    <div><span class="a">Llave</span><span class="b">Propia</span></div>
-    <p>Evaluador de Leasing Habitacional</p>
+<!-- ═══ LOGIN ═══ -->
+<div id="login-view">
+  <div class="login-card">
+    <div class="brand">
+      <div><span class="la">Llave</span><span class="lb">Propia</span></div>
+      <p>Evaluador de Leasing Habitacional</p>
+    </div>
+    <h2>Iniciar sesi&oacute;n</h2>
+    <div class="login-err" id="login-err">Usuario o contrase&ntilde;a incorrectos.</div>
+    <div class="lf">
+      <label for="lu">Usuario</label>
+      <input type="text" id="lu" autocomplete="username" placeholder="Usuario">
+    </div>
+    <div class="lf">
+      <label for="lp">Contrase&ntilde;a</label>
+      <input type="password" id="lp" autocomplete="current-password" placeholder="Contrase&ntilde;a" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn-login" onclick="doLogin()">Entrar</button>
   </div>
-  <h2>Iniciar sesion</h2>
-  <div class="login-err" id="login-err">Usuario o contrasena incorrectos.</div>
-  <div class="f">
-    <label class="lbl">Usuario</label>
-    <input type="text" id="login-user" autocomplete="username" placeholder="Usuario">
-  </div>
-  <div class="f">
-    <label class="lbl">Contrasena</label>
-    <input type="password" id="login-pass" autocomplete="current-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" onkeydown="if(event.key==='Enter')doLogin()">
-  </div>
-  <button class="btn-primary" onclick="doLogin()">Entrar</button>
 </div>
 
-<!-- EVALUADOR -->
-<div class="wrap" id="eval-view" style="display:none">
+<!-- ═══ APP ═══ -->
+<div id="eval-view">
 
-  <div class="page-header no-print">
+  <div class="app-hdr">
     <div>
-      <div><span class="a">Llave</span><span class="b">Propia</span></div>
-      <p>Evaluador de Elegibilidad — Leasing Habitacional DS120</p>
+      <div><span class="la">Llave</span><span class="lb">Propia</span></div>
+      <p>Evaluador de Elegibilidad &mdash; Leasing Habitacional DS120</p>
     </div>
-    <button class="logout-btn" onclick="doLogout()">Cerrar sesion</button>
+    <button class="logout-btn" onclick="doLogout()">Cerrar sesi&oacute;n</button>
   </div>
 
-  <!-- FORMULARIO -->
-  <div id="form-section">
+  <div class="cols">
 
-    <!-- 1. DATOS PERSONALES -->
-    <div class="card">
-      <div class="card-title">1 &mdash; Datos del solicitante</div>
-      <div class="grid-2">
-        <div class="f">
-          <label class="lbl">Nombre completo</label>
-          <input type="text" id="nombre" placeholder="Juan Perez">
+    <!-- ─────────── FORMULARIO ─────────── -->
+    <div class="form-panel">
+
+      <div class="fsect">Datos del solicitante</div>
+      <div class="g2f">
+        <div class="ff">
+          <label>Nombre</label>
+          <input type="text" id="nombre" placeholder="Juan P&eacute;rez" autocomplete="off" oninput="liveEval()">
         </div>
-        <div class="f">
-          <label class="lbl">Edad (anos)</label>
-          <input type="number" id="edad" min="0" max="100" placeholder="35">
+        <div class="ff">
+          <label>Edad (a&ntilde;os)</label>
+          <input type="number" id="edad" min="0" max="100" placeholder="35" oninput="liveEval()">
         </div>
       </div>
-      <div class="grid-2">
-        <div class="f">
-          <label class="lbl">Nacionalidad</label>
-          <select id="nacionalidad">
-            <option value="">-- Seleccionar --</option>
+      <div class="g2f">
+        <div class="ff">
+          <label>Plazo del contrato</label>
+          <select id="plazo" onchange="liveEval()">
+            <option value="">&#8212; Seleccionar &#8212;</option>
+            <option value="10">10 a&ntilde;os</option>
+            <option value="15">15 a&ntilde;os</option>
+            <option value="20">20 a&ntilde;os</option>
+            <option value="25">25 a&ntilde;os</option>
+            <option value="30">30 a&ntilde;os</option>
+          </select>
+        </div>
+        <div class="ff">
+          <label>Nacionalidad</label>
+          <select id="nacionalidad" onchange="liveEval()">
+            <option value="">&#8212; Seleccionar &#8212;</option>
             <option value="chileno">Chileno/a</option>
             <option value="extranjero_def">Extranjero con permanencia definitiva</option>
             <option value="extranjero_sin">Extranjero sin permanencia definitiva</option>
           </select>
         </div>
-        <div class="f">
-          <label class="lbl">Plazo del contrato</label>
-          <select id="plazo">
-            <option value="">-- Seleccionar --</option>
-            <option value="10">10 anos</option>
-            <option value="15">15 anos</option>
-            <option value="20">20 anos</option>
-            <option value="25">25 anos</option>
-            <option value="30">30 anos</option>
-          </select>
-        </div>
       </div>
-    </div>
 
-    <!-- 2. SITUACION LABORAL -->
-    <div class="card">
-      <div class="card-title">2 &mdash; Situacion laboral</div>
-      <div class="grid-2">
-        <div class="f">
-          <label class="lbl">Tipo de trabajador</label>
-          <select id="tipo-trab" onchange="onTipoTrab()">
-            <option value="">-- Seleccionar --</option>
+      <div class="fsect">Situaci&oacute;n laboral</div>
+      <div class="g2f">
+        <div class="ff">
+          <label>Tipo de trabajador</label>
+          <select id="tipo-trab" onchange="onTipoTrab();liveEval()">
+            <option value="">&#8212; Seleccionar &#8212;</option>
             <option value="indefinido_fija">Indefinido &mdash; Renta fija</option>
             <option value="indefinido_variable">Indefinido &mdash; Renta variable</option>
             <option value="obra_contrata">Por obra o a contrata</option>
@@ -195,472 +199,366 @@
             <option value="pensionado">Pensionado/a</option>
           </select>
         </div>
-        <div class="f" id="antiguedad-wrap">
-          <label class="lbl">Antiguedad laboral (meses)</label>
-          <input type="number" id="antiguedad" min="0" placeholder="12">
-          <div class="note" id="antiguedad-hint"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. INGRESOS Y DEUDAS -->
-    <div class="card">
-      <div class="card-title">3 &mdash; Ingresos y deudas</div>
-      <div class="grid-2">
-        <div class="f">
-          <label class="lbl">Renta liquida mensual (CLP)</label>
-          <input type="text" id="renta" placeholder="$ 1.200.000" oninput="fmtMonto(this)">
-          <div class="note" id="renta-hint">Ingrese segun tipo de trabajador</div>
-        </div>
-        <div class="f">
-          <label class="lbl">Otras cuotas mensuales (CLP)</label>
-          <input type="text" id="otras-deudas" placeholder="$ 0" oninput="fmtMonto(this)">
-          <div class="note">Creditos consumo, automotriz, tarjetas, etc.</div>
+        <div class="ff" id="antig-wrap">
+          <label>Antig&uuml;edad (meses) <span id="antig-hint" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)"></span></label>
+          <input type="number" id="antiguedad" min="0" placeholder="12" oninput="liveEval()">
         </div>
       </div>
 
-      <div class="f">
-        <label class="lbl">Tiene deuda vigente en DICOM?</label>
-        <div class="radio-group" style="max-width:260px">
-          <label class="radio-opt">
-            <input type="radio" name="dicom" value="no" checked onchange="onDicom()">
-            <div class="radio-card">No tiene</div>
-          </label>
-          <label class="radio-opt">
-            <input type="radio" name="dicom" value="si" onchange="onDicom()">
-            <div class="radio-card">Si tiene</div>
-          </label>
+      <div class="fsect">Ingresos y deudas</div>
+      <div class="g2f">
+        <div class="ff">
+          <label>Renta l&iacute;quida mensual (CLP) <span id="renta-hint" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)"></span></label>
+          <input type="text" id="renta" placeholder="$ 1.200.000" oninput="fmtMonto(this);liveEval()">
         </div>
-      </div>
-      <div class="sub-section" id="dicom-detalle">
-        <div class="f" style="margin-bottom:0">
-          <label class="lbl">Monto DICOM (UF)</label>
-          <input type="number" id="dicom-monto" min="0" step="0.1" placeholder="0.0">
-          <div class="note">Solo deudas aclaradas con pago efectivo (no renegociaciones ni convenios)</div>
+        <div class="ff">
+          <label>Otras cuotas mensuales (CLP)</label>
+          <input type="text" id="otras-deudas" placeholder="$ 0" oninput="fmtMonto(this);liveEval()">
+          <div class="note">Cr&eacute;dito consumo, auto, tarjetas, etc.</div>
         </div>
       </div>
 
-      <div class="f" style="margin-top:8px">
-        <label class="lbl">Tiene deudas morosas, vencidas o castigadas en CMF?</label>
-        <div class="radio-group" style="max-width:260px">
-          <label class="radio-opt">
-            <input type="radio" name="cmf" value="no" checked>
-            <div class="radio-card">No tiene</div>
-          </label>
-          <label class="radio-opt">
-            <input type="radio" name="cmf" value="si">
-            <div class="radio-card">Si tiene</div>
-          </label>
-        </div>
-        <div class="note" style="margin-top:6px">Consumo, comercial, hipotecaria u otro tipo de deuda directa</div>
-      </div>
-    </div>
-
-    <!-- 4. PROPIEDAD -->
-    <div class="card">
-      <div class="card-title">4 &mdash; Propiedad y dividendo</div>
-
-      <div class="f">
-        <label class="lbl">Como ingresa el dividendo?</label>
-        <div class="radio-group" style="max-width:340px">
-          <label class="radio-opt">
-            <input type="radio" name="calc-mode" value="manual" checked onchange="onCalcMode()">
-            <div class="radio-card">Ingresar directamente</div>
-          </label>
-          <label class="radio-opt">
-            <input type="radio" name="calc-mode" value="calc" onchange="onCalcMode()">
-            <div class="radio-card">Calcular desde propiedad</div>
-          </label>
-        </div>
-      </div>
-
-      <div id="div-calc" style="display:none">
-        <div class="calc-box">
-          <div class="calc-title">Calculadora de dividendo estimado</div>
-          <div class="grid-3">
-            <div class="f" style="margin-bottom:0">
-              <label class="lbl">Valor propiedad (UF)</label>
-              <input type="number" id="calc-propuf" placeholder="2500" min="1">
-            </div>
-            <div class="f" style="margin-bottom:0">
-              <label class="lbl">Tasa anual (%)</label>
-              <input type="number" id="calc-tasa" placeholder="6.5" step="0.1" value="6.5">
-            </div>
-            <div class="f" style="margin-bottom:0">
-              <label class="lbl">Valor UF (CLP)</label>
-              <input type="number" id="uf-valor" placeholder="37900" value="37900">
+      <div class="g2f">
+        <div class="ff">
+          <label>&iquest;Tiene deuda vigente en DICOM?</label>
+          <div class="rtabs">
+            <label class="rtab"><input type="radio" name="dicom" value="no" checked onchange="onDicom();liveEval()"><div class="rtab-lbl">No</div></label>
+            <label class="rtab"><input type="radio" name="dicom" value="si" onchange="onDicom();liveEval()"><div class="rtab-lbl">S&iacute;</div></label>
+          </div>
+          <div class="inline-sub" id="dicom-sub">
+            <div class="g2f" style="margin-top:8px">
+              <div class="ff" style="margin-bottom:0">
+                <label>Monto DICOM (UF)</label>
+                <input type="number" id="dicom-monto" min="0" step="0.01" placeholder="0.00" oninput="liveEval()">
+              </div>
+              <div class="ff" style="margin-bottom:0">
+                <label>Valor UF actual <span id="uf-fecha" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)">cargando...</span></label>
+                <input type="number" id="uf-clp" min="1" placeholder="37900" value="37900" oninput="liveEval()">
+              </div>
             </div>
           </div>
-          <button class="btn-calc" onclick="calcDividendo()">Calcular dividendo</button>
-          <div id="calc-res" style="display:none">
-            <div class="calc-result" id="calc-res-txt"></div>
+        </div>
+        <div class="ff">
+          <label>&iquest;Deudas morosas o castigadas en CMF?</label>
+          <div class="rtabs">
+            <label class="rtab"><input type="radio" name="cmf" value="no" checked onchange="liveEval()"><div class="rtab-lbl">No</div></label>
+            <label class="rtab"><input type="radio" name="cmf" value="si" onchange="liveEval()"><div class="rtab-lbl">S&iacute;</div></label>
+          </div>
+          <div class="note" style="margin-top:6px">Consumo, comercial, hipotecaria u otro tipo</div>
+        </div>
+      </div>
+
+      <div class="fsect">Propiedad</div>
+      <div class="ff" style="max-width:360px">
+        <label>Dividendo mensual total (CLP)</label>
+        <input type="text" id="dividendo" placeholder="$ 350.000" oninput="fmtMonto(this);liveEval()">
+        <div class="note">Cuota completa incluyendo seguros y gastos</div>
+      </div>
+
+      <div class="fsect">Codeudor solidario (opcional)</div>
+      <div class="ff" style="margin-bottom:0">
+        <label>&iquest;Agrega codeudor?</label>
+        <div class="rtabs" style="max-width:400px">
+          <label class="rtab"><input type="radio" name="cod" value="no" checked onchange="onCod();liveEval()"><div class="rtab-lbl">Sin codeudor</div></label>
+          <label class="rtab"><input type="radio" name="cod" value="familiar" onchange="onCod();liveEval()"><div class="rtab-lbl">Familiar*</div></label>
+          <label class="rtab"><input type="radio" name="cod" value="otro" onchange="onCod();liveEval()"><div class="rtab-lbl">Otro</div></label>
+        </div>
+        <div class="note" style="margin-top:5px">*C&oacute;nyuge, conviviente civil, pareja con hijos, padre o hijo</div>
+        <div class="inline-sub" id="cod-sub">
+          <div class="ff" style="margin-top:10px;margin-bottom:0;max-width:280px">
+            <label>Renta l&iacute;quida codeudor (CLP)</label>
+            <input type="text" id="renta-cod" placeholder="$ 800.000" oninput="fmtMonto(this);liveEval()">
           </div>
         </div>
       </div>
 
-      <div class="f">
-        <label class="lbl">Dividendo mensual estimado (CLP)</label>
-        <input type="text" id="dividendo" placeholder="$ 350.000" oninput="fmtMonto(this)">
-        <div class="note">Cuota sin seguros ni contribuciones (Dto. excluyendo seguros y territorial)</div>
+    </div><!-- /form-panel -->
+
+    <!-- ─────────── RESULTADO EN VIVO ─────────── -->
+    <div class="result-panel">
+
+      <div class="v-box pendiente" id="v-box">
+        <div class="v-ico" id="v-ico">&#8211;</div>
+        <div class="v-tit" id="v-tit">EN ESPERA</div>
+        <div class="v-sub" id="v-sub">Complete el formulario para ver el resultado</div>
       </div>
-    </div>
 
-    <!-- 5. CODEUDOR -->
-    <div class="card">
-      <div class="card-title">5 &mdash; Codeudor solidario (opcional)</div>
-      <div class="f">
-        <label class="lbl">Agrega codeudor solidario?</label>
-        <div class="radio-group" style="max-width:440px">
-          <label class="radio-opt">
-            <input type="radio" name="codeudor" value="no" checked onchange="onCodOption()">
-            <div class="radio-card">Sin codeudor</div>
-          </label>
-          <label class="radio-opt">
-            <input type="radio" name="codeudor" value="familiar" onchange="onCodOption()">
-            <div class="radio-card">Familiar directo*</div>
-          </label>
-          <label class="radio-opt">
-            <input type="radio" name="codeudor" value="otro" onchange="onCodOption()">
-            <div class="radio-card">Otro codeudor</div>
-          </label>
-        </div>
-        <div class="note" style="margin-top:6px">*Conyuge, conviviente civil, pareja con hijos en comun, padre o hijo</div>
+      <div class="crit-list" id="crit-lista"></div>
+
+      <div class="resumen" id="resumen" style="display:none">
+        <div class="tag tag-ok" id="tag-ok"></div>
+        <div class="tag tag-no" id="tag-no"></div>
+        <div class="tag tag-pend" id="tag-pend"></div>
       </div>
-      <div class="sub-section" id="codeudor-detalle">
-        <div class="f" style="margin-bottom:0">
-          <label class="lbl">Renta liquida codeudor (CLP)</label>
-          <input type="text" id="renta-cod" placeholder="$ 800.000" oninput="fmtMonto(this)">
-        </div>
-      </div>
-    </div>
 
-    <!-- UF referencia (oculto en modo manual) -->
-    <div id="uf-manual-wrap" style="display:none">
-      <div class="card">
-        <div class="card-title">Referencia UF</div>
-        <div class="f" style="max-width:220px;margin-bottom:0">
-          <label class="lbl">Valor UF actual (CLP)</label>
-          <input type="number" id="uf-valor-manual" placeholder="37900" value="37900">
-        </div>
-      </div>
-    </div>
+    </div><!-- /result-panel -->
 
-    <button class="btn-primary no-print" onclick="evaluar()">Evaluar elegibilidad &rarr;</button>
-  </div>
+  </div><!-- /cols -->
 
-  <!-- RESULTADO -->
-  <div id="resultado">
-
-    <div id="veredicto-box" class="veredicto">
-      <div class="v-icon" id="v-icon"></div>
-      <div class="v-titulo" id="v-titulo"></div>
-      <div class="v-sub" id="v-sub"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Detalle por criterio</div>
-      <div id="criterios-lista"></div>
-    </div>
-
-    <div class="no-print" style="display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn-secondary" onclick="nuevaEval()">&larr; Nueva evaluacion</button>
-      <button class="btn-secondary" onclick="window.print()">Imprimir / Guardar PDF</button>
-    </div>
-  </div>
-
-</div>
+</div><!-- /eval-view -->
 
 <script>
-// AUTH
-function doLogin() {
-  var u = document.getElementById('login-user').value.trim();
-  var p = document.getElementById('login-pass').value;
-  if (u === 'rcanas' && p === 'rcanas') {
-    document.getElementById('login-view').style.display = 'none';
-    document.body.classList.remove('center');
-    document.getElementById('eval-view').style.display = 'block';
-    document.getElementById('login-err').style.display = 'none';
-  } else {
-    document.getElementById('login-err').style.display = 'block';
+/* ── AUTH ── */
+function doLogin(){
+  var u=document.getElementById('lu').value.trim();
+  var p=document.getElementById('lp').value;
+  if(u==='rcanas'&&p==='rcanas'){
+    document.getElementById('login-view').style.display='none';
+    document.body.classList.add('app');
+    document.getElementById('eval-view').style.display='block';
+    liveEval();
+  }else{
+    document.getElementById('login-err').style.display='block';
   }
 }
-function doLogout() {
-  document.getElementById('eval-view').style.display = 'none';
-  document.body.classList.add('center');
-  document.getElementById('login-view').style.display = 'block';
-  document.getElementById('login-pass').value = '';
+function doLogout(){
+  document.getElementById('eval-view').style.display='none';
+  document.body.classList.remove('app');
+  document.getElementById('login-view').style.display='flex';
+  document.getElementById('lp').value='';
+  document.getElementById('login-err').style.display='none';
 }
 
-// REACTIVE
-function onDicom() {
-  var v = document.querySelector('input[name="dicom"]:checked').value;
-  document.getElementById('dicom-detalle').classList.toggle('visible', v === 'si');
+/* ── REACTIVE FORM ── */
+function onDicom(){
+  var v=document.querySelector('input[name="dicom"]:checked').value;
+  document.getElementById('dicom-sub').classList.toggle('on',v==='si');
 }
-function onCodOption() {
-  var v = document.querySelector('input[name="codeudor"]:checked').value;
-  document.getElementById('codeudor-detalle').classList.toggle('visible', v !== 'no');
+function onCod(){
+  var v=document.querySelector('input[name="cod"]:checked').value;
+  document.getElementById('cod-sub').classList.toggle('on',v!=='no');
 }
-function onCalcMode() {
-  var v = document.querySelector('input[name="calc-mode"]:checked').value;
-  document.getElementById('div-calc').style.display = v === 'calc' ? 'block' : 'none';
-  document.getElementById('uf-manual-wrap').style.display = v === 'manual' ? 'block' : 'none';
-}
-function onTipoTrab() {
-  var t = document.getElementById('tipo-trab').value;
-  var hints = {
-    indefinido_fija:          'Minimo 3 meses de antiguedad',
-    indefinido_variable:      'Minimo 6 meses de antiguedad',
-    obra_contrata:            'Minimo 6 meses (3 con el mismo empleador)',
-    independiente_honorarios: 'Minimo 12 meses de ejercicio',
-    independiente_comercial:  'Minimo 12 meses de ejercicio',
-    socio_empresa:            'Minimo 12 meses',
-    pensionado:               'No aplica requisito de antiguedad'
+function onTipoTrab(){
+  var t=document.getElementById('tipo-trab').value;
+  var hints={
+    indefinido_fija:'(m\u00edn. 3 meses)',
+    indefinido_variable:'(m\u00edn. 6 meses)',
+    obra_contrata:'(m\u00edn. 6 meses)',
+    independiente_honorarios:'(m\u00edn. 12 meses)',
+    independiente_comercial:'(m\u00edn. 12 meses)',
+    socio_empresa:'(m\u00edn. 12 meses)',
+    pensionado:''
   };
-  var rentaHints = {
-    indefinido_fija:          'Promedio de las 3 ultimas liquidaciones de sueldo',
-    indefinido_variable:      'Promedio de las 6 ultimas liquidaciones de sueldo',
-    obra_contrata:            'Promedio de las 3-6 ultimas liquidaciones',
-    independiente_honorarios: 'Promedio honorarios liquidos del ano en curso (min. 6 meses)',
-    independiente_comercial:  '30% del promedio de ingresos por ventas (min. 6 meses)',
-    socio_empresa:            'Promedio retiros liquidos acreditados (min. 6 meses)',
-    pensionado:               'Promedio de los 3 ultimos pagos de pension'
+  var rHints={
+    indefinido_fija:'prom. 3 \u00faltimas liquidaciones',
+    indefinido_variable:'prom. 6 \u00faltimas liquidaciones',
+    obra_contrata:'prom. \u00faltimas liquidaciones',
+    independiente_honorarios:'prom. honorarios (m\u00edn. 6 meses)',
+    independiente_comercial:'30% prom. ventas (m\u00edn. 6 meses)',
+    socio_empresa:'prom. retiros acreditados',
+    pensionado:'prom. 3 \u00faltimos pagos'
   };
-  document.getElementById('antiguedad-hint').textContent = hints[t] || '';
-  document.getElementById('renta-hint').textContent = rentaHints[t] || '';
-  var w = document.getElementById('antiguedad-wrap');
-  w.style.opacity = t === 'pensionado' ? '0.4' : '1';
+  document.getElementById('antig-hint').textContent=hints[t]||'';
+  document.getElementById('renta-hint').textContent=rHints[t]?'['+rHints[t]+']':'';
+  document.getElementById('antig-wrap').style.opacity=t==='pensionado'?'0.4':'1';
 }
 
-// MONEDA
-function fmtMonto(el) {
-  var raw = el.value.replace(/\D/g, '');
-  el.value = raw ? '$ ' + parseInt(raw).toLocaleString('es-CL') : '';
+/* ── FORMATO MONEDA ── */
+function fmtMonto(el){
+  var raw=el.value.replace(/\D/g,'');
+  el.value=raw?'$ '+parseInt(raw).toLocaleString('es-CL'):'';
 }
-function parseMonto(v) {
-  return parseInt(String(v || '').replace(/\D/g, '')) || 0;
-}
-function fmt(n) {
-  return '$ ' + Math.round(n).toLocaleString('es-CL');
-}
-function pct(r) {
-  return (r * 100).toFixed(1) + '%';
-}
-function getUF() {
-  var m = document.querySelector('input[name="calc-mode"]:checked').value;
-  var id = m === 'calc' ? 'uf-valor' : 'uf-valor-manual';
-  return parseFloat(document.getElementById(id).value) || 37900;
-}
-
-// CALCULADORA
-function calcDividendo() {
-  var propUF = parseFloat(document.getElementById('calc-propuf').value) || 0;
-  var tasa   = parseFloat(document.getElementById('calc-tasa').value) || 6.5;
-  var plazo  = parseInt(document.getElementById('plazo').value) || 20;
-  var ufClp  = parseFloat(document.getElementById('uf-valor').value) || 37900;
-  if (!propUF) { alert('Ingresa el valor de la propiedad en UF'); return; }
-  var r = (tasa / 100) / 12;
-  var n = plazo * 12;
-  var cuotaUF  = propUF * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-  var cuotaCLP = cuotaUF * ufClp;
-  document.getElementById('calc-res-txt').textContent =
-    'Dividendo estimado: ' + cuotaUF.toFixed(2) + ' UF = ' + fmt(cuotaCLP) + ' / mes';
-  document.getElementById('calc-res').style.display = 'block';
-  document.getElementById('dividendo').value = '$ ' + Math.round(cuotaCLP).toLocaleString('es-CL');
-}
-
-// LOGICA DE EVALUACION
-function getMinAntiguedad(t) {
+function parseMonto(v){return parseInt(String(v||'').replace(/\D/g,''))||0;}
+function fmt(n){return '$ '+Math.round(n).toLocaleString('es-CL');}
+function pct(r){return (r*100).toFixed(1)+'%';}
+function getMinAntig(t){
   return {indefinido_fija:3,indefinido_variable:6,obra_contrata:6,
-          independiente_honorarios:12,independiente_comercial:12,socio_empresa:12,pensionado:0}[t] || 0;
+          independiente_honorarios:12,independiente_comercial:12,socio_empresa:12,pensionado:0}[t]||0;
 }
 
-function evaluar() {
-  var nombre     = document.getElementById('nombre').value.trim() || 'Solicitante';
-  var edad       = parseInt(document.getElementById('edad').value) || 0;
-  var plazo      = parseInt(document.getElementById('plazo').value) || 0;
-  var nac        = document.getElementById('nacionalidad').value;
-  var tipoTrab   = document.getElementById('tipo-trab').value;
-  var antiguedad = parseInt(document.getElementById('antiguedad').value) || 0;
-  var renta      = parseMonto(document.getElementById('renta').value);
-  var otrasDeud  = parseMonto(document.getElementById('otras-deudas').value);
-  var dicomOpt   = document.querySelector('input[name="dicom"]:checked').value;
-  var dicomUF    = parseFloat(document.getElementById('dicom-monto').value) || 0;
-  var cmfOpt     = document.querySelector('input[name="cmf"]:checked').value;
-  var dividendo  = parseMonto(document.getElementById('dividendo').value);
-  var codOpt     = document.querySelector('input[name="codeudor"]:checked').value;
-  var rentaCod   = parseMonto(document.getElementById('renta-cod').value);
-  var ufClp      = getUF();
+/* ── EVALUACION EN VIVO ── */
+var ICONS={ok:'\u2705',no:'\u274C',pend:'\u26AA'};
 
-  if (!edad || !plazo || !nac || !tipoTrab || !renta || !dividendo) {
-    alert('Por favor completa todos los campos obligatorios antes de evaluar.');
-    return;
-  }
+function liveEval(){
+  var nombre   =document.getElementById('nombre').value.trim()||'Solicitante';
+  var edad     =parseInt(document.getElementById('edad').value)||0;
+  var plazo    =parseInt(document.getElementById('plazo').value)||0;
+  var nac      =document.getElementById('nacionalidad').value;
+  var tipo     =document.getElementById('tipo-trab').value;
+  var antig    =parseInt(document.getElementById('antiguedad').value)||0;
+  var renta    =parseMonto(document.getElementById('renta').value);
+  var otras    =parseMonto(document.getElementById('otras-deudas').value);
+  var dicomOpt =document.querySelector('input[name="dicom"]:checked').value;
+  var dicomUF  =parseFloat(document.getElementById('dicom-monto').value)||0;
+  var ufClp    =parseFloat(document.getElementById('uf-clp').value)||37900;
+  var cmfOpt   =document.querySelector('input[name="cmf"]:checked').value;
+  var dividendo=parseMonto(document.getElementById('dividendo').value);
+  var codOpt   =document.querySelector('input[name="cod"]:checked').value;
+  var rentaCod =parseMonto(document.getElementById('renta-cod').value);
 
-  var crit = [];
+  // Cada criterio: {n, state:'ok'|'no'|'pend', d}
+  var crit=[];
 
   // 1. Edad minima
-  crit.push({
-    n: 'Edad minima (18 anos)',
-    ok: edad >= 18,
-    d: edad < 18 ? 'Tiene ' + edad + ' anos — se requieren minimo 18 anos.' : edad + ' anos cumple el minimo.'
-  });
+  if(!edad){
+    crit.push({n:'Edad m\u00ednima (18 a\u00f1os)',s:'pend',d:'Ingrese la edad del solicitante.'});
+  }else{
+    var ok=edad>=18;
+    crit.push({n:'Edad m\u00ednima (18 a\u00f1os)',s:ok?'ok':'no',
+      d:ok?edad+' a\u00f1os \u2014 cumple el m\u00ednimo.':edad+' a\u00f1os \u2014 se requieren m\u00ednimo 18 a\u00f1os.'});
+  }
 
   // 2. Edad al termino
-  var edFin = edad + plazo;
-  crit.push({
-    n: 'Edad al termino del contrato (max. 80 anos)',
-    ok: edFin <= 80,
-    d: edFin > 80
-      ? edad + ' + ' + plazo + ' = ' + edFin + ' anos al termino — supera el maximo de 80 anos.'
-      : edad + ' + ' + plazo + ' = ' + edFin + ' anos al termino, dentro del limite.'
-  });
+  if(!edad||!plazo){
+    crit.push({n:'Edad al t\u00e9rmino (m\u00e1x. 80 a\u00f1os)',s:'pend',d:'Ingrese edad y plazo.'});
+  }else{
+    var edFin=edad+plazo, ok2=edFin<=80;
+    crit.push({n:'Edad al t\u00e9rmino (m\u00e1x. 80 a\u00f1os)',s:ok2?'ok':'no',
+      d:ok2?edad+' + '+plazo+' = '+edFin+' a\u00f1os al t\u00e9rmino.':
+             edad+' + '+plazo+' = '+edFin+' a\u00f1os al t\u00e9rmino \u2014 supera el m\u00e1ximo de 80.'});
+  }
 
   // 3. Nacionalidad
-  var nacLabels = {chileno:'Chileno/a',extranjero_def:'Extranjero con permanencia definitiva',extranjero_sin:'Extranjero sin permanencia definitiva'};
-  crit.push({
-    n: 'Nacionalidad habilitada',
-    ok: nac === 'chileno' || nac === 'extranjero_def',
-    d: nac === 'extranjero_sin'
-      ? 'Extranjero sin permanencia definitiva no califica para leasing habitacional.'
-      : (nacLabels[nac] || nac) + ' cumple el requisito de nacionalidad.'
-  });
+  if(!nac){
+    crit.push({n:'Nacionalidad habilitada',s:'pend',d:'Seleccione la nacionalidad.'});
+  }else{
+    var okN=nac==='chileno'||nac==='extranjero_def';
+    var nacTexts={chileno:'Chileno/a',extranjero_def:'Extranjero/a con permanencia definitiva',extranjero_sin:'Extranjero/a sin permanencia definitiva'};
+    crit.push({n:'Nacionalidad habilitada',s:okN?'ok':'no',
+      d:okN?nacTexts[nac]+' \u2014 califica.':'Extranjero sin permanencia definitiva \u2014 no califica.'});
+  }
 
   // 4. DICOM
-  if (dicomOpt === 'si') {
-    var dicomCLP = dicomUF * ufClp;
-    var ok1 = dicomUF <= 3.5;
-    var ok2 = dicomCLP <= 0.25 * renta;
-    var okD = ok1 && ok2;
-    var detD;
-    if (!ok1) detD = 'DICOM de ' + dicomUF.toFixed(2) + ' UF supera el maximo permitido de 3,5 UF.';
-    else if (!ok2) detD = 'DICOM de ' + fmt(dicomCLP) + ' supera el 25% del sueldo base (' + fmt(0.25 * renta) + ').';
-    else detD = 'DICOM de ' + dicomUF.toFixed(2) + ' UF (' + fmt(dicomCLP) + ') dentro de los limites permitidos.';
-    crit.push({ n: 'DICOM dentro de limites (max. 3,5 UF y max. 25% sueldo base)', ok: okD, d: detD });
-  } else {
-    crit.push({ n: 'DICOM', ok: true, d: 'Sin deuda vigente en DICOM.' });
+  if(dicomOpt==='no'){
+    crit.push({n:'DICOM (m\u00e1x. 3,5 UF / 25% sueldo)',s:'ok',d:'Sin deuda vigente en DICOM.'});
+  }else{
+    var dCLP=dicomUF*ufClp, ok1=dicomUF<=3.5, ok2r=renta>0?dCLP<=0.25*renta:true;
+    var okD=ok1&&ok2r;
+    crit.push({n:'DICOM (m\u00e1x. 3,5 UF / 25% sueldo)',s:okD?'ok':'no',
+      d:!ok1?'DICOM '+dicomUF.toFixed(2)+' UF \u2014 supera el m\u00e1ximo de 3,5 UF.':
+         !ok2r?'DICOM '+fmt(dCLP)+' supera 25% del sueldo base ('+fmt(0.25*renta)+').':
+               'DICOM '+dicomUF.toFixed(2)+' UF \u2014 dentro de l\u00edmites.'});
   }
 
   // 5. CMF
-  crit.push({
-    n: 'Sin deudas morosas, vencidas o castigadas en CMF',
-    ok: cmfOpt === 'no',
-    d: cmfOpt === 'si'
-      ? 'Registra deudas morosas, vencidas o castigadas en el sistema CMF. No cumple el requisito.'
-      : 'Sin deudas morosas ni vencidas en CMF.'
-  });
+  crit.push({n:'Sin deudas morosas en CMF',s:cmfOpt==='no'?'ok':'no',
+    d:cmfOpt==='si'?'Registra deudas morosas, vencidas o castigadas en CMF.':'Sin deudas morosas en CMF.'});
 
-  // 6. Antiguedad laboral
-  var minM = getMinAntiguedad(tipoTrab);
-  if (tipoTrab === 'pensionado') {
-    crit.push({ n: 'Antiguedad laboral', ok: true, d: 'Pensionado/a — no aplica requisito de antiguedad.' });
-  } else {
-    crit.push({
-      n: 'Antiguedad laboral (min. ' + minM + ' meses)',
-      ok: antiguedad >= minM,
-      d: antiguedad < minM
-        ? 'Tiene ' + antiguedad + ' meses — se requieren ' + minM + ' meses para este tipo de contrato.'
-        : antiguedad + ' meses de antiguedad cumple el minimo de ' + minM + ' meses.'
-    });
+  // 6. Antiguedad
+  if(!tipo){
+    crit.push({n:'Antig\u00fcedad laboral',s:'pend',d:'Seleccione tipo de trabajador.'});
+  }else if(tipo==='pensionado'){
+    crit.push({n:'Antig\u00fcedad laboral',s:'ok',d:'Pensionado/a \u2014 no aplica requisito de antig\u00fcedad.'});
+  }else{
+    var minM=getMinAntig(tipo), okA=antig>=minM;
+    crit.push({n:'Antig\u00fcedad laboral (m\u00edn. '+minM+' meses)',s:okA?'ok':'no',
+      d:okA?antig+' meses \u2014 cumple el m\u00ednimo de '+minM+'.':
+             antig+' meses \u2014 se requieren '+minM+' meses.'});
   }
 
   // 7. Relacion dividendo / renta
-  var rentaTotal = (codOpt !== 'no' && rentaCod > 0) ? renta + rentaCod : renta;
-  var esFamiliar = codOpt === 'familiar';
-  var okDiv, detDiv;
-
-  if (codOpt === 'no') {
-    var rd = dividendo / renta;
-    okDiv  = rd < 0.25;
-    detDiv = !okDiv
-      ? 'Dividendo ' + fmt(dividendo) + ' representa el ' + pct(rd) + ' de la renta liquida ' + fmt(renta) + ' — maximo 25%.'
-      : 'Dividendo es el ' + pct(rd) + ' de la renta liquida, dentro del limite del 25%.';
-  } else if (esFamiliar) {
-    var rd2 = dividendo / rentaTotal;
-    okDiv  = rd2 <= 0.25;
-    detDiv = !okDiv
-      ? 'Dividendo ' + fmt(dividendo) + ' representa el ' + pct(rd2) + ' de la renta combinada ' + fmt(rentaTotal) + ' — maximo 25%.'
-      : 'Dividendo es el ' + pct(rd2) + ' de la renta combinada (' + fmt(rentaTotal) + '), dentro del limite.';
-  } else {
-    var ra = dividendo / rentaTotal;
-    var rb = dividendo / renta;
-    okDiv = ra <= 0.25 && rb <= 0.50;
-    if (!okDiv) {
-      detDiv = ra > 0.25
-        ? 'Dividendo ' + pct(ra) + ' de renta combinada ' + fmt(rentaTotal) + ' — maximo 25%.'
-        : 'Dividendo ' + pct(rb) + ' de renta del titular ' + fmt(renta) + ' — maximo 50% (codeudor no familiar).';
-    } else {
-      detDiv = 'Dividendo ' + pct(ra) + ' de renta combinada y ' + pct(rb) + ' de renta titular — dentro de limites.';
+  if(!renta||!dividendo){
+    crit.push({n:'Dividendo / renta (m\u00e1x. 25%)',s:'pend',d:'Ingrese renta y dividendo.'});
+  }else{
+    var rentaT=(codOpt!=='no'&&rentaCod>0)?renta+rentaCod:renta;
+    var esFam=codOpt==='familiar';
+    var okDR,detDR;
+    if(codOpt==='no'){
+      var rd=dividendo/renta; okDR=rd<0.25;
+      detDR=okDR?'Dividendo es '+pct(rd)+' de la renta.':'Dividendo '+pct(rd)+' de la renta '+fmt(renta)+' \u2014 m\u00e1ximo 25%.';
+    }else if(esFam){
+      var rd2=dividendo/rentaT; okDR=rd2<=0.25;
+      detDR=okDR?'Dividendo '+pct(rd2)+' de renta combinada ('+fmt(rentaT)+').':
+                 'Dividendo '+pct(rd2)+' de renta combinada \u2014 m\u00e1ximo 25%.';
+    }else{
+      var ra=dividendo/rentaT, rb=dividendo/renta;
+      okDR=ra<=0.25&&rb<=0.50;
+      detDR=okDR?'Dividendo '+pct(ra)+' renta combinada, '+pct(rb)+' renta titular.':
+                 ra>0.25?'Dividendo '+pct(ra)+' de renta combinada \u2014 m\u00e1ximo 25%.':
+                         'Dividendo '+pct(rb)+' de renta titular \u2014 m\u00e1ximo 50% con codeudor no familiar.';
     }
+    crit.push({n:'Dividendo / renta (m\u00e1x. 25%)',s:okDR?'ok':'no',d:detDR});
   }
-  crit.push({ n: 'Relacion dividendo / renta (max. 25%)', ok: okDiv, d: detDiv });
 
   // 8. Carga financiera
-  var cargaT = dividendo + otrasDeud;
-  var okCarg, detCarg;
-
-  if (codOpt === 'no') {
-    var rc = cargaT / renta;
-    okCarg  = rc <= 0.50;
-    detCarg = !okCarg
-      ? 'Carga financiera total ' + fmt(cargaT) + ' representa el ' + pct(rc) + ' de la renta — maximo 50%.'
-      : 'Carga financiera total es el ' + pct(rc) + ' de la renta, dentro del limite del 50%.';
-  } else if (esFamiliar) {
-    var rc2 = cargaT / rentaTotal;
-    okCarg  = rc2 <= 0.50;
-    detCarg = !okCarg
-      ? 'Carga financiera ' + fmt(cargaT) + ' es el ' + pct(rc2) + ' de la renta combinada — maximo 50%.'
-      : 'Carga financiera es el ' + pct(rc2) + ' de la renta combinada (' + fmt(rentaTotal) + ').';
-  } else {
-    var rca = cargaT / rentaTotal;
-    var rcb = cargaT / renta;
-    okCarg = rca <= 0.50 && rcb <= 0.60;
-    if (!okCarg) {
-      detCarg = rca > 0.50
-        ? 'Carga financiera ' + pct(rca) + ' de renta combinada — maximo 50%.'
-        : 'Carga financiera ' + pct(rcb) + ' de renta del titular — maximo 60% (codeudor no familiar).';
-    } else {
-      detCarg = 'Carga financiera ' + pct(rca) + ' de renta combinada y ' + pct(rcb) + ' de renta titular — dentro de limites.';
+  if(!renta||!dividendo){
+    crit.push({n:'Carga financiera total (m\u00e1x. 50%)',s:'pend',d:'Ingrese renta y dividendo.'});
+  }else{
+    var cargaT=dividendo+otras;
+    var rentaT2=(codOpt!=='no'&&rentaCod>0)?renta+rentaCod:renta;
+    var esFam2=codOpt==='familiar';
+    var okCF,detCF;
+    if(codOpt==='no'){
+      var rc=cargaT/renta; okCF=rc<=0.50;
+      detCF=okCF?'Carga total '+pct(rc)+' de la renta.':'Carga total '+fmt(cargaT)+' es '+pct(rc)+' de la renta \u2014 m\u00e1ximo 50%.';
+    }else if(esFam2){
+      var rc2=cargaT/rentaT2; okCF=rc2<=0.50;
+      detCF=okCF?'Carga total '+pct(rc2)+' de renta combinada.':'Carga total '+fmt(cargaT)+' es '+pct(rc2)+' de renta combinada \u2014 m\u00e1ximo 50%.';
+    }else{
+      var rca=cargaT/rentaT2, rcb=cargaT/renta;
+      okCF=rca<=0.50&&rcb<=0.60;
+      detCF=okCF?'Carga '+pct(rca)+' renta combinada, '+pct(rcb)+' renta titular.':
+                 rca>0.50?'Carga '+pct(rca)+' de renta combinada \u2014 m\u00e1ximo 50%.':
+                          'Carga '+pct(rcb)+' de renta titular \u2014 m\u00e1ximo 60%.';
     }
+    crit.push({n:'Carga financiera total (m\u00e1x. 50%)',s:okCF?'ok':'no',d:detCF});
   }
-  crit.push({ n: 'Carga financiera total (max. 50% de renta)', ok: okCarg, d: detCarg });
 
-  // VEREDICTO
-  var califica = crit.every(function(c) { return c.ok; });
-  var fallas   = crit.filter(function(c) { return !c.ok; }).length;
-
-  var vBox = document.getElementById('veredicto-box');
-  vBox.className = 'veredicto ' + (califica ? 'ok' : 'no');
-  document.getElementById('v-icon').textContent   = califica ? '\u2705' : '\u274C';
-  document.getElementById('v-titulo').textContent = califica ? 'CALIFICA' : 'NO CALIFICA';
-  document.getElementById('v-sub').innerHTML =
-    (nombre !== 'Solicitante' ? '<span class="v-nombre">' + nombre + '</span> &mdash; ' : '') +
-    (califica
-      ? 'Cumple todos los requisitos de la Politica de Otorgamiento de Leasing Habitacional.'
-      : fallas + ' criterio' + (fallas > 1 ? 's' : '') + ' no cumplido' + (fallas > 1 ? 's' : '') + '. Ver detalle abajo.');
-
-  var lista = document.getElementById('criterios-lista');
-  lista.innerHTML = '';
-  crit.forEach(function(c) {
-    lista.innerHTML +=
-      '<div class="criterio">' +
-        '<div class="c-icon">' + (c.ok ? '\u2705' : '\u274C') + '</div>' +
-        '<div>' +
-          '<div class="c-nombre">' + c.n + '</div>' +
-          '<div class="c-detalle' + (c.ok ? '' : ' bad') + '">' + c.d + '</div>' +
-        '</div>' +
+  /* ── RENDER ── */
+  var lista=document.getElementById('crit-lista');
+  lista.innerHTML='';
+  crit.forEach(function(c){
+    lista.innerHTML+=
+      '<div class="crit">'+
+        '<div class="crit-ico">'+ICONS[c.s]+'</div>'+
+        '<div class="crit-body">'+
+          '<div class="crit-nom">'+c.n+'</div>'+
+          '<div class="crit-det'+(c.s==='no'?' bad':'')+'">'+c.d+'</div>'+
+        '</div>'+
       '</div>';
   });
 
-  document.getElementById('form-section').style.display = 'none';
-  document.getElementById('resultado').style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  var nOk  =crit.filter(function(c){return c.s==='ok';}).length;
+  var nNo  =crit.filter(function(c){return c.s==='no';}).length;
+  var nPend=crit.filter(function(c){return c.s==='pend';}).length;
+
+  document.getElementById('tag-ok').textContent=nOk+' criterio'+(nOk!==1?'s':'')+' OK';
+  document.getElementById('tag-no').textContent=nNo+' criterio'+(nNo!==1?'s':'')+' falla'+(nNo!==1?'n':'');
+  document.getElementById('tag-pend').textContent=nPend+' pendiente'+(nPend!==1?'s':'');
+  document.getElementById('resumen').style.display='flex';
+
+  // Veredicto
+  var vBox=document.getElementById('v-box');
+  var vIco =document.getElementById('v-ico');
+  var vTit =document.getElementById('v-tit');
+  var vSub =document.getElementById('v-sub');
+
+  if(nPend>0){
+    vBox.className='v-box pendiente';
+    vIco.textContent='\u270D\uFE0F';
+    vTit.textContent='INCOMPLETO';
+    vSub.textContent='Faltan '+nPend+' campo'+(nPend>1?'s':'')+' por completar.';
+  }else if(nNo===0){
+    vBox.className='v-box ok';
+    vIco.textContent='\u2705';
+    vTit.textContent='CALIFICA';
+    vSub.textContent=(nombre!=='Solicitante'?nombre+' \u2014 ':'')+'Cumple todos los requisitos de la Pol\u00edtica de Otorgamiento.';
+  }else{
+    vBox.className='v-box no';
+    vIco.textContent='\u274C';
+    vTit.textContent='NO CALIFICA';
+    vSub.textContent=(nombre!=='Solicitante'?nombre+' \u2014 ':'')+nNo+' criterio'+(nNo>1?'s':'')+' no cumplido'+(nNo>1?'s':'')+'.';
+  }
 }
 
-function nuevaEval() {
-  document.getElementById('resultado').style.display = 'none';
-  document.getElementById('form-section').style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+liveEval();
+
+/* ── UF EN VIVO (mindicador.cl) ── */
+async function fetchUF(){
+  try{
+    var res=await fetch('https://mindicador.cl/api/uf');
+    var data=await res.json();
+    var val=data.serie[0].valor;
+    var fecha=new Date(data.serie[0].fecha);
+    var dia=fecha.toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric'});
+    document.getElementById('uf-clp').value=Math.round(val);
+    document.getElementById('uf-fecha').textContent='('+dia+': '+fmt(val)+')';
+    liveEval();
+  }catch(e){
+    document.getElementById('uf-fecha').textContent='(sin conexi\u00f3n)';
+  }
 }
+fetchUF();
 </script>
 </body>
 </html>
