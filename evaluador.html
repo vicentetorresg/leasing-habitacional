@@ -76,7 +76,7 @@
 
     /* CARD PRINCIPAL: estado + UF grande */
     .main-card{border-radius:16px;padding:24px 26px;transition:all .3s}
-    .main-card.pend{background:#fff;box-shadow:0 4px 20px rgba(0,0,0,.07);border:2px solid var(--border)}
+    .main-card.pend{background:#f9f8f6;border:2px dashed #c9c2b8;box-shadow:none}
     .main-card.ok{background:linear-gradient(145deg,#1B2B5E,#162244);box-shadow:0 8px 32px rgba(27,43,94,.35)}
     .main-card.no{background:linear-gradient(145deg,#7f1d1d,#991b1b);box-shadow:0 8px 32px rgba(127,29,29,.35)}
 
@@ -229,7 +229,7 @@
           <input type="text" id="renta" placeholder="$ 1.200.000" oninput="fmtMonto(this);liveEval()">
         </div>
         <div class="ff">
-          <label>Otras cuotas mensuales</label>
+          <label>Cuotas mensuales</label>
           <input type="text" id="otras-deudas" placeholder="$ 0" oninput="fmtMonto(this);liveEval()">
           <div class="note">Consumo, auto, tarjetas, dividendos hipotecarios u otros leasing vigentes.</div>
         </div>
@@ -304,7 +304,7 @@
       <div class="main-card pend" id="main-card">
         <div class="estado-badge" id="estado-badge">&#9679; En espera</div>
         <div class="uf-big" id="uf-big">&#8212;</div>
-        <div class="uf-label" id="uf-label">m&aacute;ximo a financiar</div>
+        <div class="uf-label" id="uf-label">m&aacute;ximo cr&eacute;dito a financiar (no valor propiedad)</div>
         <div class="clp-big" id="clp-big">&nbsp;</div>
         <div class="fin-meta" id="fin-meta">&nbsp;</div>
         <div class="status-msg" id="status-msg"></div>
@@ -503,7 +503,7 @@ function liveEval(){
     card.className='main-card pend';
     badge.textContent='\u25CF Incompleto';
     ufBig.textContent='\u2014';
-    ufLbl.textContent='m\u00e1ximo a financiar';
+    ufLbl.textContent='m\u00e1ximo cr\u00e9dito a financiar (no valor propiedad)';
     clpBig.innerHTML='&nbsp;';
     finMeta.innerHTML='&nbsp;';
     statusMsg.textContent='Faltan '+nPend+' campo'+(nPend>1?'s':'')+' por completar.';
@@ -511,7 +511,7 @@ function liveEval(){
     card.className='main-card ok';
     badge.textContent='\u2714 Califica';
     ufBig.textContent=maxUFval>0?fmtUF(maxUFval):'\u2014';
-    ufLbl.textContent='m\u00e1ximo a financiar';
+    ufLbl.textContent='m\u00e1ximo cr\u00e9dito a financiar (no valor propiedad)';
     clpBig.textContent=maxCLPval>0?fmt(maxCLPval):'';
     finMeta.textContent=maxDivVal>0?'Dividendo m\u00e1x. '+fmt(maxDivVal)+'/mes \u00b7 '+plazo+' a\u00f1os \u00b7 '+fmtTasa(tasa)+'% anual':'';
     statusMsg.textContent='';
@@ -519,7 +519,7 @@ function liveEval(){
     card.className='main-card no';
     badge.textContent='\u2716 No califica';
     ufBig.textContent='\u2014';
-    ufLbl.textContent='m\u00e1ximo a financiar';
+    ufLbl.textContent='m\u00e1ximo cr\u00e9dito a financiar (no valor propiedad)';
     clpBig.innerHTML='&nbsp;';
     finMeta.innerHTML='&nbsp;';
     statusMsg.textContent=nNo+' criterio'+(nNo>1?'s':'')+' no cumplido'+(nNo>1?'s':'')+'.';
