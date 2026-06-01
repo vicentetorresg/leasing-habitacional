@@ -18,28 +18,40 @@
     </div>
   </noscript>
 </head>
-<body><script>
+<body>
+<div id="lp-gate" style="position:fixed;inset:0;background:rgba(10,30,54,.75);display:flex;align-items:center;justify-content:center;z-index:99999;backdrop-filter:blur(6px)">
+  <div style="font-family:system-ui,sans-serif;background:#fff;border-radius:16px;padding:40px 36px;width:340px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.22);text-align:center">
+    <img src="/logo_llave_propia.jpeg" style="height:52px;margin-bottom:24px;display:block;margin-left:auto;margin-right:auto">
+    <h2 style="margin:0 0 6px;font-size:20px;color:#16365C;font-weight:700">Acceso restringido</h2>
+    <p style="margin:0 0 24px;font-size:13px;color:#6b7280">Ingresa tus credenciales para continuar</p>
+    <div id="lp-err" style="display:none;background:#fee2e2;color:#991b1b;font-size:12.5px;font-weight:600;padding:9px 12px;border-radius:8px;margin-bottom:16px;">Usuario o contraseña incorrectos</div>
+    <input id="lp-u" type="text" placeholder="Usuario" autocomplete="username" style="width:100%;padding:11px 14px;border:1px solid #dbe3ec;border-radius:10px;font-size:14px;margin-bottom:10px;box-sizing:border-box">
+    <input id="lp-p" type="password" placeholder="Contraseña" autocomplete="current-password" style="width:100%;padding:11px 14px;border:1px solid #dbe3ec;border-radius:10px;font-size:14px;margin-bottom:18px;box-sizing:border-box">
+    <button id="lp-btn" style="width:100%;padding:12px;background:#16365C;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer">Ingresar</button>
+  </div>
+</div>
+<script>
 (function(){
-  var k = 'lp_auth_v2';
-  if(sessionStorage.getItem(k) === '1') return;
-  document.documentElement.style.overflow = 'hidden';
-  var o = document.createElement('div');
-  o.id = 'lp-gate';
-  o.innerHTML = '<div style="font-family:system-ui,sans-serif;background:#fff;border-radius:16px;padding:40px 36px;width:340px;box-shadow:0 20px 60px rgba(0,0,0,.18);text-align:center"><img src="/logo_llave_propia.jpeg" style="height:44px;margin-bottom:24px;display:block;margin-left:auto;margin-right:auto"><h2 style="margin:0 0 6px;font-size:20px;color:#16365C">Acceso restringido</h2><p style="margin:0 0 24px;font-size:13px;color:#6b7280">Ingresa tus credenciales para continuar</p><div id="lp-err" style="display:none;background:#fee2e2;color:#991b1b;font-size:12.5px;font-weight:600;padding:9px 12px;border-radius:8px;margin-bottom:16px;">Usuario o contraseña incorrectos</div><input id="lp-u" type="text" placeholder="Usuario" autocomplete="username" style="width:100%;padding:11px 14px;border:1px solid #dbe3ec;border-radius:10px;font-size:14px;margin-bottom:10px;box-sizing:border-box;outline:none"><input id="lp-p" type="password" placeholder="Contraseña" autocomplete="current-password" style="width:100%;padding:11px 14px;border:1px solid #dbe3ec;border-radius:10px;font-size:14px;margin-bottom:18px;box-sizing:border-box;outline:none"><button onclick="lpLogin()" style="width:100%;padding:12px;background:#16365C;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer">Ingresar</button></div>';
-  o.style.cssText = 'position:fixed;inset:0;background:rgba(10,30,54,.7);display:flex;align-items:center;justify-content:center;z-index:99999;backdrop-filter:blur(6px)';
-  document.addEventListener('DOMContentLoaded', function(){ document.body.appendChild(o); });
-  window.lpLogin = function(){
-    var u = document.getElementById('lp-u').value.trim();
-    var p = document.getElementById('lp-p').value.trim();
-    if(u === 'rcanas' && p === 'rcanas'){
+  var k='lp_auth_v2';
+  function tryAuth(){
+    var u=document.getElementById('lp-u').value.trim();
+    var p=document.getElementById('lp-p').value.trim();
+    if(u==='rcanas'&&p==='rcanas'){
       sessionStorage.setItem(k,'1');
-      document.getElementById('lp-gate').remove();
-      document.documentElement.style.overflow = '';
+      var g=document.getElementById('lp-gate');
+      if(g) g.remove();
+      document.documentElement.style.overflow='';
     } else {
       document.getElementById('lp-err').style.display='block';
     }
-  };
-  document.addEventListener('keydown', function(e){ if(e.key==='Enter') window.lpLogin(); });
+  }
+  if(sessionStorage.getItem(k)==='1'){
+    document.getElementById('lp-gate').style.display='none';
+  } else {
+    document.documentElement.style.overflow='hidden';
+    document.getElementById('lp-btn').addEventListener('click', tryAuth);
+    document.addEventListener('keydown',function(e){if(e.key==='Enter')tryAuth();});
+  }
 })();
 </script>
   <div id="__bundler_thumbnail">
