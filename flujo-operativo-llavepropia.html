@@ -19,62 +19,6 @@
   </noscript>
 </head>
 <body>
-<script>
-(function(){
-  var K='lp_auth_v3';
-  if(sessionStorage.getItem(K)==='1') return;
-
-  function tryAuth(){
-    var gate=document.getElementById('lp-gate');
-    if(!gate) return;
-    var uEl=document.getElementById('lp-u');
-    var pEl=document.getElementById('lp-p');
-    if(!uEl||!pEl) return;
-    if(uEl.value.trim()==='rcanas'&&pEl.value.trim()==='rcanas'){
-      sessionStorage.setItem(K,'1');
-      gate.remove();
-      document.documentElement.style.overflow='';
-      if(window._lpMO){window._lpMO.disconnect();delete window._lpMO;}
-    } else {
-      var e=document.getElementById('lp-err');
-      if(e) e.style.display='block';
-    }
-  }
-
-  if(!window._lpKD){
-    window._lpKD=true;
-    document.addEventListener('keydown',function(e){if(e.key==='Enter')tryAuth();});
-  }
-
-  function inject(){
-    if(document.getElementById('lp-gate')) return;
-    var body=document.body||document.documentElement;
-    if(!body) return;
-    var o=document.createElement('div');
-    o.id='lp-gate';
-    o.style.cssText='position:fixed;inset:0;background:rgba(10,30,54,.78);display:flex;align-items:center;justify-content:center;z-index:2147483647;backdrop-filter:blur(5px)';
-    o.innerHTML='<div style="background:#fff;border-radius:16px;padding:40px 36px;width:340px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.22);text-align:center">'
-      +'<img src="/logo_llave_propia.jpeg" style="height:52px;display:block;margin:0 auto 24px">'
-      +'<h2 style="margin:0 0 6px;font-size:20px;color:#16365C;font-weight:700">Acceso restringido</h2>'
-      +'<p style="margin:0 0 24px;font-size:13px;color:#6b7280">Ingresa tus credenciales para continuar</p>'
-      +'<div id="lp-err" style="display:none;background:#fee2e2;color:#991b1b;font-size:12.5px;font-weight:600;padding:9px 12px;border-radius:8px;margin-bottom:16px">Usuario o contrase\xf1a incorrectos</div>'
-      +'<input id="lp-u" type="text" placeholder="Usuario" style="width:100%;padding:11px 14px;border:1px solid #dbe3ec;border-radius:10px;font-size:14px;margin-bottom:10px;box-sizing:border-box">'
-      +'<input id="lp-p" type="password" placeholder="Contrase\xf1a" style="width:100%;padding:11px 14px;border:1px solid #dbe3ec;border-radius:10px;font-size:14px;margin-bottom:18px;box-sizing:border-box">'
-      +'<button id="lp-btn" style="width:100%;padding:12px;background:#16365C;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer">Ingresar</button>'
-      +'</div>';
-    body.appendChild(o);
-    document.documentElement.style.overflow='hidden';
-    document.getElementById('lp-btn').addEventListener('click',tryAuth);
-  }
-
-  // Watch document for childList changes — fires when bundler calls
-  // document.documentElement.replaceWith(newDoc) replacing the entire tree
-  window._lpMO=new MutationObserver(function(){setTimeout(inject,0);});
-  window._lpMO.observe(document,{childList:true});
-
-  document.addEventListener('DOMContentLoaded',inject);
-})();
-</script>
   <div id="__bundler_thumbnail">
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <rect width="100" height="100" rx="20" fill="#16365C"></rect>

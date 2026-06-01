@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flujo Operativo — Llave Propia</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #EDF1F5; }
+    #gate {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: #EDF1F5; z-index: 10;
+    }
+    .card {
+      background: #fff; border-radius: 16px; padding: 40px 36px;
+      width: 340px; max-width: 90vw;
+      box-shadow: 0 20px 60px rgba(0,0,0,.14); text-align: center;
+    }
+    .card img { height: 54px; display: block; margin: 0 auto 28px; }
+    .card h2 { font-size: 20px; color: #16365C; font-weight: 700; margin-bottom: 6px; }
+    .card p  { font-size: 13px; color: #6b7280; margin-bottom: 24px; }
+    .card input {
+      width: 100%; padding: 11px 14px; border: 1px solid #dbe3ec;
+      border-radius: 10px; font-size: 14px; margin-bottom: 10px;
+      outline: none; transition: border .15s;
+    }
+    .card input:focus { border-color: #10998B; }
+    .card input:last-of-type { margin-bottom: 18px; }
+    .card button {
+      width: 100%; padding: 12px; background: #16365C; color: #fff;
+      border: none; border-radius: 10px; font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: background .15s;
+    }
+    .card button:hover { background: #0F2A49; }
+    #err {
+      display: none; background: #fee2e2; color: #991b1b;
+      font-size: 12.5px; font-weight: 600; padding: 9px 12px;
+      border-radius: 8px; margin-bottom: 16px;
+    }
+    #frame {
+      display: none; position: fixed; inset: 0;
+      width: 100%; height: 100%; border: none; z-index: 5;
+    }
+  </style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="card">
+    <img src="/logo_llave_propia.jpeg" alt="Llave Propia">
+    <h2>Acceso restringido</h2>
+    <p>Ingresa tus credenciales para continuar</p>
+    <div id="err">Usuario o contraseña incorrectos</div>
+    <input id="u" type="text" placeholder="Usuario" autocomplete="username">
+    <input id="p" type="password" placeholder="Contraseña" autocomplete="current-password">
+    <button id="btn">Ingresar</button>
+  </div>
+</div>
+
+<iframe id="frame" src="about:blank"></iframe>
+
+<script>
+  var K = 'lp_gate_v1';
+
+  function show() {
+    document.getElementById('gate').style.display = 'none';
+    var f = document.getElementById('frame');
+    f.src = '/flujo-operativo-llavepropia';
+    f.style.display = 'block';
+  }
+
+  if (sessionStorage.getItem(K) === '1') {
+    show();
+  }
+
+  function tryAuth() {
+    var u = document.getElementById('u').value.trim();
+    var p = document.getElementById('p').value.trim();
+    if (u === 'rcanas' && p === 'rcanas') {
+      sessionStorage.setItem(K, '1');
+      show();
+    } else {
+      document.getElementById('err').style.display = 'block';
+    }
+  }
+
+  document.getElementById('btn').addEventListener('click', tryAuth);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') tryAuth();
+  });
+</script>
+
+</body>
+</html>
