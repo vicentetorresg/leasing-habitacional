@@ -1,5 +1,8 @@
 {
   "cleanUrls": true,
+  "rewrites": [
+    { "source": "/flujo-operacional", "destination": "/flujo-operativo-llavepropia.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
