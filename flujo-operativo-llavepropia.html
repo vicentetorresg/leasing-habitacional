@@ -21,17 +21,41 @@
 <body>
 <script>
 (function(){
-  var k='lp_auth_v2';
-  if(sessionStorage.getItem(k)==='1') return;
+  var K='lp_auth_v3';
+  if(sessionStorage.getItem(K)==='1') return;
 
-  var LOGO='/logo_llave_propia.jpeg';
+  function getEl(id){ return document.getElementById(id); }
 
-  function buildGate(){
+  function tryAuth(){
+    var gate=getEl('lp-gate');
+    if(!gate) return;
+    var u=(getEl('lp-u')||{}).value||'';
+    var p=(getEl('lp-p')||{}).value||'';
+    if(u.trim()==='rcanas' && p.trim()==='rcanas'){
+      sessionStorage.setItem(K,'1');
+      gate.remove();
+      document.documentElement.style.overflow='';
+    } else {
+      var err=getEl('lp-err');
+      if(err) err.style.display='block';
+    }
+  }
+
+  // Single global keydown — safe across multiple inject calls
+  if(!window._lpKD){
+    window._lpKD=true;
+    document.addEventListener('keydown',function(e){
+      if(e.key==='Enter') tryAuth();
+    });
+  }
+
+  function inject(){
+    if(getEl('lp-gate')) return;
     var o=document.createElement('div');
     o.id='lp-gate';
     o.style.cssText='position:fixed;inset:0;background:rgba(10,30,54,.78);display:flex;align-items:center;justify-content:center;z-index:2147483647;backdrop-filter:blur(5px)';
     o.innerHTML='<div style="background:#fff;border-radius:16px;padding:40px 36px;width:340px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.22);text-align:center">'
-      +'<img src="'+LOGO+'" style="height:52px;display:block;margin:0 auto 24px">'
+      +'<img src="/logo_llave_propia.jpeg" style="height:52px;display:block;margin:0 auto 24px">'
       +'<h2 style="margin:0 0 6px;font-size:20px;color:#16365C;font-weight:700">Acceso restringido</h2>'
       +'<p style="margin:0 0 24px;font-size:13px;color:#6b7280">Ingresa tus credenciales para continuar</p>'
       +'<div id="lp-err" style="display:none;background:#fee2e2;color:#991b1b;font-size:12.5px;font-weight:600;padding:9px 12px;border-radius:8px;margin-bottom:16px">Usuario o contraseña incorrectos</div>'
@@ -39,47 +63,23 @@
       +'<input id="lp-p" type="password" placeholder="Contraseña" style="width:100%;padding:11px 14px;border:1px solid #dbe3ec;border-radius:10px;font-size:14px;margin-bottom:18px;box-sizing:border-box">'
       +'<button id="lp-btn" style="width:100%;padding:12px;background:#16365C;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer">Ingresar</button>'
       +'</div>';
-    return o;
-  }
-
-  function attach(o){
-    function tryAuth(){
-      var u=document.getElementById('lp-u').value.trim();
-      var p=document.getElementById('lp-p').value.trim();
-      if(u==='rcanas'&&p==='rcanas'){
-        sessionStorage.setItem(k,'1');
-        document.getElementById('lp-gate').remove();
-        document.documentElement.style.overflow='';
-      } else {
-        document.getElementById('lp-err').style.display='block';
-      }
-    }
-    document.getElementById('lp-btn').addEventListener('click',tryAuth);
-    document.addEventListener('keydown',function(e){if(e.key==='Enter')tryAuth();});
-  }
-
-  function inject(){
-    if(document.getElementById('lp-gate')) return;
-    var o=buildGate();
     (document.body||document.documentElement).appendChild(o);
     document.documentElement.style.overflow='hidden';
-    attach(o);
+    getEl('lp-btn').addEventListener('click', tryAuth);
   }
 
-  // Intercept replaceWith — bundler calls document.documentElement.replaceWith()
-  // which destroys our overlay; we re-inject right after
-  var orig=Element.prototype.replaceWith;
+  // Intercept bundler's document.documentElement.replaceWith()
+  var _orig=Element.prototype.replaceWith;
   Element.prototype.replaceWith=function(){
-    orig.apply(this,arguments);
-    if(this===document.documentElement||this.tagName==='HTML'){
-      Element.prototype.replaceWith=orig; // restore
+    _orig.apply(this,arguments);
+    if(this.tagName==='HTML'){
+      Element.prototype.replaceWith=_orig;
       setTimeout(inject,0);
     }
   };
 
-  // Also inject now for immediate visual block
-  if(document.body) inject();
-  else document.addEventListener('DOMContentLoaded',inject);
+  // Inject immediately (shows gate before bundler runs)
+  document.addEventListener('DOMContentLoaded', inject);
 })();
 </script>
   <div id="__bundler_thumbnail">
