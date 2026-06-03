@@ -13,6 +13,7 @@
 
     :root{
       --navy:#1B2B5E;--teal:#2BA89C;--teal-l:#eefaf9;
+      --austral:#064e3b;--austral2:#065f46;--austral-acc:#10b981;
       --red:#dc2626;--red-l:#fef2f2;--green:#059669;--green-l:#ecfdf5;
       --border:#e2ddd5;--muted:#6b7280;--text:#1a1d2e
     }
@@ -38,7 +39,7 @@
     .btn-login:hover{background:#162244}
 
     /* APP */
-    #eval-view{display:none;width:100%;max-width:1300px;margin:0 auto}
+    #eval-view{display:none;width:100%;max-width:1440px;margin:0 auto}
     .app-hdr{background:linear-gradient(135deg,var(--navy),#162244);border-radius:16px;padding:16px 28px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
     .app-hdr .la{color:#fff;font-weight:900;font-size:1.15rem}
     .app-hdr .lb{color:var(--teal);font-weight:900;font-size:1.15rem}
@@ -47,7 +48,7 @@
     .logout-btn:hover{background:rgba(255,255,255,.18)}
 
     /* LAYOUT */
-    .cols{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:start}
+    .cols{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;align-items:start}
 
     /* FORM */
     .form-panel{background:#fff;border-radius:18px;padding:24px 28px;box-shadow:0 4px 20px rgba(0,0,0,.07)}
@@ -60,6 +61,7 @@
     .ff label{display:block;font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
     .ff input,.ff select{padding:10px 12px;font-size:.88rem;border-radius:9px}
     .note{font-size:.7rem;color:var(--muted);margin-top:4px;line-height:1.3}
+    .note.au{color:var(--austral2)}
 
     /* RADIOS */
     .rtabs{display:flex;gap:7px}
@@ -72,55 +74,83 @@
     .inline-sub.on{display:block}
 
     /* RESULTADO */
-    .result-panel{border-radius:18px;position:sticky;top:16px;display:flex;flex-direction:column;gap:12px}
+    .result-panel{position:sticky;top:16px;display:flex;flex-direction:column;gap:12px}
 
-    /* CARD PRINCIPAL: estado + UF grande */
-    .main-card{border-radius:16px;padding:24px 26px;transition:all .3s}
-    .main-card.pend{background:#f9f8f6;border:2px dashed #c9c2b8;box-shadow:none}
-    .main-card.ok{background:linear-gradient(145deg,#1B2B5E,#162244);box-shadow:0 8px 32px rgba(27,43,94,.35)}
-    .main-card.no{background:linear-gradient(145deg,#7f1d1d,#991b1b);box-shadow:0 8px 32px rgba(127,29,29,.35)}
+    /* INSTITUTION CARDS */
+    .inst-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .inst-card{border-radius:16px;padding:18px 20px;transition:background .3s,box-shadow .3s}
+    .inst-card.pend{background:#f9f8f6;border:2px dashed #c9c2b8;box-shadow:none}
+    .inst-card.no{background:linear-gradient(145deg,#7f1d1d,#991b1b);box-shadow:0 8px 28px rgba(127,29,29,.35)}
+    .inst-card.cp.ok{background:linear-gradient(145deg,#1B2B5E,#162244);box-shadow:0 8px 28px rgba(27,43,94,.35)}
+    .inst-card.au.ok{background:linear-gradient(145deg,var(--austral),var(--austral2));box-shadow:0 8px 28px rgba(6,78,59,.35)}
 
-    /* badge de estado */
-    .estado-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:99px;margin-bottom:14px}
-    .main-card.pend .estado-badge{background:rgba(0,0,0,.06);color:var(--muted)}
-    .main-card.ok  .estado-badge{background:rgba(43,168,156,.2);color:var(--teal)}
-    .main-card.no  .estado-badge{background:rgba(255,255,255,.15);color:rgba(255,255,255,.8)}
+    .inst-name{font-size:.62rem;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:8px}
+    .inst-card.pend .inst-name{color:var(--muted)}
+    .inst-card.ok   .inst-name{color:rgba(255,255,255,.45)}
+    .inst-card.no   .inst-name{color:rgba(255,255,255,.4)}
 
-    /* numero UF grande */
-    .uf-big{font-size:4rem;font-weight:900;line-height:1;letter-spacing:-2px;margin-bottom:2px}
-    .main-card.ok .uf-big{color:var(--teal)}
+    .estado-badge{display:inline-flex;align-items:center;gap:5px;font-size:.67rem;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:3px 9px;border-radius:99px;margin-bottom:10px}
+    .inst-card.pend .estado-badge{background:rgba(0,0,0,.06);color:var(--muted)}
+    .inst-card.ok   .estado-badge{background:rgba(255,255,255,.15);color:rgba(255,255,255,.9)}
+    .inst-card.no   .estado-badge{background:rgba(255,255,255,.15);color:rgba(255,255,255,.85)}
 
-    .uf-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px}
-    .main-card.ok .uf-label{color:rgba(255,255,255,.45)}
+    .uf-big{font-size:2.7rem;font-weight:900;line-height:1;letter-spacing:-1.5px;margin-bottom:2px}
+    .inst-card.pend    .uf-big{color:#ccc}
+    .inst-card.cp.ok   .uf-big{color:var(--teal)}
+    .inst-card.au.ok   .uf-big{color:var(--austral-acc)}
+    .inst-card.no      .uf-big{color:rgba(255,255,255,.2)}
 
-    .clp-big{font-size:1.25rem;font-weight:800;margin-bottom:6px;line-height:1.3}
-    .main-card.pend .clp-big{color:var(--muted);font-size:.92rem;font-weight:500}
-    .main-card.ok   .clp-big{color:#fff}
-    .main-card.no   .clp-big{color:rgba(255,255,255,.8);font-size:.92rem;font-weight:500}
+    .uf-label{font-size:.61rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+    .inst-card.ok   .uf-label{color:rgba(255,255,255,.4)}
+    .inst-card.pend .uf-label{color:#ccc}
+    .inst-card.no   .uf-label{display:none}
 
-    .fin-meta{font-size:.76rem;line-height:1.5}
-    .main-card.pend .fin-meta{color:#bbb;font-size:.75rem}
-    .main-card.ok   .fin-meta{color:rgba(255,255,255,.55)}
-    .main-card.no   .fin-meta{color:rgba(255,255,255,.5)}
+    .clp-big{font-size:.95rem;font-weight:800;line-height:1.3}
+    .inst-card.pend .clp-big{color:var(--muted);font-size:.82rem;font-weight:500}
+    .inst-card.ok   .clp-big{color:#fff}
+    .inst-card.no   .clp-big{color:rgba(255,255,255,.75);font-size:.82rem;font-weight:500}
 
-    /* CRITERIOS */
-    .crit-card{background:#fff;border-radius:16px;padding:18px 22px;box-shadow:0 4px 20px rgba(0,0,0,.07)}
-    .crit{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+    .fin-meta{font-size:.69rem;line-height:1.5;margin-top:4px}
+    .inst-card.pend .fin-meta{color:#bbb}
+    .inst-card.ok   .fin-meta{color:rgba(255,255,255,.5)}
+    .inst-card.no   .fin-meta{color:rgba(255,255,255,.45)}
+
+    /* CRITERIA DUAL */
+    .crit-card{background:#fff;border-radius:16px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.07)}
+    .crit-hdr{display:grid;grid-template-columns:26px 1fr 26px;gap:4px;padding-bottom:8px;border-bottom:2px solid var(--border);margin-bottom:2px}
+    .crit-hdr-cp{font-size:.6rem;font-weight:900;color:var(--navy);text-align:center;letter-spacing:.4px;text-transform:uppercase}
+    .crit-hdr-mid{font-size:.6rem;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.8px;text-transform:uppercase}
+    .crit-hdr-au{font-size:.6rem;font-weight:900;color:var(--austral2);text-align:center;letter-spacing:.4px;text-transform:uppercase}
+
+    .crit{display:grid;grid-template-columns:26px 1fr 26px;gap:4px;align-items:start;padding:7px 0;border-bottom:1px solid var(--border)}
     .crit:last-child{border-bottom:none}
-    .crit-ico{font-size:.9rem;flex-shrink:0;width:18px;text-align:center;margin-top:1px}
-    .crit-nom{font-size:.81rem;font-weight:700;color:var(--text);line-height:1.2}
-    .crit-det{font-size:.73rem;color:var(--muted);margin-top:2px;line-height:1.3}
+    .crit-ico{font-size:.82rem;text-align:center;padding-top:1px}
+    .crit-nom{font-size:.78rem;font-weight:700;color:var(--text);line-height:1.2}
+    .crit-det{font-size:.69rem;color:var(--muted);margin-top:2px;line-height:1.3}
     .crit-det.bad{color:var(--red)}
+    .crit-det-row{display:flex;gap:5px;align-items:baseline;margin-top:2px}
+    .crit-det-lbl{font-size:.6rem;font-weight:900;text-transform:uppercase;letter-spacing:.4px;flex-shrink:0}
+    .cp-lbl{color:var(--navy)}
+    .au-lbl{color:var(--austral2)}
+    .crit-det-txt{font-size:.69rem;color:var(--muted);line-height:1.3}
+    .crit-det-txt.bad{color:var(--red)}
 
-    /* RESUMEN TAGS */
-    .resumen{display:flex;gap:8px}
-    .tag{flex:1;text-align:center;border-radius:8px;padding:7px 4px;font-size:.7rem;font-weight:800}
+    /* SUMMARY */
+    .dual-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+    .sum-block{border-radius:8px;padding:8px 10px}
+    .sum-block.cp-sum{background:rgba(27,43,94,.05);border:1px solid rgba(27,43,94,.12)}
+    .sum-block.au-sum{background:rgba(6,95,70,.05);border:1px solid rgba(6,95,70,.12)}
+    .sum-block-name{font-size:.6rem;font-weight:900;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px}
+    .cp-sum .sum-block-name{color:var(--navy)}
+    .au-sum .sum-block-name{color:var(--austral2)}
+    .sum-tags{display:flex;gap:5px}
+    .tag{flex:1;text-align:center;border-radius:6px;padding:5px 2px;font-size:.64rem;font-weight:800}
     .tag-ok{background:var(--green-l);color:var(--green)}
     .tag-no{background:var(--red-l);color:var(--red)}
     .tag-pend{background:#f3f4f6;color:#9ca3af}
 
-    @media(max-width:960px){.cols{grid-template-columns:1fr}.result-panel{position:static}}
-    @media(max-width:500px){.login-card{padding:36px 24px}.g2f,.g3f{grid-template-columns:1fr}}
+    @media(max-width:1050px){.cols{grid-template-columns:1fr}.result-panel{position:static}}
+    @media(max-width:600px){.inst-grid{grid-template-columns:1fr}.login-card{padding:36px 24px}.g2f,.g3f{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -152,7 +182,7 @@
   <div class="app-hdr">
     <div>
       <div><span class="la">Llave</span><span class="lb">Propia</span></div>
-      <p>Evaluador de Elegibilidad &mdash; Leasing Habitacional DS120</p>
+      <p>Evaluador DS120 &mdash; Casa Pronta vs Leasing Austral</p>
     </div>
     <button class="logout-btn" onclick="doLogout()">Cerrar sesi&oacute;n</button>
   </div>
@@ -181,6 +211,7 @@
             <option value="25">25 a&ntilde;os</option>
             <option value="30">30 a&ntilde;os</option>
           </select>
+          <div class="note au">Austral: solo 8, 12, 15 &oacute; 20 a&ntilde;os</div>
         </div>
         <div class="ff">
           <label>Nacionalidad</label>
@@ -202,6 +233,7 @@
             <option value="indefinido_fija">Indefinido &mdash; Renta fija</option>
             <option value="indefinido_variable">Indefinido &mdash; Renta variable</option>
             <option value="obra_contrata">Por obra o a contrata</option>
+            <option value="parttime">Part-time / propinas</option>
             <option value="independiente_honorarios">Independiente &mdash; Honorarios</option>
             <option value="independiente_comercial">Independiente &mdash; Giro comercial</option>
             <option value="socio_empresa">Socio de empresa</option>
@@ -214,6 +246,21 @@
         </div>
       </div>
 
+      <div class="g2f" id="extra-wrap" style="display:none">
+        <div class="ff" id="continu-wrap" style="display:none">
+          <label>Continuidad laboral (meses) <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--austral-acc)">[Austral: m&iacute;n. 12]</span></label>
+          <input type="number" id="continuidad" min="0" placeholder="12" oninput="liveEval()">
+          <div class="note">Meses de historia laboral continua documentada.</div>
+        </div>
+        <div class="ff" id="pension-wrap" style="display:none">
+          <label>Tipo de pensi&oacute;n <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--austral-acc)">[Austral: solo vitalicia]</span></label>
+          <div class="rtabs">
+            <label class="rtab"><input type="radio" name="tipopension" value="vitalicia" checked onchange="liveEval()"><div class="rtab-lbl">Vitalicia</div></label>
+            <label class="rtab"><input type="radio" name="tipopension" value="retiro" onchange="liveEval()"><div class="rtab-lbl">Retiro prog.</div></label>
+          </div>
+        </div>
+      </div>
+
       <div class="fsect">Ingresos y deudas</div>
       <div class="g2f">
         <div class="ff">
@@ -221,9 +268,9 @@
           <input type="text" id="renta" placeholder="$ 1.200.000" oninput="fmtMonto(this);liveEval()">
         </div>
         <div class="ff">
-          <label>Cuotas mensuales</label>
+          <label>Cuotas mensuales otras deudas</label>
           <input type="text" id="otras-deudas" placeholder="$ 0" oninput="fmtMonto(this);liveEval()">
-          <div class="note">Consumo, auto, tarjetas, dividendos hipotecarios u otros leasing vigentes.</div>
+          <div class="note">Consumo, auto, tarjetas, dividendos u otros leasing vigentes.</div>
         </div>
       </div>
       <div class="g2f">
@@ -258,15 +305,27 @@
 
       <div class="fsect">Financiamiento</div>
       <div class="g2f">
-        <div class="ff" style="margin-bottom:0">
-          <label>Tasa anual (%)</label>
-          <input type="text" id="tasa" placeholder="10,50" value="10,50" oninput="liveEval()" onkeydown="ajustarTasa(event)">
-          <div class="note">UF + tasa &mdash; &uarr;&darr; ajusta 0,25% &bull; default 10,50%</div>
+        <div class="ff">
+          <label>Valor propiedad (UF) <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--austral-acc)">[Austral]</span></label>
+          <input type="number" id="valor-prop" min="0" step="1" placeholder="1.500" oninput="liveEval()">
+          <div class="note au">Austral: entre 1.000&ndash;2.000 UF &bull; financia hasta 90%</div>
         </div>
-        <div class="ff" style="margin-bottom:0">
+        <div class="ff">
           <label>Valor UF (CLP) <span id="uf-fecha2" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)">cargando&hellip;</span></label>
           <input type="text" id="uf-clp2" placeholder="37.900" value="37.900" oninput="fmtNumero(this);liveEval()">
           <div class="note">Actualizado autom&aacute;ticamente</div>
+        </div>
+      </div>
+      <div class="g2f">
+        <div class="ff" style="margin-bottom:0">
+          <label>Tasa Casa Pronta (%)</label>
+          <input type="text" id="tasa-cp" placeholder="10,50" value="10,50" oninput="liveEval()" onkeydown="ajustarTasa(event,'tasa-cp')">
+          <div class="note">UF + tasa &mdash; &uarr;&darr; ajusta 0,25%</div>
+        </div>
+        <div class="ff" style="margin-bottom:0">
+          <label>Tasa Austral (%)</label>
+          <input type="text" id="tasa-au" placeholder="9,50" value="9,50" oninput="liveEval()" onkeydown="ajustarTasa(event,'tasa-au')">
+          <div class="note">UF + tasa &mdash; &uarr;&darr; ajusta 0,25%</div>
         </div>
       </div>
 
@@ -278,7 +337,7 @@
           <label class="rtab"><input type="radio" name="cod" value="familiar" onchange="onCod();liveEval()"><div class="rtab-lbl">Familiar*</div></label>
           <label class="rtab"><input type="radio" name="cod" value="otro" onchange="onCod();liveEval()"><div class="rtab-lbl">Otro</div></label>
         </div>
-        <div class="note" style="margin-top:5px">*C&oacute;nyuge, conviviente civil, pareja con hijos, padre o hijo</div>
+        <div class="note" style="margin-top:5px">*C&oacute;nyuge, conviviente civil, pareja con hijos, padre o hijo &mdash; Austral tambi&eacute;n acepta hermanos y otros.</div>
         <div class="inline-sub" id="cod-sub">
           <div class="ff" style="margin-top:10px;margin-bottom:0;max-width:280px">
             <label>Renta l&iacute;quida codeudor</label>
@@ -292,33 +351,62 @@
     <!-- RESULTADO EN VIVO -->
     <div class="result-panel">
 
-      <!-- CARD PRINCIPAL -->
-      <div class="main-card pend" id="main-card">
-        <div class="estado-badge" id="estado-badge">&#9679; Datos incompletos</div>
-        <div class="uf-big" id="uf-big"></div>
-        <div class="uf-label" id="uf-label"></div>
-        <div class="clp-big" id="clp-big">Completa el formulario para calcular el cr&eacute;dito m&aacute;ximo.</div>
-        <div class="fin-meta" id="fin-meta"></div>
-        <div class="status-msg" id="status-msg"></div>
-      </div>
-
-      <!-- CRITERIOS -->
-      <div class="crit-card">
-        <div id="crit-lista"></div>
-        <div class="resumen" id="resumen" style="display:none;margin-top:12px">
-          <div class="tag tag-ok" id="tag-ok"></div>
-          <div class="tag tag-no" id="tag-no"></div>
-          <div class="tag tag-pend" id="tag-pend"></div>
+      <div class="inst-grid">
+        <!-- Casa Pronta -->
+        <div class="inst-card cp pend" id="cp-card">
+          <div class="inst-name">Casa Pronta</div>
+          <div class="estado-badge" id="cp-badge">&#9679; Incompleto</div>
+          <div class="uf-big" id="cp-uf-big">&mdash;</div>
+          <div class="uf-label">UF cr&eacute;dito m&aacute;ximo</div>
+          <div class="clp-big" id="cp-clp">Completa el formulario</div>
+          <div class="fin-meta" id="cp-meta"></div>
+        </div>
+        <!-- Austral -->
+        <div class="inst-card au pend" id="au-card">
+          <div class="inst-name">Leasing Austral</div>
+          <div class="estado-badge" id="au-badge">&#9679; Incompleto</div>
+          <div class="uf-big" id="au-uf-big">&mdash;</div>
+          <div class="uf-label">UF cr&eacute;dito m&aacute;ximo</div>
+          <div class="clp-big" id="au-clp">Completa el formulario</div>
+          <div class="fin-meta" id="au-meta"></div>
         </div>
       </div>
 
-    </div>
+      <!-- CRITERIOS DUALES -->
+      <div class="crit-card">
+        <div class="crit-hdr">
+          <div class="crit-hdr-cp">CP</div>
+          <div class="crit-hdr-mid">Criterio</div>
+          <div class="crit-hdr-au">AU</div>
+        </div>
+        <div id="crit-lista"></div>
+        <div class="dual-summary" id="dual-summary" style="display:none">
+          <div class="sum-block cp-sum">
+            <div class="sum-block-name">Casa Pronta</div>
+            <div class="sum-tags">
+              <div class="tag tag-ok"   id="cp-tag-ok"></div>
+              <div class="tag tag-no"   id="cp-tag-no"></div>
+              <div class="tag tag-pend" id="cp-tag-pend"></div>
+            </div>
+          </div>
+          <div class="sum-block au-sum">
+            <div class="sum-block-name">Leasing Austral</div>
+            <div class="sum-tags">
+              <div class="tag tag-ok"   id="au-tag-ok"></div>
+              <div class="tag tag-no"   id="au-tag-no"></div>
+              <div class="tag tag-pend" id="au-tag-pend"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /result-panel -->
 
   </div><!-- /cols -->
 </div><!-- /eval-view -->
 
 <script>
-/* ── SESSION ── */
+/* SESSION */
 function showApp(){
   document.getElementById('login-view').style.display='none';
   document.body.classList.add('app');
@@ -343,193 +431,318 @@ function doLogout(){
   document.getElementById('login-view').style.display='flex';
   document.getElementById('lp').value='';
 }
-// Auto-login si hay sesion guardada
 if(localStorage.getItem('lp_auth')==='1') showApp();
 
-/* ── REACTIVE ── */
+/* REACTIVE */
 function onDicom(){document.getElementById('dicom-sub').classList.toggle('on',document.querySelector('input[name="dicom"]:checked').value==='si');}
 function onCod(){document.getElementById('cod-sub').classList.toggle('on',document.querySelector('input[name="cod"]:checked').value!=='no');}
+
+var DEP_TYPES=['indefinido_fija','indefinido_variable','obra_contrata'];
+
 function onTipoTrab(){
   var t=document.getElementById('tipo-trab').value;
-  var ah={indefinido_fija:'(m\u00edn. 3m)',indefinido_variable:'(m\u00edn. 6m)',obra_contrata:'(m\u00edn. 6m)',
-          independiente_honorarios:'(m\u00edn. 12m)',independiente_comercial:'(m\u00edn. 12m)',socio_empresa:'(m\u00edn. 12m)',pensionado:''};
-  var rh={indefinido_fija:'prom. 3 liq.',indefinido_variable:'prom. 6 liq.',obra_contrata:'prom. liq.',
-          independiente_honorarios:'prom. honorarios',independiente_comercial:'30% prom. ventas',
-          socio_empresa:'prom. retiros',pensionado:'prom. 3 pagos'};
+  var ah={
+    indefinido_fija:'(CP: m\u00edn. 3m | AU: m\u00edn. 3m)',
+    indefinido_variable:'(CP: m\u00edn. 6m | AU: m\u00edn. 6m)',
+    obra_contrata:'(CP: m\u00edn. 6m | AU: m\u00edn. 6m)',
+    parttime:'(AU: m\u00edn. 24m)',
+    independiente_honorarios:'(CP: m\u00edn. 12m | AU: m\u00edn. 24m)',
+    independiente_comercial:'(CP: m\u00edn. 12m | AU: m\u00edn. 24m)',
+    socio_empresa:'(CP: m\u00edn. 12m | AU: m\u00edn. 24m)',
+    pensionado:''
+  };
+  var rh={
+    indefinido_fija:'prom. 3 liq.',indefinido_variable:'prom. 6 liq.',obra_contrata:'prom. liq.',
+    parttime:'prom. liq.',independiente_honorarios:'prom. honorarios',
+    independiente_comercial:'30% prom. ventas',socio_empresa:'prom. retiros',pensionado:'prom. 3 pagos'
+  };
   document.getElementById('antig-hint').textContent=ah[t]||'';
   document.getElementById('renta-hint').textContent=rh[t]?'['+rh[t]+']':'';
   document.getElementById('antig-wrap').style.opacity=t==='pensionado'?'0.4':'1';
+
+  var showContinu=DEP_TYPES.indexOf(t)!==-1;
+  var showPension=t==='pensionado';
+  document.getElementById('extra-wrap').style.display=(showContinu||showPension)?'grid':'none';
+  document.getElementById('continu-wrap').style.display=showContinu?'block':'none';
+  document.getElementById('pension-wrap').style.display=showPension?'block':'none';
 }
 
-/* ── TASA CON COMA ── */
-function parseTasa(){
-  var raw=document.getElementById('tasa').value||'10,50';
-  return parseFloat(raw.replace(',','.'))||10.50;
-}
+/* TASA */
+function parseTasa(id){return parseFloat((document.getElementById(id).value||'10,50').replace(',','.'))||10.50;}
 function fmtTasa(v){return v.toFixed(2).replace('.',',');}
-function ajustarTasa(e){
+function ajustarTasa(e,id){
   if(e.key==='ArrowUp'||e.key==='ArrowDown'){
     e.preventDefault();
-    var v=parseTasa();
+    var v=parseTasa(id);
     v=e.key==='ArrowUp'?v+0.25:Math.max(0,v-0.25);
-    document.getElementById('tasa').value=fmtTasa(v);
+    document.getElementById(id).value=fmtTasa(v);
     liveEval();
   }
 }
 
-/* ── FORMATO ── */
+/* FORMATO */
 var LOC='es-CL';
 function fmtMonto(el){var r=el.value.replace(/\D/g,'');el.value=r?'$ '+parseInt(r).toLocaleString(LOC):'';}
 function fmtNumero(el){var r=el.value.replace(/\D/g,'');el.value=r?parseInt(r).toLocaleString(LOC):'';}
 function parseMonto(v){return parseInt(String(v||'').replace(/\D/g,''))||0;}
 function parseNumero(id){return parseInt((document.getElementById(id).value||'0').replace(/\D/g,''))||0;}
 function fmt(n){return '$ '+Math.round(n).toLocaleString(LOC);}
-function fmtUF(n){return Math.round(n).toLocaleString(LOC)+' UF';}
-function pct(r){return (r*100).toLocaleString(LOC,{minimumFractionDigits:1,maximumFractionDigits:1})+'%';}
-function getMinAntig(t){return {indefinido_fija:3,indefinido_variable:6,obra_contrata:6,independiente_honorarios:12,independiente_comercial:12,socio_empresa:12,pensionado:0}[t]||0;}
 
-var ICONS={ok:'\u2705',no:'\u274C',pend:'\u26AA'};
+var ICONS={ok:'\u2705',no:'\u274C',pend:'\u25A1'};
+var AU_PLAZOS=[8,12,15,20];
 
-/* ── EVALUACION EN VIVO ── */
+function getMinAntigCP(t){
+  return {indefinido_fija:3,indefinido_variable:6,obra_contrata:6,
+          independiente_honorarios:12,independiente_comercial:12,socio_empresa:12,
+          parttime:0,pensionado:0}[t]||0;
+}
+function getMinAntigAU(t){
+  return {indefinido_fija:3,indefinido_variable:6,obra_contrata:6,
+          independiente_honorarios:24,independiente_comercial:24,socio_empresa:24,
+          parttime:24,pensionado:0}[t]||0;
+}
+
+/* EVALUACION */
 function liveEval(){
   var edad    =parseInt(document.getElementById('edad').value)||0;
   var plazo   =parseInt(document.getElementById('plazo').value)||0;
   var nac     =document.getElementById('nacionalidad').value;
   var tipo    =document.getElementById('tipo-trab').value;
   var antig   =parseInt(document.getElementById('antiguedad').value)||0;
+  var continu =parseInt(document.getElementById('continuidad').value)||0;
+  var tipoPensEl=document.querySelector('input[name="tipopension"]:checked');
+  var tipoPens=tipoPensEl?tipoPensEl.value:'vitalicia';
   var renta   =parseMonto(document.getElementById('renta').value);
   var otras   =parseMonto(document.getElementById('otras-deudas').value);
   var dicomOpt=document.querySelector('input[name="dicom"]:checked').value;
   var dicomUF =parseFloat(document.getElementById('dicom-monto').value)||0;
   var ufDicom =parseNumero('uf-clp')||37900;
   var cmfOpt  =document.querySelector('input[name="cmf"]:checked').value;
-  var tasa    =parseTasa();
+  var valorProp=parseFloat(document.getElementById('valor-prop').value)||0;
+  var tasaCP  =parseTasa('tasa-cp');
+  var tasaAU  =parseTasa('tasa-au');
   var ufClp   =parseNumero('uf-clp2')||37900;
   var codOpt  =document.querySelector('input[name="cod"]:checked').value;
   var rentaCod=parseMonto(document.getElementById('renta-cod').value);
 
-  // Hint plazo maximo segun edad
-  document.getElementById('plazo-hint').textContent=edad>0?'(m\u00e1x. '+(80-edad)+' a\u00f1os)':'';
+  document.getElementById('plazo-hint').textContent=edad>0?'(CP: m\u00e1x. '+(80-edad)+' \u00b7 AU: m\u00e1x. '+(79-edad)+')':'';
 
-  var crit=[];
+  var crits=[];
+  function same(n,s,d){return {n:n,cp:{s:s,d:d},au:{s:s,d:d}};}
 
-  // 1. Edad minima
-  if(!edad) crit.push({n:'Edad m\u00ednima (18 a\u00f1os)',s:'pend',d:'Ingrese la edad del solicitante.'});
-  else crit.push({n:'Edad m\u00ednima (18 a\u00f1os)',s:edad>=18?'ok':'no',
-    d:edad>=18?edad+' a\u00f1os.':edad+' a\u00f1os \u2014 m\u00ednimo 18.'});
+  /* 1. Edad minima */
+  crits.push(same('Edad m\u00ednima (18 a\u00f1os)',
+    !edad?'pend':edad>=18?'ok':'no',
+    !edad?'\u2014':edad+' a\u00f1os'+(edad<18?' \u2014 m\u00edn. 18':'')));
 
-  // 2. Edad al termino
-  if(!edad||!plazo) crit.push({n:'Edad al t\u00e9rmino (m\u00e1x. 80 a\u00f1os)',s:'pend',d:'Ingrese edad y plazo.'});
-  else{var f=edad+plazo;crit.push({n:'Edad al t\u00e9rmino (m\u00e1x. 80 a\u00f1os)',s:f<=80?'ok':'no',
-    d:f<=80?edad+' + '+plazo+' = '+f+' a\u00f1os al t\u00e9rmino.':edad+' + '+plazo+' = '+f+' a\u00f1os \u2014 supera el m\u00e1ximo de 80.'});}
+  /* 2. Edad al termino: CP <=80, AU <=79 */
+  var term=edad+plazo;
+  crits.push({n:'Edad al t\u00e9rmino',
+    cp:{s:(!edad||!plazo)?'pend':term<=80?'ok':'no',
+        d:(!edad||!plazo)?'\u2014':edad+'+'+plazo+'='+term+' a\u00f1os (m\u00e1x. 80)'},
+    au:{s:(!edad||!plazo)?'pend':term<=79?'ok':'no',
+        d:(!edad||!plazo)?'\u2014':edad+'+'+plazo+'='+term+' a\u00f1os (m\u00e1x. 79)'}
+  });
 
-  // 3. Nacionalidad
-  if(!nac) crit.push({n:'Nacionalidad habilitada',s:'pend',d:'Seleccione la nacionalidad.'});
-  else{var okN=nac==='chileno'||nac==='extranjero_def';
-    crit.push({n:'Nacionalidad habilitada',s:okN?'ok':'no',
-      d:okN?{chileno:'Chileno/a',extranjero_def:'Extranjero/a con permanencia definitiva'}[nac]+'.':'Extranjero sin permanencia definitiva \u2014 no califica.'});}
+  /* 3. Nacionalidad */
+  var okN=nac==='chileno'||nac==='extranjero_def';
+  crits.push(same('Nacionalidad habilitada',
+    !nac?'pend':okN?'ok':'no',
+    !nac?'\u2014':okN?({chileno:'Chileno/a',extranjero_def:'Perm. definitiva \u2014 califica'}[nac]):
+      'Sin permanencia definitiva \u2014 no califica'));
 
-  // 4. DICOM
-  if(dicomOpt==='no') crit.push({n:'DICOM (m\u00e1x. 3,5 UF / 25% sueldo)',s:'ok',d:'Sin deuda vigente en DICOM.'});
-  else{var dCLP=dicomUF*ufDicom,ok1=dicomUF<=3.5,ok2=renta>0?dCLP<=0.25*renta:true;
-    crit.push({n:'DICOM (m\u00e1x. 3,5 UF / 25% sueldo)',s:(ok1&&ok2)?'ok':'no',
-      d:!ok1?'DICOM '+dicomUF.toFixed(2).replace('.',',')+' UF \u2014 supera el m\u00e1ximo de 3,5 UF.':
-         !ok2?'DICOM '+fmt(dCLP)+' supera 25% del sueldo ('+fmt(0.25*renta)+').':
-              'DICOM '+dicomUF.toFixed(2).replace('.',',')+' UF \u2014 dentro de l\u00edmites.'});}
+  /* 4. DICOM */
+  var dS,dD;
+  if(dicomOpt==='no'){dS='ok';dD='Sin DICOM vigente.';}
+  else{
+    var dCLP=dicomUF*ufDicom,ok1=dicomUF<=3.5,ok2=renta>0?dCLP<=0.25*renta:true;
+    dS=(ok1&&ok2)?'ok':'no';
+    dD=!ok1?dicomUF.toFixed(2)+' UF \u2014 supera m\u00e1x. 3,5 UF':
+       !ok2?'Supera 25% del sueldo ('+fmt(0.25*renta)+')':
+            dicomUF.toFixed(2)+' UF \u2014 dentro de l\u00edmites';
+  }
+  crits.push(same('DICOM (m\u00e1x. 3,5 UF / 25% sueldo)',dS,dD));
 
-  // 5. CMF
-  crit.push({n:'Sin deudas morosas en CMF',s:cmfOpt==='no'?'ok':'no',
-    d:cmfOpt==='si'?'Registra deudas morosas, vencidas o castigadas en CMF.':'Sin deudas morosas en CMF.'});
+  /* 5. CMF */
+  crits.push(same('Sin morosas en CMF',
+    cmfOpt==='no'?'ok':'no',
+    cmfOpt==='si'?'Registra deudas morosas, vencidas o castigadas.':'Sin morosas en CMF.'));
 
-  // 6. Antiguedad
-  if(!tipo) crit.push({n:'Antig\u00fcedad laboral',s:'pend',d:'Seleccione tipo de trabajador.'});
-  else if(tipo==='pensionado') crit.push({n:'Antig\u00fcedad laboral',s:'ok',d:'Pensionado/a \u2014 no aplica.'});
-  else{var minM=getMinAntig(tipo);crit.push({n:'Antig\u00fcedad (m\u00edn. '+minM+' meses)',s:antig>=minM?'ok':'no',
-    d:antig>=minM?antig+' meses.':antig+' meses \u2014 se requieren '+minM+'.'});}
-
-  // 7. Capacidad financiera
-  var maxUFval=0,maxCLPval=0,maxDivVal=0;
-  if(!renta||!plazo||tasa<=0){
-    crit.push({n:'Capacidad de financiamiento',s:'pend',d:'Ingrese renta, plazo y tasa.'});
-  }else{
-    var esFam=codOpt==='familiar';
-    var rentaT=(codOpt!=='no'&&rentaCod>0)?renta+rentaCod:renta;
-    var maxDiv25=codOpt==='no'?renta*0.25:esFam?rentaT*0.25:Math.min(rentaT*0.25,renta*0.50);
-    var maxDiv50=codOpt==='no'?renta*0.50-otras:esFam?rentaT*0.50-otras:Math.min(rentaT*0.50,renta*0.60)-otras;
-    var maxDiv=Math.min(maxDiv25,maxDiv50);
-    if(maxDiv<=0){
-      crit.push({n:'Capacidad de financiamiento',s:'no',d:'Las deudas actuales ('+fmt(otras)+') agotan la capacidad de pago.'});
-    }else{
-      var r=tasa/100/12,n=plazo*12;
-      maxUFval=maxDiv/ufClp/((r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1));
-      maxCLPval=maxUFval*ufClp;
-      maxDivVal=maxDiv;
-      crit.push({n:'Capacidad de financiamiento',s:'ok',
-        d:'Div. m\u00e1x. '+fmt(maxDiv)+' \u2192 financia hasta '+fmtUF(maxUFval)+' ('+fmt(maxCLPval)+').'});
+  /* 6. Antiguedad */
+  if(!tipo){
+    crits.push(same('Antig\u00fcedad laboral','pend','Seleccione tipo de trabajador.'));
+  } else if(tipo==='pensionado'){
+    crits.push({n:'Tipo de pensi\u00f3n',
+      cp:{s:'ok',d:'Vitalicia o retiro programado \u2014 ambas aceptadas'},
+      au:{s:tipoPens==='vitalicia'?'ok':'no',
+          d:tipoPens==='vitalicia'?'Renta vitalicia \u2014 califica':'Retiro programado \u2014 Austral no acepta'}
+    });
+  } else if(tipo==='parttime'){
+    crits.push({n:'Antig\u00fcedad part-time',
+      cp:{s:'ok',d:'Casa Pronta eval\u00faa caso a caso'},
+      au:{s:!antig?'pend':antig>=24?'ok':'no',
+          d:!antig?'\u2014':antig+' meses (m\u00edn. 24)'}
+    });
+  } else {
+    var minCP=getMinAntigCP(tipo),minAU=getMinAntigAU(tipo);
+    crits.push({n:'Antig\u00fcedad laboral',
+      cp:{s:!antig&&minCP>0?'pend':antig>=minCP?'ok':'no',
+          d:antig?antig+' meses (m\u00edn. '+minCP+')':'\u2014'},
+      au:{s:!antig&&minAU>0?'pend':antig>=minAU?'ok':'no',
+          d:antig?antig+' meses (m\u00edn. '+minAU+')':'\u2014'}
+    });
+    if(DEP_TYPES.indexOf(tipo)!==-1){
+      crits.push({n:'Continuidad laboral',
+        cp:{s:'ok',d:'No requerida por Casa Pronta'},
+        au:{s:!continu?'pend':continu>=12?'ok':'no',
+            d:!continu?'\u2014':continu+' meses (m\u00edn. 12)'}
+      });
     }
   }
 
-  // Render criterios
+  /* 7. Plazo */
+  if(plazo){
+    var auPlazoOk=AU_PLAZOS.indexOf(plazo)!==-1;
+    crits.push({n:'Plazo disponible',
+      cp:{s:'ok',d:plazo+' a\u00f1os \u2014 disponible'},
+      au:{s:auPlazoOk?'ok':'no',
+          d:auPlazoOk?plazo+' a\u00f1os \u2014 disponible':'Austral solo ofrece 8, 12, 15 \u00f3 20 a\u00f1os'}
+    });
+  }
+
+  /* 8. Valor propiedad */
+  if(valorProp>0){
+    var auValOk=valorProp>=1000&&valorProp<=2000;
+    crits.push({n:'Valor propiedad',
+      cp:{s:'ok',d:valorProp.toLocaleString(LOC)+' UF \u2014 sin restricci\u00f3n de rango'},
+      au:{s:auValOk?'ok':'no',
+          d:auValOk?valorProp.toLocaleString(LOC)+' UF \u2014 rango v\u00e1lido (1.000\u20132.000 UF)':
+            valorProp<1000?valorProp+' UF \u2014 m\u00edn. 1.000 UF':valorProp+' UF \u2014 m\u00e1x. 2.000 UF'}
+    });
+  }
+
+  /* 9. Capacidad financiera */
+  var esFam=codOpt==='familiar';
+  var rentaT=(codOpt!=='no'&&rentaCod>0)?renta+rentaCod:renta;
+
+  function computeCap(tasa,inst){
+    if(!renta||!plazo||tasa<=0) return {s:'pend',d:'Ingrese renta, plazo y tasa.',uf:0,clp:0,div:0};
+    var mD25,mD50;
+    if(inst==='cp'){
+      mD25=codOpt==='no'?renta*0.25:esFam?rentaT*0.25:Math.min(rentaT*0.25,renta*0.50);
+      mD50=codOpt==='no'?renta*0.50-otras:esFam?rentaT*0.50-otras:Math.min(rentaT*0.50,renta*0.60)-otras;
+    } else {
+      mD25=codOpt==='no'?renta*0.25:rentaT*0.25;
+      mD50=codOpt==='no'?renta*0.50-otras:rentaT*0.50-otras;
+    }
+    var maxDiv=Math.min(mD25,mD50);
+    if(maxDiv<=0) return {s:'no',d:'Deudas actuales ('+fmt(otras)+') agotan la capacidad de pago.',uf:0,clp:0,div:0};
+    var r=tasa/100/12,n=plazo*12;
+    var uf=maxDiv/ufClp/((r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1));
+    return {s:'ok',d:'',uf:uf,clp:uf*ufClp,div:maxDiv};
+  }
+
+  var cpCap=computeCap(tasaCP,'cp');
+  var auCap=computeCap(tasaAU,'au');
+
+  /* Austral: LTV 90% + minimo 600 UF */
+  var auUF=auCap.uf;
+  if(auCap.s==='ok'&&valorProp>0) auUF=Math.min(auUF,valorProp*0.90);
+  var auFinal={s:auCap.s,d:auCap.d,uf:auUF,clp:auUF*ufClp,div:auCap.div};
+  if(auCap.s==='ok'){
+    if(auUF>0&&auUF<600){
+      auFinal={s:'no',d:'Capacidad ('+Math.round(auUF).toLocaleString(LOC)+' UF) inferior al m\u00ednimo de 600 UF.',uf:0,clp:0,div:0};
+    } else {
+      auFinal.d='Div. m\u00e1x. '+fmt(auCap.div)+' \u2192 '+Math.round(auUF).toLocaleString(LOC)+' UF ('+fmt(auUF*ufClp)+')';
+    }
+  }
+  if(cpCap.s==='ok'){
+    cpCap.d='Div. m\u00e1x. '+fmt(cpCap.div)+' \u2192 '+Math.round(cpCap.uf).toLocaleString(LOC)+' UF ('+fmt(cpCap.clp)+')';
+  }
+
+  crits.push({n:'Capacidad de financiamiento',
+    cp:{s:cpCap.s,d:cpCap.d},
+    au:{s:auFinal.s,d:auFinal.d}
+  });
+
+  /* RENDER CRITERIOS */
   var lista=document.getElementById('crit-lista');
-  while(lista.firstChild){lista.removeChild(lista.firstChild);}
-  crit.forEach(function(c){
+  while(lista.firstChild) lista.removeChild(lista.firstChild);
+  crits.forEach(function(c){
     var row=document.createElement('div'); row.className='crit';
-    var ico=document.createElement('div'); ico.className='crit-ico'; ico.textContent=ICONS[c.s];
-    var wrap=document.createElement('div');
+    var icoCP=document.createElement('div'); icoCP.className='crit-ico'; icoCP.textContent=ICONS[c.cp.s];
+    var body=document.createElement('div'); body.className='crit-body';
     var nom=document.createElement('div'); nom.className='crit-nom'; nom.textContent=c.n;
-    var det=document.createElement('div'); det.className='crit-det'+(c.s==='no'?' bad':''); det.textContent=c.d;
-    wrap.appendChild(nom); wrap.appendChild(det);
-    row.appendChild(ico); row.appendChild(wrap);
+    body.appendChild(nom);
+    if(c.cp.d===c.au.d){
+      var det=document.createElement('div');
+      det.className='crit-det'+(c.cp.s==='no'?' bad':'');
+      det.textContent=c.cp.d;
+      body.appendChild(det);
+    } else {
+      [['cp','CP'],['au','AU']].forEach(function(pair){
+        var inst=pair[0],lbl=pair[1];
+        if(!c[inst].d||c[inst].d==='\u2014') return;
+        var r2=document.createElement('div'); r2.className='crit-det-row';
+        var lb=document.createElement('span'); lb.className='crit-det-lbl '+inst+'-lbl'; lb.textContent=lbl+':';
+        var tx=document.createElement('span'); tx.className='crit-det-txt'+(c[inst].s==='no'?' bad':'');
+        tx.textContent=c[inst].d;
+        r2.appendChild(lb); r2.appendChild(tx);
+        body.appendChild(r2);
+      });
+    }
+    var icoAU=document.createElement('div'); icoAU.className='crit-ico'; icoAU.textContent=ICONS[c.au.s];
+    row.appendChild(icoCP); row.appendChild(body); row.appendChild(icoAU);
     lista.appendChild(row);
   });
 
-  var nOk=crit.filter(function(c){return c.s==='ok';}).length;
-  var nNo=crit.filter(function(c){return c.s==='no';}).length;
-  var nPend=crit.filter(function(c){return c.s==='pend';}).length;
-  document.getElementById('tag-ok').textContent=nOk+' OK';
-  document.getElementById('tag-no').textContent=nNo+' falla'+(nNo!==1?'n':'');
-  document.getElementById('tag-pend').textContent=nPend+' pendiente'+(nPend!==1?'s':'');
-  document.getElementById('resumen').style.display='flex';
+  /* CONTEOS */
+  function count(arr,s){return arr.filter(function(c){return c.s===s;}).length;}
+  var cpStats=crits.map(function(c){return c.cp;});
+  var auStats=crits.map(function(c){return c.au;});
+  var cpOk=count(cpStats,'ok'),cpNo=count(cpStats,'no'),cpPend=count(cpStats,'pend');
+  var auOk=count(auStats,'ok'),auNo=count(auStats,'no'),auPend=count(auStats,'pend');
 
-  // Card principal
-  var card=document.getElementById('main-card');
-  var badge=document.getElementById('estado-badge');
-  var ufBig=document.getElementById('uf-big');
-  var ufLbl=document.getElementById('uf-label');
-  var clpBig=document.getElementById('clp-big');
-  var finMeta=document.getElementById('fin-meta');
-  var statusMsg=document.getElementById('status-msg');
+  document.getElementById('cp-tag-ok').textContent=cpOk+' OK';
+  document.getElementById('cp-tag-no').textContent=cpNo+' falla'+(cpNo!==1?'n':'');
+  document.getElementById('cp-tag-pend').textContent=cpPend+' pend.';
+  document.getElementById('au-tag-ok').textContent=auOk+' OK';
+  document.getElementById('au-tag-no').textContent=auNo+' falla'+(auNo!==1?'n':'');
+  document.getElementById('au-tag-pend').textContent=auPend+' pend.';
+  document.getElementById('dual-summary').style.display='grid';
 
-  if(nPend>0){
-    card.className='main-card pend';
-    badge.textContent='\u25CF Datos incompletos';
-    ufBig.innerHTML='';
-    ufLbl.textContent='';
-    clpBig.textContent='Completa el formulario para calcular el cr\u00e9dito m\u00e1ximo.';
-    finMeta.textContent=nPend+' campo'+(nPend>1?'s':'')+' pendiente'+(nPend>1?'s':'')+'...';
-    statusMsg.textContent='';
-  }else if(nNo===0){
-    card.className='main-card ok';
-    badge.textContent='\u2714 Califica';
-    ufBig.textContent=maxUFval>0?Math.round(maxUFval).toLocaleString(LOC):'--';
-    ufLbl.textContent='UF de cr\u00e9dito m\u00e1ximo';
-    clpBig.textContent=maxCLPval>0?fmt(maxCLPval):'';
-    finMeta.innerHTML=(maxDivVal>0?'Div. m\u00e1x. '+fmt(maxDivVal)+'/mes \u00b7 '+plazo+' a\u00f1os \u00b7 '+fmtTasa(tasa)+'%':'')+'<br><span style="font-size:.69rem;opacity:.5;font-weight:400">Valor cr\u00e9dito \u2260 valor propiedad</span>';
-    statusMsg.textContent='';
-  }else{
-    card.className='main-card no';
-    badge.textContent='\u2716 No califica';
-    ufBig.innerHTML='';
-    ufLbl.textContent='';
-    clpBig.textContent=nNo+' criterio'+(nNo>1?'s':'')+' no cumplido'+(nNo>1?'s':'')+'.';
-    finMeta.textContent='Revisa los requisitos en detalle.';
-    statusMsg.textContent='';
+  /* CARDS */
+  function setCard(pfx,nOk,nNo,nPend,uf,clp,div,tasa){
+    var card=document.getElementById(pfx+'-card');
+    var state=nPend>0?'pend':nNo===0?'ok':'no';
+    card.className='inst-card '+pfx+' '+state;
+    var badge=document.getElementById(pfx+'-badge');
+    var ufEl=document.getElementById(pfx+'-uf-big');
+    var clpEl=document.getElementById(pfx+'-clp');
+    var metaEl=document.getElementById(pfx+'-meta');
+    if(state==='pend'){
+      badge.textContent='\u25CF Datos incompletos';
+      ufEl.textContent='\u2014'; clpEl.textContent='Completa el formulario'; metaEl.innerHTML='';
+    } else if(state==='ok'){
+      badge.textContent='\u2714 Califica';
+      ufEl.textContent=uf>0?Math.round(uf).toLocaleString(LOC):'\u2014';
+      clpEl.textContent=clp>0?fmt(clp):'';
+      metaEl.innerHTML=div>0?'Div. m\u00e1x. '+fmt(div)+'/mes \u00b7 '+plazo+' a\u00f1os \u00b7 '+fmtTasa(tasa)+'%':'';
+    } else {
+      badge.textContent='\u2716 No califica';
+      ufEl.textContent='\u2014';
+      clpEl.textContent=nNo+' criterio'+(nNo>1?'s':'')+' no cumplido'+(nNo>1?'s':'');
+      metaEl.textContent='Revisa los requisitos en detalle.';
+    }
   }
+
+  setCard('cp',cpOk,cpNo,cpPend,cpCap.uf,cpCap.clp,cpCap.div,tasaCP);
+  setCard('au',auOk,auNo,auPend,auFinal.uf,auFinal.clp,auCap.div,tasaAU);
 }
 
 liveEval();
 
-/* ── UF EN VIVO ── */
+/* UF EN VIVO */
 async function fetchUF(){
   try{
     var res=await fetch('https://mindicador.cl/api/uf');
@@ -537,7 +750,7 @@ async function fetchUF(){
     var val=data.serie[0].valor;
     var fecha=new Date(data.serie[0].fecha);
     var dia=fecha.toLocaleDateString(LOC,{day:'2-digit',month:'2-digit'});
-    var label='('+dia+': '+fmt(val)+')';
+    var label='('+dia+': $ '+Math.round(val).toLocaleString(LOC)+')';
     document.getElementById('uf-clp').value=Math.round(val).toLocaleString(LOC);
     document.getElementById('uf-clp2').value=Math.round(val).toLocaleString(LOC);
     document.getElementById('uf-fecha').textContent=label;
