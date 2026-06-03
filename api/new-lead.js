@@ -184,7 +184,7 @@ export default async function handler(req, res) {
       </tr>`).join('')}
     </table>
     <div style="margin-top:22px;text-align:center">
-      <a href="https://wa.me/${waPhone || '56957823672'}"
+      <a href="https://wa.me/${waPhone || '56962078510'}"
          style="display:inline-block;background:#25D366;color:#fff;padding:13px 30px;border-radius:50px;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 4px 14px rgba(37,211,102,0.3)">
         💬 Contactar por WhatsApp
       </a>
