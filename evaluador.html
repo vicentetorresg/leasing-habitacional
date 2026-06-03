@@ -431,7 +431,6 @@ function doLogout(){
   document.getElementById('login-view').style.display='flex';
   document.getElementById('lp').value='';
 }
-if(localStorage.getItem('lp_auth')==='1') showApp();
 
 /* REACTIVE */
 function onDicom(){document.getElementById('dicom-sub').classList.toggle('on',document.querySelector('input[name="dicom"]:checked').value==='si');}
@@ -740,8 +739,6 @@ function liveEval(){
   setCard('au',auOk,auNo,auPend,auFinal.uf,auFinal.clp,auCap.div,tasaAU);
 }
 
-liveEval();
-
 /* UF EN VIVO */
 async function fetchUF(){
   try{
@@ -762,6 +759,9 @@ async function fetchUF(){
   }
 }
 fetchUF();
+
+/* Iniciar sesion guardada — al final, cuando todas las vars ya estan inicializadas */
+if(localStorage.getItem('lp_auth')==='1') showApp();
 </script>
 </body>
 </html>
