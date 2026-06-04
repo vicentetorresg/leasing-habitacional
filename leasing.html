@@ -1027,6 +1027,13 @@ footer{background:var(--navy);padding:56px 40px 28px}
         '<a href="' + waHref + '" class="f-wa-btn" target="_blank" rel="noopener" style="margin-top:4px">' + WA_SVG + ' Escribir por WhatsApp</a>';
       ok.style.display = 'flex';
     });
+    // Scroll suave al hero card para que quede visible completo
+    setTimeout(function() {
+      var hfc = document.getElementById('hfc');
+      if (!hfc) return;
+      var top = hfc.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    }, 120);
   }
 
   document.addEventListener('DOMContentLoaded', function() {
