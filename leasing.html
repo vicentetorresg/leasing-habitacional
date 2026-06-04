@@ -929,7 +929,6 @@ footer{background:var(--navy);padding:56px 40px 28px}
     const r = document.getElementById(prefix+'-r');
     if (r && (!r.value || r.value === 'Menos de $700.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $700.000).'); return; }
     saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, fuente:src});
-    localStorage.setItem('lp_submitted', n);
     markAllFormsSubmitted(n);
   }
 
@@ -953,7 +952,6 @@ footer{background:var(--navy);padding:56px 40px 28px}
     const r = document.getElementById(prefix+'-r');
     if (r && (!r.value || r.value === 'Menos de $700.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $700.000).'); return; }
     saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:cf.value, vivienda:viv.value, fuente:src||prefix});
-    localStorage.setItem('lp_submitted', n);
     markAllFormsSubmitted(n);
   }
 
@@ -1034,8 +1032,6 @@ footer{background:var(--navy);padding:56px 40px 28px}
   document.addEventListener('DOMContentLoaded', function() {
     fillFields();
     watchFields();
-    var sub = localStorage.getItem('lp_submitted');
-    if (sub) markAllFormsSubmitted(sub);
   });
 </script>
 <script>
