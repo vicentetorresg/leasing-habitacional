@@ -144,7 +144,7 @@ const Admin = () => {
         </div>
         <div className="flex items-center gap-4">
           <NavLink to="/executive" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Ejecutiva</NavLink>
-          <NavLink to="/advisor" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Asesorías</NavLink>
+          <NavLink to="/advisor" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Seguimiento</NavLink>
           <NavLink to="/backoffice" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Backoffice</NavLink>
           <UserMenu fullName={demoDisplayName} email={currentUser?.email ?? ''} roleLabel={roleLabel} onSignOut={signOut} />
         </div>

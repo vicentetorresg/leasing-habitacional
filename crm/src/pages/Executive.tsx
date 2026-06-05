@@ -494,7 +494,7 @@ const Executive = () => {
             />
           )}
           <NavLink data-tour="nav-advisor" to="/advisor" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            Asesorías
+            Seguimiento
           </NavLink>
           <UserMenu
             fullName={demoDisplayName}

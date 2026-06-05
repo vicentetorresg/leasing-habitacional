@@ -33,7 +33,7 @@ function MockExecutiveView() {
               2
             </span>
           </div>
-          <span className="text-gray-500 text-[10px] font-bold">Asesorías</span>
+          <span className="text-gray-500 text-[10px] font-bold">Seguimiento</span>
           <div className="w-6 h-6 rounded-full bg-orange-500 text-white flex items-center justify-center text-[10px] font-black">
             JC
           </div>
@@ -276,7 +276,7 @@ function MockAdvisorKanban() {
           <span className="font-black text-orange-600 text-sm">LeadFlash</span>
           <span className="text-gray-400 text-[10px] font-bold ml-2">Telemarketing</span>
           <span className="text-orange-600 text-[10px] font-black border-b-2 border-orange-500 pb-0.5 ml-1">
-            Asesorías
+            Seguimiento
           </span>
         </div>
         <div className="flex items-center gap-2">
