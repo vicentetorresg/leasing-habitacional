@@ -4,7 +4,7 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/crm/",
+  base: "/crm-dist/",
   build: {
     outDir: "../crm-dist",
     emptyOutDir: true,

@@ -3,7 +3,7 @@
   "rewrites": [
     { "source": "/flujo-operacional", "destination": "/flujo-operacional.html" },
     { "source": "/crm", "destination": "/crm-dist/index.html" },
-    { "source": "/crm/(.*)", "destination": "/crm-dist/$1" }
+    { "source": "/crm/:path*", "destination": "/crm-dist/index.html" }
   ],
   "headers": [
     {
