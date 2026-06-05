@@ -336,7 +336,7 @@ function emailNoContestoManual(firstName: string) {
     ${divider()}
     <p style="margin:0;font-size:14px;color:#475569;line-height:1.6;">
       Saludos,<br/>
-      <strong style="color:#0F172A;">Katherine Loyola</strong><br/>
+      <strong style="color:#0F172A;">Katherine D.</strong><br/>
       <span style="color:#64748B;">Llave Propia · Leasing Habitacional</span>
     </p>
   `;
@@ -368,7 +368,7 @@ function emailClienteInteresadoManual(firstName: string) {
     ${divider()}
     <p style="margin:0;font-size:14px;color:#475569;line-height:1.6;">
       ¡Gracias!<br/>
-      <strong style="color:#0F172A;">Katherine Loyola</strong><br/>
+      <strong style="color:#0F172A;">Katherine D.</strong><br/>
       <span style="color:#64748B;">Llave Propia · Leasing Habitacional</span>
     </p>
   `;
