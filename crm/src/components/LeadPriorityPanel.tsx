@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import LeadDocuments from '@/components/LeadDocuments';
 import type { Lead } from '@/hooks/useLeads';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -612,11 +613,6 @@ const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, animationKey,
 
   const handleAction = async (action: string) => {
     if (!lead) return;
-    if (action === 'scheduled') {
-      setShowManualCallInfo(false);
-      setShowAdvisorDialog(true);
-      return;
-    }
     setShowManualCallInfo(false);
     await onAction(lead.id, action, undefined, callNotesRef.current || undefined);
     callNotesRef.current = '';
@@ -655,8 +651,11 @@ const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, animationKey,
 
   const statusBadge = (() => {
     const map: Record<string, { label: string; style: string }> = {
-      new: { label: '🆕 Nuevo', style: 'bg-primary/15 text-primary' },
-      first_call: { label: '1️⃣ Primer llamado', style: 'bg-warning/15 text-warning' },
+      nuevo: { label: '🆕 Nuevo', style: 'bg-primary/15 text-primary' },
+      contactado: { label: '✅ Contactado', style: 'bg-success/15 text-success' },
+      recontactar: { label: '🔄 Recontactar', style: 'bg-warning/15 text-warning' },
+      no_contesta: { label: '📵 No Contesta', style: 'bg-accent/15 text-accent' },
+      no_califica: { label: '🚫 No Califica', style: 'bg-muted text-muted-foreground' },
       second_call: { label: '2️⃣ Segundo llamado', style: 'bg-accent/15 text-accent' },
       scheduled: { label: '✅ Agendado', style: 'bg-success/15 text-success' },
       asesoria_agendada: { label: '✅ Agendado', style: 'bg-success/15 text-success' },
@@ -929,20 +928,13 @@ const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, animationKey,
         {isDemo && <DemoCallDialog open={showDemoCall} onClose={() => setShowDemoCall(false)} phone={lead.phone} />}
 
         {/* Action Buttons */}
-        {role === 'recicladora' ? (
-          <div className="grid grid-cols-1 gap-1.5">
-            <ActionButton onClick={() => handleAction('scheduled')} emoji="📅" label="Agendar Asesoría" variant="success" />
-          </div>
-        ) : (
-          <div data-tour="action-buttons" className="grid grid-cols-3 gap-1.5">
-            <ActionButton onClick={() => handleAction('scheduled')} emoji="📅" label="Agendado" variant="success" />
-            <ActionButton onClick={() => handleAction('no_qualify')} emoji="🚫" label="No Califica" variant="muted" />
-            <ActionButton onClick={() => handleAction('first_call')} emoji="1️⃣" label="1er Llamado" variant="warning" />
-            <ActionButton onClick={() => handleAction('second_call')} emoji="2️⃣" label="2do Llamado" variant="accent" />
-            <ActionButton onClick={() => handleAction('bad_number')} emoji="❌" label="Nro Malo / No Invierte" variant="destructive" />
-            <ActionButton onClick={() => handleAction('reciclado')} emoji="♻️" label="Reciclado" variant="muted" />
-          </div>
-        )}
+        <div data-tour="action-buttons" className="grid grid-cols-3 gap-1.5">
+          <ActionButton onClick={() => handleAction('contactado')} emoji="✅" label="Contactado" variant="success" />
+          <ActionButton onClick={() => handleAction('recontactar')} emoji="🔄" label="Recontactar" variant="warning" />
+          <ActionButton onClick={() => handleAction('no_contesta')} emoji="📵" label="No Contesta" variant="accent" />
+          <ActionButton onClick={() => handleAction('no_califica')} emoji="🚫" label="No Califica" variant="muted" />
+          <ActionButton onClick={() => handleAction('cliente_interesado')} emoji="⭐" label="Cliente Interesado" variant="success" />
+        </div>
 
         {/* Tasks Section */}
         <div className="mt-3 space-y-1.5">
@@ -980,6 +972,11 @@ const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, animationKey,
             onDelete={deleteTask}
             compact
           />
+        </div>
+
+        {/* Gestor Documental */}
+        <div className="border-t border-border pt-3 mt-3">
+          <LeadDocuments leadId={lead.id} />
         </div>
       </div>
 

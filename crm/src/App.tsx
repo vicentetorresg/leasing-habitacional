@@ -36,11 +36,8 @@ function AppRoutes() {
   if (!user) {
     return (
       <Routes>
-        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/demo" element={<Demo />} />
-        <Route path="/mailing-oportunidad" element={<MailingOportunidad />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     );
   }

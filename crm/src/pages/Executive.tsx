@@ -135,8 +135,8 @@ const Executive = () => {
 
   // Metrics
   const totalToday = todayLeads.length;
-  const answered = todayLeads.filter(l => l.status === 'scheduled' || l.status === 'asesoria_agendada' || l.status === 'disqualified' || l.status === 'answered' || l.status === 'done').length;
-  const noAnswer = todayLeads.filter(l => l.status === 'first_call' || l.status === 'second_call').length;
+  const answered = todayLeads.filter(l => l.status === 'contactado' || l.status === 'cliente_interesado' || l.status === 'solicitando_documentos').length;
+  const noAnswer = todayLeads.filter(l => l.status === 'recontactar' || l.status === 'no_contesta').length;
   const contactRate = totalToday > 0 ? Math.round((answered / totalToday) * 100) : 0;
 
   const handleNewLead = useCallback((lead: Lead) => {
@@ -204,7 +204,7 @@ const Executive = () => {
     // Reset to new — just update status, no call attempt
     if (action === 'new') {
       await supabase.from('leads').update({
-        status: 'new',
+        status: 'nuevo',
         advisor_id: null,
         last_attempt_at: null
       }).eq('id', leadId);
@@ -217,37 +217,30 @@ const Executive = () => {
     let outcome = action;
 
     switch (action) {
-      case 'scheduled':
-        status = 'asesoria_agendada';
-        outcome = 'scheduled';
+      case 'cliente_interesado':
+        status = 'solicitando_documentos';
+        outcome = 'cliente_interesado';
         break;
-      case 'no_qualify':
-        status = 'disqualified';
-        outcome = 'no_qualify';
+      case 'no_califica':
+        status = 'no_califica';
+        outcome = 'no_califica';
         break;
-      case 'first_call':
-        status = 'first_call';
-        outcome = 'first_call';
+      case 'contactado':
+        status = 'contactado';
+        outcome = 'contactado';
         break;
-      case 'second_call':
-        status = 'second_call';
-        outcome = 'second_call';
+      case 'recontactar':
+        status = 'recontactar';
+        outcome = 'recontactar';
         break;
-      case 'bad_number':
-        status = 'bad_number';
-        outcome = 'bad_number';
-        break;
-      case 'reciclado':
-        status = 'reciclado';
-        outcome = 'reciclado';
+      case 'no_contesta':
+        status = 'no_contesta';
+        outcome = 'no_contesta';
         break;
     }
 
-    // Combine assignment + status in a single update to avoid triggering
-    // a realtime UPDATE with status still 'new'
     const lead = leads.find(l => l.id === leadId);
     const updateData: any = { status, last_attempt_at: new Date().toISOString() };
-    if (status === 'asesoria_agendada') updateData.scheduled_at = new Date().toISOString();
     // Recicladora siempre toma posesión del lead para poder editarlo después
     if (lead && (!lead.assigned_to || isRecicladora)) updateData.assigned_to = user.id;
     if (advisorId) updateData.advisor_id = advisorId;
@@ -363,7 +356,7 @@ const Executive = () => {
       name,
       phone,
       source: 'demo',
-      status: 'new',
+      status: 'nuevo',
       priority: 'media',
       is_demo: true,
       sueldo_liquido_raw: `${(800 + Math.floor(Math.random() * 1200)) * 1000} a ${(1500 + Math.floor(Math.random() * 1000)) * 1000}`,
@@ -655,7 +648,7 @@ const Executive = () => {
                   name: newLeadName.trim(),
                   phone,
                   source: 'manual',
-                  status: 'new',
+                  status: 'nuevo',
                   priority: 'media',
                   is_demo: false,
                   assigned_to: user?.id,

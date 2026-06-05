@@ -37,8 +37,8 @@ export interface Lead {
   camila_notes_hidden_since: string | null;
 }
 
-// Statuses that mean the lead is still pending
-const PENDING_STATUSES = ['new', 'first_call', 'second_call', 'calling'];
+// Statuses that mean the lead is still pending (ejecutiva view)
+const PENDING_STATUSES = ['nuevo', 'recontactar', 'no_contesta'];
 
 export function useLeads(userId?: string, isAdmin?: boolean, userEmail?: string, isRecicladora?: boolean) {
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -55,31 +55,19 @@ export function useLeads(userId?: string, isAdmin?: boolean, userEmail?: string,
       .eq('is_demo', isDemo)
       .order('created_at', { ascending: false });
 
-    if (isRecicladora) {
-      // Recicladora ve TODOS los leads reciclados (de cualquier ejecutiva)
-      query = query.eq('status', 'reciclado');
-    } else if (!isAdmin && userId) {
-      // Ejecutivas solo ven sus propios leads; admin ve todos
-      query = query.eq('assigned_to', userId);
+    // Ejecutiva pipeline statuses (shown in executive view)
+    const EJECUTIVA_STATUSES = ['nuevo', 'contactado', 'recontactar', 'no_contesta', 'no_califica'];
+
+    if (!isAdmin && userId) {
+      // Ejecutiva ve solo sus leads y solo los del pipeline ejecutiva
+      query = query.eq('assigned_to', userId).in('status', EJECUTIVA_STATUSES);
+    } else if (isAdmin) {
+      // Admin en vista ejecutiva ve todos los leads del pipeline ejecutiva
+      query = query.in('status', EJECUTIVA_STATUSES);
     }
 
     const { data } = await query;
     if (data) {
-      // Auto-revert stale "calling" leads (>3 min old) back to previous status
-      const now = Date.now();
-      const staleCallingLeads = data.filter(l => 
-        l.status === 'calling' && 
-        l.status_changed_at && 
-        (now - new Date(l.status_changed_at).getTime()) > 3 * 60 * 1000
-      );
-      if (staleCallingLeads.length > 0) {
-        for (const sl of staleCallingLeads) {
-          // Revert to previous_status; if unknown, use 'first_call' for leads that have been attempted
-          const revertStatus = sl.previous_status || (sl.last_attempt_at ? 'first_call' : 'new');
-          await supabase.from('leads').update({ status: revertStatus, previous_status: null }).eq('id', sl.id);
-          sl.status = revertStatus;
-        }
-      }
       setLeads(data as Lead[]);
     }
     setLoading(false);

@@ -19,13 +19,17 @@ interface LeadsTableProps {
 
 const STATUS_FILTER_OPTIONS = [
   { value: 'all', label: 'Todos' },
-  { value: 'new', label: '🆕 Nuevos' },
-  { value: 'first_call', label: '1️⃣ 1er Llamado' },
-  { value: 'second_call', label: '2️⃣ 2do Llamado' },
-  { value: 'asesoria_agendada', label: '✅ Agendados' },
-  { value: 'disqualified', label: '🚫 No Califica' },
-  { value: 'bad_number', label: '❌ Nro Malo / No Invierte' },
-  { value: 'reciclado', label: '♻️ Reciclado' },
+  { value: 'nuevo', label: '🆕 Nuevo' },
+  { value: 'contactado', label: '✅ Contactado' },
+  { value: 'recontactar', label: '🔄 Recontactar' },
+  { value: 'no_contesta', label: '📵 No Contesta' },
+  { value: 'no_califica', label: '🚫 No Califica' },
+  { value: 'solicitando_documentos', label: '📋 Solicitando Documentos' },
+  { value: 'enviado_a_evaluar', label: '📤 Enviado a Evaluar' },
+  { value: 'aprobado', label: '✅ Aprobado' },
+  { value: 'buscando_vivienda', label: '🏠 Buscando Vivienda' },
+  { value: 'cbr_listo', label: '🎉 CBR Listo' },
+  { value: 'rechazado', label: '❌ Rechazado' },
 ];
 
 function formatSource(source: string): string {
@@ -42,21 +46,20 @@ function formatSueldo(lead: Lead): string {
 }
 
 const statusConfig: Record<string, { label: string; style: string }> = {
-  new: { label: '🆕 Nuevo', style: 'bg-primary/15 text-primary' },
-  calling: { label: '📞 Llamando', style: 'bg-primary/15 text-primary animate-pulse' },
-  first_call: { label: '1️⃣ 1er', style: 'bg-warning/15 text-warning' },
-  second_call: { label: '2️⃣ 2do', style: 'bg-accent/15 text-accent' },
-  scheduled: { label: '✅ Agend.', style: 'bg-success/15 text-success' },
-  asesoria_agendada: { label: '✅ Agend.', style: 'bg-success/15 text-success' },
-  recontactar: { label: '✅ Agend.', style: 'bg-success/15 text-success' },
-  asesoria_concretada: { label: '✅ Agend.', style: 'bg-success/15 text-success' },
-  plan_presentado: { label: '✅ Agend.', style: 'bg-success/15 text-success' },
-  departamento_reservado: { label: '✅ Agend.', style: 'bg-success/15 text-success' },
-  departamento_cerrado: { label: '✅ Agend.', style: 'bg-success/15 text-success' },
-  cierres: { label: '✅ Agend.', style: 'bg-success/15 text-success' },
-  disqualified: { label: '🚫 No cal.', style: 'bg-muted text-muted-foreground' },
-  bad_number: { label: '❌ Nro Malo/No Inv.', style: 'bg-destructive/15 text-destructive' },
-  reciclado: { label: '♻️ Reciclado', style: 'bg-emerald-500/15 text-emerald-600' },
+  nuevo: { label: '🆕 Nuevo', style: 'bg-primary/15 text-primary' },
+  contactado: { label: '✅ Contactado', style: 'bg-success/15 text-success' },
+  recontactar: { label: '🔄 Recontactar', style: 'bg-warning/15 text-warning' },
+  no_contesta: { label: '📵 No Contesta', style: 'bg-accent/15 text-accent' },
+  no_califica: { label: '🚫 No Califica', style: 'bg-muted text-muted-foreground' },
+  solicitando_documentos: { label: '📋 Sol. Docs', style: 'bg-primary/15 text-primary' },
+  enviado_a_evaluar: { label: '📤 Evaluando', style: 'bg-yellow-500/15 text-yellow-600' },
+  aprobado: { label: '✅ Aprobado', style: 'bg-success/15 text-success' },
+  buscando_vivienda: { label: '🏠 Buscando', style: 'bg-blue-500/15 text-blue-600' },
+  set_hipotecario_firmado: { label: '✍️ Set Firmado', style: 'bg-violet-500/15 text-violet-600' },
+  escritura_firmada: { label: '📜 Escritura', style: 'bg-indigo-500/15 text-indigo-600' },
+  cbr_listo: { label: '🎉 CBR Listo', style: 'bg-emerald-500/15 text-emerald-600' },
+  rechazado: { label: '❌ Rechazado', style: 'bg-destructive/15 text-destructive' },
+  archivado: { label: '📦 Archivado', style: 'bg-muted text-muted-foreground' },
 };
 
 const PAGE_SIZE = 100;

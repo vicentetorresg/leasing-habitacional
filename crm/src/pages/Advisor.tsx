@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import LeadDocuments from '@/components/LeadDocuments';
 import EmailButtonsComponent from '@/components/EmailButtons';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -62,16 +63,18 @@ function formatSueldoShort(lead: Lead): string {
 }
 
 const ADVISOR_STATUSES = [
-  { key: 'asesoria_agendada', label: 'Asesoría Agendada', emoji: '📅', color: 'bg-primary/15 border-primary/30' },
-  { key: 'recontactar', label: 'No se conectó, recontactar', emoji: '🔄', color: 'bg-yellow-500/15 border-yellow-500/30' },
-  { key: 'asesoria_concretada', label: 'Asesoría Concretada', emoji: '✅', color: 'bg-green-500/15 border-green-500/30' },
-  { key: 'plan_presentado', label: 'Plan Presentado', emoji: '📋', color: 'bg-violet-500/15 border-violet-500/30' },
-  { key: 'departamento_reservado', label: 'Departamento Reservado', emoji: '🏠', color: 'bg-blue-500/15 border-blue-500/30' },
-  { key: 'cierres', label: 'Cierres', emoji: '🎉', color: 'bg-emerald-500/15 border-emerald-500/30' },
-  { key: 'archived', label: 'Archivado', emoji: '📦', color: 'bg-muted border-muted-foreground/20' },
+  { key: 'solicitando_documentos', label: 'Solicitando Documentos', emoji: '📋', color: 'bg-primary/15 border-primary/30' },
+  { key: 'enviado_a_evaluar', label: 'Enviado a Evaluar', emoji: '📤', color: 'bg-yellow-500/15 border-yellow-500/30' },
+  { key: 'aprobado', label: 'Aprobado', emoji: '✅', color: 'bg-green-500/15 border-green-500/30' },
+  { key: 'buscando_vivienda', label: 'Buscando Vivienda', emoji: '🏠', color: 'bg-blue-500/15 border-blue-500/30' },
+  { key: 'set_hipotecario_firmado', label: 'Set Hipotecario Firmado', emoji: '✍️', color: 'bg-violet-500/15 border-violet-500/30' },
+  { key: 'escritura_firmada', label: 'Escritura Firmada', emoji: '📜', color: 'bg-indigo-500/15 border-indigo-500/30' },
+  { key: 'cbr_listo', label: 'CBR Listo', emoji: '🎉', color: 'bg-emerald-500/15 border-emerald-500/30' },
+  { key: 'rechazado', label: 'Rechazado', emoji: '❌', color: 'bg-red-500/15 border-red-500/30' },
+  { key: 'archivado', label: 'Archivado', emoji: '📦', color: 'bg-muted border-muted-foreground/20' },
 ];
 
-const VISIBLE_STATUSES = ADVISOR_STATUSES.filter(s => s.key !== 'archived');
+const VISIBLE_STATUSES = ADVISOR_STATUSES.filter(s => s.key !== 'archivado');
 
 function downloadXlsx(leads: Lead[], filename: string) {
   const data = leads.map(l => ({
@@ -350,10 +353,10 @@ const Advisor = () => {
       email: newLeadData.email.trim() || null,
       rut: newLeadData.rut.trim() || null,
       sueldo_liquido_raw: newLeadData.sueldo_liquido_raw.trim() || null,
-      source: 'asesor',
-      status: 'asesoria_agendada',
+      source: 'manual',
+      status: 'solicitando_documentos',
       advisor_id: user.id,
-      assigned_to: null,
+      assigned_to: user.id,
       is_demo: isDemoUser,
       scheduled_at: new Date().toISOString(),
     });
@@ -414,7 +417,7 @@ const Advisor = () => {
   };
 
   // Filter leads: archived toggle, advisor filter, month filter, then search
-  const baseLeads = showArchived ? leads : leads.filter(l => l.status !== 'archived');
+  const baseLeads = showArchived ? leads : leads.filter(l => l.status !== 'archivado');
   const advisorFilteredLeads = filterAdvisor === 'all'
     ? baseLeads
     : baseLeads.filter(l => l.advisor_id === filterAdvisor);
@@ -461,8 +464,8 @@ const Advisor = () => {
 
   // My leads (for stats - only non-archived, respecting advisor filter)
   const myLeadsBase = isAdminOrEjecutiva
-    ? leads.filter(l => l.status !== 'archived')
-    : leads.filter(l => l.advisor_id === user?.id && l.status !== 'archived');
+    ? leads.filter(l => l.status !== 'archivado')
+    : leads.filter(l => l.advisor_id === user?.id && l.status !== 'archivado');
   const myLeads = filterAdvisor === 'all'
     ? myLeadsBase
     : myLeadsBase.filter(l => l.advisor_id === filterAdvisor);
@@ -864,7 +867,7 @@ const Advisor = () => {
                     <button
                       onClick={async (e) => {
                         e.stopPropagation();
-                        if (lead.status === 'archived') {
+                        if (lead.status === 'archivado') {
                           // Restore previous status
                           const restoreTo = lead.previous_status || 'asesoria_agendada';
                           await supabase.from('leads').update({ status: restoreTo, previous_status: null }).eq('id', lead.id);
@@ -872,15 +875,15 @@ const Advisor = () => {
                           fetchLeads();
                         } else {
                           // Archive: save current status
-                          await supabase.from('leads').update({ status: 'archived', previous_status: lead.status }).eq('id', lead.id);
+                          await supabase.from('leads').update({ status: 'archivado', previous_status: lead.status }).eq('id', lead.id);
                           toast.success('Archivado');
                           fetchLeads();
                         }
                       }}
                       className="text-xs px-1.5 py-0.5 rounded bg-muted hover:bg-destructive/20 text-muted-foreground hover:text-destructive"
-                      title={lead.status === 'archived' ? 'Desarchivar' : 'Archivar'}
+                      title={lead.status === 'archivado' ? 'Desarchivar' : 'Archivar'}
                     >
-                      {lead.status === 'archived' ? '📤' : '📦'}
+                      {lead.status === 'archivado' ? '📤' : '📦'}
                     </button>
                   </div>
                 </div>
@@ -1605,6 +1608,11 @@ function LeadDetailContent({
           onDelete={deleteTask}
           compact
         />
+      </div>
+
+      {/* Gestor Documental */}
+      <div className="border-t border-border pt-4 mt-4">
+        <LeadDocuments leadId={lead.id} />
       </div>
     </div>
   );
