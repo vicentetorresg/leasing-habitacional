@@ -41,7 +41,7 @@ serve(async (req) => {
 
     // Demo mode: redirect emails to fixed demo recipients
     const DEMO_EMAIL = 'demo@demo.cl';
-    const DEMO_RECIPIENTS = ['diego.sanchez@proppi.cl', 'vicente.torres@proppi.cl'];
+    const DEMO_RECIPIENTS: string[] = [];
     const isDemo = recipientEmail === DEMO_EMAIL;
     const finalRecipients = isDemo ? DEMO_RECIPIENTS : [recipientEmail];
 
@@ -52,7 +52,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Proppi CRM <notificaciones@proppi.cl>',
+        from: 'Llave Propia CRM <notificaciones@llavepropia.cl>',
         to: finalRecipients,
         subject: isDemo ? `[DEMO] ${subject}` : subject,
         html,

@@ -55,7 +55,7 @@ serve(async (req) => {
 
         // Demo mode: redirect emails to fixed demo recipients
         const DEMO_EMAIL = 'demo@demo.cl';
-        const DEMO_RECIPIENTS = ['diego.sanchez@proppi.cl', 'vicente.torres@proppi.cl'];
+        const DEMO_RECIPIENTS: string[] = [];
         const isDemo = userEmail === DEMO_EMAIL;
         const finalRecipients = isDemo ? DEMO_RECIPIENTS : [userEmail];
 
@@ -92,7 +92,7 @@ serve(async (req) => {
               ${leadHtml}
             </div>
             <p style="color: #888; font-size: 14px;">Tu tarea comienza ${reminderLabel}.</p>
-            <p style="color: #aaa; font-size: 12px;">— Proppi CRM</p>
+            <p style="color: #aaa; font-size: 12px;">— Llave Propia CRM</p>
           </div>
         </html>`;
 
@@ -103,7 +103,7 @@ serve(async (req) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: 'Proppi CRM <notificaciones@proppi.cl>',
+            from: 'Llave Propia CRM <notificaciones@llavepropia.cl>',
             to: finalRecipients,
             subject: isDemo ? `[DEMO] 🔔 Recordatorio: ${task.title}` : `🔔 Recordatorio: ${task.title}`,
             html,

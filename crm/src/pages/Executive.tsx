@@ -429,7 +429,7 @@ const Executive = () => {
               ➕ Nuevo Lead
             </button>
           )}
-          {!isDemo && (user?.email === 'susan.petersen@proppi.cl' || role === 'admin' || isRecicladora) && (
+          {!isDemo && (user?.email === 'katherine@llavepropia.cl' || role === 'admin' || isRecicladora) && (
             <button
               onClick={async () => {
                 const { data, error } = await supabase

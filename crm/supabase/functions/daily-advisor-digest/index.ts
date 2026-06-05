@@ -6,7 +6,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const CC_EMAIL = 'vicente.torres@proppi.cl';
+const CC_EMAILS = ['vicente.torres@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'];
 
 function daysSince(dateStr: string | null): number {
   if (!dateStr) return 999;
@@ -142,11 +142,11 @@ serve(async (req) => {
               </table>
               <div style="margin-top:24px;padding:16px;background:#fef3c7;border-radius:8px;border-left:4px solid #f59e0b;">
                 <p style="margin:0;color:#92400e;font-size:14px;font-weight:bold;">📌 Acción requerida</p>
-                <p style="margin:6px 0 0 0;color:#78350f;font-size:13px;">Ingresa a Proppi CRM y actualiza el estado de cada cliente. Los clientes estancados afectan tus métricas y el cierre de negocios.</p>
+                <p style="margin:6px 0 0 0;color:#78350f;font-size:13px;">Ingresa a Llave Propia CRM y actualiza el estado de cada cliente. Los clientes estancados afectan tus métricas y el cierre de negocios.</p>
               </div>
             </div>
             <div style="padding:16px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;">
-              <p style="margin:0;color:#9ca3af;font-size:12px;">— Proppi CRM · Este email se envía automáticamente cada día a las 10:00 AM</p>
+              <p style="margin:0;color:#9ca3af;font-size:12px;">— Llave Propia CRM · Este email se envía automáticamente cada día a las 10:00 AM</p>
             </div>
           </div>
         </body>
@@ -160,9 +160,9 @@ serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'Proppi CRM <notificaciones@proppi.cl>',
+          from: 'Llave Propia CRM <notificaciones@llavepropia.cl>',
           to: [userEmail],
-          cc: [CC_EMAIL],
+          cc: CC_EMAILS,
           subject: `${subjectEmoji} ${leads.length} cliente${leads.length !== 1 ? 's' : ''} estancado${leads.length !== 1 ? 's' : ''} – Acción requerida`,
           html,
         }),

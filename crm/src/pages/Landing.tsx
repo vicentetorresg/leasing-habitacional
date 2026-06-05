@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import proppiLogo from "@/assets/proppi-logo.png";
+import proppiLogo from "@/assets/proppi-logo.png"; // TODO: reemplazar por logo Llave Propia
 
 const WHATSAPP_URL = "https://wa.me/56994366697?text=Hola%2C%20me%20interesa%20LeadFlash";
 
@@ -328,7 +328,7 @@ const Landing = () => {
             </p>
             <p className="mt-2 text-xl font-black text-white">Operación comercial más ordenada, rápida y visible.</p>
           </div>
-          <img src={proppiLogo} alt="Proppi" className="h-16 rounded-xl bg-white/95 p-3 opacity-90" />
+          <img src={proppiLogo} alt="Llave Propia" className="h-16 rounded-xl bg-white/95 p-3 opacity-90" />
         </div>
       </section>
 

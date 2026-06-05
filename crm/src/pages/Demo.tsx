@@ -593,7 +593,7 @@ const slides: Slide[] = [
         </p>
         <div className="pt-6">
           <span className="px-8 py-4 bg-white text-orange-600 font-black text-xl rounded-2xl shadow-xl inline-block">
-            leadflash.cl
+            llavepropia.cl
           </span>
         </div>
       </div>

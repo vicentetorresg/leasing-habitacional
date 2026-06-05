@@ -6,7 +6,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const CC_EMAIL = 'vicente.torres@proppi.cl';
+const CC_EMAILS = ['vicente.torres@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'];
 
 interface Lead {
   id: string;
@@ -38,7 +38,7 @@ function buildEmail(lead: Lead): { subject: string; html: string } | null {
             </div>
             <div style="padding:28px 32px;color:#374151;">
               <p style="font-size:16px;line-height:1.6;">Hola <strong>${firstName}</strong>,</p>
-              <p style="font-size:15px;line-height:1.6;">Te escribimos de <strong>Proppi</strong> para recordarte que tienes una asesoría agendada sobre <strong>${proyecto}</strong>.</p>
+              <p style="font-size:15px;line-height:1.6;">Te escribimos de <strong>Llave Propia</strong> para recordarte que tienes una asesoría agendada sobre <strong>${proyecto}</strong>.</p>
               <p style="font-size:15px;line-height:1.6;">Queremos asegurarnos de que no se te pase. Tu asesor está preparado para resolver todas tus dudas y guiarte en el proceso.</p>
               <div style="margin:24px 0;padding:16px;background:#eef2ff;border-radius:8px;border-left:4px solid #4f46e5;">
                 <p style="margin:0;font-size:14px;color:#3730a3;font-weight:bold;">💡 ¿Qué preparar?</p>
@@ -52,7 +52,7 @@ function buildEmail(lead: Lead): { subject: string; html: string } | null {
               <p style="font-size:15px;line-height:1.6;">¡Te esperamos! 🏠</p>
             </div>
             <div style="padding:16px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;">
-              <p style="margin:0;color:#9ca3af;font-size:12px;">— Equipo Proppi · proppi.cl</p>
+              <p style="margin:0;color:#9ca3af;font-size:12px;">— Equipo Llave Propia · llavepropia.cl</p>
             </div>
           </div>
         </body>
@@ -80,7 +80,7 @@ function buildEmail(lead: Lead): { subject: string; html: string } | null {
               <p style="font-size:15px;line-height:1.6;">¡Estamos para ayudarte a encontrar tu hogar! 🏡</p>
             </div>
             <div style="padding:16px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;">
-              <p style="margin:0;color:#9ca3af;font-size:12px;">— Equipo Proppi · proppi.cl</p>
+              <p style="margin:0;color:#9ca3af;font-size:12px;">— Equipo Llave Propia · llavepropia.cl</p>
             </div>
           </div>
         </body>
@@ -108,7 +108,7 @@ function buildEmail(lead: Lead): { subject: string; html: string } | null {
               <p style="font-size:15px;line-height:1.6;">Quedamos atentos 📞</p>
             </div>
             <div style="padding:16px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;">
-              <p style="margin:0;color:#9ca3af;font-size:12px;">— Equipo Proppi · proppi.cl</p>
+              <p style="margin:0;color:#9ca3af;font-size:12px;">— Equipo Llave Propia · llavepropia.cl</p>
             </div>
           </div>
         </body>
@@ -171,9 +171,9 @@ serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'Proppi <notificaciones@proppi.cl>',
+          from: 'Llave Propia <notificaciones@llavepropia.cl>',
           to: [lead.email],
-          cc: [CC_EMAIL],
+          cc: CC_EMAILS,
           subject: emailData.subject,
           html: emailData.html,
         }),
@@ -188,7 +188,7 @@ serve(async (req) => {
         await supabase.from('email_queue').insert({
           lead_id: lead.id,
           email_to: lead.email!,
-          cc: [CC_EMAIL],
+          cc: CC_EMAILS,
           reply_to: [],
           subject: emailData.subject,
           html: emailData.html,

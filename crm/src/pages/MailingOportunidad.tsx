@@ -172,7 +172,7 @@ export default function MailingOportunidad() {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Proppi</title>
+  <title>Llave Propia</title>
 </head>
 <body style="margin:0;padding:0;background-color:#EEF0FB;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#EEF0FB;padding:36px 16px;">
@@ -238,8 +238,8 @@ export default function MailingOportunidad() {
               <table cellpadding="0" cellspacing="0">
                 <tr>
                   <td>
-                    <a href="https://proppi.cl" style="display:inline-block;background:linear-gradient(135deg,#4A5CB8,#7B8EDF);color:#ffffff;font-size:13px;font-weight:700;text-decoration:none;padding:11px 26px;border-radius:8px;letter-spacing:0.3px;">
-                      Visitar proppi.cl &rarr;
+                    <a href="https://llavepropia.cl" style="display:inline-block;background:linear-gradient(135deg,#4A5CB8,#7B8EDF);color:#ffffff;font-size:13px;font-weight:700;text-decoration:none;padding:11px 26px;border-radius:8px;letter-spacing:0.3px;">
+                      Visitar llavepropia.cl &rarr;
                     </a>
                   </td>
                 </tr>
@@ -254,10 +254,10 @@ export default function MailingOportunidad() {
                 <tr>
                   <td style="vertical-align:top;">
                     <p style="margin:0 0 3px;font-size:14px;font-weight:900;color:#8198E7;letter-spacing:1.5px;text-transform:uppercase;">PROPPI</p>
-                    <p style="margin:0 0 14px;font-size:11px;color:#6B7DD6;">proppi.cl</p>
+                    <p style="margin:0 0 14px;font-size:11px;color:#6B7DD6;">llavepropia.cl</p>
                     <p style="margin:0;font-size:11px;color:#4A5580;line-height:1.7;">
                       Recibiste este mensaje porque registraste tu inter&eacute;s en uno de nuestros proyectos.<br/>
-                      Consultas: <a href="mailto:contacto@proppi.cl" style="color:#8198E7;text-decoration:none;">contacto@proppi.cl</a>
+                      Consultas: <a href="mailto:contacto@llavepropia.cl" style="color:#8198E7;text-decoration:none;">contacto@llavepropia.cl</a>
                     </p>
                   </td>
                   <td align="right" valign="top" style="padding-left:16px;">
@@ -435,7 +435,7 @@ export default function MailingOportunidad() {
         </div>
         <div>
           <h1 className="text-sm font-black text-white leading-none">Mailing Oportunidad</h1>
-          <p className="text-[11px] text-slate-500 mt-0.5">LeadFlash · Proppi</p>
+          <p className="text-[11px] text-slate-500 mt-0.5">Llave Propia CRM</p>
         </div>
       </header>
 

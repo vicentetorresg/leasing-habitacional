@@ -6,9 +6,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const FROM      = 'Proppi <notificaciones@proppi.cl>';
-const CC_ADMIN  = 'vicente.torres@proppi.cl';
-const REPLY_TO  = 'vicente.torres@proppi.cl';
+const FROM      = 'Llave Propia <notificaciones@llavepropia.cl>';
+const CC_ADMINS = ['vicente.torres@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'];
+const REPLY_TO  = 'vicente.torres@llavepropia.cl';
 
 const ASESOR_PIPELINE = ['asesoria_agendada', 'recontactar', 'plan_presentado'];
 const EMAIL_STATUSES  = ['new', 'asesoria_agendada', 'recontactar', 'plan_presentado', 'no_contesto_manual', 'asesoria_agendada_manual'];
@@ -121,8 +121,8 @@ function baseTemplate({
                 <tr>
                   <td>
                     <div style="font-size:12px;color:#64748B;line-height:1.6;">
-                      Este mensaje fue enviado a ${firstName} desde <strong style="color:#0369A1;">Proppi CRM</strong>.<br/>
-                      <a href="https://proppi.cl" style="color:#0EA5E9;text-decoration:none;">proppi.cl</a> &nbsp;·&nbsp; notificaciones@proppi.cl
+                      Este mensaje fue enviado a ${firstName} desde <strong style="color:#0369A1;">Llave Propia CRM</strong>.<br/>
+                      <a href="https://llavepropia.cl" style="color:#0EA5E9;text-decoration:none;">llavepropia.cl</a> &nbsp;·&nbsp; notificaciones@llavepropia.cl
                     </div>
                   </td>
                   <td align="right" style="vertical-align:bottom;">
@@ -187,7 +187,7 @@ function stepsList(steps: { num: string; text: string }[]): string {
   return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0;">${rows}</table>`;
 }
 
-function ctaButton(text: string, url = 'https://proppi.cl'): string {
+function ctaButton(text: string, url = 'https://llavepropia.cl'): string {
   return `
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 8px;">
     <tr>
@@ -212,7 +212,7 @@ function emailBienvenida(firstName: string) {
   const body = `
     ${p(`Hola <strong>${firstName}</strong>,`)}
     ${p('Gracias por tu interés. Nos alegra que estés considerando invertir en bienes raíces, y queremos acompañarte en cada paso del camino.')}
-    ${infoBox('', '¿Qué es Proppi?', 'Somos una empresa especializada en inversión inmobiliaria en Chile. Te ayudamos a encontrar la propiedad ideal según tu perfil financiero, con asesoría personalizada y sin costo para ti.')}
+    ${infoBox('', '¿Qué es Llave Propia?', 'Somos una empresa especializada en inversión inmobiliaria en Chile. Te ayudamos a encontrar la propiedad ideal según tu perfil financiero, con asesoría personalizada y sin costo para ti.')}
     ${divider()}
     <div style="font-size:14px;font-weight:700;color:#0F172A;margin-bottom:4px;">¿Qué pasa ahora?</div>
     ${stepsList([
@@ -222,10 +222,10 @@ function emailBienvenida(firstName: string) {
     ])}
     ${divider()}
     ${p('Si tienes preguntas mientras tanto, puedes visitar nuestra web o respondernos directamente a este correo.')}
-    ${ctaButton('Conoce más en proppi.cl')}
+    ${ctaButton('Conoce más en llavepropia.cl')}
   `;
   return {
-    subject: `Bienvenido/a a Proppi, ${firstName}`,
+    subject: `Bienvenido/a a Llave Propia, ${firstName}`,
     html: baseTemplate({
       firstName,
       headerEmoji: '',
@@ -239,7 +239,7 @@ function emailBienvenida(firstName: string) {
 function emailAsesoriaAgendada(firstName: string, asesorName?: string | null) {
   const body = `
     ${p(`¡Hola <strong>${firstName}</strong>!`)}
-    ${p('Nos alegra confirmarte que tu asesoría con Proppi está agendada. Estás un paso más cerca de hacer realidad tu inversión.')}
+    ${p('Nos alegra confirmarte que tu asesoría con Llave Propia está agendada. Estás un paso más cerca de hacer realidad tu inversión.')}
     ${infoBox('', 'Link de la reunión', 'Revisa tu bandeja de entrada — te llegó una invitación de Google Calendar con el enlace de Google Meet para conectarte el día y hora acordados.')}
     ${divider()}
     <div style="font-size:14px;font-weight:700;color:#0F172A;margin-bottom:12px;">¿Qué veremos en la asesoría?</div>
@@ -252,7 +252,7 @@ function emailAsesoriaAgendada(firstName: string, asesorName?: string | null) {
     ${p('Si necesitas reprogramar, no dudes en responder este correo o contactar directamente a tu asesor.')}
   `;
   return {
-    subject: `Tu asesoría con Proppi está confirmada`,
+    subject: `Tu asesoría con Llave Propia está confirmada`,
     html: baseTemplate({
       firstName,
       headerEmoji: '',
@@ -264,7 +264,7 @@ function emailAsesoriaAgendada(firstName: string, asesorName?: string | null) {
 }
 
 function emailRecontactar(firstName: string, asesorName?: string | null) {
-  const firmante = asesorName ?? 'El equipo Proppi';
+  const firmante = asesorName ?? 'El equipo Llave Propia';
   const body = `
     ${p(`Hola <strong>${firstName}</strong>,`)}
     ${p('Intentamos contactarte pero no pudimos comunicarnos. Queremos asegurarnos de que tengas toda la información sobre las oportunidades de inversión que tenemos para ti.')}
@@ -272,12 +272,12 @@ function emailRecontactar(firstName: string, asesorName?: string | null) {
     ${divider()}
     ${p('Si quieres que te llamemos en otro horario, simplemente responde este correo indicando cuándo te viene bien. Nos adaptamos a tus tiempos.')}
     ${p('También puedes escribirnos directamente si prefieres coordinar por esta vía.')}
-    ${ctaButton('Escríbenos a proppi.cl')}
+    ${ctaButton('Escríbenos a llavepropia.cl')}
     ${divider()}
     <p style="margin:0;font-size:14px;color:#475569;line-height:1.6;">
       Saludos,<br/>
       <strong style="color:#0F172A;">${firmante}</strong><br/>
-      <span style="color:#64748B;">Proppi · Inversión Inmobiliaria</span>
+      <span style="color:#64748B;">Llave Propia · Leasing Habitacional</span>
     </p>
   `;
   return {
@@ -296,19 +296,19 @@ function emailPlanPresentado(firstName: string, proyecto?: string | null, asesor
   const proyectoLinea = proyecto
     ? `<p style="margin:0 0 16px;font-size:15px;color:#1E3A5F;line-height:1.65;">Ya revisaste los números de <strong style="color:#0369A1;">${proyecto}</strong> junto a tu asesor. Ahora queremos asegurarnos de que tengas todo claro para dar el siguiente paso con confianza.</p>`
     : `<p style="margin:0 0 16px;font-size:15px;color:#1E3A5F;line-height:1.65;">Ya revisaste los números y flujos de tu inversión junto a tu asesor. Ahora queremos asegurarnos de que tengas todo claro para dar el siguiente paso con confianza.</p>`;
-  const firmante = asesorName ?? 'Tu asesor Proppi';
+  const firmante = asesorName ?? 'Tu asesor Llave Propia';
   const body = `
     ${p(`Hola <strong>${firstName}</strong>,`)}
     ${proyectoLinea}
     ${infoBox('', 'Recuerda que tu plan incluye', 'La propuesta detallada con valores, financiamiento y retorno estimado queda a tu disposición. Tu asesor puede resolver cualquier duda que tengas.')}
     ${divider()}
     ${infoBox('', '¿Tienes preguntas?', 'Responde directamente este correo o comunícate con tu asesor. Estamos para acompañarte en cada detalle antes de tomar una decisión.')}
-    ${ctaButton('Escríbenos a proppi.cl')}
+    ${ctaButton('Escríbenos a llavepropia.cl')}
     ${divider()}
     <p style="margin:0;font-size:14px;color:#475569;line-height:1.6;">
       Saludos,<br/>
       <strong style="color:#0F172A;">${firmante}</strong><br/>
-      <span style="color:#64748B;">Proppi · Inversión Inmobiliaria</span>
+      <span style="color:#64748B;">Llave Propia · Leasing Habitacional</span>
     </p>
   `;
   return {
@@ -336,20 +336,20 @@ function emailNoContestoManual(firstName: string) {
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 8px;">
       <tr>
         <td align="center">
-          <a href="https://wa.me/56979711557?text=Hola%2C%20me%20contactaron%20de%20Proppi%20y%20quiero%20más%20información" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:12px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35);">Contáctanos ahora</a>
+          <a href="https://wa.me/56957823672?text=Hola%2C%20me%20contactaron%20de%20Llave%20Propia%20y%20quiero%20más%20información" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:12px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35);">Contáctanos ahora</a>
         </td>
       </tr>
     </table>
-    ${ctaButton('Conoce más en proppi.cl')}
+    ${ctaButton('Conoce más en llavepropia.cl')}
     ${divider()}
     <p style="margin:0;font-size:14px;color:#475569;line-height:1.6;">
       Saludos,<br/>
       <strong style="color:#0F172A;">Susan Petersen</strong><br/>
-      <span style="color:#64748B;">Proppi · Inversión Inmobiliaria</span>
+      <span style="color:#64748B;">Llave Propia · Leasing Habitacional</span>
     </p>
   `;
   return {
-    subject: `${firstName}, intentamos contactarte - Proppi`,
+    subject: `${firstName}, intentamos contactarte - Llave Propia`,
     html: baseTemplate({
       firstName,
       headerEmoji: '',
@@ -363,7 +363,7 @@ function emailNoContestoManual(firstName: string) {
 function emailAsesoriaAgendadaManual(firstName: string) {
   const body = `
     ${p(`¡Hola <strong>${firstName}</strong>!`)}
-    ${p('Te confirmamos que tu asesoría con Proppi ya fue agendada. A tu correo te llegó el link de <strong>Google Meet</strong> para conectarte a la reunión.')}
+    ${p('Te confirmamos que tu asesoría con Llave Propia ya fue agendada. A tu correo te llegó el link de <strong>Google Meet</strong> para conectarte a la reunión.')}
     ${infoBox('', 'Link de la reunión', 'Revisa tu bandeja de entrada — te llegó una invitación de Google Calendar con el enlace de Google Meet para conectarte el día y hora acordados.')}
     ${divider()}
     <div style="font-size:14px;font-weight:700;color:#0F172A;margin-bottom:12px;">¿Qué veremos en la asesoría?</div>
@@ -378,11 +378,11 @@ function emailAsesoriaAgendadaManual(firstName: string) {
     <p style="margin:0;font-size:14px;color:#475569;line-height:1.6;">
       ¡Gracias!<br/>
       <strong style="color:#0F172A;">Susan Petersen</strong><br/>
-      <span style="color:#64748B;">Proppi · Inversión Inmobiliaria</span>
+      <span style="color:#64748B;">Llave Propia · Leasing Habitacional</span>
     </p>
   `;
   return {
-    subject: `Tu asesoría con Proppi está confirmada`,
+    subject: `Tu asesoría con Llave Propia está confirmada`,
     html: baseTemplate({
       firstName,
       headerEmoji: '',
@@ -474,15 +474,15 @@ serve(async (req) => {
 
     // CC según pipeline
     const MANUAL_TEMPLATES = ['no_contesto_manual', 'asesoria_agendada_manual'];
-    const CC_SUSAN = 'susan.petersen@proppi.cl';
+    const CC_KATHERINE = 'katherine@llavepropia.cl';
     // Solo agregar a Susan en CC si ella es la ejecutiva asignada al lead
-    const ejecutivaIsSusan = ejecutivaEmail === CC_SUSAN;
+    const ejecutivaIsKatherine = ejecutivaEmail === CC_KATHERINE;
     let cc: string[];
     if (MANUAL_TEMPLATES.includes(new_status)) {
-      cc = ejecutivaIsSusan ? [CC_ADMIN, CC_SUSAN] : [CC_ADMIN];
+      cc = ejecutivaIsKatherine ? [...CC_ADMINS, CC_KATHERINE] : CC_ADMINS;
     } else {
       const ccContact = ASESOR_PIPELINE.includes(new_status) ? asesorEmail : ejecutivaEmail;
-      cc = [CC_ADMIN, ccContact].filter(Boolean) as string[];
+      cc = [...CC_ADMINS, ccContact].filter(Boolean) as string[];
     }
 
     const firstName    = lead.name.split(' ')[0];
@@ -492,8 +492,8 @@ serve(async (req) => {
       return new Response(JSON.stringify({ skipped: true, reason: 'No template for status' }), { status: 200, headers: corsHeaders });
     }
 
-    const replyTo = (MANUAL_TEMPLATES.includes(new_status) && ejecutivaIsSusan)
-      ? [REPLY_TO, CC_SUSAN]
+    const replyTo = (MANUAL_TEMPLATES.includes(new_status) && ejecutivaIsKatherine)
+      ? [REPLY_TO, CC_KATHERINE]
       : [REPLY_TO];
 
     const emailPayload = {

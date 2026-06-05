@@ -104,7 +104,7 @@ export function useTasks(userId?: string) {
                 <p style="color: #555; margin: 0;">🔔 Recordatorio: ${reminderLabel}</p>
                 ${leadHtml}
               </div>
-              <p style="color: #aaa; font-size: 12px;">— Proppi CRM</p>
+              <p style="color: #aaa; font-size: 12px;">— Llave Propia CRM</p>
              </div>
             </html>`,
         },
@@ -171,7 +171,7 @@ export function useTasks(userId?: string) {
                   <p style="color: #555; margin: 0;">📅 Estaba programada para: ${dueDate.toLocaleString('es-CL')}</p>
                   ${leadHtml}
                 </div>
-                <p style="color: #aaa; font-size: 12px;">— Proppi CRM</p>
+                <p style="color: #aaa; font-size: 12px;">— Llave Propia CRM</p>
                </div>
               </html>`,
           },

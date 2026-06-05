@@ -90,7 +90,7 @@ serve(async (req) => {
     else if (!phone.startsWith('+')) phone = '+' + phone;
 
     const smsBody =
-      "¡Hola! 👋🏠 Somos Proppi Inversión Inmobiliaria. Tratamos de llamarte recién sin éxito 📞 ¡Queremos ayudarte a que puedas invertir en un departamento! 🔑\n\nEscríbenos para agendar una asesoría gratis por WhatsApp aquí 👇\nhttps://wa.me/56979711557";
+      "¡Hola! 👋🏠 Somos Llave Propia. Tratamos de llamarte recién sin éxito 📞 ¡Queremos ayudarte a que puedas invertir en un departamento! 🔑\n\nEscríbenos para agendar una asesoría gratis por WhatsApp aquí 👇\nhttps://wa.me/56957823672";
 
     const formData = new URLSearchParams();
     formData.append("To", phone);
