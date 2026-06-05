@@ -3,7 +3,6 @@
 *.log
 .env
 
-crm-dist/
 crm/node_modules/
 crm/migrate/data/
 

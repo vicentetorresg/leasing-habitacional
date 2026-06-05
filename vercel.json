@@ -1,5 +1,4 @@
 {
-  "buildCommand": "cd crm && npm install && npm run build",
   "cleanUrls": true,
   "rewrites": [
     { "source": "/flujo-operacional", "destination": "/flujo-operacional.html" },
