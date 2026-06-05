@@ -2,8 +2,8 @@
   "cleanUrls": true,
   "rewrites": [
     { "source": "/flujo-operacional", "destination": "/flujo-operacional.html" },
-    { "source": "/crm", "destination": "/crm-dist/index.html" },
-    { "source": "/crm/:path*", "destination": "/crm-dist/index.html" }
+    { "source": "/crm", "destination": "/crm-dist/index" },
+    { "source": "/crm/:path*", "destination": "/crm-dist/index" }
   ],
   "headers": [
     {
