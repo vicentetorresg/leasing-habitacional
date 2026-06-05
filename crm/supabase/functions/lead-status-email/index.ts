@@ -11,9 +11,9 @@ const CC_ADMINS = ['vicente.torres@llavepropia.cl', 'rodrigo.canas@llavepropia.c
 const REPLY_TO  = 'vicente.torres@llavepropia.cl';
 
 const ASESOR_PIPELINE = ['asesoria_agendada', 'recontactar', 'plan_presentado'];
-const EMAIL_STATUSES  = ['new', 'asesoria_agendada', 'recontactar', 'plan_presentado', 'no_contesto_manual', 'asesoria_agendada_manual'];
+const EMAIL_STATUSES  = ['new', 'asesoria_agendada', 'recontactar', 'plan_presentado', 'no_contesto_manual', 'asesoria_agendada_manual', 'cliente_interesado_manual'];
 
-async function sendEmailViaAppsScript(payload: {
+async function sendEmailViaResend(payload: {
   from: string;
   to: string[];
   cc?: string[];
@@ -21,37 +21,29 @@ async function sendEmailViaAppsScript(payload: {
   subject: string;
   html: string;
 }) {
-  const appsScriptUrl = Deno.env.get('APPS_SCRIPT_EMAIL_URL');
-  const appsScriptToken = Deno.env.get('APPS_SCRIPT_EMAIL_TOKEN');
+  const resendKey = Deno.env.get('RESEND_API_KEY');
+  if (!resendKey) throw new Error('RESEND_API_KEY not set');
 
-  if (!appsScriptUrl) {
-    throw new Error('APPS_SCRIPT_EMAIL_URL not set');
-  }
+  const body: Record<string, any> = {
+    from:     payload.from,
+    to:       payload.to,
+    subject:  payload.subject,
+    html:     payload.html,
+  };
+  if (payload.cc?.length)       body.cc       = payload.cc;
+  if (payload.reply_to?.length) body.reply_to = payload.reply_to;
 
-  const response = await fetch(appsScriptUrl, {
+  const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${resendKey}`,
+      'Content-Type':  'application/json',
     },
-    body: JSON.stringify({
-      ...payload,
-      token: appsScriptToken || undefined,
-    }),
+    body: JSON.stringify(body),
   });
 
-  const rawBody = await response.text();
-  let data: any = null;
-
-  try {
-    data = rawBody ? JSON.parse(rawBody) : null;
-  } catch {
-    data = { raw: rawBody };
-  }
-
-  if (!response.ok) {
-    throw new Error(data?.error || data?.message || `Apps Script send failed (${response.status})`);
-  }
-
+  const data = await response.json();
+  if (!response.ok) throw new Error(data?.message || `Resend error (${response.status})`);
   return data;
 }
 
@@ -94,8 +86,8 @@ function baseTemplate({
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td style="vertical-align:middle;">
-                    <div style="font-size:22px;font-weight:900;color:#ffffff;letter-spacing:-0.5px;line-height:1;">PROPPI</div>
-                    <div style="font-size:11px;color:rgba(255,255,255,0.65);letter-spacing:2px;text-transform:uppercase;margin-top:3px;">Inversión Inmobiliaria</div>
+                    <div style="font-size:22px;font-weight:900;color:#ffffff;letter-spacing:-0.5px;line-height:1;">LLAVE PROPIA</div>
+                    <div style="font-size:11px;color:rgba(255,255,255,0.65);letter-spacing:2px;text-transform:uppercase;margin-top:3px;">Leasing Habitacional</div>
                   </td>
                   ${headerEmojiHtml}
                 </tr>
@@ -126,7 +118,7 @@ function baseTemplate({
                     </div>
                   </td>
                   <td align="right" style="vertical-align:bottom;">
-                    <div style="font-size:20px;font-weight:900;color:#BFDBFE;letter-spacing:-0.5px;">PROPPI</div>
+                    <div style="font-size:20px;font-weight:900;color:#BFDBFE;letter-spacing:-0.5px;">LLAVE PROPIA</div>
                   </td>
                 </tr>
               </table>
@@ -328,15 +320,15 @@ function emailPlanPresentado(firstName: string, proyecto?: string | null, asesor
 function emailNoContestoManual(firstName: string) {
   const body = `
     ${p(`Hola <strong>${firstName}</strong>,`)}
-    ${p('Recién intentamos contactarte por teléfono sin éxito. Nos comunicamos porque nos dejaste tus datos para conocer más sobre inversión en departamentos.')}
-    ${infoBox('', 'Te intentamos llamar', 'Queremos hacerte unas preguntas breves para evaluar si calificas y, de ser así, agendar una asesoría gratuita con uno de nuestros asesores inmobiliarios.')}
+    ${p('Intentamos contactarte por teléfono pero no pudimos comunicarnos. Nos gustaría ayudarte a comprar tu casa propia y encontrar el mejor financiamiento disponible para ti.')}
+    ${infoBox('', 'Te intentamos llamar', 'Queremos conocer tu situación y orientarte sobre las alternativas de financiamiento habitacional que existen hoy en Chile, incluyendo el Leasing Habitacional.')}
     ${divider()}
-    ${p('<strong>¿Podrías indicarnos por este correo cuándo sería un buen momento para llamarte?</strong> Nos adaptamos a tu horario.')}
-    ${p('También puedes escribirnos directamente por WhatsApp para coordinar de forma más rápida:')}
+    ${p('<strong>¿Podrías indicarnos cuándo es un buen momento para llamarte?</strong> Nos adaptamos a tu horario.')}
+    ${p('También puedes escribirnos directamente por WhatsApp:')}
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 8px;">
       <tr>
         <td align="center">
-          <a href="https://wa.me/56962078510?text=Hola%2C%20me%20contactaron%20de%20Llave%20Propia%20y%20quiero%20más%20información" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:12px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35);">Contáctanos ahora</a>
+          <a href="https://wa.me/56962078510?text=Hola%2C%20me%20contactaron%20de%20Llave%20Propia%20y%20quiero%20más%20información" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:12px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35);">Escríbenos por WhatsApp</a>
         </td>
       </tr>
     </table>
@@ -344,7 +336,7 @@ function emailNoContestoManual(firstName: string) {
     ${divider()}
     <p style="margin:0;font-size:14px;color:#475569;line-height:1.6;">
       Saludos,<br/>
-      <strong style="color:#0F172A;">Susan Petersen</strong><br/>
+      <strong style="color:#0F172A;">Katherine Loyola</strong><br/>
       <span style="color:#64748B;">Llave Propia · Leasing Habitacional</span>
     </p>
   `;
@@ -354,7 +346,39 @@ function emailNoContestoManual(firstName: string) {
       firstName,
       headerEmoji: '',
       headerTitle: 'Intentamos contactarte',
-      headerSubtitle: 'Nos dejaste tus datos para invertir en departamentos',
+      headerSubtitle: 'Queremos ayudarte a comprar tu casa y encontrar financiamiento',
+      bodyHtml: body,
+    }),
+  };
+}
+
+function emailClienteInteresadoManual(firstName: string) {
+  const body = `
+    ${p(`¡Hola <strong>${firstName}</strong>!`)}
+    ${p('Nos alegra que estés interesado/a en Llave Propia. Como siguiente paso, comenzaremos a recopilar tu documentación para evaluar tu caso y avanzar juntos en el proceso.')}
+    ${infoBox('', '¿Qué documentos necesitaremos?', 'Te iremos solicitando los documentos de forma ordenada. Nuestro equipo te acompañará en cada etapa para que el proceso sea lo más simple posible.')}
+    ${divider()}
+    <div style="font-size:14px;font-weight:700;color:#0F172A;margin-bottom:12px;">¿Cómo será el proceso?</div>
+    ${stepsList([
+      { num: '1', text: '<strong>Recopilación de documentos</strong> — te pediremos la documentación necesaria paso a paso.' },
+      { num: '2', text: '<strong>Evaluación financiera</strong> — analizaremos tu situación para encontrar el mejor financiamiento.' },
+      { num: '3', text: '<strong>Aprobación y búsqueda de vivienda</strong> — una vez aprobado, te ayudamos a encontrar tu casa ideal.' },
+    ])}
+    ${infoBox('', 'Estamos contigo', 'Si tienes preguntas o necesitas orientación en algún momento, no dudes en responder este correo o escribirnos por WhatsApp.')}
+    ${divider()}
+    <p style="margin:0;font-size:14px;color:#475569;line-height:1.6;">
+      ¡Gracias!<br/>
+      <strong style="color:#0F172A;">Katherine Loyola</strong><br/>
+      <span style="color:#64748B;">Llave Propia · Leasing Habitacional</span>
+    </p>
+  `;
+  return {
+    subject: `${firstName}, comenzamos a solicitar tu documentación — Llave Propia`,
+    html: baseTemplate({
+      firstName,
+      headerEmoji: '',
+      headerTitle: '¡Comenzamos el proceso!',
+      headerSubtitle: 'El siguiente paso es reunir tu documentación',
       bodyHtml: body,
     }),
   };
@@ -406,8 +430,9 @@ function generateEmail(
     case 'asesoria_agendada':         return emailAsesoriaAgendada(firstName, asesorName);
     case 'recontactar':               return emailRecontactar(firstName, asesorName);
     case 'plan_presentado':           return emailPlanPresentado(firstName, proyecto, asesorName);
-    case 'no_contesto_manual':        return emailNoContestoManual(firstName);
-    case 'asesoria_agendada_manual':  return emailAsesoriaAgendadaManual(firstName);
+    case 'no_contesto_manual':          return emailNoContestoManual(firstName);
+    case 'cliente_interesado_manual':   return emailClienteInteresadoManual(firstName);
+    case 'asesoria_agendada_manual':    return emailAsesoriaAgendadaManual(firstName);
     default:                          return null;
   }
 }
@@ -473,7 +498,7 @@ serve(async (req) => {
     }
 
     // CC según pipeline
-    const MANUAL_TEMPLATES = ['no_contesto_manual', 'asesoria_agendada_manual'];
+    const MANUAL_TEMPLATES = ['no_contesto_manual', 'asesoria_agendada_manual', 'cliente_interesado_manual'];
     const CC_KATHERINE = 'katherine@llavepropia.cl';
     // Solo agregar a Susan en CC si ella es la ejecutiva asignada al lead
     const ejecutivaIsKatherine = ejecutivaEmail === CC_KATHERINE;
@@ -505,10 +530,10 @@ serve(async (req) => {
       html:      emailContent.html,
     };
 
-    const sendResult = await sendEmailViaAppsScript(emailPayload);
+    const sendResult = await sendEmailViaResend(emailPayload);
 
     console.log(`Email sent for status "${new_status}" to ${lead.email}`);
-    return new Response(JSON.stringify({ ok: true, provider: 'apps_script', result: sendResult }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ ok: true, provider: 'resend', result: sendResult }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
   } catch (err) {
     console.error('Unexpected error:', err);

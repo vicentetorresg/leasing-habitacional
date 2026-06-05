@@ -15,7 +15,7 @@ export default function EmailButtons({ leadId, leadEmail, compact = false }: Ema
   const normalizedEmail = leadEmail?.trim() ?? '';
   const hasEmail = normalizedEmail.length > 0;
 
-  const sendEmail = async (templateType: 'no_contesto_manual' | 'asesoria_agendada_manual') => {
+  const sendEmail = async (templateType: 'no_contesto_manual' | 'cliente_interesado_manual') => {
     if (!hasEmail) {
       toast.info('Este lead no tiene email');
       return;
@@ -58,11 +58,11 @@ export default function EmailButtons({ leadId, leadEmail, compact = false }: Ema
           {sendingNoContesto ? '⏳ Enviando...' : '📧 No contestó'}
         </button>
         <button
-          onClick={() => sendEmail('asesoria_agendada_manual')}
+          onClick={() => sendEmail('cliente_interesado_manual')}
           disabled={!hasEmail || sendingAgendada}
           className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-primary/40 bg-primary/10 px-3 py-2.5 text-xs font-bold text-primary transition-all hover:border-primary/60 hover:bg-primary/20 disabled:opacity-50"
         >
-          {sendingAgendada ? '⏳ Enviando...' : '📧 Asesoría agendada'}
+          {sendingAgendada ? '⏳ Enviando...' : '📧 Cliente Interesado'}
         </button>
       </div>
     </div>
