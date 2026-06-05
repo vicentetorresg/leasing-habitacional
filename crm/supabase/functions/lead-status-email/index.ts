@@ -365,6 +365,13 @@ function emailClienteInteresadoManual(firstName: string) {
       { num: '3', text: '<strong>Aprobación y búsqueda de vivienda</strong> — una vez aprobado, te ayudamos a encontrar tu casa ideal.' },
     ])}
     ${infoBox('', 'Estamos contigo', 'Si tienes preguntas o necesitas orientación en algún momento, no dudes en responder este correo o escribirnos por WhatsApp.')}
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 8px;">
+      <tr>
+        <td align="center">
+          <a href="https://wa.me/56962078510?text=Hola%2C%20me%20contactaron%20de%20Llave%20Propia%20y%20quiero%20más%20información" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:12px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35);">Escríbenos por WhatsApp</a>
+        </td>
+      </tr>
+    </table>
     ${divider()}
     <p style="margin:0;font-size:14px;color:#475569;line-height:1.6;">
       ¡Gracias!<br/>
