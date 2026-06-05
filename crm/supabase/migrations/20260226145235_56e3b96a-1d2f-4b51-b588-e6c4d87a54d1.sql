@@ -1,0 +1,1 @@
+ALTER TABLE public.leads ADD COLUMN previous_status text;

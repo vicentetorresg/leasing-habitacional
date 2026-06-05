@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 30 30% 96%;
+    --foreground: 25 25% 12%;
+
+    --card: 30 25% 99%;
+    --card-foreground: 25 25% 12%;
+
+    --popover: 30 25% 99%;
+    --popover-foreground: 25 25% 12%;
+
+    --primary: 20 80% 48%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 30 20% 92%;
+    --secondary-foreground: 25 25% 20%;
+
+    --muted: 30 15% 90%;
+    --muted-foreground: 25 10% 50%;
+
+    --accent: 25 70% 42%;
+    --accent-foreground: 30 30% 96%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 15% 88%;
+    --input: 30 15% 88%;
+    --ring: 20 80% 48%;
+
+    --radius: 0.75rem;
+
+    --success: 152 60% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 38 90% 10%;
+
+    --glow-red: 0 85% 55%;
+    --glow-orange: 20 90% 52%;
+
+    --sidebar-background: 30 20% 94%;
+    --sidebar-foreground: 25 25% 20%;
+    --sidebar-primary: 20 80% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 30 15% 90%;
+    --sidebar-accent-foreground: 25 25% 20%;
+    --sidebar-border: 30 15% 88%;
+    --sidebar-ring: 20 80% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', system-ui, sans-serif;
+    @apply font-bold tracking-tight;
+  }
+
+  code, pre {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer utilities {
+  .glow-red {
+    box-shadow: 0 0 20px hsl(var(--glow-red) / 0.3),
+                0 0 60px hsl(var(--glow-red) / 0.1);
+  }
+
+  .glow-orange {
+    box-shadow: 0 0 15px hsl(var(--glow-orange) / 0.3),
+                0 0 40px hsl(var(--glow-orange) / 0.1);
+  }
+
+  .glow-border {
+    border-color: hsl(var(--glow-red) / 0.5);
+    box-shadow: 0 0 15px hsl(var(--glow-red) / 0.2),
+                inset 0 0 15px hsl(var(--glow-red) / 0.03);
+  }
+
+  .text-gradient-brand {
+    background: linear-gradient(135deg, hsl(20 80% 48%), hsl(25 70% 42%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px hsl(var(--glow-red) / 0.3),
+                0 0 40px hsl(var(--glow-red) / 0.1);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px hsl(var(--glow-red) / 0.5),
+                0 0 80px hsl(var(--glow-red) / 0.2);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes border-pulse {
+  0%, 100% {
+    border-color: hsl(var(--glow-red) / 0.3);
+  }
+  50% {
+    border-color: hsl(var(--glow-red) / 0.8);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fly-to-panel {
+  0% {
+    opacity: 0;
+    transform: translateX(200px) scale(0.4);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-10px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes fly-to-sidebar {
+  0% {
+    opacity: 0;
+    transform: translateX(-200px) scale(1.3);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(5px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes card-selected-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.6) translateX(-60px);
+  }
+}
+
+.animate-fly-to-panel {
+  animation: fly-to-panel 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-fly-to-sidebar {
+  animation: fly-to-sidebar 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-card-out {
+  animation: card-selected-out 0.3s ease-in forwards;
+}

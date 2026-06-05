@@ -1,0 +1,1 @@
+ALTER TABLE public.leads ADD COLUMN sms_sent boolean NOT NULL DEFAULT false;

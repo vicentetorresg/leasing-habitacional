@@ -1,7 +1,10 @@
 {
+  "buildCommand": "cd crm && npm install && npm run build",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/flujo-operacional", "destination": "/flujo-operacional.html" }
+    { "source": "/flujo-operacional", "destination": "/flujo-operacional.html" },
+    { "source": "/crm", "destination": "/crm-dist/index.html" },
+    { "source": "/crm/(.*)", "destination": "/crm-dist/$1" }
   ],
   "headers": [
     {

@@ -2,3 +2,13 @@
 .vercel
 *.log
 .env
+
+crm-dist/
+crm/node_modules/
+crm/migrate/data/
+
+reel/node_modules/
+reel/.remotion/
+
+node_modules/
+reel/out/

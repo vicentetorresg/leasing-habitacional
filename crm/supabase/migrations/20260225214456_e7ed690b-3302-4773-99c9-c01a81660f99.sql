@@ -1,0 +1,1 @@
+ALTER TABLE public.call_attempts ALTER COLUMN provider SET DEFAULT 'twilio';

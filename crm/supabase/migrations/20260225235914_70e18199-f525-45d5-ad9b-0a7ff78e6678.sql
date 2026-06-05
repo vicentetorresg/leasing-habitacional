@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX IF NOT EXISTS idx_leads_source_external_id ON public.leads (source, external_id) WHERE external_id IS NOT NULL;
