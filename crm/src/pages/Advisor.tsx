@@ -86,8 +86,9 @@ function downloadXlsx(leads: Lead[], filename: string) {
     'DICOM': l.en_dicom ? 'Sí' : 'No',
     'Fuente': l.source,
     'Estado': ADVISOR_STATUSES.find(s => s.key === l.status)?.label || l.status,
-    'Proyecto': l.proyecto || '',
-    'UF sin BP': l.uf_sin_bp || '',
+    'Dirección Vivienda': l.direccion_vivienda || '',
+    'Valor Vivienda UF': l.valor_vivienda_uf || '',
+    'Valor Financiamiento UF': l.valor_financiamiento_uf || '',
     'Fecha Reserva': l.fecha_reserva || '',
     'Mes Cierre': l.mes_cierre || '',
     'Prioridad': l.priority || 'media',
@@ -1241,7 +1242,12 @@ function LeadDetailContent({
   onEditNote: (noteId: string, newText: string) => Promise<void>;
 }) {
   const canEditAdvisorFields = role === 'admin' || role === 'asesor';
+  const fmtUf = (v: number | null) => v != null ? v.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
+  const parseUf = (s: string) => { const n = parseFloat(s.replace(/\./g, '').replace(',', '.')); return isNaN(n) ? null : n; };
   const [ufSinBp, setUfSinBp] = useState(lead.uf_sin_bp?.toString() ?? '');
+  const [valorViviendaUf, setValorViviendaUf] = useState(fmtUf(lead.valor_vivienda_uf));
+  const [valorFinanciamientoUf, setValorFinanciamientoUf] = useState(fmtUf(lead.valor_financiamiento_uf));
+  const [direccionVivienda, setDireccionVivienda] = useState(lead.direccion_vivienda ?? '');
   const [proyecto, setProyecto] = useState(lead.proyecto ?? '');
   const [fechaReserva, setFechaReserva] = useState(lead.fecha_reserva ?? '');
   const [mesCierre, setMesCierre] = useState(lead.mes_cierre ?? '');
@@ -1286,6 +1292,9 @@ function LeadDetailContent({
   const saveFields = () => {
     updateLeadFields(lead.id, {
       uf_sin_bp: ufSinBp ? parseFloat(ufSinBp) : null,
+      valor_vivienda_uf: parseUf(valorViviendaUf),
+      valor_financiamiento_uf: parseUf(valorFinanciamientoUf),
+      direccion_vivienda: direccionVivienda || null,
       proyecto: proyecto || null,
       fecha_reserva: fechaReserva || null,
       mes_cierre: mesCierre || null,
@@ -1415,24 +1424,37 @@ function LeadDetailContent({
       {/* Editable fields */}
       <div className="grid grid-cols-2 gap-3 p-4 bg-muted/50 rounded-lg">
         <div>
-          <label className="text-xs text-muted-foreground uppercase">UF sin BP</label>
-          <input type="number" step="0.01" value={ufSinBp} onChange={e => setUfSinBp(e.target.value)}
+          <label className="text-xs text-muted-foreground uppercase">Valor Vivienda UF</label>
+          <input
+            type="text"
+            inputMode="decimal"
+            value={valorViviendaUf}
+            onChange={e => setValorViviendaUf(e.target.value.replace(/[^0-9,]/g, ''))}
+            onBlur={() => { const n = parseUf(valorViviendaUf); setValorViviendaUf(fmtUf(n)); }}
+            onFocus={() => setValorViviendaUf(v => v.replace(/\./g, '').replace(',', '.'))}
             disabled={!canEditAdvisorFields}
+            placeholder="0,00"
             className={`w-full mt-1 px-2 py-1.5 rounded border border-border bg-background text-sm text-foreground ${!canEditAdvisorFields ? 'opacity-50 cursor-not-allowed' : ''}`} />
         </div>
         <div>
-          <label className="text-xs text-muted-foreground uppercase">Proyecto</label>
-          <Select value={proyecto || '__none__'} onValueChange={v => setProyecto(v === '__none__' ? '' : v)}>
-            <SelectTrigger className="w-full mt-1">
-              <SelectValue placeholder="Seleccionar proyecto" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="__none__">— Sin proyecto —</SelectItem>
-              {projectsList.map(p => (
-                <SelectItem key={p} value={p}>{p}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <label className="text-xs text-muted-foreground uppercase">Valor Financiamiento UF</label>
+          <input
+            type="text"
+            inputMode="decimal"
+            value={valorFinanciamientoUf}
+            onChange={e => setValorFinanciamientoUf(e.target.value.replace(/[^0-9,]/g, ''))}
+            onBlur={() => { const n = parseUf(valorFinanciamientoUf); setValorFinanciamientoUf(fmtUf(n)); }}
+            onFocus={() => setValorFinanciamientoUf(v => v.replace(/\./g, '').replace(',', '.'))}
+            disabled={!canEditAdvisorFields}
+            placeholder="0,00"
+            className={`w-full mt-1 px-2 py-1.5 rounded border border-border bg-background text-sm text-foreground ${!canEditAdvisorFields ? 'opacity-50 cursor-not-allowed' : ''}`} />
+        </div>
+        <div>
+          <label className="text-xs text-muted-foreground uppercase">Dirección Vivienda</label>
+          <input type="text" value={direccionVivienda} onChange={e => setDireccionVivienda(e.target.value)}
+            disabled={!canEditAdvisorFields}
+            placeholder="Ej: Av. Libertad 123, Santiago"
+            className={`w-full mt-1 px-2 py-1.5 rounded border border-border bg-background text-sm text-foreground ${!canEditAdvisorFields ? 'opacity-50 cursor-not-allowed' : ''}`} />
         </div>
         <div>
           <label className="text-xs text-muted-foreground uppercase">Fecha Reserva</label>

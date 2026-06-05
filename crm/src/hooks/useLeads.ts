@@ -21,7 +21,10 @@ export interface Lead {
   en_dicom: boolean | null;
   advisor_id: string | null;
   uf_sin_bp: number | null;
+  valor_vivienda_uf: number | null;
+  valor_financiamiento_uf: number | null;
   proyecto: string | null;
+  direccion_vivienda: string | null;
   fecha_reserva: string | null;
   mes_cierre: string | null;
   priority: string;
