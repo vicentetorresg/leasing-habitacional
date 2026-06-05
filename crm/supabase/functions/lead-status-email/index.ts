@@ -336,7 +336,7 @@ function emailNoContestoManual(firstName: string) {
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 8px;">
       <tr>
         <td align="center">
-          <a href="https://wa.me/56957823672?text=Hola%2C%20me%20contactaron%20de%20Llave%20Propia%20y%20quiero%20más%20información" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:12px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35);">Contáctanos ahora</a>
+          <a href="https://wa.me/56962078510?text=Hola%2C%20me%20contactaron%20de%20Llave%20Propia%20y%20quiero%20más%20información" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:12px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35);">Contáctanos ahora</a>
         </td>
       </tr>
     </table>
