@@ -59,7 +59,7 @@ export function useLeads(userId?: string, isAdmin?: boolean, userEmail?: string,
       .order('created_at', { ascending: false });
 
     // Ejecutiva pipeline statuses (shown in executive view)
-    const EJECUTIVA_STATUSES = ['nuevo', 'contactado', 'recontactar', 'no_contesta', 'no_califica'];
+    const EJECUTIVA_STATUSES = ['nuevo', 'contactado', 'recontactar', 'no_contesta', 'no_califica', 'calling'];
 
     if (!isAdmin && userId) {
       // Ejecutiva ve solo sus leads y solo los del pipeline ejecutiva

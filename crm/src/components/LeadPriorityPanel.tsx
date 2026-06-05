@@ -646,8 +646,8 @@ const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, animationKey,
     );
   }
 
-  const isNew = lead.status === 'new' && !lead.last_attempt_at;
-  const isRetry = lead.status === 'no_answer' || lead.status === 'busy';
+  const isNew = lead.status === 'nuevo' && !lead.last_attempt_at;
+  const isRetry = lead.status === 'recontactar' || lead.status === 'no_contesta';
 
   const statusBadge = (() => {
     const map: Record<string, { label: string; style: string }> = {
