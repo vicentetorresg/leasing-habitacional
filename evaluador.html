@@ -288,7 +288,7 @@
               </div>
               <div class="ff" style="margin-bottom:0">
                 <label>UF hoy <span id="uf-fecha" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)">cargando&hellip;</span></label>
-                <input type="text" id="uf-clp" placeholder="37.900" value="37.900" oninput="fmtNumero(this);liveEval()">
+                <input type="text" id="uf-clp" placeholder="40.000" value="40.000" readonly style="background:#f4f2ee;cursor:default;color:var(--muted)">
               </div>
             </div>
           </div>
@@ -312,7 +312,7 @@
         </div>
         <div class="ff">
           <label>Valor UF (CLP) <span id="uf-fecha2" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)">cargando&hellip;</span></label>
-          <input type="text" id="uf-clp2" placeholder="37.900" value="37.900" oninput="fmtNumero(this);liveEval()">
+          <input type="text" id="uf-clp2" placeholder="40.000" value="40.000" readonly style="background:#f4f2ee;cursor:default;color:var(--muted)">
           <div class="note">Actualizado autom&aacute;ticamente</div>
         </div>
       </div>
@@ -515,12 +515,12 @@ function liveEval(){
   var otras   =parseMonto(document.getElementById('otras-deudas').value);
   var dicomOpt=document.querySelector('input[name="dicom"]:checked').value;
   var dicomUF =parseFloat(document.getElementById('dicom-monto').value)||0;
-  var ufDicom =parseNumero('uf-clp')||37900;
+  var ufDicom =parseNumero('uf-clp')||40000;
   var cmfOpt  =document.querySelector('input[name="cmf"]:checked').value;
   var valorProp=parseFloat(document.getElementById('valor-prop').value)||0;
   var tasaCP  =parseTasa('tasa-cp');
   var tasaAU  =parseTasa('tasa-au');
-  var ufClp   =parseNumero('uf-clp2')||37900;
+  var ufClp   =parseNumero('uf-clp2')||40000;
   var codOpt  =document.querySelector('input[name="cod"]:checked').value;
   var rentaCod=parseMonto(document.getElementById('renta-cod').value);
 
@@ -756,6 +756,8 @@ async function fetchUF(){
   }catch(e){
     document.getElementById('uf-fecha').textContent='(sin conexi\u00f3n)';
     document.getElementById('uf-fecha2').textContent='(sin conexi\u00f3n)';
+    document.getElementById('uf-clp').value='40.000';
+    document.getElementById('uf-clp2').value='40.000';
   }
 }
 fetchUF();
