@@ -56,6 +56,7 @@ const Executive = () => {
   const [urgentPopupLead, setUrgentPopupLead] = useState<Lead | null>(null);
   const [isCallDialogOpen, setIsCallDialogOpen] = useState(false);
   const [todayCalledLeadIds, setTodayCalledLeadIds] = useState<Set<string>>(new Set());
+  const [perfRows, setPerfRows] = useState<{ date: string; full_name: string; calls_made: number; scheduled_made: number }[]>([]);
 
   const DEMO_ADVISOR_NAMES = ['Alejandro Reyes', 'Camila Fuentes', 'Sebastián Mora', 'Daniela Pinto'];
 
@@ -106,6 +107,34 @@ const Executive = () => {
         if (data) setTodayCalledLeadIds(new Set(data.map(r => r.lead_id)));
       });
   }, [user?.id, leads]);
+
+  // Fetch daily performance table (auto-refresh every 60s)
+  useEffect(() => {
+    const fetchPerf = async () => {
+      const { data } = await supabase
+        .from('daily_performance' as any)
+        .select('date, user_id, calls_made, scheduled_made')
+        .order('date', { ascending: false })
+        .limit(200);
+      if (!data) return;
+      const userIds = [...new Set((data as any[]).map((r: any) => r.user_id))];
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('user_id, full_name')
+        .in('user_id', userIds);
+      const nameMap: Record<string, string> = {};
+      (profiles ?? []).forEach((p: any) => { nameMap[p.user_id] = p.full_name; });
+      setPerfRows((data as any[]).map((r: any) => ({
+        date: r.date,
+        full_name: nameMap[r.user_id] ?? r.user_id,
+        calls_made: r.calls_made,
+        scheduled_made: r.scheduled_made,
+      })));
+    };
+    fetchPerf();
+    const interval = setInterval(fetchPerf, 60_000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Get ALL pending leads (carry over from previous days)
   const pendingAll = getPendingLeads(leads, user?.id);
@@ -608,6 +637,32 @@ const Executive = () => {
           </div>
         </div>
       </div>
+
+      {/* Performance Table */}
+      {perfRows.length > 0 && (
+        <div className="px-3 pb-6">
+          <table className="w-full text-sm border-collapse select-all" style={{ fontFamily: 'monospace' }}>
+            <thead>
+              <tr className="border-b border-border text-left text-xs text-muted-foreground uppercase tracking-wider">
+                <th className="py-1.5 pr-6">Fecha</th>
+                <th className="py-1.5 pr-6">Usuario</th>
+                <th className="py-1.5 pr-6 text-right">Llamados</th>
+                <th className="py-1.5 text-right">Agendados</th>
+              </tr>
+            </thead>
+            <tbody>
+              {perfRows.map((r, i) => (
+                <tr key={i} className="border-b border-border/40 hover:bg-muted/30">
+                  <td className="py-1 pr-6 text-muted-foreground">{r.date}</td>
+                  <td className="py-1 pr-6 font-medium text-foreground">{r.full_name}</td>
+                  <td className="py-1 pr-6 text-right">{r.calls_made}</td>
+                  <td className="py-1 text-right">{r.scheduled_made}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* New Lead Dialog */}
       <Dialog open={showNewLeadForm} onOpenChange={setShowNewLeadForm}>
