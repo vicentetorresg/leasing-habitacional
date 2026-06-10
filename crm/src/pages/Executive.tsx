@@ -124,12 +124,15 @@ const Executive = () => {
         .in('user_id', userIds);
       const nameMap: Record<string, string> = {};
       (profiles ?? []).forEach((p: any) => { nameMap[p.user_id] = p.full_name; });
-      setPerfRows((data as any[]).map((r: any) => ({
-        date: r.date,
-        full_name: nameMap[r.user_id] ?? r.user_id,
-        calls_made: r.calls_made,
-        scheduled_made: r.scheduled_made,
-      })));
+      setPerfRows((data as any[])
+        .map((r: any) => ({
+          date: r.date,
+          full_name: nameMap[r.user_id] ?? r.user_id,
+          calls_made: r.calls_made,
+          scheduled_made: r.scheduled_made,
+        }))
+        .sort((a, b) => b.date.localeCompare(a.date) || a.full_name.localeCompare(b.full_name))
+      );
     };
     fetchPerf();
     const interval = setInterval(fetchPerf, 60_000);
