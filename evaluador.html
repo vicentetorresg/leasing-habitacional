@@ -324,7 +324,7 @@
         </div>
         <div class="ff" style="margin-bottom:0">
           <label>Tasa Austral (%)</label>
-          <input type="text" id="tasa-au" placeholder="8,70" value="8,70" oninput="liveEval()" onkeydown="ajustarTasa(event,'tasa-au')">
+          <input type="text" id="tasa-au" placeholder="9,50" value="9,50" oninput="liveEval()" onkeydown="ajustarTasa(event,'tasa-au')">
           <div class="note">UF + tasa &mdash; &uarr;&darr; ajusta 0,25%</div>
         </div>
       </div>
@@ -467,7 +467,7 @@ function onTipoTrab(){
 }
 
 /* TASA */
-function parseTasa(id){var def=id==='tasa-au'?'8,70':'11,00';return parseFloat((document.getElementById(id).value||def).replace(',','.'))||parseFloat(def.replace(',','.'));}
+function parseTasa(id){var def=id==='tasa-au'?'9,50':'11,00';return parseFloat((document.getElementById(id).value||def).replace(',','.'))||parseFloat(def.replace(',','.'));}
 function fmtTasa(v){return v.toFixed(2).replace('.',',');}
 function ajustarTasa(e,id){
   if(e.key==='ArrowUp'||e.key==='ArrowDown'){
