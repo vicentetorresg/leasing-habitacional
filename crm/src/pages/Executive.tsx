@@ -56,7 +56,7 @@ const Executive = () => {
   const [urgentPopupLead, setUrgentPopupLead] = useState<Lead | null>(null);
   const [isCallDialogOpen, setIsCallDialogOpen] = useState(false);
   const [todayCalledLeadIds, setTodayCalledLeadIds] = useState<Set<string>>(new Set());
-  const [perfRows, setPerfRows] = useState<{ date: string; full_name: string; calls_made: number; scheduled_made: number }[]>([]);
+  const [perfRows, setPerfRows] = useState<{ date: string; full_name: string; calls_made: number; scheduled_made: number }[] | null>(null);
 
   const DEMO_ADVISOR_NAMES = ['Alejandro Reyes', 'Camila Fuentes', 'Sebastián Mora', 'Daniela Pinto'];
 
@@ -111,12 +111,13 @@ const Executive = () => {
   // Fetch daily performance table (auto-refresh every 60s)
   useEffect(() => {
     const fetchPerf = async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('daily_performance' as any)
         .select('date, user_id, calls_made, scheduled_made')
         .order('date', { ascending: false })
         .limit(200);
-      if (!data) return;
+      if (error) { console.error('[perf]', error); setPerfRows([]); return; }
+      if (!data) { setPerfRows([]); return; }
       const userIds = [...new Set((data as any[]).map((r: any) => r.user_id))];
       const { data: profiles } = await supabase
         .from('profiles')
@@ -642,30 +643,35 @@ const Executive = () => {
       </div>
 
       {/* Performance Table */}
-      {perfRows.length > 0 && (
-        <div className="px-3 pb-6">
-          <table className="w-full text-sm border-collapse select-all" style={{ fontFamily: 'monospace' }}>
+      <div className="px-3 pb-6">
+        <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">📊 Rendimiento diario</div>
+        {perfRows === null ? (
+          <p className="text-xs text-muted-foreground">Cargando...</p>
+        ) : perfRows.length === 0 ? (
+          <p className="text-xs text-muted-foreground">Sin datos aún.</p>
+        ) : (
+          <table className="text-sm border-collapse select-all" style={{ fontFamily: 'monospace' }}>
             <thead>
               <tr className="border-b border-border text-left text-xs text-muted-foreground uppercase tracking-wider">
-                <th className="py-1.5 pr-6">Fecha</th>
-                <th className="py-1.5 pr-6">Usuario</th>
-                <th className="py-1.5 pr-6 text-right">Llamados</th>
+                <th className="py-1.5 pr-8">Fecha</th>
+                <th className="py-1.5 pr-8">Usuario</th>
+                <th className="py-1.5 pr-8 text-right">Llamados</th>
                 <th className="py-1.5 text-right">Agendados</th>
               </tr>
             </thead>
             <tbody>
               {perfRows.map((r, i) => (
                 <tr key={i} className="border-b border-border/40 hover:bg-muted/30">
-                  <td className="py-1 pr-6 text-muted-foreground">{r.date}</td>
-                  <td className="py-1 pr-6 font-medium text-foreground">{r.full_name}</td>
-                  <td className="py-1 pr-6 text-right">{r.calls_made}</td>
+                  <td className="py-1 pr-8 text-muted-foreground">{r.date}</td>
+                  <td className="py-1 pr-8 font-medium text-foreground">{r.full_name}</td>
+                  <td className="py-1 pr-8 text-right">{r.calls_made}</td>
                   <td className="py-1 text-right">{r.scheduled_made}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* New Lead Dialog */}
       <Dialog open={showNewLeadForm} onOpenChange={setShowNewLeadForm}>
