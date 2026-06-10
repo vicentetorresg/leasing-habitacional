@@ -319,12 +319,12 @@
       <div class="g2f">
         <div class="ff" style="margin-bottom:0">
           <label>Tasa Casa Pronta (%)</label>
-          <input type="text" id="tasa-cp" placeholder="10,50" value="10,50" oninput="liveEval()" onkeydown="ajustarTasa(event,'tasa-cp')">
+          <input type="text" id="tasa-cp" placeholder="12,50" value="12,50" oninput="liveEval()" onkeydown="ajustarTasa(event,'tasa-cp')">
           <div class="note">UF + tasa &mdash; &uarr;&darr; ajusta 0,25%</div>
         </div>
         <div class="ff" style="margin-bottom:0">
           <label>Tasa Austral (%)</label>
-          <input type="text" id="tasa-au" placeholder="9,50" value="9,50" oninput="liveEval()" onkeydown="ajustarTasa(event,'tasa-au')">
+          <input type="text" id="tasa-au" placeholder="8,70" value="8,70" oninput="liveEval()" onkeydown="ajustarTasa(event,'tasa-au')">
           <div class="note">UF + tasa &mdash; &uarr;&darr; ajusta 0,25%</div>
         </div>
       </div>
@@ -467,7 +467,7 @@ function onTipoTrab(){
 }
 
 /* TASA */
-function parseTasa(id){return parseFloat((document.getElementById(id).value||'10,50').replace(',','.'))||10.50;}
+function parseTasa(id){var def=id==='tasa-au'?'8,70':'12,50';return parseFloat((document.getElementById(id).value||def).replace(',','.'))||parseFloat(def.replace(',','.'));}
 function fmtTasa(v){return v.toFixed(2).replace('.',',');}
 function ajustarTasa(e,id){
   if(e.key==='ArrowUp'||e.key==='ArrowDown'){
@@ -628,9 +628,11 @@ function liveEval(){
     if(!renta||!plazo||tasa<=0) return {s:'pend',d:'Ingrese renta, plazo y tasa.',uf:0,clp:0,div:0};
     var mD25,mD50;
     if(inst==='cp'){
-      mD25=codOpt==='no'?renta*0.25:esFam?rentaT*0.25:Math.min(rentaT*0.25,renta*0.50);
+      /* Casa Pronta: cuota ≤ 30% renta (incluye seguros) */
+      mD25=codOpt==='no'?renta*0.30:esFam?rentaT*0.30:Math.min(rentaT*0.30,renta*0.50);
       mD50=codOpt==='no'?renta*0.50-otras:esFam?rentaT*0.50-otras:Math.min(rentaT*0.50,renta*0.60)-otras;
     } else {
+      /* Austral: cuota ≤ 25% renta (incluye seguros) */
       mD25=codOpt==='no'?renta*0.25:rentaT*0.25;
       mD50=codOpt==='no'?renta*0.50-otras:rentaT*0.50-otras;
     }
