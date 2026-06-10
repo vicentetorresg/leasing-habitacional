@@ -664,7 +664,7 @@ const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, animationKey,
       reciclado: { label: '♻️ Reciclado', style: 'bg-emerald-500/15 text-emerald-600' },
       calling: { label: '📞 Llamando', style: 'bg-primary/15 text-primary' },
     };
-    const s = map[lead.status] || map.new;
+    const s = map[lead.status] || { label: lead.status, style: 'bg-muted text-muted-foreground' };
     return s;
   })();
 

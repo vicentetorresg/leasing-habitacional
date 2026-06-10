@@ -51,6 +51,7 @@ const statusConfig: Record<string, { label: string; style: string }> = {
   recontactar: { label: '🔄 Recontactar', style: 'bg-warning/15 text-warning' },
   no_contesta: { label: '📵 No Contesta', style: 'bg-accent/15 text-accent' },
   no_califica: { label: '🚫 No Califica', style: 'bg-muted text-muted-foreground' },
+  calling: { label: '📞 Llamando', style: 'bg-primary/15 text-primary' },
   solicitando_documentos: { label: '📋 Sol. Docs', style: 'bg-primary/15 text-primary' },
   enviado_a_evaluar: { label: '📤 Evaluando', style: 'bg-yellow-500/15 text-yellow-600' },
   aprobado: { label: '✅ Aprobado', style: 'bg-success/15 text-success' },
@@ -271,7 +272,7 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
             )}
             {paginated.map((lead, idx) => {
               const attempts = attemptCounts[lead.id] ?? 0;
-              const s = statusConfig[lead.status] || statusConfig.new;
+              const s = statusConfig[lead.status] || { label: lead.status, style: 'bg-muted text-muted-foreground' };
               const isSelected = selectedLeadId === lead.id;
               const globalIdx = safePage * PAGE_SIZE + idx;
 
