@@ -73,9 +73,9 @@ export function useAuth() {
 
         await supabase.functions.invoke('send-task-email', {
           body: {
-            to: 'vicente.torres@llavepropia.cl',
-            subject: `LeadFlash: ${name} acaba de ingresar`,
-            html: `<p><strong>${name}</strong> (${email}) acaba de iniciar sesión en LeadFlash.</p><p>Hora: ${now}</p>`,
+            to: 'vicente@llavepropia.cl',
+            subject: `CRM: ${name} acaba de ingresar`,
+            html: `<p><strong>${name}</strong> (${email}) acaba de iniciar sesión en el CRM de Llave Propia.</p><p>Hora: ${now}</p>`,
           },
         });
       })().catch(console.error);

@@ -241,6 +241,9 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
               <TableHead className="px-2">Teléfono</TableHead>
               <TableHead className="px-2">RUT</TableHead>
               <TableHead className="px-2">Renta</TableHead>
+              <TableHead className="px-2">Arriendo</TableHead>
+              <TableHead className="px-2 text-center">Contrato</TableHead>
+              <TableHead className="px-2 text-center">Vivienda</TableHead>
               <TableHead className="px-2">Fuente</TableHead>
               <TableHead className="px-2">DICOM</TableHead>
               <TableHead className="px-2">Intentos</TableHead>
@@ -261,7 +264,7 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
           <TableBody>
             {sorted.length === 0 && (
               <TableRow>
-                <TableCell colSpan={11} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={14} className="text-center py-8 text-muted-foreground">
                   {searchInput || statusFilter !== 'all' ? 'Sin resultados para este filtro' : 'No hay leads pendientes'}
                 </TableCell>
               </TableRow>
@@ -303,6 +306,15 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
                   </TableCell>
                   <TableCell className="px-2 text-xs text-foreground whitespace-nowrap max-w-[120px] truncate" title={formatSueldo(lead)}>
                     {formatSueldo(lead)}
+                  </TableCell>
+                  <TableCell className="px-2 text-xs text-muted-foreground whitespace-nowrap">
+                    {(lead as any).arriendo || '—'}
+                  </TableCell>
+                  <TableCell className="px-2 text-center text-xs">
+                    {(lead as any).contrato === 'si' ? <span className="text-success font-bold">✅</span> : (lead as any).contrato === 'no' ? <span className="text-destructive font-bold">❌</span> : <span className="text-muted-foreground">—</span>}
+                  </TableCell>
+                  <TableCell className="px-2 text-center text-xs">
+                    {(lead as any).vivienda === 'si' ? <span className="text-warning font-bold">⚠️</span> : (lead as any).vivienda === 'no' ? <span className="text-success font-bold">✅</span> : <span className="text-muted-foreground">—</span>}
                   </TableCell>
                   <TableCell className="px-2">
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-bold whitespace-nowrap">

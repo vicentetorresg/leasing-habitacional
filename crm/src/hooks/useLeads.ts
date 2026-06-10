@@ -38,6 +38,9 @@ export interface Lead {
   no_califica_razon: string | null;
   transferred_from_susan: boolean;
   camila_notes_hidden_since: string | null;
+  arriendo: string | null;
+  contrato: string | null;
+  vivienda: string | null;
 }
 
 // Statuses that mean the lead is still pending (ejecutiva view)

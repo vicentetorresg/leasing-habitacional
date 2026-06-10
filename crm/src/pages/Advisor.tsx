@@ -808,10 +808,31 @@ const Advisor = () => {
                     <p className="text-xs text-muted-foreground">🪪 {lead.rut}</p>
                   )}
                   <p className="text-[10px] text-muted-foreground">📣 {lead.source}</p>
+                  {lead.en_dicom != null && (
+                    <p className={`text-[10px] font-semibold ${lead.en_dicom ? 'text-destructive' : 'text-success'}`}>
+                      {lead.en_dicom ? '⚠️ En DICOM' : '✅ Sin DICOM'}
+                    </p>
+                  )}
+                  {lead.arriendo && (
+                    <p className="text-[10px] text-muted-foreground">🏠 Arriendo: {lead.arriendo}</p>
+                  )}
+                  {lead.contrato && (
+                    <p className={`text-[10px] ${lead.contrato === 'si' ? 'text-success' : 'text-warning'}`}>
+                      📋 Contrato indefinido: {lead.contrato === 'si' ? 'Sí' : 'No'}
+                    </p>
+                  )}
+                  {lead.vivienda && (
+                    <p className={`text-[10px] ${lead.vivienda === 'si' ? 'text-warning' : 'text-success'}`}>
+                      🏡 Tiene vivienda: {lead.vivienda === 'si' ? 'Sí' : 'No'}
+                    </p>
+                  )}
                   {lead.scheduled_at && (
                     <p className="text-[10px] text-primary/80 font-semibold">
                       🗓️ Agendado: {new Date(lead.scheduled_at).toLocaleString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </p>
+                  )}
+                  {lead.direccion_vivienda && (
+                    <p className="text-xs text-muted-foreground truncate">📍 {lead.direccion_vivienda}</p>
                   )}
                   {lead.proyecto && (
                     <p className="text-xs text-muted-foreground truncate">🏗️ {lead.proyecto}</p>

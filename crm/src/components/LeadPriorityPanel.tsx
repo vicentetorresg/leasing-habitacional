@@ -1202,6 +1202,9 @@ function EditableLeadGrid({ lead, userRole, onSaved }: { lead: Lead; userRole?: 
       {renderField('rut', 'RUT', lead.rut || '—')}
       {renderField('en_dicom', 'DICOM', lead.en_dicom ? '⚠️ Sí' : '✅ No', lead.en_dicom ?? false)}
       {renderField('source', 'Fuente', formatSource(lead.source))}
+      {(lead as any).arriendo && <DetailItem label="Arriendo actual" value={(lead as any).arriendo} />}
+      {(lead as any).contrato != null && <DetailItem label="Contrato indefinido" value={(lead as any).contrato === 'si' ? '✅ Sí' : '❌ No'} />}
+      {(lead as any).vivienda != null && <DetailItem label="Tiene vivienda" value={(lead as any).vivienda === 'si' ? '⚠️ Sí' : '✅ No'} />}
       {renderField('email', 'Email', lead.email || '—')}
       {renderField('phone', 'Teléfono', lead.phone)}
     </div>
