@@ -319,7 +319,7 @@
       <div class="g2f">
         <div class="ff" style="margin-bottom:0">
           <label>Tasa Casa Pronta (%)</label>
-          <input type="text" id="tasa-cp" placeholder="10,50" value="10,50" oninput="liveEval()" onkeydown="ajustarTasa(event,'tasa-cp')">
+          <input type="text" id="tasa-cp" placeholder="11,00" value="11,00" oninput="liveEval()" onkeydown="ajustarTasa(event,'tasa-cp')">
           <div class="note">UF + tasa &mdash; &uarr;&darr; ajusta 0,25% &mdash; <strong>verificar con CP</strong></div>
         </div>
         <div class="ff" style="margin-bottom:0">
@@ -467,7 +467,7 @@ function onTipoTrab(){
 }
 
 /* TASA */
-function parseTasa(id){var def=id==='tasa-au'?'8,70':'10,50';return parseFloat((document.getElementById(id).value||def).replace(',','.'))||parseFloat(def.replace(',','.'));}
+function parseTasa(id){var def=id==='tasa-au'?'8,70':'11,00';return parseFloat((document.getElementById(id).value||def).replace(',','.'))||parseFloat(def.replace(',','.'));}
 function fmtTasa(v){return v.toFixed(2).replace('.',',');}
 function ajustarTasa(e,id){
   if(e.key==='ArrowUp'||e.key==='ArrowDown'){
