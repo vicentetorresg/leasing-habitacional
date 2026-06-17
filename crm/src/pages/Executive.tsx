@@ -3,11 +3,8 @@ import { NavLink } from '@/components/NavLink';
 import { useDemoMode } from '@/hooks/useDemoMode';
 import { useAuth } from '@/hooks/useAuth';
 import UserMenu from '@/components/UserMenu';
-import { useAlertSound } from '@/hooks/useAlertSound';
-import UrgentCallPopup from '@/components/UrgentCallPopup';
 import { useLeads, useRealtimeLeads, updateLeadStatus, createCallAttempt, assignLead, deleteLead, getPendingLeads, type Lead } from '@/hooks/useLeads';
 import { useSettings } from '@/hooks/useSettings';
-import { useIdleTimer } from '@/hooks/useIdleTimer';
 import { useDailyPerformanceTracker } from '@/hooks/useDailyPerformanceTracker';
 
 import { supabase } from '@/integrations/supabase/client';
@@ -15,12 +12,8 @@ import LeadPriorityPanel from '@/components/LeadPriorityPanel';
 import TodayCallsTable from '@/components/TodayCallsTable';
 import MetricsBar from '@/components/MetricsBar';
 import DailyGoalsBar from '@/components/DailyGoalsBar';
-import AlertActivator from '@/components/AlertActivator';
 import LeadsTable from '@/components/LeadsTable';
-import LeadSuggestionPopup from '@/components/LeadSuggestionPopup';
-import { useLeadSuggestion } from '@/hooks/useLeadSuggestion';
 import GuidedTour from '@/components/GuidedTour';
-import MissedCallsBell from '@/components/MissedCallsBell';
 import { toast } from 'sonner';
 import * as XLSX from 'xlsx';
 import {
@@ -38,7 +31,6 @@ const Executive = () => {
   const demoDisplayName = isDemo ? 'Javiera Contreras' : fullName;
   const isRecicladora = role === 'recicladora';
   const roleLabel = isDemo ? 'Admin' : role === 'admin' ? 'CEO' : role === 'ejecutiva' ? 'Telemarketing' : role === 'asesor' ? 'Asesor Inmobiliario' : role === 'recicladora' ? 'Recicladora' : '';
-  const { enabled: alertsEnabled, activate, deactivate, playAlert, playNewLeadChime, playReminderNudge, playCallStart, playUrgentAlarm } = useAlertSound();
   const { leads, refetch } = useLeads(user?.id, role === 'admin', user?.email, isRecicladora);
   const { settings } = useSettings();
   const [flashingLead, setFlashingLead] = useState<Lead | null>(null);
@@ -53,7 +45,6 @@ const Executive = () => {
 
   const [newLeadName, setNewLeadName] = useState('');
   const [newLeadPhone, setNewLeadPhone] = useState('');
-  const [urgentPopupLead, setUrgentPopupLead] = useState<Lead | null>(null);
   const [isCallDialogOpen, setIsCallDialogOpen] = useState(false);
   const [todayCalledLeadIds, setTodayCalledLeadIds] = useState<Set<string>>(new Set());
   const [perfRows, setPerfRows] = useState<{ date: string; full_name: string; calls_made: number; scheduled_made: number }[] | null>(null);
@@ -174,38 +165,20 @@ const Executive = () => {
 
   const handleNewLead = useCallback((lead: Lead) => {
     if (isOnCall) {
-      // Don't interrupt an active call — just refresh data, lead will appear in sidebar
-      console.log('[Alerts] New lead arrived but user is on a call, not interrupting');
-      if (alertsEnabled) playNewLeadChime();
       refetch();
       return;
     }
     setSelectedPendingId(null);
-    setSkippedLeadIds(new Set()); // Reset skips when new lead arrives
-    if (alertsEnabled) {
-      console.log('[Alerts] Playing new lead chime');
-      playNewLeadChime();
-      setFlashingLead(lead);
-    }
+    setSkippedLeadIds(new Set());
+    setFlashingLead(lead);
     mainScrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
     refetch();
-  }, [alertsEnabled, isOnCall, playNewLeadChime, refetch]);
+  }, [isOnCall, refetch]);
 
   useRealtimeLeads(handleNewLead, isDemo, user?.id);
 
   // NOTE: Removed UPDATE realtime subscription — caused double re-fetch on every action
   // (handleAction already calls refetch() explicitly after each update)
-
-  // Lead suggestion system — suggests a random pending lead every 3 minutes
-  const { suggestedLead, dismissSuggestion, resetSuggestionTimer } = useLeadSuggestion({
-    intervalSeconds: 180,
-    enabled: alertsEnabled && !isCallDialogOpen,
-    pendingLeads: pendingAll,
-    isOnCall,
-    playNudge: playReminderNudge,
-  });
-
-  // Idle timer — visible counter + periodic reminder nudge every 60s
 
   // Track daily performance
   useDailyPerformanceTracker({
@@ -213,22 +186,6 @@ const Executive = () => {
     todayLeads: todayLeadsForGoals,
     goalCalls: settings.daily_goal_calls,
     goalScheduled: settings.daily_goal_scheduled,
-  });
-
-  const { idleSeconds, resetIdleTimer } = useIdleTimer({
-    enabled: alertsEnabled && !isCallDialogOpen,
-    hasPendingLeads: pendingAll.length > 0,
-    reminderIntervalSeconds: 60,
-    playReminderNudge,
-    urgentThresholdSeconds: 120,
-    onUrgentIdle: useCallback(() => {
-      playUrgentAlarm();
-      // Pick a random pending lead for the popup
-      if (pendingAll.length > 0) {
-        const lead = pendingAll[Math.floor(Math.random() * pendingAll.length)];
-        setUrgentPopupLead(lead);
-      }
-    }, [playUrgentAlarm, pendingAll]),
   });
 
   const handleAction = async (leadId: string, action: string, advisorId?: string, notes?: string) => {
@@ -318,8 +275,6 @@ const Executive = () => {
     // Skip this lead from priority so the next one takes over
     setSkippedLeadIds(prev => new Set(prev).add(leadId));
     setIsOnCall(false); // Call is done after action
-    resetSuggestionTimer();
-    resetIdleTimer();
     const statusLabels: Record<string, string> = {
       scheduled: 'Agendado',
       no_qualify: 'No califica',
@@ -340,27 +295,13 @@ const Executive = () => {
   // When user clicks LLAMAR on a lead, mark it as "calling" and track it
   const handleCallClick = async (leadId: string) => {
     if (!user) return;
-    playCallStart(); // Short call-start sound
     setIsOnCall(true);
     const lead = leads.find(l => l.id === leadId);
-    // Recicladora siempre toma posesión del lead para poder continuar con el flujo
     if (lead && (!lead.assigned_to || isRecicladora)) {
       await assignLead(leadId, user.id);
     }
     await updateLeadStatus(leadId, 'calling');
-    resetSuggestionTimer();
-    resetIdleTimer();
     await refetch();
-  };
-
-  const handleSuggestionCall = (leadId: string) => {
-    dismissSuggestion();
-    resetSuggestionTimer();
-    resetIdleTimer();
-    // Select this lead in the priority panel
-    setSelectedPendingId(leadId);
-    setFlashingLead(null);
-    mainScrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleDeleteLead = async (leadId: string) => {
@@ -400,30 +341,6 @@ const Executive = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Urgent 2-min idle popup */}
-      {urgentPopupLead && (
-        <UrgentCallPopup
-          lead={urgentPopupLead}
-          onDismiss={() => setUrgentPopupLead(null)}
-          onCallNow={(leadId) => {
-            setUrgentPopupLead(null);
-            setSelectedPendingId(leadId);
-            setFlashingLead(null);
-            mainScrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-            resetIdleTimer();
-          }}
-        />
-      )}
-
-      {/* Lead Suggestion Popup */}
-      {suggestedLead && (
-        <LeadSuggestionPopup
-          lead={suggestedLead}
-          onDismiss={dismissSuggestion}
-          onCallNow={handleSuggestionCall}
-        />
-      )}
-
       {/* Top Bar */}
       <div className="flex items-center justify-between px-6 py-3 border-b border-border bg-card">
         <div className="flex items-center gap-4">
@@ -509,23 +426,6 @@ const Executive = () => {
               ♻️ Descargar Reciclados
             </button>
           )}
-          <div data-tour="alert-activator">
-            <AlertActivator
-              enabled={alertsEnabled}
-              onActivate={activate}
-              onTest={() => playAlert(3)}
-            />
-          </div>
-          {user && (
-            <MissedCallsBell
-              userId={user.id}
-              onSelectLead={(leadId) => {
-                setSelectedPendingId(leadId);
-                setFlashingLead(null);
-                mainScrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-            />
-          )}
           <NavLink data-tour="nav-advisor" to="/advisor" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Seguimiento
           </NavLink>
@@ -561,28 +461,6 @@ const Executive = () => {
       <div className="flex gap-3 p-3" style={{ minHeight: 'calc(100vh - 140px)' }}>
         {/* Left: Table + Today's Calls stacked */}
         <div className="flex-1 min-w-0 flex flex-col gap-3">
-          {/* Idle Timer */}
-          {pendingAll.length > 0 && idleSeconds > 0 && (
-            <div className={`flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border transition-all shrink-0 ${
-              idleSeconds >= 120
-                ? 'bg-destructive/15 border-destructive/40 animate-pulse'
-                : idleSeconds >= 60
-                  ? 'bg-warning/15 border-warning/40'
-                  : 'bg-muted border-border'
-            }`}>
-              <span className="text-xs">⏱️</span>
-              <span className={`text-sm font-mono font-bold ${
-                idleSeconds >= 120
-                  ? 'text-destructive'
-                  : idleSeconds >= 60
-                    ? 'text-warning'
-                    : 'text-muted-foreground'
-              }`}>
-                {Math.floor(idleSeconds / 60)}:{String(idleSeconds % 60).padStart(2, '0')} sin llamar
-              </span>
-            </div>
-          )}
-
           {/* Leads table - fixed height to keep its size */}
           <div style={{ height: 'calc(60vh - 70px)', minHeight: '350px' }}>
             <LeadsTable
@@ -632,10 +510,6 @@ const Executive = () => {
               executiveEditorMode={executiveEditorMode}
               onCallDialogOpenChange={(open) => {
                 setIsCallDialogOpen(open);
-                if (!open) {
-                  resetIdleTimer();
-                  resetSuggestionTimer();
-                }
               }}
             />
           </div>
@@ -704,11 +578,15 @@ const Executive = () => {
             <Button
               disabled={!newLeadName.trim() || !newLeadPhone.trim()}
               onClick={async () => {
+                if (!user?.id) {
+                  toast.error('Sesión no disponible, refresca la página');
+                  return;
+                }
                 let phone = newLeadPhone.trim().replace(/[\s\-\(\)]/g, '');
                 if (/^9\d{8}$/.test(phone)) phone = '+56' + phone;
                 else if (/^56\d{9}$/.test(phone)) phone = '+' + phone;
                 else if (!phone.startsWith('+')) phone = '+' + phone;
-                await supabase.from('leads').insert({
+                const { error } = await supabase.from('leads').insert({
                   name: newLeadName.trim(),
                   phone,
                   source: 'manual',
@@ -717,6 +595,11 @@ const Executive = () => {
                   is_demo: false,
                   assigned_to: user?.id,
                 });
+                if (error) {
+                  console.error('[NewLead] Insert failed:', error);
+                  toast.error('Error al crear lead: ' + error.message);
+                  return;
+                }
                 setShowNewLeadForm(false);
                 setNewLeadName('');
                 setNewLeadPhone('');

@@ -42,32 +42,36 @@ export default function LeadDocuments({ leadId }: LeadDocumentsProps) {
   }, [leadId]);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
     setUploading(true);
     try {
-      const ext = file.name.split('.').pop();
-      const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-      const storagePath = `${leadId}/${uniqueName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('lead-documents')
-        .upload(storagePath, file);
-
-      if (uploadError) throw uploadError;
-
       const { data: { user } } = await supabase.auth.getUser();
-      const { error: dbError } = await supabase.from('lead_documents').insert({
-        lead_id: leadId,
-        file_name: file.name,
-        file_size: file.size,
-        storage_path: storagePath,
-        uploaded_by: user?.id,
-      });
-      if (dbError) throw dbError;
+      let uploaded = 0;
+      for (const file of Array.from(files)) {
+        const ext = file.name.split('.').pop();
+        const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+        const storagePath = `${leadId}/${uniqueName}`;
 
-      toast.success(`${file.name} subido correctamente`);
-      fetchDocuments();
+        const { error: uploadError } = await supabase.storage
+          .from('lead-documents')
+          .upload(storagePath, file);
+        if (uploadError) { toast.error(`Error al subir ${file.name}: ${uploadError.message}`); continue; }
+
+        const { error: dbError } = await supabase.from('lead_documents').insert({
+          lead_id: leadId,
+          file_name: file.name,
+          file_size: file.size,
+          storage_path: storagePath,
+          uploaded_by: user?.id,
+        });
+        if (dbError) { toast.error(`Error al registrar ${file.name}: ${dbError.message}`); continue; }
+        uploaded++;
+      }
+      if (uploaded > 0) {
+        toast.success(`${uploaded} archivo${uploaded > 1 ? 's' : ''} subido${uploaded > 1 ? 's' : ''} correctamente`);
+        fetchDocuments();
+      }
     } catch (err: any) {
       toast.error(`Error al subir: ${err.message}`);
     } finally {
@@ -122,6 +126,7 @@ export default function LeadDocuments({ leadId }: LeadDocumentsProps) {
             className="hidden"
             onChange={handleUpload}
             accept="*/*"
+            multiple
           />
           <Button
             size="sm"
@@ -130,7 +135,7 @@ export default function LeadDocuments({ leadId }: LeadDocumentsProps) {
             disabled={uploading}
             className="text-xs h-7"
           >
-            {uploading ? '⏳ Subiendo...' : '⬆️ Subir archivo'}
+            {uploading ? '⏳ Subiendo...' : '⬆️ Subir archivos'}
           </Button>
         </div>
       </div>
