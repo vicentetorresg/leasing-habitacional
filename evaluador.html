@@ -311,17 +311,10 @@
       </div>
 
       <div class="fsect">Financiamiento</div>
-      <div class="g2f">
-        <div class="ff">
-          <label>Valor propiedad (UF) <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--austral-acc)">[Austral]</span></label>
-          <input type="number" id="valor-prop" min="0" step="1" placeholder="1.500" oninput="liveEval()">
-          <div class="note au">Austral: entre 1.000&ndash;2.000 UF &bull; financia hasta 90%</div>
-        </div>
-        <div class="ff">
-          <label>Valor UF (CLP) <span id="uf-fecha2" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)">cargando&hellip;</span></label>
-          <input type="text" id="uf-clp2" placeholder="40.000" value="40.000" readonly style="background:#f4f2ee;cursor:default;color:var(--muted)">
-          <div class="note">Actualizado autom&aacute;ticamente</div>
-        </div>
+      <div class="ff">
+        <label>Valor UF (CLP) <span id="uf-fecha2" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--teal)">cargando&hellip;</span></label>
+        <input type="text" id="uf-clp2" placeholder="40.000" value="40.000" readonly style="background:#f4f2ee;cursor:default;color:var(--muted);max-width:280px">
+        <div class="note">Actualizado autom&aacute;ticamente</div>
       </div>
       <div class="g2f">
         <div class="ff" style="margin-bottom:0">
@@ -534,7 +527,6 @@ function liveEval(){
   var dicomUF =parseFloat(document.getElementById('dicom-monto').value)||0;
   var ufDicom =parseNumero('uf-clp')||40000;
   var cmfOpt  =document.querySelector('input[name="cmf"]:checked').value;
-  var valorProp=parseFloat(document.getElementById('valor-prop').value)||0;
   var tasaCP  =parseTasa('tasa-cp');
   var tasaAU  =parseTasa('tasa-au');
   var ufClp   =parseNumero('uf-clp2')||40000;
@@ -626,18 +618,7 @@ function liveEval(){
     });
   }
 
-  /* 8. Valor propiedad */
-  if(valorProp>0){
-    var auValOk=valorProp>=1000&&valorProp<=2000;
-    crits.push({n:'Valor propiedad',
-      cp:{s:'ok',d:valorProp.toLocaleString(LOC)+' UF \u2014 sin restricci\u00f3n de rango'},
-      au:{s:auValOk?'ok':'no',
-          d:auValOk?valorProp.toLocaleString(LOC)+' UF \u2014 rango v\u00e1lido (1.000\u20132.000 UF)':
-            valorProp<1000?valorProp+' UF \u2014 m\u00edn. 1.000 UF':valorProp+' UF \u2014 m\u00e1x. 2.000 UF'}
-    });
-  }
-
-  /* 9. Capacidad financiera */
+  /* 8. Capacidad financiera */
   var esFam=codOpt==='familiar';
   var rentaT=(codOpt!=='no'&&rentaCod>0)?renta+rentaCod:renta;
 
@@ -664,9 +645,10 @@ function liveEval(){
   var cpCap=computeCap(tasaCP,'cp');
   var auCap=computeCap(tasaAU,'au');
 
-  /* Austral: LTV 90% + minimo 600 UF */
-  var auUF=auCap.uf;
-  if(auCap.s==='ok'&&valorProp>0) auUF=Math.min(auUF,valorProp*0.90);
+  /* Austral: LTV 90% + subsidio DS120 + minimo 600 UF */
+  /* CLH ≤ 0.90 × VP donde VP = (CLH+725.8)/1.325 → CLH ≤ 0.90×725.8/(1.325−0.90) */
+  var auLtvMax=0.90*725.8/(1.325-0.90);
+  var auUF=auCap.s==='ok'?Math.min(auCap.uf,auLtvMax):auCap.uf;
   var auFinal={s:auCap.s,d:auCap.d,uf:auUF,clp:auUF*ufClp,div:auCap.div};
   if(auCap.s==='ok'){
     if(auUF>0&&auUF<600){
