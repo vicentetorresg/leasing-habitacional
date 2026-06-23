@@ -645,12 +645,13 @@ function liveEval(){
     if(!renta||!plazo||tasa<=0) return {s:'pend',d:'Ingrese renta, plazo y tasa.',uf:0,clp:0,div:0};
     var mD25,mD50;
     if(inst==='cp'){
-      /* Casa Pronta: cuota ≤ 30% renta (incluye seguros) */
-      mD25=codOpt==='no'?renta*0.30:esFam?rentaT*0.30:Math.min(rentaT*0.30,renta*0.50);
+      /* Casa Pronta: dividendo ≤ 25% renta; con codeudor no familiar ≤ 50% renta individual */
+      mD25=codOpt==='no'?renta*0.25:esFam?rentaT*0.25:Math.min(rentaT*0.25,renta*0.50);
+      /* Carga financiera ≤ 50%; con codeudor no familiar ≤ 60% renta individual */
       mD50=codOpt==='no'?renta*0.50-otras:esFam?rentaT*0.50-otras:Math.min(rentaT*0.50,renta*0.60)-otras;
     } else {
-      /* Austral: cuota ≤ 25% renta (incluye seguros) */
-      mD25=codOpt==='no'?renta*0.25:rentaT*0.25;
+      /* Austral: dividendo ≤ 25% renta; con codeudor ≤ 50% renta individual */
+      mD25=codOpt==='no'?renta*0.25:Math.min(rentaT*0.25,renta*0.50);
       mD50=codOpt==='no'?renta*0.50-otras:rentaT*0.50-otras;
     }
     var maxDiv=Math.min(mD25,mD50);
