@@ -115,6 +115,13 @@
     .inst-card.ok   .fin-meta{color:rgba(255,255,255,.5)}
     .inst-card.no   .fin-meta{color:rgba(255,255,255,.45)}
 
+    .desglose{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.12)}
+    .inst-card.pend .desglose{display:none}
+    .inst-card.no   .desglose{display:none}
+    .desglose-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
+    .desglose-lbl{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,.45)}
+    .desglose-val{font-size:.82rem;font-weight:800;color:rgba(255,255,255,.9)}
+
     /* CRITERIA DUAL */
     .crit-card{background:#fff;border-radius:16px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.07)}
     .crit-hdr{display:grid;grid-template-columns:26px 1fr 26px;gap:4px;padding-bottom:8px;border-bottom:2px solid var(--border);margin-bottom:2px}
@@ -360,6 +367,11 @@
           <div class="uf-label">UF cr&eacute;dito m&aacute;ximo</div>
           <div class="clp-big" id="cp-clp">Completa el formulario</div>
           <div class="fin-meta" id="cp-meta"></div>
+          <div class="desglose" id="cp-desglose">
+            <div class="desglose-row"><span class="desglose-lbl">Valor propiedad</span><span class="desglose-val" id="cp-vp"></span></div>
+            <div class="desglose-row"><span class="desglose-lbl">Subsidio DS120</span><span class="desglose-val" id="cp-sub"></span></div>
+            <div class="desglose-row"><span class="desglose-lbl">Pie (5%)</span><span class="desglose-val" id="cp-pie"></span></div>
+          </div>
         </div>
         <!-- Austral -->
         <div class="inst-card au pend" id="au-card">
@@ -369,6 +381,11 @@
           <div class="uf-label">UF cr&eacute;dito m&aacute;ximo</div>
           <div class="clp-big" id="au-clp">Completa el formulario</div>
           <div class="fin-meta" id="au-meta"></div>
+          <div class="desglose" id="au-desglose">
+            <div class="desglose-row"><span class="desglose-lbl">Valor propiedad</span><span class="desglose-val" id="au-vp"></span></div>
+            <div class="desglose-row"><span class="desglose-lbl">Subsidio DS120</span><span class="desglose-val" id="au-sub"></span></div>
+            <div class="desglose-row"><span class="desglose-lbl">Pie (5%)</span><span class="desglose-val" id="au-pie"></span></div>
+          </div>
         </div>
       </div>
 
@@ -734,6 +751,21 @@ function liveEval(){
       ufEl.textContent='\u2014';
       clpEl.textContent=nNo+' criterio'+(nNo>1?'s':'')+' no cumplido'+(nNo>1?'s':'');
       metaEl.textContent='Revisa los requisitos en detalle.';
+    }
+    /* Desglose subsidio DS120 */
+    var vpEl=document.getElementById(pfx+'-vp');
+    var subEl=document.getElementById(pfx+'-sub');
+    var pieEl=document.getElementById(pfx+'-pie');
+    if(state==='ok'&&uf>0){
+      var vp=(uf+725.8)/1.325;
+      var subsidio=725.8-0.375*vp;
+      if(subsidio<0){subsidio=0;vp=uf/0.95;}
+      var pie=0.05*vp;
+      vpEl.textContent=Math.round(vp).toLocaleString(LOC)+' UF';
+      subEl.textContent=subsidio>0?subsidio.toFixed(1).replace('.',',')+' UF':'No aplica';
+      pieEl.textContent=pie.toFixed(1).replace('.',',')+' UF';
+    } else {
+      vpEl.textContent='\u2014';subEl.textContent='\u2014';pieEl.textContent='\u2014';
     }
   }
 
