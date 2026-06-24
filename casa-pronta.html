@@ -3,6 +3,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Simulacion Leasing Habitacional</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <style>
   :root {
@@ -169,7 +170,7 @@
   }
   .params-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     gap: 7px;
   }
   .param-card {
@@ -574,6 +575,10 @@
         </select>
       </div>
       <div class="param-card">
+        <div class="param-label">Tasa Anual (%)</div>
+        <input class="param-input" type="text" id="tasaInput" value="10,75" oninput="onTasaInput(this)" onblur="onTasaBlur(this)" />
+      </div>
+      <div class="param-card">
         <div class="param-label">Pie Mínimo (UF)</div>
         <input class="param-input" id="pie" type="text" readonly />
       </div>
@@ -877,6 +882,35 @@ function onValorPropFocus(el) {
   el.value = el.value.replace(/,[0-9]*$/, '');
 }
 
+// ── Tasa input: solo dígitos y una coma, máximo 2 decimales ──
+let tasaManual = false; // true cuando el usuario edita la tasa a mano
+
+function onTasaInput(el) {
+  // Permitir solo dígitos y una coma
+  let v = el.value.replace(/[^0-9,]/g, '');
+  // Solo una coma
+  const parts = v.split(',');
+  if (parts.length > 2) v = parts[0] + ',' + parts.slice(1).join('');
+  // Máximo 2 decimales
+  if (parts.length === 2 && parts[1].length > 2) v = parts[0] + ',' + parts[1].slice(0, 2);
+  el.value = v;
+  tasaManual = true;
+  calcular();
+}
+
+function onTasaBlur(el) {
+  const raw = el.value.replace(/[^0-9,]/g, '');
+  if (!raw) { el.value = '0,00'; return; }
+  const num = parseFloat(raw.replace(',', '.')) || 0;
+  el.value = num.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function actualizarTasaDefault(vp) {
+  if (tasaManual) return;
+  const tasa = tasaPorVP(vp) * 100;
+  document.getElementById('tasaInput').value = tasa.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
 // ══════════════════════════════════════════════
 //  CÁLCULO PRINCIPAL
 // ══════════════════════════════════════════════
@@ -889,7 +923,9 @@ function calcular() {
   const sub_uf   = subsidio(vp);
   const monto    = vp - pie_uf - sub_uf;         // Saldo Precio
   const nMeses   = anos * 12;
-  const tasaAnual = tasaPorVP(vp);
+  actualizarTasaDefault(vp);
+  const tasaPctStr = document.getElementById('tasaInput').value || '0';
+  const tasaAnual = parseFloat(tasaPctStr.replace(/\./g,'').replace(',','.')) / 100;
   const tasaMes  = parseFloat((tasaAnual / 12).toFixed(8));
 
   const canonSS = Math.trunc(pmt(tasaMes, nMeses, monto) * 1e6) / 1e6;
