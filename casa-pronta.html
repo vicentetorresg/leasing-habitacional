@@ -1,0 +1,1156 @@
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulacion Leasing Habitacional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+  :root {
+    --purple:       #5C2E85;
+    --purple-light: #7a3fa8;
+    --purple-dark:  #3e1e5c;
+    --gray-bg:      #CAD1D3;
+    --gray-light:   #f2f4f5;
+    --gray-mid:     #dde1e3;
+    --white:         #ffffff;
+    --gold:         #ffd700;
+    --font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: linear-gradient(135deg, #e8eaec 0%, #d4d8dc 100%);
+    min-height: 100vh;
+    padding: 24px 16px;
+    color: var(--purple);
+  }
+
+  /* ── PAGE WRAPPER ── */
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(92,46,133,0.18);
+  }
+
+  /* ── TOP STRIPE ── */
+  .top-stripe { height: 6px; background: var(--purple); }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 22px 8px;
+    border-bottom: 1px solid var(--gray-mid);
+    gap: 16px;
+  }
+  .header-logo { height: 44px; object-fit: contain; }
+  .header-center { flex: 1; text-align: center; }
+  .result-badge {
+    display: inline-block;
+    background: var(--gray-bg);
+    color: var(--purple);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 6px 20px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .header-right {
+    min-width: 130px;
+    text-align: right;
+    font-size: 10px;
+    color: var(--purple);
+    line-height: 1.6;
+  }
+  .header-right .greeting { font-size: 12px; font-weight: 700; }
+
+  /* ── CLIENT SECTION ── */
+  .client-section {
+    background: var(--gray-light);
+    padding: 8px 22px 10px;
+    border-bottom: 3px solid var(--purple);
+  }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--purple);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.4fr;
+    gap: 6px 16px;
+  }
+  .field { display: flex; flex-direction: column; gap: 3px; }
+  .field label {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+  }
+  .field input, .field select {
+    border: 1.5px solid rgba(92,46,133,0.35);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 11px;
+    color: var(--purple);
+    font-family: var(--font);
+    background: white;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .field input:focus, .field select:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(92,46,133,0.1);
+  }
+  .field input.field-error {
+    border-color: #c0392b;
+    box-shadow: 0 0 0 3px rgba(192,57,43,0.12);
+  }
+  .field-err-msg {
+    font-size: 9px;
+    color: #c0392b;
+    font-weight: 700;
+    display: none;
+    margin-top: 1px;
+  }
+  .field-err-msg.visible { display: block; }
+  .req-star { color: #c0392b; margin-left: 1px; }
+
+  /* ── INFO BAR ── */
+  .info-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 22px;
+    font-size: 10px;
+    color: var(--purple);
+    background: white;
+    border-bottom: 1px solid var(--gray-mid);
+  }
+  .info-bar strong { font-weight: 700; }
+  .btn-uf-refresh {
+    background: none;
+    border: 1.5px solid rgba(92,46,133,0.4);
+    border-radius: 4px;
+    color: var(--purple);
+    font-size: 10px;
+    font-weight: 700;
+    font-family: var(--font);
+    cursor: pointer;
+    padding: 3px 9px;
+    letter-spacing: 0.03em;
+    transition: background 0.2s, color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .btn-uf-refresh:hover { background: var(--purple); color: white; }
+  .btn-uf-refresh.loading { opacity: 0.6; pointer-events: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spin-icon { display: inline-block; }
+  .spin-icon.spinning { animation: spin 0.7s linear infinite; }
+
+  /* ── PARAMS SECTION ── */
+  .params-section {
+    padding: 10px 22px 8px;
+    background: white;
+    border-bottom: 1px solid var(--gray-mid);
+  }
+  .params-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 7px;
+  }
+  .param-card {
+    background: var(--gray-light);
+    border-radius: 6px;
+    padding: 6px 10px;
+    border-left: 3px solid var(--purple);
+    transition: box-shadow 0.2s;
+  }
+  .param-card:hover { box-shadow: 0 2px 8px rgba(92,46,133,0.12); }
+  .param-label {
+    font-size: 8.5px;
+    font-weight: 700;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 5px;
+    opacity: 0.75;
+  }
+  .param-input, .param-select {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--purple);
+    font-family: var(--font);
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  .param-input[readonly] { opacity: 0.65; cursor: default; font-size: 12px; }
+  .param-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  .btn-row { margin-top: 8px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .btn-pdf {
+    background: white;
+    color: var(--purple);
+    border: 2px solid var(--purple);
+    border-radius: 5px;
+    padding: 9px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: var(--font);
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-pdf:hover { background: var(--purple); color: white; }
+  .btn-pdf:active { transform: scale(0.98); }
+  .btn-email {
+    background: white;
+    color: var(--purple);
+    border: 2px solid var(--purple);
+    border-radius: 5px;
+    padding: 9px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: var(--font);
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-email:hover { background: var(--purple); color: white; }
+  .btn-email:active { transform: scale(0.98); }
+  .btn-pdf.loading, .btn-email.loading { opacity: 0.6; pointer-events: none; }
+  .btn-pdf:disabled, .btn-email:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .btn-simulate {
+    background: var(--purple);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 9px 28px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: var(--font);
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 2px 8px rgba(92,46,133,0.25);
+  }
+  .btn-simulate:hover { background: var(--purple-light); }
+  .btn-simulate:active { transform: scale(0.98); }
+  .tasa-display {
+    font-size: 11px;
+    color: var(--purple);
+    opacity: 0.7;
+  }
+
+  /* ── RENTA BANNER ── */
+  .renta-banner {
+    background: var(--gray-bg);
+    padding: 7px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 2px solid var(--purple);
+    border-bottom: 2px solid var(--purple);
+    gap: 12px;
+  }
+  .renta-banner .label { font-size: 11px; font-weight: 600; color: var(--purple); }
+  .renta-banner .amount { font-size: 16px; font-weight: 800; color: var(--purple); white-space: nowrap; }
+
+  /* ── CARDS GRID ── */
+  .cards-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 10px 22px 0;
+  }
+
+  .pcard {
+    background: var(--purple);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: white;
+    box-shadow: 0 4px 16px rgba(92,46,133,0.2);
+  }
+  .pcard h3 {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    opacity: 0.9;
+  }
+  .crow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px 0;
+    font-size: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .crow:last-child { border-bottom: none; }
+  .crow .lbl { opacity: 0.82; }
+  .crow .val { font-weight: 700; text-align: right; }
+  .crow.hi .val { font-size: 13px; color: var(--gold); }
+  .crow.hi .lbl { font-weight: 600; }
+  .crow.divider { border-top: 1px solid rgba(255,255,255,0.25); margin-top: 4px; padding-top: 8px; }
+
+  /* ── GOP ROW ── */
+  .gop-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 10px 22px 0;
+  }
+
+  /* ── TOTAL BANNER ── */
+  .total-banner {
+    background: var(--purple);
+    margin: 10px 22px 0;
+    border-radius: 8px;
+    padding: 8px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    box-shadow: 0 4px 12px rgba(92,46,133,0.3);
+  }
+  .total-banner .lbl { font-size: 11px; font-weight: 600; opacity: 0.9; }
+  .total-banner .amt { font-size: 18px; font-weight: 800; color: var(--gold); }
+
+  /* ── NOTES ── */
+  .gop-note-box {
+    background: var(--gray-light);
+    border-left: 4px solid var(--purple);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 9px;
+    color: var(--purple);
+    line-height: 1.6;
+    height: 100%;
+  }
+  .gop-note-box strong { display: block; margin-bottom: 3px; font-size: 9px; }
+
+  /* ── FOOTER NOTES ── */
+  .footer-notes {
+    padding: 8px 22px 6px;
+    background: var(--gray-light);
+    border-top: 1px solid var(--gray-mid);
+    margin-top: 10px;
+  }
+  .footer-notes p {
+    font-size: 8px;
+    color: var(--purple);
+    line-height: 1.5;
+    margin-bottom: 2px;
+    opacity: 0.75;
+  }
+  .footer-meta {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 22px;
+    font-size: 8px;
+    color: var(--purple);
+    background: white;
+    border-top: 1px solid var(--gray-mid);
+    opacity: 0.65;
+  }
+
+  .bottom-stripe { height: 4px; background: var(--purple); }
+
+  /* ── TABLA COMPARATIVA ── */
+  .tabla-comparativa {
+    padding: 10px 22px 0;
+  }
+  .tabla-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--purple);
+    opacity: 0.75;
+    margin-bottom: 7px;
+  }
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10px;
+    color: var(--purple-dark);
+  }
+  .comp-table th {
+    background: var(--purple);
+    color: white;
+    font-size: 8.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 6px 8px;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .comp-table th:first-child { text-align: left; border-radius: 5px 0 0 0; }
+  .comp-table th:last-child  { border-radius: 0 5px 0 0; }
+  .comp-table td {
+    padding: 5px 8px;
+    text-align: right;
+    border-bottom: 1px solid var(--gray-mid);
+    white-space: nowrap;
+  }
+  .comp-table td:first-child { text-align: left; font-weight: 700; color: var(--purple); }
+  .comp-table td.tasa-cell   { font-weight: 700; }
+  .comp-table tr.fila-activa td { background: #f0eaf8; font-weight: 700; }
+  .comp-table tr.fila-activa td:first-child { border-left: 3px solid var(--purple); }
+  .comp-table .col-tasa { display: none; }
+
+  /* ── RESULTADOS: ocultos hasta simular ── */
+  .resultados-wrapper {
+    display: none;
+    animation: fadeInDown 0.4s ease;
+  }
+  .resultados-wrapper.visible {
+    display: block;
+  }
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 680px) {
+    .params-grid { grid-template-columns: repeat(3, 1fr); }
+    .cards-row, .gop-row { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr 1fr; }
+    .renta-banner { flex-direction: column; text-align: center; gap: 4px; }
+  }
+  @media print {
+    @page {
+      size: letter portrait;
+      margin: 0;
+    }
+    html, body {
+      width: 215.9mm;
+      height: 279.4mm;
+      margin: 0;
+      padding: 0;
+      background: white;
+    }
+    body {
+      /* Escala el contenido para que quepa exactamente en 1 página Carta */
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .page {
+      box-shadow: none;
+      border-radius: 0;
+      width: 215.9mm;
+      /* Comprimir para que quepa en 1 página: zoom aplicado al imprimir */
+      transform-origin: top left;
+    }
+    .btn-row { display: none !important; }
+    body > *:not(.page) { display: none !important; }
+    /* Ocultar flechas de selección en los select al imprimir */
+    .param-select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+    /* Forzar una sola línea en los inputs de parámetros al imprimir */
+    .param-input {
+      white-space: nowrap;
+      overflow: hidden;
+      font-size: 11px;
+    }
+    /* Reducir label para que quepa en una sola línea */
+    .param-label {
+      font-size: 7px;
+      letter-spacing: 0em;
+      word-spacing: -0.5px;
+    }
+    .param-card {
+      padding: 4px 6px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="top-stripe"></div>
+
+  <div class="header">
+    <img class="header-logo" id="logo-img" src="" alt="Logo" />
+    <div class="header-center"></div>
+    <div class="header-right">
+      <span class="greeting">¡Hola, <span id="nombre-display">Cliente</span>!</span>
+      <span>Revisa las condiciones de tu solicitud</span>
+    </div>
+  </div>
+
+  <div class="client-section">
+    <div class="section-title">Datos de la Operación</div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Nombre Cliente<span class="req-star">*</span></label>
+        <input type="text" id="nombre" placeholder="Ingrese nombre completo" oninput="updateNombre(); clearErr('nombre')" />
+        <span class="field-err-msg" id="err-nombre">Campo obligatorio</span>
+      </div>
+      <div class="field">
+        <label>RUT<span class="req-star">*</span></label>
+        <input type="text" id="rut" placeholder="12.345.678-9" oninput="clearErr('rut')" />
+        <span class="field-err-msg" id="err-rut">Campo obligatorio</span>
+      </div>
+      <div class="field">
+        <label>Celular<span class="req-star">*</span></label>
+        <input type="tel" id="celular" placeholder="+56 9 1234 5678" maxlength="12" oninput="soloNumeros(this); clearErr('celular')" onkeydown="return soloNumerosKey(event)" />
+        <span class="field-err-msg" id="err-celular">Campo obligatorio</span>
+      </div>
+      <div class="field">
+        <label>E-mail</label>
+        <input type="email" id="email" placeholder="correo@dominio.com" />
+      </div>
+    </div>
+  </div>
+
+  <div class="info-bar">
+    <span style="display:flex;align-items:center;gap:6px;">Fecha:
+      <input type="text" id="fecha-hoy" maxlength="10" placeholder="DD/MM/AAAA"
+        style="border:1.5px solid rgba(92,46,133,0.35);border-radius:4px;padding:3px 8px;font-size:11px;font-weight:700;font-family:inherit;color:var(--purple);background:white;outline:none;width:100px;text-align:center;"
+        onfocus="this.style.borderColor='var(--purple)';this.style.boxShadow='0 0 0 3px rgba(92,46,133,0.1)'"
+        onblur="this.style.borderColor='rgba(92,46,133,0.35)';this.style.boxShadow='none';onFechaBlur(this.value)"
+        oninput="mascararFecha(this)" />
+    </span>
+    <span style="display:flex;align-items:center;gap:8px;">
+      Valor UF: <strong id="uf-val">$40.746,28</strong>
+      <button class="btn-uf-refresh" id="btn-uf" onclick="fetchUF()">
+        <span class="spin-icon" id="uf-spin">↻</span> Actualizar UF
+      </button>
+    </span>
+  </div>
+
+  <div class="params-section">
+    <div class="section-title" style="margin-bottom:10px;">Parámetros de Simulación</div>
+    <div class="params-grid">
+      <div class="param-card">
+        <div class="param-label">Valor Prop. (UF)</div>
+        <input class="param-input" type="text" id="valorProp" value="1.000,00" oninput="onValorPropInput(this)" onblur="onValorPropBlur(this)" onfocus="onValorPropFocus(this)" />
+      </div>
+      <div class="param-card">
+        <div class="param-label">Tipo Propiedad</div>
+        <select class="param-select" id="tipoProp" onchange="calcular()">
+          <option value="Casa" selected>Casa</option>
+          <option value="Departamento">Departamento</option>
+        </select>
+      </div>
+      <div class="param-card">
+        <div class="param-label">Pie Mínimo (UF)</div>
+        <input class="param-input" id="pie" type="text" readonly />
+      </div>
+      <div class="param-card">
+        <div class="param-label">Subsidio (UF)</div>
+        <input class="param-input" id="subsidio" type="text" readonly />
+      </div>
+      <div class="param-card">
+        <div class="param-label">Saldo Precio (UF)</div>
+        <input class="param-input" id="saldoPrecio" type="text" readonly />
+      </div>
+      <div class="param-card">
+        <div class="param-label">Plazo (años)</div>
+        <select class="param-select" id="plazo" onchange="calcular()">
+          <option value="8">8 años</option>
+          <option value="12">12 años</option>
+          <option value="15">15 años</option>
+          <option value="20" selected>20 años</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:none;"><span id="tasa-display"></span></div>
+  <div class="btn-row">
+      <button class="btn-simulate" onclick="simularValidado()">▶ Simular</button>
+      <button class="btn-pdf" id="btn-pdf" onclick="descargarPDF()" disabled>⬇ Descargar PDF</button>
+      <button class="btn-email" id="btn-email" onclick="enviarPorMail()" disabled>✉ Enviar por Mail</button>
+    </div>
+  </div>
+
+  <div class="resultados-wrapper" id="resultados-wrapper">
+  <div class="renta-banner">
+    <span class="label">Para tu solicitud de leasing habitacional, requieres una renta mensual de:</span>
+    <span class="amount" id="renta-req">—</span>
+  </div>
+
+  <div class="cards-row">
+
+    <div class="pcard">
+      <h3>Detalle de la Operación</h3>
+      <div class="crow"><span class="lbl">Valor Propiedad:</span><span class="val" id="r-valorProp">—</span></div>
+      <div class="crow" style="display:none;"><span class="lbl">Tasa de Originación:</span><span class="val" id="r-tasa">—</span></div>
+      <div class="crow"><span class="lbl">Pie:</span><span class="val" id="r-pie">—</span></div>
+      <div class="crow"><span class="lbl">Subsidio:</span><span class="val" id="r-subsidio">—</span></div>
+      <div class="crow"><span class="lbl">Saldo Precio:</span><span class="val" id="r-saldo">—</span></div>
+      <div class="crow"><span class="lbl">Plazo en Años:</span><span class="val" id="r-plazo">—</span></div>
+    </div>
+
+    <div class="pcard">
+      <h3>Detalle Cuotas Mensuales</h3>
+      <div class="crow"><span class="lbl">Cuota sin Seguros:</span><span class="val" id="r-sinSeg">—</span></div>
+      <div class="crow"><span class="lbl">Seguro Desgravamen:</span><span class="val" id="r-desgrav">—</span></div>
+      <div class="crow"><span class="lbl">Seguro Incendio y Sismo:</span><span class="val" id="r-incendio">—</span></div>
+      <div class="crow"><span class="lbl">Seguro Cesantía:</span><span class="val" id="r-cesantia">—</span></div>
+      <div class="crow hi divider"><span class="lbl">Cuota con Seguros (UF):</span><span class="val" id="r-conSeg">—</span></div>
+      <div class="crow hi"><span class="lbl">Cuota con Seguros ($):</span><span class="val" id="r-cuotaPesos">—</span></div>
+    </div>
+  </div>
+
+  <div class="gop-row">
+    <div class="pcard">
+      <h3>Gastos Operacionales</h3>
+      <div class="crow"><span class="lbl">Tasación:</span><span class="val">UF 3,0</span></div>
+      <div class="crow"><span class="lbl">Estudio de títulos:</span><span class="val">UF 3,0</span></div>
+      <div class="crow"><span class="lbl">Redacción escritura:</span><span class="val">UF 2,5</span></div>
+      <div class="crow"><span class="lbl">Gastos notariales:</span><span class="val">UF 3,0</span></div>
+      <div class="crow"><span class="lbl">Conservador de bienes raíces:</span><span class="val">UF 8,9</span></div>
+      <div class="crow hi divider"><span class="lbl">Total GOP:</span><span class="val">UF 20,4</span></div>
+    </div>
+
+    <div>
+      <div class="gop-note-box">
+        <strong>Nota sobre Gastos Operacionales:</strong>
+        Se deberá provisionar un mínimo de UF 6.<br>
+        El saldo de los GOP podrán ser cancelados en 24 cuotas,
+        éstas serán sumadas a tu cuota total.
+      </div>
+    </div>
+  </div>
+
+  <div class="total-banner">
+    <span class="lbl">El total de tus gastos operacionales es de:</span>
+    <span class="amt" id="r-totalGop">—</span>
+  </div>
+
+   <div class="footer-notes">
+    <p><strong>1.- Los valores son solo referenciales y pueden estar sujetos a modificaciones al momento de cursar la aprobación.</strong></p>
+    <p><strong>2.- Aclarar que el documento es solo una simulación y no se debe entender como una aprobación.</strong></p>
+    <p><strong>3.- El valor de los gastos operacionales corresponden a RM, en regiones el monto se puede ver incrementado.</strong></p>
+    <p><strong>4.- Para el cálculo de la prima de incendio y sismo, el valor asegurable corresponde al 100% del valor de la propiedad para departamentos y al 75% para casas.</strong></p>
+  </div>
+
+  <div class="footer-meta">
+    <span>Fecha de emisión: <strong id="footer-fecha"></strong></span>
+    <span>Valor UF: <strong id="footer-uf"></strong></span>
+  </div>
+
+  </div><!-- /resultados-wrapper -->
+
+  <div class="bottom-stripe"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  CONSTANTES (del archivo Parametros)
+// ══════════════════════════════════════════════
+let VALOR_UF = 40746.28;
+
+// ── Fetch UF desde mindicador.cl (CORS abierto) ──
+async function fetchUF() {
+  const btn  = document.getElementById('btn-uf');
+  const icon = document.getElementById('uf-spin');
+  btn.classList.add('loading');
+  icon.classList.add('spinning');
+  try {
+    const res  = await fetch('https://mindicador.cl/api/uf');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const raw  = data?.serie?.[0]?.valor;
+    if (raw != null) {
+      VALOR_UF = parseFloat(raw);
+      const ufStr = '$' + VALOR_UF.toLocaleString('es-CL', {minimumFractionDigits:2, maximumFractionDigits:2});
+      document.getElementById('uf-val').textContent    = ufStr;
+      document.getElementById('footer-uf').textContent = ufStr;
+      // Sincronizar campo fecha al día de hoy
+      const hoy = new Date();
+      const fechaHoy = hoy.toLocaleDateString('es-CL', {day:'2-digit', month:'2-digit', year:'numeric'});
+      document.getElementById('fecha-hoy').value          = fechaHoy;
+      document.getElementById('footer-fecha').textContent = fechaHoy;
+      calcular();
+      btn.classList.remove('loading');
+      icon.classList.remove('spinning');
+      btn.style.background = '#2e7d32'; btn.style.color = 'white';
+      btn.innerHTML = '✔ Actualizada';
+      setTimeout(() => { btn.style.background=''; btn.style.color=''; btn.innerHTML='<span class="spin-icon" id="uf-spin">↻</span> Actualizar UF'; }, 2500);
+      return;
+    }
+  } catch(e) {}
+  // fallback error
+  btn.classList.remove('loading');
+  icon.classList.remove('spinning');
+  btn.style.background = '#c0392b'; btn.style.color = 'white';
+  btn.innerHTML = '✗ Sin conexión';
+  setTimeout(() => { btn.style.background=''; btn.style.color=''; btn.innerHTML='<span class="spin-icon" id="uf-spin">↻</span> Actualizar UF'; }, 2500);
+}
+
+// ── Solo números en celular ──
+function soloNumeros(input) {
+  input.value = input.value.replace(/[^0-9]/g, '');
+}
+function soloNumerosKey(e) {
+  if ([8,9,13,27,46,37,38,39,40].includes(e.keyCode)) return true;
+  if ((e.ctrlKey || e.metaKey) && [65,67,86,88].includes(e.keyCode)) return true;
+  if (e.key < '0' || e.key > '9') { e.preventDefault(); return false; }
+  return true;
+}
+
+// ── Validación Módulo 11 para RUT chileno ──
+function validarRut(rut) {
+  rut = rut.replace(/[\.\-]/g, '').trim().toUpperCase();
+  if (rut.length < 2) return false;
+  const cuerpo = rut.slice(0, -1);
+  const dv     = rut.slice(-1);
+  if (!/^[0-9]+$/.test(cuerpo)) return false;
+  let suma = 0, mul = 2;
+  for (let i = cuerpo.length - 1; i >= 0; i--) {
+    suma += parseInt(cuerpo[i]) * mul;
+    mul = mul === 7 ? 2 : mul + 1;
+  }
+  const dvCalc = 11 - (suma % 11);
+  const dvEsperado = dvCalc === 11 ? '0' : dvCalc === 10 ? 'K' : String(dvCalc);
+  return dv === dvEsperado;
+}
+
+// ── Validación campos obligatorios ──
+function simularValidado() {
+  let ok = true;
+
+  // Nombre
+  const nombre = document.getElementById('nombre');
+  if (!nombre.value.trim()) {
+    nombre.classList.add('field-error');
+    const e = document.getElementById('err-nombre');
+    e.textContent = 'Campo obligatorio'; e.classList.add('visible');
+    ok = false;
+  }
+
+  // RUT — obligatorio + módulo 11
+  const rutEl = document.getElementById('rut');
+  const errRut = document.getElementById('err-rut');
+  if (!rutEl.value.trim()) {
+    rutEl.classList.add('field-error');
+    errRut.textContent = 'Campo obligatorio'; errRut.classList.add('visible');
+    ok = false;
+  } else if (!validarRut(rutEl.value)) {
+    rutEl.classList.add('field-error');
+    errRut.textContent = 'RUT inválido'; errRut.classList.add('visible');
+    ok = false;
+  }
+
+  // Celular
+  const cel = document.getElementById('celular');
+  if (!cel.value.trim()) {
+    cel.classList.add('field-error');
+    const e = document.getElementById('err-celular');
+    e.textContent = 'Campo obligatorio'; e.classList.add('visible');
+    ok = false;
+  }
+
+  if (!ok) {
+    document.getElementById('resultados-wrapper').classList.remove('visible');
+    return;
+  }
+  calcular();
+  const wrapper = document.getElementById('resultados-wrapper');
+  wrapper.classList.add('visible');
+  actualizarBotones();
+  // Scroll suave hacia los resultados
+  setTimeout(() => wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+}
+
+function actualizarBotones() {
+  const nombre  = document.getElementById('nombre').value.trim();
+  const rut     = document.getElementById('rut').value.trim();
+  const celular = document.getElementById('celular').value.trim();
+  const habilitado = nombre && rut && celular;
+  document.getElementById('btn-pdf').disabled   = !habilitado;
+  document.getElementById('btn-email').disabled = !habilitado;
+}
+
+function clearErr(id) {
+  const el = document.getElementById(id);
+  el.classList.remove('field-error');
+  const err = document.getElementById('err-' + id);
+  if (err) err.classList.remove('visible');
+}
+// ── Tasa de originación por tramo de valor propiedad ──
+// Clave: valor mínimo del tramo (UF), Valor: tasa anual decimal
+const TASAS_TRAMO = [
+  { desde:    0, hasta:  999, tasa: 0.1100 },  // UF 900  → 11,00%
+  { desde: 1000, hasta: 1099, tasa: 0.1075 },  // UF 1000 → 10,75%
+  { desde: 1100, hasta: 1199, tasa: 0.1050 },  // UF 1100 → 10,50%
+  { desde: 1200, hasta: 1299, tasa: 0.1050 },  // UF 1200 → 10,50%
+  { desde: 1300, hasta: 9999, tasa: 0.1050 },  // UF 1300+ → 10,50%
+];
+
+function tasaPorVP(vp) {
+  const t = TASAS_TRAMO.find(t => vp >= t.desde && vp <= t.hasta);
+  return t ? t.tasa : 0.1000;
+}
+
+const PRIMA_DESGRAV = 0.00024;        // por UF de monto
+const PRIMA_INCEN   = 0.00017127;     // por UF de valor prop × factor
+const PRIMA_CESANT  = 0.00057;        // por UF de monto (0.57/1000)
+const GOP_UF        = 20.4;           // Total GOP fijo
+
+// Factor incendio: Casa=0.75, Dpto=1.00
+const FACTOR_INC = { 'Casa': 0.75, 'Departamento': 1 };
+
+// ══════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════
+const fmt  = (n, d=2) => n.toLocaleString('es-CL', { minimumFractionDigits:d, maximumFractionDigits:d });
+const peso = (n)      => '$' + Math.round(n).toLocaleString('es-CL');
+
+function pmt(r, n, pv) {
+  if (r === 0) return pv / n;
+  return pv * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1);
+}
+
+function subsidio(vp) {
+  return Math.ceil(Math.max(Math.min(725 - vp * 0.375, 425), 125));
+}
+
+// ── Formatear valor propiedad mientras se escribe ──
+function onValorPropInput(el) {
+  // Conservar solo dígitos (sin decimales mientras se escribe)
+  const raw = el.value.replace(/[^0-9]/g, '');
+  if (raw === '') { el.value = ''; calcular(); return; }
+  const num = Math.min(parseInt(raw, 10), 2000);
+  // Mostrar con separador de miles pero sin decimales mientras se escribe
+  const pos = el.selectionStart;
+  const prevLen = el.value.length;
+  el.value = num.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  // Ajustar cursor
+  const diff = el.value.length - prevLen;
+  el.setSelectionRange(pos + diff, pos + diff);
+  calcular();
+}
+
+function onValorPropBlur(el) {
+  // Al salir del campo, agregar 2 decimales
+  const raw = el.value.replace(/[^0-9]/g, '');
+  if (raw === '') { el.value = ''; return; }
+  const num = parseInt(raw, 10);
+  el.value = num.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function onValorPropFocus(el) {
+  // Al entrar al campo, quitar solo la parte decimal (,xx) para facilitar edición
+  // Eliminar decimales: quitar coma y todo lo que sigue
+  el.value = el.value.replace(/,[0-9]*$/, '');
+}
+
+// ══════════════════════════════════════════════
+//  CÁLCULO PRINCIPAL
+// ══════════════════════════════════════════════
+function calcular() {
+  const vp    = parseFloat((document.getElementById('valorProp').value || '0').replace(/\./g,'').replace(',','.')) || 0;
+  const tipo  = document.getElementById('tipoProp').value;
+  const anos  = parseInt(document.getElementById('plazo').value) || 20;
+
+  const pie_uf   = vp * 0.05;
+  const sub_uf   = subsidio(vp);
+  const monto    = vp - pie_uf - sub_uf;         // Saldo Precio
+  const nMeses   = anos * 12;
+  const tasaAnual = tasaPorVP(vp);
+  const tasaMes  = parseFloat((tasaAnual / 12).toFixed(8));
+
+  const canonSS = Math.trunc(pmt(tasaMes, nMeses, monto) * 1e6) / 1e6;
+
+  // Seguros (UF/mes)
+  const segDesgrav = monto * PRIMA_DESGRAV;
+  const segIncen   = vp * PRIMA_INCEN * FACTOR_INC[tipo];
+  const segCesant  = monto * PRIMA_CESANT;
+
+  // Cuota con seguros
+  const canonCS    = canonSS + segDesgrav + segIncen + segCesant;
+  const canonCS_$  = canonCS * VALOR_UF;
+  const canonSS_$  = canonSS * VALOR_UF;
+
+  // Renta requerida = cuota sin seguros × 4
+  const renta = canonSS_$ * 4;
+
+  // GOP en pesos
+  const gopPesos = GOP_UF * VALOR_UF;
+
+  // ── Actualizar campos de inputs ──
+  document.getElementById('pie').value         = fmt(pie_uf);
+  document.getElementById('subsidio').value    = fmt(sub_uf);
+  document.getElementById('saldoPrecio').value = fmt(monto);
+
+  // ── Actualizar tasa display ──
+  const tasaPct = (tasaAnual * 100).toLocaleString('es-CL', {minimumFractionDigits:2, maximumFractionDigits:2});
+  const tasaEl = document.getElementById('tasa-display');
+  if (tasaEl) tasaEl.textContent = 'Tasa de originación: ' + tasaPct + '% anual';
+
+  // ── Actualizar resultados ──
+  set('r-valorProp',  'UF ' + fmt(vp));
+  set('r-tasa',       tasaPct + '% anual');
+  set('r-pie',        'UF ' + fmt(pie_uf));
+  set('r-subsidio',   'UF ' + fmt(sub_uf));
+  set('r-saldo',      'UF ' + fmt(monto));
+  set('r-plazo',      anos + ' años');
+  set('r-cuotaTotal', 'UF ' + fmt(canonCS,4) + ' / ' + peso(canonCS_$));
+
+  set('r-sinSeg',    'UF ' + fmt(canonSS,4));
+  set('r-desgrav',   'UF ' + fmt(segDesgrav,4));
+  set('r-incendio',  'UF ' + fmt(segIncen,4));
+  set('r-cesantia',  'UF ' + fmt(segCesant,4));
+  set('r-conSeg',    'UF ' + fmt(canonCS,4));
+  set('r-cuotaPesos', peso(canonCS_$));
+
+  set('r-totalGop',  peso(gopPesos));
+  set('renta-req',   peso(renta));
+
+  renderTablaComparativa(vp, tipo, anos);
+}
+
+// ── Datos fijos de tramos ──
+const TRAMOS = [
+  { vp:  900, pie:  45, sub: 388, saldo:  467, tasa: 0.1100 },
+  { vp: 1000, pie:  50, sub: 350, saldo:  600, tasa: 0.1075 },
+  { vp: 1100, pie:  55, sub: 313, saldo:  732, tasa: 0.1050 },
+  { vp: 1200, pie:  60, sub: 275, saldo:  865, tasa: 0.1050 },
+  { vp: 1300, pie:  65, sub: 238, saldo:  997, tasa: 0.1050 },
+  { vp: 1400, pie:  70, sub: 200, saldo: 1130, tasa: 0.1050 },
+  { vp: 1500, pie:  75, sub: 163, saldo: 1262, tasa: 0.1050 },
+  { vp: 1600, pie:  80, sub: 125, saldo: 1395, tasa: 0.1050 },
+  { vp: 1700, pie:  85, sub: 125, saldo: 1490, tasa: 0.1050 },
+  { vp: 1800, pie:  90, sub: 125, saldo: 1585, tasa: 0.1050 },
+  { vp: 1900, pie:  95, sub: 125, saldo: 1680, tasa: 0.1050 },
+  { vp: 2000, pie: 100, sub: 125, saldo: 1775, tasa: 0.1050 },
+];
+
+function renderTablaComparativa(vpActual, tipo, anos) {
+  const tbody = document.getElementById('comp-tbody');
+  if (!tbody) return;
+  const nMeses = anos * 12;
+  let html = '';
+  // fila activa: la más cercana al VP ingresado
+  let idxActivo = 0;
+  let minDist = Infinity;
+  TRAMOS.forEach((t, i) => {
+    const d = Math.abs(t.vp - vpActual);
+    if (d < minDist) { minDist = d; idxActivo = i; }
+  });
+
+  TRAMOS.forEach((t, i) => {
+    const tm    = t.tasa / 12;
+    const cSS   = Math.trunc(pmt(tm, nMeses, t.saldo) * 1e6) / 1e6;
+    const segD  = t.saldo * PRIMA_DESGRAV;
+    const segI  = t.vp    * PRIMA_INCEN * FACTOR_INC[tipo];
+    const segC  = t.saldo * PRIMA_CESANT;
+    const cCS   = cSS + segD + segI + segC;
+    const cuota$ = cCS  * VALOR_UF;
+    const renta$ = cSS * VALOR_UF * 4;
+    const tasaPct = (t.tasa * 100).toLocaleString('es-CL',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%';
+    const cls = i === idxActivo ? ' class="fila-activa"' : '';
+    html += `<tr${cls}>
+      <td>UF ${t.vp.toLocaleString('es-CL')}</td>
+      <td class="tasa-cell col-tasa">${tasaPct}</td>
+      <td>UF ${t.pie}</td>
+      <td>UF ${t.sub}</td>
+      <td>UF ${t.saldo.toLocaleString('es-CL')}</td>
+      <td>UF ${fmt(cSS,2)}</td>
+      <td>UF ${fmt(cCS,2)}</td>
+      <td>${peso(cuota$)}</td>
+      <td>${peso(renta$)}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
+}
+
+function set(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function updateNombre() {
+  const n = document.getElementById('nombre').value.trim();
+  document.getElementById('nombre-display').textContent = n || 'Cliente';
+}
+
+// ── Descargar PDF (impresión nativa del navegador) ──
+function descargarPDF() {
+  // Calcular el zoom necesario para que el contenido quepa en 1 página A4
+  // A4 = 794px a 96dpi. Tomamos la altura real del .page y calculamos el factor.
+  const page = document.querySelector('.page');
+  const pageH = page.scrollHeight;
+  const a4H   = 1056; // 279.4mm (carta) a 96dpi ≈ 1056px
+
+  let styleEl = document.getElementById('print-scale-style');
+  if (!styleEl) {
+    styleEl = document.createElement('style');
+    styleEl.id = 'print-scale-style';
+    document.head.appendChild(styleEl);
+  }
+
+  if (pageH > a4H) {
+    const scale = a4H / pageH;
+    styleEl.textContent = `
+      @media print {
+        .page {
+          zoom: ${scale};
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+      }
+    `;
+  } else {
+    styleEl.textContent = `
+      @media print {
+        .page {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+      }
+    `;
+  }
+
+  window.print();
+}
+
+// ── Enviar por Mail ──
+function enviarPorMail() {
+  const nombre     = document.getElementById('nombre').value.trim() || 'Cliente';
+  const email      = document.getElementById('email').value.trim();
+  const valorPropRaw = document.getElementById('valorProp').value || '';
+  const valorProp  = valorPropRaw || '—';
+  const tipoProp   = document.getElementById('tipoProp').value;
+  const plazo      = document.getElementById('plazo').value;
+  const cuota      = document.getElementById('r-cuotaPesos').textContent || '—';
+  const renta      = document.getElementById('renta-req').textContent || '—';
+  const fecha      = document.getElementById('fecha-hoy').value;
+
+  const para = email ? encodeURIComponent(email) : '';
+
+  const asunto = encodeURIComponent(`Simulación – ${nombre} – ${fecha}`);
+
+  const cuerpo = encodeURIComponent(
+`Estimado/a ${nombre},
+
+A continuación encontrará el resumen de su simulación:
+
+• Fecha de simulación: ${fecha}
+• Valor Propiedad: UF ${valorProp}
+• Tipo de Propiedad: ${tipoProp}
+• Plazo: ${plazo} años
+• Cuota mensual estimada (con seguros): ${cuota}
+• Renta mensual requerida: ${renta}
+
+Los valores son solo referenciales y pueden estar sujetos a modificaciones al momento de cursar la aprobación. Este documento es una simulación y no debe entenderse como una aprobación formal.
+
+Saludos cordiales,
+Equipo Casa Pronta`
+  );
+
+  window.location.href = `mailto:${para}?subject=${asunto}&body=${cuerpo}`;
+}
+
+
+// ── Máscara DD/MM/AAAA ──
+function mascararFecha(el) {
+  let v = el.value.replace(/\D/g, '').slice(0, 8);
+  if (v.length >= 5)      v = v.slice(0,2) + '/' + v.slice(2,4) + '/' + v.slice(4);
+  else if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
+  el.value = v;
+}
+
+// ── Al salir del campo fecha: sincronizar footer y buscar UF ──
+function onFechaBlur(val) {
+  document.getElementById('footer-fecha').textContent = val;
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(val)) fetchUFporFecha(val);
+}
+
+// ── Fetch UF por fecha específica desde mindicador.cl ──
+async function fetchUFporFecha(fechaDDMMAAAA) {
+  const [dd, mm, yyyy] = fechaDDMMAAAA.split('/');
+  const btn  = document.getElementById('btn-uf');
+  const icon = document.getElementById('uf-spin');
+  btn.classList.add('loading');
+  icon.classList.add('spinning');
+  try {
+    // mindicador.cl permite consultar por fecha: /api/uf/YYYY-MM-DD
+    const url = `https://mindicador.cl/api/uf/${yyyy}-${mm}-${dd}`;
+    const res  = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const raw  = data?.serie?.[0]?.valor;
+    if (raw != null) {
+      VALOR_UF = parseFloat(raw);
+      const ufStr = '$' + VALOR_UF.toLocaleString('es-CL', {minimumFractionDigits:2, maximumFractionDigits:2});
+      document.getElementById('uf-val').textContent    = ufStr;
+      document.getElementById('footer-uf').textContent = ufStr;
+      calcular();
+      btn.classList.remove('loading'); icon.classList.remove('spinning');
+      btn.style.background = '#2e7d32'; btn.style.color = 'white';
+      btn.innerHTML = '✔ UF actualizada';
+      setTimeout(() => { btn.style.background=''; btn.style.color=''; btn.innerHTML='<span class="spin-icon" id="uf-spin">↻</span> Actualizar UF'; }, 2500);
+      return;
+    }
+  } catch(e) {}
+  btn.classList.remove('loading'); icon.classList.remove('spinning');
+  btn.style.background = '#c0392b'; btn.style.color = 'white';
+  btn.innerHTML = '✗ Sin conexión';
+  setTimeout(() => { btn.style.background=''; btn.style.color=''; btn.innerHTML='<span class="spin-icon" id="uf-spin">↻</span> Actualizar UF'; }, 2500);
+}
+
+(function init() {
+  const hoy = new Date();
+  const opts = { day:'2-digit', month:'2-digit', year:'numeric' };
+  const s = hoy.toLocaleDateString('es-CL', opts);
+  // Valor UF de respaldo (se mostrará brevemente mientras se consulta el valor real)
+  const ufStr = '$' + VALOR_UF.toLocaleString('es-CL', {minimumFractionDigits:2, maximumFractionDigits:2});
+  document.getElementById('fecha-hoy').value         = s;
+  document.getElementById('footer-fecha').textContent = s;
+  document.getElementById('uf-val').textContent      = ufStr;
+  document.getElementById('footer-uf').textContent   = ufStr;
+  
+  // Se mantiene el logo principal inyectado como marcador de posición. 
+  // Puedes sustituirlo por una ruta local (ej: 'imagenes/logo.png') en el futuro.
+  document.getElementById('logo-img').src  = '/logo_llave_propia.jpeg';
+  calcular();
+
+  // ── Actualizar automáticamente la UF al valor vigente de hoy ──
+  fetchUF();
+})();
+</script>
+</body>
+</html>

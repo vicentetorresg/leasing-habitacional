@@ -2,6 +2,7 @@
   "cleanUrls": true,
   "rewrites": [
     { "source": "/flujo-operacional", "destination": "/flujo-operacional.html" },
+    { "source": "/casa-pronta", "destination": "/casa-pronta.html" },
     { "source": "/crm", "destination": "/crm-dist/index" },
     { "source": "/crm/:path*", "destination": "/crm-dist/index" }
   ],
