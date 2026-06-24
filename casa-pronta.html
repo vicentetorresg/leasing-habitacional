@@ -523,19 +523,16 @@
     <div class="section-title">Datos de la Operación</div>
     <div class="form-grid">
       <div class="field">
-        <label>Nombre Cliente<span class="req-star">*</span></label>
-        <input type="text" id="nombre" placeholder="Ingrese nombre completo" oninput="updateNombre(); clearErr('nombre')" />
-        <span class="field-err-msg" id="err-nombre">Campo obligatorio</span>
+        <label>Nombre Cliente</label>
+        <input type="text" id="nombre" placeholder="Ingrese nombre completo" oninput="updateNombre()" />
       </div>
       <div class="field">
-        <label>RUT<span class="req-star">*</span></label>
-        <input type="text" id="rut" placeholder="12.345.678-9" oninput="clearErr('rut')" />
-        <span class="field-err-msg" id="err-rut">Campo obligatorio</span>
+        <label>RUT</label>
+        <input type="text" id="rut" placeholder="12.345.678-9" />
       </div>
       <div class="field">
-        <label>Celular<span class="req-star">*</span></label>
-        <input type="tel" id="celular" placeholder="+56 9 1234 5678" maxlength="12" oninput="soloNumeros(this); clearErr('celular')" onkeydown="return soloNumerosKey(event)" />
-        <span class="field-err-msg" id="err-celular">Campo obligatorio</span>
+        <label>Celular</label>
+        <input type="tel" id="celular" placeholder="+56 9 1234 5678" maxlength="12" oninput="soloNumeros(this)" onkeydown="return soloNumerosKey(event)" />
       </div>
       <div class="field">
         <label>E-mail</label>
@@ -754,58 +751,12 @@ function validarRut(rut) {
 
 // ── Validación campos obligatorios ──
 function simularValidado() {
-  let ok = true;
-
-  // Nombre
-  const nombre = document.getElementById('nombre');
-  if (!nombre.value.trim()) {
-    nombre.classList.add('field-error');
-    const e = document.getElementById('err-nombre');
-    e.textContent = 'Campo obligatorio'; e.classList.add('visible');
-    ok = false;
-  }
-
-  // RUT — obligatorio + módulo 11
-  const rutEl = document.getElementById('rut');
-  const errRut = document.getElementById('err-rut');
-  if (!rutEl.value.trim()) {
-    rutEl.classList.add('field-error');
-    errRut.textContent = 'Campo obligatorio'; errRut.classList.add('visible');
-    ok = false;
-  } else if (!validarRut(rutEl.value)) {
-    rutEl.classList.add('field-error');
-    errRut.textContent = 'RUT inválido'; errRut.classList.add('visible');
-    ok = false;
-  }
-
-  // Celular
-  const cel = document.getElementById('celular');
-  if (!cel.value.trim()) {
-    cel.classList.add('field-error');
-    const e = document.getElementById('err-celular');
-    e.textContent = 'Campo obligatorio'; e.classList.add('visible');
-    ok = false;
-  }
-
-  if (!ok) {
-    document.getElementById('resultados-wrapper').classList.remove('visible');
-    return;
-  }
   calcular();
   const wrapper = document.getElementById('resultados-wrapper');
   wrapper.classList.add('visible');
-  actualizarBotones();
-  // Scroll suave hacia los resultados
+  document.getElementById('btn-pdf').disabled = false;
+  document.getElementById('btn-email').disabled = false;
   setTimeout(() => wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
-}
-
-function actualizarBotones() {
-  const nombre  = document.getElementById('nombre').value.trim();
-  const rut     = document.getElementById('rut').value.trim();
-  const celular = document.getElementById('celular').value.trim();
-  const habilitado = nombre && rut && celular;
-  document.getElementById('btn-pdf').disabled   = !habilitado;
-  document.getElementById('btn-email').disabled = !habilitado;
 }
 
 function clearErr(id) {
