@@ -140,7 +140,27 @@
     max-height: calc(100vh - 180px);
     scrollbar-width: auto;
     scrollbar-color: var(--purple) #e0e0e0;
+    -webkit-overflow-scrolling: touch;
   }
+  .btn-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: var(--purple-pale);
+    color: var(--purple);
+    border: none;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: var(--font);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  .btn-copy:hover { background: var(--purple); color: white; }
+  .btn-copy.copied { background: #27ae60; color: white; }
+  .btn-copy.copied:hover { background: #27ae60; }
   .table-wrap::-webkit-scrollbar { width: 14px; height: 14px; }
   .table-wrap::-webkit-scrollbar-track { background: #e0e0e0; border-radius: 7px; }
   .table-wrap::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 7px; border: 2px solid #e0e0e0; }
@@ -422,9 +442,10 @@ function renderRows(rows) {
       const v = r[c.key];
       if (c.link) {
         if (!v) return '<td></td>';
-        const label = c.video ? '▶ Video' : '🔗 Ver';
-        const cls = c.video ? 'link-btn video' : 'link-btn';
-        return `<td><a class="${cls}" href="${v}" target="_blank" rel="noopener">${label}</a></td>`;
+        if (c.video) {
+          return `<td><a class="link-btn video" href="${v}" target="_blank" rel="noopener">▶ Video</a></td>`;
+        }
+        return `<td><button class="btn-copy" onclick="copyLink(this, '${v.replace(/'/g, "\\'")}')">📋 Copiar</button></td>`;
       }
       if (c.badge) {
         if (!v) return '<td></td>';
@@ -473,6 +494,14 @@ document.getElementById('price-input').addEventListener('input', function() {
   document.getElementById('price-slider').value = Math.min(v, 8000);
   applyFilters();
 });
+
+function copyLink(btn, url) {
+  navigator.clipboard.writeText(url).then(() => {
+    btn.textContent = '✔ Copiado';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '📋 Copiar'; btn.classList.remove('copied'); }, 1500);
+  });
+}
 
 // ── Load data ──
 fetch('/assetplan-data.json')
