@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propiedades Disponibles – AssetPlan</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+  :root {
+    --purple: #5C2E85;
+    --purple-light: #7a3fa8;
+    --purple-pale: #f3eef8;
+    --gray-bg: #f5f6f8;
+    --gray-mid: #dde1e3;
+    --white: #ffffff;
+    --gold: #ffd700;
+    --green: #27ae60;
+    --font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    background: var(--gray-bg);
+    color: #333;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .top-bar {
+    background: var(--purple);
+    color: white;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .top-bar h1 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .top-bar .logo { height: 36px; }
+  .top-bar .count {
+    background: rgba(255,255,255,0.2);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* ── FILTERS BAR ── */
+  .filters {
+    background: white;
+    padding: 14px 24px;
+    border-bottom: 2px solid var(--purple);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .filter-group label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .filter-group select,
+  .filter-group input {
+    border: 1.5px solid rgba(92,46,133,0.3);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-size: 13px;
+    font-family: var(--font);
+    color: #333;
+    background: white;
+    outline: none;
+    min-width: 130px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .filter-group select:focus,
+  .filter-group input:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(92,46,133,0.1);
+  }
+  .filter-group.price-filter input {
+    width: 120px;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--purple);
+    text-align: center;
+  }
+  .filter-group.price-filter {
+    background: var(--purple-pale);
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 2px solid var(--purple);
+  }
+  .filter-group.price-filter label {
+    font-size: 11px;
+  }
+  .price-range {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .price-range input[type=range] {
+    flex: 1;
+    min-width: 160px;
+    accent-color: var(--purple);
+    height: 6px;
+    cursor: pointer;
+  }
+  .btn-clear {
+    background: none;
+    border: 1.5px solid rgba(92,46,133,0.4);
+    border-radius: 6px;
+    color: var(--purple);
+    font-size: 12px;
+    font-weight: 700;
+    font-family: var(--font);
+    cursor: pointer;
+    padding: 7px 16px;
+    transition: background 0.2s, color 0.2s;
+    align-self: flex-end;
+  }
+  .btn-clear:hover { background: var(--purple); color: white; }
+
+  /* ── TABLE ── */
+  .table-wrap {
+    overflow-x: auto;
+    padding: 0 12px 24px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 8px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  thead th {
+    background: var(--purple);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 10px 8px;
+    text-align: left;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    cursor: pointer;
+    user-select: none;
+  }
+  thead th:hover { background: var(--purple-light); }
+  thead th .sort-arrow { font-size: 9px; margin-left: 3px; opacity: 0.6; }
+  thead th.sorted .sort-arrow { opacity: 1; }
+  tbody tr { transition: background 0.15s; }
+  tbody tr:nth-child(even) { background: #faf9fc; }
+  tbody tr:hover { background: #ede6f5; }
+  tbody td {
+    padding: 8px 8px;
+    border-bottom: 1px solid #f0edf3;
+    white-space: nowrap;
+  }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.price { font-weight: 700; color: var(--purple); }
+  a.link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: var(--purple-pale);
+    color: var(--purple);
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  a.link-btn:hover { background: var(--purple); color: white; }
+  a.link-btn.video { background: #eaf7ef; color: var(--green); }
+  a.link-btn.video:hover { background: var(--green); color: white; }
+  .no-results {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+    font-size: 15px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .badge-arrendado { background: #e8f5e9; color: #2e7d32; }
+  .badge-lista { background: #e3f2fd; color: #1565c0; }
+  .badge-reacond { background: #fff3e0; color: #e65100; }
+  .badge-aviso { background: #fce4ec; color: #c62828; }
+  .badge-default { background: #f5f5f5; color: #666; }
+
+  @media (max-width: 768px) {
+    .filters { padding: 10px 12px; gap: 8px; }
+    .filter-group select, .filter-group input { min-width: 100px; font-size: 12px; }
+    .top-bar { padding: 10px 12px; }
+    .top-bar h1 { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <img class="logo" src="/logo_llave_propia.jpeg" alt="Logo">
+    <h1>Propiedades Disponibles</h1>
+  </div>
+  <span class="count" id="row-count">Cargando...</span>
+</div>
+
+<div class="filters" id="filters">
+  <div class="filter-group price-filter">
+    <label>Precio Tope (UF) – Precio Final Dpto</label>
+    <div class="price-range">
+      <input type="range" id="price-slider" min="0" max="8000" step="50" value="8000">
+      <input type="number" id="price-input" value="8000" min="0" max="99999" step="50">
+    </div>
+  </div>
+  <div class="filter-group">
+    <label>Región</label>
+    <select id="f-region"><option value="">Todas</option></select>
+  </div>
+  <div class="filter-group">
+    <label>Comuna</label>
+    <select id="f-comuna"><option value="">Todas</option></select>
+  </div>
+  <div class="filter-group">
+    <label>Tipología</label>
+    <select id="f-tipologia"><option value="">Todas</option></select>
+  </div>
+  <div class="filter-group">
+    <label>Tipo</label>
+    <select id="f-tipo"><option value="">Todas</option></select>
+  </div>
+  <div class="filter-group">
+    <label>Estado Admin.</label>
+    <select id="f-estado"><option value="">Todos</option></select>
+  </div>
+  <div class="filter-group">
+    <label>Condominio</label>
+    <select id="f-condominio"><option value="">Todos</option></select>
+  </div>
+  <button class="btn-clear" onclick="clearFilters()">Limpiar filtros</button>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr id="thead-row"></tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<script>
+let DATA = [];
+let sortCol = null;
+let sortAsc = true;
+
+const COLUMNS = [
+  { key: 'condominio',       label: 'Condominio' },
+  { key: 'direccion',        label: 'Dirección' },
+  { key: 'comuna',           label: 'Comuna' },
+  { key: 'region',           label: 'Región' },
+  { key: 'tipologia',        label: 'Tipología' },
+  { key: 'tipo',             label: 'Tipo' },
+  { key: 'orientacion',      label: 'Orient.' },
+  { key: 'est',              label: 'Est.', cls: 'num' },
+  { key: 'bod',              label: 'Bod.', cls: 'num' },
+  { key: 'm2_interior',      label: 'M² Int.', cls: 'num' },
+  { key: 'm2_total',         label: 'M² Total', cls: 'num' },
+  { key: 'ano',              label: 'Año', cls: 'num' },
+  { key: 'estado_admin',     label: 'Estado Admin.', badge: true },
+  { key: 'arriendo',         label: 'Arriendo $', cls: 'num' },
+  { key: 'precio_escritura', label: 'Escritura UF', cls: 'num price' },
+  { key: 'bono_pie_pct',     label: '% Bono', cls: 'num' },
+  { key: 'precio_final',     label: 'Precio Final UF', cls: 'num price' },
+  { key: 'uf_m2',            label: 'UF/M²', cls: 'num' },
+  { key: 'cap_rate',         label: 'Cap Rate', cls: 'num' },
+  { key: 'comision_pct',     label: '% Com.', cls: 'num' },
+  { key: 'link_pub',         label: 'Publicación', link: true },
+  { key: 'link_video',       label: 'Video', link: true, video: true },
+];
+
+function parseNum(v) {
+  if (!v) return null;
+  const n = parseFloat(v.replace(/\./g, '').replace(',', '.').replace('%', ''));
+  return isNaN(n) ? null : n;
+}
+
+function badgeClass(v) {
+  if (!v) return 'badge-default';
+  const l = v.toLowerCase();
+  if (l.includes('arrendado')) return 'badge-arrendado';
+  if (l.includes('lista')) return 'badge-lista';
+  if (l.includes('acondic')) return 'badge-reacond';
+  if (l.includes('aviso') || l.includes('desocup')) return 'badge-aviso';
+  if (l.includes('esperando')) return 'badge-lista';
+  return 'badge-default';
+}
+
+function buildHead() {
+  const tr = document.getElementById('thead-row');
+  tr.innerHTML = COLUMNS.map((c, i) =>
+    `<th data-idx="${i}" onclick="sortBy(${i})">${c.label}<span class="sort-arrow">▼</span></th>`
+  ).join('');
+}
+
+function populateFilters() {
+  const fields = [
+    { id: 'f-region', key: 'region' },
+    { id: 'f-comuna', key: 'comuna' },
+    { id: 'f-tipologia', key: 'tipologia' },
+    { id: 'f-tipo', key: 'tipo' },
+    { id: 'f-estado', key: 'estado_admin' },
+    { id: 'f-condominio', key: 'condominio' },
+  ];
+  fields.forEach(f => {
+    const el = document.getElementById(f.id);
+    const vals = [...new Set(DATA.map(r => r[f.key]).filter(Boolean))].sort();
+    const firstOpt = el.options[0].outerHTML;
+    el.innerHTML = firstOpt + vals.map(v => `<option value="${v}">${v}</option>`).join('');
+    el.addEventListener('change', applyFilters);
+  });
+}
+
+function getFilters() {
+  return {
+    priceMax: parseFloat(document.getElementById('price-input').value) || 99999,
+    region: document.getElementById('f-region').value,
+    comuna: document.getElementById('f-comuna').value,
+    tipologia: document.getElementById('f-tipologia').value,
+    tipo: document.getElementById('f-tipo').value,
+    estado: document.getElementById('f-estado').value,
+    condominio: document.getElementById('f-condominio').value,
+  };
+}
+
+function applyFilters() {
+  const f = getFilters();
+  let rows = DATA.filter(r => {
+    const price = parseNum(r.precio_final);
+    if (price !== null && price > f.priceMax) return false;
+    if (f.region && r.region !== f.region) return false;
+    if (f.comuna && r.comuna !== f.comuna) return false;
+    if (f.tipologia && r.tipologia !== f.tipologia) return false;
+    if (f.tipo && r.tipo !== f.tipo) return false;
+    if (f.estado && r.estado_admin !== f.estado) return false;
+    if (f.condominio && r.condominio !== f.condominio) return false;
+    return true;
+  });
+
+  if (sortCol !== null) {
+    const col = COLUMNS[sortCol];
+    rows.sort((a, b) => {
+      let va = a[col.key], vb = b[col.key];
+      const na = parseNum(va), nb = parseNum(vb);
+      if (na !== null && nb !== null) return sortAsc ? na - nb : nb - na;
+      va = va || ''; vb = vb || '';
+      return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+    });
+  }
+
+  renderRows(rows);
+}
+
+function renderRows(rows) {
+  const tbody = document.getElementById('tbody');
+  document.getElementById('row-count').textContent =
+    rows.length + ' de ' + DATA.length + ' propiedades';
+
+  if (rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="${COLUMNS.length}" class="no-results">No hay propiedades con estos filtros</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows.map(r => {
+    return '<tr>' + COLUMNS.map(c => {
+      const v = r[c.key];
+      if (c.link) {
+        if (!v) return '<td></td>';
+        const label = c.video ? '▶ Video' : '🔗 Ver';
+        const cls = c.video ? 'link-btn video' : 'link-btn';
+        return `<td><a class="${cls}" href="${v}" target="_blank" rel="noopener">${label}</a></td>`;
+      }
+      if (c.badge) {
+        if (!v) return '<td></td>';
+        return `<td><span class="badge ${badgeClass(v)}">${v}</span></td>`;
+      }
+      const cls = c.cls ? ` class="${c.cls}"` : '';
+      return `<td${cls}>${v || ''}</td>`;
+    }).join('') + '</tr>';
+  }).join('');
+}
+
+function sortBy(idx) {
+  if (sortCol === idx) { sortAsc = !sortAsc; }
+  else { sortCol = idx; sortAsc = true; }
+  document.querySelectorAll('thead th').forEach((th, i) => {
+    th.classList.toggle('sorted', i === idx);
+    th.querySelector('.sort-arrow').textContent = (i === idx && !sortAsc) ? '▲' : '▼';
+  });
+  applyFilters();
+}
+
+function clearFilters() {
+  document.getElementById('price-slider').value = 8000;
+  document.getElementById('price-input').value = 8000;
+  document.getElementById('f-region').value = '';
+  document.getElementById('f-comuna').value = '';
+  document.getElementById('f-tipologia').value = '';
+  document.getElementById('f-tipo').value = '';
+  document.getElementById('f-estado').value = '';
+  document.getElementById('f-condominio').value = '';
+  sortCol = null; sortAsc = true;
+  document.querySelectorAll('thead th').forEach(th => {
+    th.classList.remove('sorted');
+    th.querySelector('.sort-arrow').textContent = '▼';
+  });
+  applyFilters();
+}
+
+// ── Sync slider ↔ input ──
+document.getElementById('price-slider').addEventListener('input', function() {
+  document.getElementById('price-input').value = this.value;
+  applyFilters();
+});
+document.getElementById('price-input').addEventListener('input', function() {
+  const v = Math.max(0, Math.min(99999, parseInt(this.value) || 0));
+  document.getElementById('price-slider').value = Math.min(v, 8000);
+  applyFilters();
+});
+
+// ── Load data ──
+fetch('/assetplan-data.json')
+  .then(r => r.json())
+  .then(data => {
+    DATA = data;
+    buildHead();
+    populateFilters();
+    applyFilters();
+  })
+  .catch(() => {
+    document.getElementById('row-count').textContent = 'Error cargando datos';
+  });
+</script>
+</body>
+</html>
