@@ -191,26 +191,17 @@
     cursor: pointer;
     user-select: none;
   }
+  /* Todas las celdas: z-index bajo por defecto */
+  td, th { position: relative; z-index: 0; }
   /* Columnas fijas (Condominio, Dirección, Comuna) */
-  td:nth-child(1), td:nth-child(2), td:nth-child(3),
-  th:nth-child(1), th:nth-child(2), th:nth-child(3) {
-    position: sticky;
-    background-clip: padding-box;
-  }
-  td:nth-child(1), th:nth-child(1) { left: 0; z-index: 3; width: 160px; min-width: 160px; max-width: 160px; background: white; }
-  td:nth-child(2), th:nth-child(2) { left: 160px; z-index: 3; width: 170px; min-width: 170px; max-width: 170px; background: white; }
-  td:nth-child(3), th:nth-child(3) { left: 330px; z-index: 3; width: 120px; min-width: 120px; max-width: 120px; background: white; box-shadow: 4px 0 8px rgba(0,0,0,0.12); }
-  th:nth-child(1) { background: var(--purple); z-index: 5; }
-  th:nth-child(2) { background: var(--purple); z-index: 5; }
-  th:nth-child(3) { background: var(--purple); z-index: 5; box-shadow: 4px 0 8px rgba(0,0,0,0.2); }
-  tr:nth-child(even) td:nth-child(1),
-  tr:nth-child(even) td:nth-child(2),
-  tr:nth-child(even) td:nth-child(3) { background: #faf9fc; }
-  tr:hover td:nth-child(1),
-  tr:hover td:nth-child(2),
-  tr:hover td:nth-child(3) { background: #ede6f5; }
-  /* La 4ta columna empieza después de las fijas */
-  td:nth-child(4), th:nth-child(4) { padding-left: 12px; }
+  .frozen { position: sticky !important; z-index: 3 !important; background: white; }
+  .frozen-0 { left: 0; width: 160px; min-width: 160px; max-width: 160px; }
+  .frozen-1 { left: 160px; width: 170px; min-width: 170px; max-width: 170px; }
+  .frozen-2 { left: 330px; width: 120px; min-width: 120px; max-width: 120px; box-shadow: 4px 0 8px rgba(0,0,0,0.15); }
+  th.frozen { z-index: 5 !important; background: var(--purple) !important; }
+  th.frozen-2 { box-shadow: 4px 0 8px rgba(0,0,0,0.25); }
+  tr:nth-child(even) td.frozen { background: #faf9fc; }
+  tr:hover td.frozen { background: #ede6f5 !important; }
   thead th:hover { background: var(--purple-light); }
   thead th .sort-arrow { font-size: 9px; margin-left: 3px; opacity: 0.6; }
   thead th.sorted .sort-arrow { opacity: 1; }
@@ -329,10 +320,9 @@ let sortCol = null;
 let sortAsc = true;
 
 const COLUMNS = [
-  { key: 'condominio',       label: 'Condominio' },
-  { key: 'direccion',        label: 'Dirección' },
-  { key: 'comuna',           label: 'Comuna' },
-  { key: 'region',           label: 'Región' },
+  { key: 'condominio',       label: 'Condominio', frozen: true },
+  { key: 'direccion',        label: 'Dirección', frozen: true },
+  { key: 'comuna',           label: 'Comuna', frozen: true },
   { key: 'tipologia',        label: 'Tipología' },
   { key: 'tipo',             label: 'Tipo' },
   { key: 'orientacion',      label: 'Orient.' },
@@ -372,9 +362,12 @@ function badgeClass(v) {
 
 function buildHead() {
   const tr = document.getElementById('thead-row');
-  tr.innerHTML = COLUMNS.map((c, i) =>
-    `<th data-idx="${i}" onclick="sortBy(${i})">${c.label}<span class="sort-arrow">▼</span></th>`
-  ).join('');
+  let frozenIdx = 0;
+  tr.innerHTML = COLUMNS.map((c, i) => {
+    let cls = '';
+    if (c.frozen) { cls = `frozen frozen-${frozenIdx}`; frozenIdx++; }
+    return `<th class="${cls}" data-idx="${i}" onclick="sortBy(${i})">${c.label}<span class="sort-arrow">▼</span></th>`;
+  }).join('');
 }
 
 function populateFilters() {
@@ -445,21 +438,28 @@ function renderRows(rows) {
     return;
   }
 
+  let frozenCount = 0;
+  COLUMNS.forEach(c => { if (c.frozen) frozenCount++; });
+
   tbody.innerHTML = rows.map(r => {
+    let fi = 0;
     return '<tr>' + COLUMNS.map(c => {
       const v = r[c.key];
+      let classes = [];
+      if (c.frozen) { classes.push('frozen', `frozen-${fi}`); fi++; }
       if (c.link) {
-        if (!v) return '<td></td>';
+        if (!v) return `<td class="${classes.join(' ')}"></td>`;
         if (c.video) {
-          return `<td><a class="link-btn video" href="${v}" target="_blank" rel="noopener">▶ Video</a></td>`;
+          return `<td class="${classes.join(' ')}"><a class="link-btn video" href="${v}" target="_blank" rel="noopener">▶ Video</a></td>`;
         }
-        return `<td><button class="btn-copy" onclick="copyLink(this, '${v.replace(/'/g, "\\'")}')">📋 Copiar</button></td>`;
+        return `<td class="${classes.join(' ')}"><button class="btn-copy" onclick="copyLink(this, '${v.replace(/'/g, "\\'")}')">📋 Copiar</button></td>`;
       }
       if (c.badge) {
-        if (!v) return '<td></td>';
-        return `<td><span class="badge ${badgeClass(v)}">${v}</span></td>`;
+        if (!v) return `<td class="${classes.join(' ')}"></td>`;
+        return `<td class="${classes.join(' ')}"><span class="badge ${badgeClass(v)}">${v}</span></td>`;
       }
-      const cls = c.cls ? ` class="${c.cls}"` : '';
+      if (c.cls) classes.push(c.cls);
+      const cls = classes.length ? ` class="${classes.join(' ')}"` : '';
       return `<td${cls}>${v || ''}</td>`;
     }).join('') + '</tr>';
   }).join('');
