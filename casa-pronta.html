@@ -681,19 +681,34 @@
 // ══════════════════════════════════════════════
 //  CONSTANTES (del archivo Parametros)
 // ══════════════════════════════════════════════
-let VALOR_UF = 40746.28;
+let VALOR_UF = 39000.00; // valor de respaldo, se actualiza automáticamente al cargar
 
-// ── Fetch UF desde mindicador.cl (CORS abierto) ──
+// ── Fetch UF desde APIs públicas (con fallback) ──
 async function fetchUF() {
   const btn  = document.getElementById('btn-uf');
   const icon = document.getElementById('uf-spin');
   btn.classList.add('loading');
   icon.classList.add('spinning');
   try {
-    const res  = await fetch('https://mindicador.cl/api/uf');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    const raw  = data?.serie?.[0]?.valor;
+    let raw = null;
+    // Intento 1: mindicador.cl endpoint general (más estable)
+    try {
+      const res = await fetch('https://mindicador.cl/api');
+      if (res.ok) {
+        const data = await res.json();
+        raw = data?.uf?.valor;
+      }
+    } catch(e) {}
+    // Intento 2: mindicador.cl endpoint específico UF
+    if (raw == null) {
+      try {
+        const res = await fetch('https://mindicador.cl/api/uf');
+        if (res.ok) {
+          const data = await res.json();
+          raw = data?.serie?.[0]?.valor;
+        }
+      } catch(e) {}
+    }
     if (raw != null) {
       VALOR_UF = parseFloat(raw);
       const ufStr = '$' + VALOR_UF.toLocaleString('es-CL', {minimumFractionDigits:2, maximumFractionDigits:2});
@@ -712,6 +727,7 @@ async function fetchUF() {
       setTimeout(() => { btn.style.background=''; btn.style.color=''; btn.innerHTML='<span class="spin-icon" id="uf-spin">↻</span> Actualizar UF'; }, 2500);
       return;
     }
+    throw new Error('No se pudo obtener UF');
   } catch(e) {}
   // fallback error
   btn.classList.remove('loading');
@@ -1086,7 +1102,7 @@ function onFechaBlur(val) {
   if (/^\d{2}\/\d{2}\/\d{4}$/.test(val)) fetchUFporFecha(val);
 }
 
-// ── Fetch UF por fecha específica desde mindicador.cl ──
+// ── Fetch UF por fecha específica ──
 async function fetchUFporFecha(fechaDDMMAAAA) {
   const [dd, mm, yyyy] = fechaDDMMAAAA.split('/');
   const btn  = document.getElementById('btn-uf');
@@ -1094,12 +1110,25 @@ async function fetchUFporFecha(fechaDDMMAAAA) {
   btn.classList.add('loading');
   icon.classList.add('spinning');
   try {
-    // mindicador.cl permite consultar por fecha: /api/uf/YYYY-MM-DD
-    const url = `https://mindicador.cl/api/uf/${yyyy}-${mm}-${dd}`;
-    const res  = await fetch(url);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    const raw  = data?.serie?.[0]?.valor;
+    let raw = null;
+    // Intento 1: mindicador.cl por fecha DD-MM-YYYY
+    try {
+      const res = await fetch(`https://mindicador.cl/api/uf/${dd}-${mm}-${yyyy}`);
+      if (res.ok) {
+        const data = await res.json();
+        raw = data?.serie?.[0]?.valor;
+      }
+    } catch(e) {}
+    // Intento 2: si es fecha de hoy, usar endpoint general
+    if (raw == null) {
+      try {
+        const res = await fetch('https://mindicador.cl/api');
+        if (res.ok) {
+          const data = await res.json();
+          raw = data?.uf?.valor;
+        }
+      } catch(e) {}
+    }
     if (raw != null) {
       VALOR_UF = parseFloat(raw);
       const ufStr = '$' + VALOR_UF.toLocaleString('es-CL', {minimumFractionDigits:2, maximumFractionDigits:2});
@@ -1112,6 +1141,7 @@ async function fetchUFporFecha(fechaDDMMAAAA) {
       setTimeout(() => { btn.style.background=''; btn.style.color=''; btn.innerHTML='<span class="spin-icon" id="uf-spin">↻</span> Actualizar UF'; }, 2500);
       return;
     }
+    throw new Error('No se pudo obtener UF');
   } catch(e) {}
   btn.classList.remove('loading'); icon.classList.remove('spinning');
   btn.style.background = '#c0392b'; btn.style.color = 'white';
