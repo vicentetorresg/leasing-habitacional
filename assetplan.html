@@ -135,12 +135,13 @@
 
   /* ── TABLE ── */
   .table-wrap {
-    overflow-x: scroll;
+    overflow: auto;
     padding: 0 12px 24px;
+    max-height: calc(100vh - 180px);
     scrollbar-width: auto;
     scrollbar-color: var(--purple) #e0e0e0;
   }
-  .table-wrap::-webkit-scrollbar { height: 14px; }
+  .table-wrap::-webkit-scrollbar { width: 14px; height: 14px; }
   .table-wrap::-webkit-scrollbar-track { background: #e0e0e0; border-radius: 7px; }
   .table-wrap::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 7px; border: 2px solid #e0e0e0; }
   .table-wrap::-webkit-scrollbar-thumb:hover { background: var(--purple-light); }
