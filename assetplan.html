@@ -192,17 +192,25 @@
     user-select: none;
   }
   /* Columnas fijas (Condominio, Dirección, Comuna) */
-  td:nth-child(1), th:nth-child(1) { position: sticky; left: 0; z-index: 3; width: 160px; min-width: 160px; max-width: 160px; }
-  td:nth-child(2), th:nth-child(2) { position: sticky; left: 160px; z-index: 3; width: 170px; min-width: 170px; max-width: 170px; }
-  td:nth-child(3), th:nth-child(3) { position: sticky; left: 330px; z-index: 3; width: 120px; min-width: 120px; max-width: 120px; box-shadow: 3px 0 6px rgba(0,0,0,0.1); }
-  th:nth-child(1), th:nth-child(2), th:nth-child(3) { z-index: 4; }
-  td:nth-child(1), td:nth-child(2), td:nth-child(3) { background: white; }
+  td:nth-child(1), td:nth-child(2), td:nth-child(3),
+  th:nth-child(1), th:nth-child(2), th:nth-child(3) {
+    position: sticky;
+    background-clip: padding-box;
+  }
+  td:nth-child(1), th:nth-child(1) { left: 0; z-index: 3; width: 160px; min-width: 160px; max-width: 160px; background: white; }
+  td:nth-child(2), th:nth-child(2) { left: 160px; z-index: 3; width: 170px; min-width: 170px; max-width: 170px; background: white; }
+  td:nth-child(3), th:nth-child(3) { left: 330px; z-index: 3; width: 120px; min-width: 120px; max-width: 120px; background: white; box-shadow: 4px 0 8px rgba(0,0,0,0.12); }
+  th:nth-child(1) { background: var(--purple); z-index: 5; }
+  th:nth-child(2) { background: var(--purple); z-index: 5; }
+  th:nth-child(3) { background: var(--purple); z-index: 5; box-shadow: 4px 0 8px rgba(0,0,0,0.2); }
   tr:nth-child(even) td:nth-child(1),
   tr:nth-child(even) td:nth-child(2),
   tr:nth-child(even) td:nth-child(3) { background: #faf9fc; }
   tr:hover td:nth-child(1),
   tr:hover td:nth-child(2),
   tr:hover td:nth-child(3) { background: #ede6f5; }
+  /* La 4ta columna empieza después de las fijas */
+  td:nth-child(4), th:nth-child(4) { padding-left: 12px; }
   thead th:hover { background: var(--purple-light); }
   thead th .sort-arrow { font-size: 9px; margin-left: 3px; opacity: 0.6; }
   thead th.sorted .sort-arrow { opacity: 1; }
