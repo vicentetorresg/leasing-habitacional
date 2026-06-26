@@ -135,9 +135,15 @@
 
   /* ── TABLE ── */
   .table-wrap {
-    overflow-x: auto;
+    overflow-x: scroll;
     padding: 0 12px 24px;
+    scrollbar-width: auto;
+    scrollbar-color: var(--purple) #e0e0e0;
   }
+  .table-wrap::-webkit-scrollbar { height: 14px; }
+  .table-wrap::-webkit-scrollbar-track { background: #e0e0e0; border-radius: 7px; }
+  .table-wrap::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 7px; border: 2px solid #e0e0e0; }
+  .table-wrap::-webkit-scrollbar-thumb:hover { background: var(--purple-light); }
   table {
     width: 100%;
     border-collapse: collapse;
