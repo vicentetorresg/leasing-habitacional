@@ -691,23 +691,11 @@ async function fetchUF() {
   icon.classList.add('spinning');
   try {
     let raw = null;
-    // Intento 1: mindicador.cl endpoint general (más estable)
-    try {
-      const res = await fetch('https://mindicador.cl/api');
-      if (res.ok) {
-        const data = await res.json();
-        raw = data?.uf?.valor;
-      }
-    } catch(e) {}
-    // Intento 2: mindicador.cl endpoint específico UF
-    if (raw == null) {
-      try {
-        const res = await fetch('https://mindicador.cl/api/uf');
-        if (res.ok) {
-          const data = await res.json();
-          raw = data?.serie?.[0]?.valor;
-        }
-      } catch(e) {}
+    // Proxy propio (evita CORS)
+    const res = await fetch('/api/uf');
+    if (res.ok) {
+      const data = await res.json();
+      raw = data?.valor;
     }
     if (raw != null) {
       VALOR_UF = parseFloat(raw);
@@ -1111,23 +1099,11 @@ async function fetchUFporFecha(fechaDDMMAAAA) {
   icon.classList.add('spinning');
   try {
     let raw = null;
-    // Intento 1: mindicador.cl por fecha DD-MM-YYYY
-    try {
-      const res = await fetch(`https://mindicador.cl/api/uf/${dd}-${mm}-${yyyy}`);
-      if (res.ok) {
-        const data = await res.json();
-        raw = data?.serie?.[0]?.valor;
-      }
-    } catch(e) {}
-    // Intento 2: si es fecha de hoy, usar endpoint general
-    if (raw == null) {
-      try {
-        const res = await fetch('https://mindicador.cl/api');
-        if (res.ok) {
-          const data = await res.json();
-          raw = data?.uf?.valor;
-        }
-      } catch(e) {}
+    // Proxy propio (evita CORS) — devuelve UF del día
+    const res = await fetch('/api/uf');
+    if (res.ok) {
+      const data = await res.json();
+      raw = data?.valor;
     }
     if (raw != null) {
       VALOR_UF = parseFloat(raw);
