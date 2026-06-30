@@ -245,6 +245,15 @@ const Advisor = () => {
     setNotes(grouped);
   }, [user, leads]);
 
+  const fetchNotesForLead = useCallback(async (leadId: string) => {
+    const { data } = await supabase
+      .from('lead_notes')
+      .select('*')
+      .eq('lead_id', leadId)
+      .order('created_at', { ascending: false });
+    setNotes(prev => ({ ...prev, [leadId]: (data ?? []) as LeadNote[] }));
+  }, []);
+
   useEffect(() => { fetchLeads(); }, [fetchLeads]);
   useEffect(() => { fetchNotes(); }, [leads]);
 
@@ -316,16 +325,29 @@ const Advisor = () => {
 
   const addNote = async () => {
     if (!selectedLead || !newNote.trim() || !user || savingNote) return;
+    const leadId = selectedLead.id;
+    const noteText = newNote.trim();
     setSavingNote(true);
-    await supabase.from('lead_notes').insert({
-      lead_id: selectedLead.id,
-      user_id: user.id,
-      note: newNote.trim(),
-    });
-    setSavingNote(false);
-    setNewNote('');
-    fetchNotes();
-    toast.success('Nota agregada');
+    try {
+      const { error } = await supabase.from('lead_notes').insert({
+        lead_id: leadId,
+        user_id: user.id,
+        note: noteText,
+      });
+      if (error) {
+        console.error('Error saving note:', error);
+        toast.error('Error al guardar nota: ' + error.message);
+        return;
+      }
+      setNewNote('');
+      await fetchNotesForLead(leadId);
+      toast.success('Nota agregada');
+    } catch (err: any) {
+      console.error('Error saving note:', err);
+      toast.error('No se pudo guardar la nota. Intenta de nuevo.');
+    } finally {
+      setSavingNote(false);
+    }
   };
 
   const handleDeleteLead = async (leadId: string) => {
@@ -946,11 +968,11 @@ const Advisor = () => {
               projectsList={projectsList}
               onDeleteNote={async (noteId: string) => {
                 await supabase.from('lead_notes').delete().eq('id', noteId);
-                fetchNotes();
+                if (selectedLead) fetchNotesForLead(selectedLead.id);
               }}
               onEditNote={async (noteId: string, newText: string) => {
                 await supabase.from('lead_notes').update({ note: newText }).eq('id', noteId);
-                fetchNotes();
+                if (selectedLead) fetchNotesForLead(selectedLead.id);
               }}
             />
           )}
