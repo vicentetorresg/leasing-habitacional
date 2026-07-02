@@ -202,8 +202,29 @@
   /* Columnas fijas (Condominio, Dirección, Comuna) */
   .frozen { position: sticky !important; z-index: 3 !important; background: white; }
   .frozen-0 { left: 0; width: 160px; min-width: 160px; max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
-  .frozen-1 { left: 160px; width: 220px; min-width: 220px; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+  .frozen-1 { left: 160px; width: 220px; min-width: 220px; max-width: 220px; overflow: hidden; text-overflow: ellipsis; cursor: default; }
   .frozen-2 { left: 380px; width: 130px; min-width: 130px; max-width: 130px; overflow: hidden; text-overflow: ellipsis; box-shadow: 4px 0 8px rgba(0,0,0,0.15); }
+
+  /* Tooltip para celdas truncadas */
+  td.frozen-1[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    z-index: 100;
+    background: var(--navy);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: normal;
+    width: 340px;
+    max-width: 50vw;
+    line-height: 1.4;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    pointer-events: none;
+  }
   th.frozen { z-index: 5 !important; background: var(--navy) !important; }
   th.frozen-2 { box-shadow: 4px 0 8px rgba(0,0,0,0.25); }
   tr:nth-child(even) td.frozen { background: #F7F5F0; }
@@ -318,7 +339,7 @@
 
 <div class="filters" id="filters">
   <div class="filter-group price-filter">
-    <label>Precio Tope (UF) – Precio Final Dpto</label>
+    <label>Precio Tope (UF) – Precio Final Vivienda</label>
     <div class="price-range">
       <input type="range" id="price-slider" min="0" max="8000" step="50" value="2350">
       <input type="number" id="price-input" value="2350" min="0" max="99999" step="50">
@@ -515,7 +536,8 @@ function renderRows(rows) {
       }
       if (c.cls) classes.push(c.cls);
       const cls = classes.length ? ` class="${classes.join(' ')}"` : '';
-      return `<td${cls}>${v || ''}</td>`;
+      const titleAttr = (c.key === 'direccion' && v) ? ` title="${v.replace(/"/g, '&quot;')}"` : '';
+      return `<td${cls}${titleAttr}>${v || ''}</td>`;
     }).join('') + '</tr>';
   }).join('');
 }
