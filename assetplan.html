@@ -5,17 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Propiedades Disponibles – Llave Propia</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --purple: #5C2E85;
-    --purple-light: #7a3fa8;
-    --purple-pale: #f3eef8;
-    --gray-bg: #f5f6f8;
-    --gray-mid: #dde1e3;
+    --navy: #1B3A6B;
+    --navy-light: #2A4F8A;
+    --navy-pale: #EAF0F7;
+    --teal: #2DB89E;
+    --teal-light: #3ACFB8;
+    --teal-pale: #E5F7F4;
+    --gray-bg: #FEFCF7;
+    --gray-mid: #EDE3D4;
     --white: #ffffff;
-    --gold: #ffd700;
-    --green: #27ae60;
-    --font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --gold: #C9871A;
+    --green: #2B7A4E;
+    --font: 'Nunito', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -27,7 +33,7 @@
 
   /* ── HEADER ── */
   .top-bar {
-    background: var(--purple);
+    background: var(--navy);
     color: white;
     padding: 14px 24px;
     display: flex;
@@ -54,7 +60,7 @@
   .filters {
     background: white;
     padding: 14px 24px;
-    border-bottom: 2px solid var(--purple);
+    border-bottom: 2px solid var(--navy);
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -68,13 +74,13 @@
   .filter-group label {
     font-size: 10px;
     font-weight: 700;
-    color: var(--purple);
+    color: var(--navy);
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
   .filter-group select,
   .filter-group input {
-    border: 1.5px solid rgba(92,46,133,0.3);
+    border: 1.5px solid rgba(27,58,107,0.3);
     border-radius: 6px;
     padding: 7px 10px;
     font-size: 13px;
@@ -87,21 +93,21 @@
   }
   .filter-group select:focus,
   .filter-group input:focus {
-    border-color: var(--purple);
-    box-shadow: 0 0 0 3px rgba(92,46,133,0.1);
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(27,58,107,0.1);
   }
   .filter-group.price-filter input {
     width: 120px;
     font-weight: 700;
     font-size: 15px;
-    color: var(--purple);
+    color: var(--navy);
     text-align: center;
   }
   .filter-group.price-filter {
-    background: var(--purple-pale);
+    background: var(--navy-pale);
     padding: 8px 14px;
     border-radius: 8px;
-    border: 2px solid var(--purple);
+    border: 2px solid var(--navy);
   }
   .filter-group.price-filter label {
     font-size: 11px;
@@ -114,15 +120,15 @@
   .price-range input[type=range] {
     flex: 1;
     min-width: 160px;
-    accent-color: var(--purple);
+    accent-color: var(--teal);
     height: 6px;
     cursor: pointer;
   }
   .btn-clear {
     background: none;
-    border: 1.5px solid rgba(92,46,133,0.4);
+    border: 1.5px solid rgba(27,58,107,0.4);
     border-radius: 6px;
-    color: var(--purple);
+    color: var(--navy);
     font-size: 12px;
     font-weight: 700;
     font-family: var(--font);
@@ -131,7 +137,7 @@
     transition: background 0.2s, color 0.2s;
     align-self: flex-end;
   }
-  .btn-clear:hover { background: var(--purple); color: white; }
+  .btn-clear:hover { background: var(--navy); color: white; }
 
   /* ── TABLE ── */
   .table-wrap {
@@ -139,15 +145,15 @@
     padding: 0 12px 24px;
     max-height: calc(100vh - 180px);
     scrollbar-width: auto;
-    scrollbar-color: var(--purple) #e0e0e0;
+    scrollbar-color: var(--navy) #e0e0e0;
     -webkit-overflow-scrolling: touch;
   }
   .btn-copy {
     display: inline-flex;
     align-items: center;
     gap: 3px;
-    background: var(--purple-pale);
-    color: var(--purple);
+    background: var(--navy-pale);
+    color: var(--navy);
     border: none;
     padding: 4px 10px;
     border-radius: 5px;
@@ -158,13 +164,13 @@
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
   }
-  .btn-copy:hover { background: var(--purple); color: white; }
+  .btn-copy:hover { background: var(--navy); color: white; }
   .btn-copy.copied { background: #27ae60; color: white; }
   .btn-copy.copied:hover { background: #27ae60; }
   .table-wrap::-webkit-scrollbar { width: 14px; height: 14px; }
   .table-wrap::-webkit-scrollbar-track { background: #e0e0e0; border-radius: 7px; }
-  .table-wrap::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 7px; border: 2px solid #e0e0e0; }
-  .table-wrap::-webkit-scrollbar-thumb:hover { background: var(--purple-light); }
+  .table-wrap::-webkit-scrollbar-thumb { background: var(--navy); border-radius: 7px; border: 2px solid #e0e0e0; }
+  .table-wrap::-webkit-scrollbar-thumb:hover { background: var(--navy-light); }
   table {
     min-width: 1800px;
     border-collapse: separate;
@@ -176,7 +182,7 @@
     box-shadow: 0 2px 12px rgba(0,0,0,0.06);
   }
   thead th {
-    background: var(--purple);
+    background: var(--navy);
     color: white;
     font-size: 10px;
     font-weight: 700;
@@ -198,29 +204,29 @@
   .frozen-0 { left: 0; width: 160px; min-width: 160px; max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
   .frozen-1 { left: 160px; width: 220px; min-width: 220px; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
   .frozen-2 { left: 380px; width: 130px; min-width: 130px; max-width: 130px; overflow: hidden; text-overflow: ellipsis; box-shadow: 4px 0 8px rgba(0,0,0,0.15); }
-  th.frozen { z-index: 5 !important; background: var(--purple) !important; }
+  th.frozen { z-index: 5 !important; background: var(--navy) !important; }
   th.frozen-2 { box-shadow: 4px 0 8px rgba(0,0,0,0.25); }
-  tr:nth-child(even) td.frozen { background: #faf9fc; }
-  tr:hover td.frozen { background: #ede6f5 !important; }
-  thead th:hover { background: var(--purple-light); }
+  tr:nth-child(even) td.frozen { background: #F7F5F0; }
+  tr:hover td.frozen { background: #E0EBF5 !important; }
+  thead th:hover { background: var(--navy-light); }
   thead th .sort-arrow { font-size: 9px; margin-left: 3px; opacity: 0.6; }
   thead th.sorted .sort-arrow { opacity: 1; }
   tbody tr { transition: background 0.15s; }
-  tbody tr:nth-child(even) { background: #faf9fc; }
-  tbody tr:hover { background: #ede6f5; }
+  tbody tr:nth-child(even) { background: #F7F5F0; }
+  tbody tr:hover { background: #E0EBF5; }
   tbody td {
     padding: 8px 8px;
-    border-bottom: 1px solid #f0edf3;
+    border-bottom: 1px solid #EDE3D4;
     white-space: nowrap;
   }
   td.num { text-align: right; font-variant-numeric: tabular-nums; }
-  td.price { font-weight: 700; color: var(--purple); }
+  td.price { font-weight: 700; color: var(--teal); }
   a.link-btn {
     display: inline-flex;
     align-items: center;
     gap: 3px;
-    background: var(--purple-pale);
-    color: var(--purple);
+    background: var(--navy-pale);
+    color: var(--navy);
     text-decoration: none;
     padding: 4px 10px;
     border-radius: 5px;
@@ -229,7 +235,7 @@
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
   }
-  a.link-btn:hover { background: var(--purple); color: white; }
+  a.link-btn:hover { background: var(--navy); color: white; }
   a.link-btn.video { background: #eaf7ef; color: var(--green); }
   a.link-btn.video:hover { background: var(--green); color: white; }
   .no-results {
@@ -265,11 +271,11 @@
     flex: 1;
     padding: 14px 20px;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 800;
     font-family: var(--font);
-    border: 2px solid var(--purple);
+    border: 2px solid var(--navy);
     background: white;
-    color: var(--purple);
+    color: var(--navy);
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
     text-align: center;
@@ -279,11 +285,11 @@
   .source-tab:last-child { border-radius: 0 8px 8px 0; }
   .source-tab:not(:first-child) { border-left: none; }
   .source-tab.active {
-    background: var(--purple);
+    background: var(--navy);
     color: white;
   }
   .source-tab:not(.active):hover {
-    background: var(--purple-pale);
+    background: var(--navy-pale);
   }
 
   @media (max-width: 768px) {
