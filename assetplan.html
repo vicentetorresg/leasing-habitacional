@@ -254,6 +254,38 @@
   .badge-assetplan { background: #e3f2fd; color: #1565c0; }
   .badge-recuperadas { background: #fff3e0; color: #e65100; }
 
+  /* ── SOURCE TABS ── */
+  .source-tabs {
+    display: flex;
+    gap: 0;
+    background: white;
+    padding: 16px 24px 0;
+  }
+  .source-tab {
+    flex: 1;
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: var(--font);
+    border: 2px solid var(--purple);
+    background: white;
+    color: var(--purple);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    text-align: center;
+    letter-spacing: 0.03em;
+  }
+  .source-tab:first-child { border-radius: 8px 0 0 8px; }
+  .source-tab:last-child { border-radius: 0 8px 8px 0; }
+  .source-tab:not(:first-child) { border-left: none; }
+  .source-tab.active {
+    background: var(--purple);
+    color: white;
+  }
+  .source-tab:not(.active):hover {
+    background: var(--purple-pale);
+  }
+
   @media (max-width: 768px) {
     .filters { padding: 10px 12px; gap: 8px; }
     .filter-group select, .filter-group input { min-width: 100px; font-size: 12px; }
@@ -272,6 +304,12 @@
   <span class="count" id="row-count">Cargando...</span>
 </div>
 
+<div class="source-tabs">
+  <button class="source-tab active" data-fuente="" onclick="setFuente(this)">TODAS</button>
+  <button class="source-tab" data-fuente="ASSETPLAN" onclick="setFuente(this)">ASSETPLAN</button>
+  <button class="source-tab" data-fuente="RECUPERADAS" onclick="setFuente(this)">RECUPERADAS</button>
+</div>
+
 <div class="filters" id="filters">
   <div class="filter-group price-filter">
     <label>Precio Tope (UF) – Precio Final Dpto</label>
@@ -279,14 +317,6 @@
       <input type="range" id="price-slider" min="0" max="8000" step="50" value="2350">
       <input type="number" id="price-input" value="2350" min="0" max="99999" step="50">
     </div>
-  </div>
-  <div class="filter-group">
-    <label>Fuente</label>
-    <select id="f-fuente">
-      <option value="">Todas</option>
-      <option value="ASSETPLAN">AssetPlan</option>
-      <option value="RECUPERADAS">Recuperadas</option>
-    </select>
   </div>
   <div class="filter-group">
     <label>Región</label>
@@ -330,7 +360,6 @@ let sortCol = null;
 let sortAsc = true;
 
 const COLUMNS = [
-  { key: 'fuente',            label: 'Fuente', badge: true },
   { key: 'condominio',       label: 'Condominio', frozen: true },
   { key: 'direccion',        label: 'Dirección', frozen: true },
   { key: 'comuna',           label: 'Comuna', frozen: true },
@@ -389,7 +418,6 @@ function buildHead() {
 }
 
 function populateFilters() {
-  document.getElementById('f-fuente').addEventListener('change', applyFilters);
   const fields = [
     { id: 'f-region', key: 'region' },
     { id: 'f-comuna', key: 'comuna' },
@@ -410,7 +438,7 @@ function populateFilters() {
 function getFilters() {
   return {
     priceMax: parseFloat(document.getElementById('price-input').value) || 99999,
-    fuente: document.getElementById('f-fuente').value,
+    fuente: document.querySelector('.source-tab.active').dataset.fuente,
     region: document.getElementById('f-region').value,
     comuna: document.getElementById('f-comuna').value,
     tipologia: document.getElementById('f-tipologia').value,
@@ -499,7 +527,7 @@ function sortBy(idx) {
 function clearFilters() {
   document.getElementById('price-slider').value = 2350;
   document.getElementById('price-input').value = 2350;
-  document.getElementById('f-fuente').value = '';
+  document.querySelectorAll('.source-tab').forEach(t => t.classList.toggle('active', t.dataset.fuente === ''));
   document.getElementById('f-region').value = '';
   document.getElementById('f-comuna').value = '';
   document.getElementById('f-tipologia').value = '';
@@ -531,6 +559,12 @@ function copyLink(btn, url) {
     btn.classList.add('copied');
     setTimeout(() => { btn.textContent = '📋 Copiar'; btn.classList.remove('copied'); }, 1500);
   });
+}
+
+function setFuente(btn) {
+  document.querySelectorAll('.source-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
 }
 
 // ── Load data ──
