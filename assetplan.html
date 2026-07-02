@@ -195,9 +195,9 @@
   td, th { position: relative; z-index: 0; }
   /* Columnas fijas (Condominio, Dirección, Comuna) */
   .frozen { position: sticky !important; z-index: 3 !important; background: white; }
-  .frozen-0 { left: 0; width: 160px; min-width: 160px; max-width: 160px; }
-  .frozen-1 { left: 160px; width: 170px; min-width: 170px; max-width: 170px; }
-  .frozen-2 { left: 330px; width: 120px; min-width: 120px; max-width: 120px; box-shadow: 4px 0 8px rgba(0,0,0,0.15); }
+  .frozen-0 { left: 0; width: 160px; min-width: 160px; max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
+  .frozen-1 { left: 160px; width: 220px; min-width: 220px; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+  .frozen-2 { left: 380px; width: 130px; min-width: 130px; max-width: 130px; overflow: hidden; text-overflow: ellipsis; box-shadow: 4px 0 8px rgba(0,0,0,0.15); }
   th.frozen { z-index: 5 !important; background: var(--purple) !important; }
   th.frozen-2 { box-shadow: 4px 0 8px rgba(0,0,0,0.25); }
   tr:nth-child(even) td.frozen { background: #faf9fc; }
