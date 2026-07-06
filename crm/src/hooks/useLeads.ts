@@ -41,6 +41,9 @@ export interface Lead {
   arriendo: string | null;
   contrato: string | null;
   vivienda: string | null;
+  tiene_propiedad_vista: string | null;
+  comuna_propiedad: string | null;
+  complementa_renta: string | null;
 }
 
 // Statuses that mean the lead is still pending (ejecutiva view)
@@ -61,14 +64,10 @@ export function useLeads(userId?: string, isAdmin?: boolean, userEmail?: string,
       .eq('is_demo', isDemo)
       .order('created_at', { ascending: false });
 
-    // Ejecutiva pipeline statuses (shown in executive view)
+    // All users see all leads (no assigned_to filter)
     const EJECUTIVA_STATUSES = ['nuevo', 'contactado', 'recontactar', 'no_contesta', 'no_califica', 'calling'];
 
-    if (!isAdmin && userId) {
-      // Ejecutiva ve solo sus leads y solo los del pipeline ejecutiva
-      query = query.eq('assigned_to', userId).in('status', EJECUTIVA_STATUSES);
-    } else if (isAdmin) {
-      // Admin en vista ejecutiva ve todos los leads del pipeline ejecutiva
+    if (isAdmin || userId) {
       query = query.in('status', EJECUTIVA_STATUSES);
     }
 

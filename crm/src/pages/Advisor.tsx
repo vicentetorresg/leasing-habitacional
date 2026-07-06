@@ -84,6 +84,9 @@ function downloadXlsx(leads: Lead[], filename: string) {
     'RUT': l.rut || '',
     'Sueldo Líquido': l.sueldo_liquido || '',
     'DICOM': l.en_dicom ? 'Sí' : 'No',
+    'Propiedad Vista': l.tiene_propiedad_vista === 'si' ? 'Sí' : l.tiene_propiedad_vista === 'no' ? 'No' : '',
+    'Comuna Propiedad': l.comuna_propiedad || '',
+    'Complementa Renta': l.complementa_renta || '',
     'Fuente': l.source,
     'Estado': ADVISOR_STATUSES.find(s => s.key === l.status)?.label || l.status,
     'Dirección Vivienda': l.direccion_vivienda || '',
@@ -848,6 +851,16 @@ const Advisor = () => {
                       🏡 Tiene vivienda: {lead.vivienda === 'si' ? 'Sí' : 'No'}
                     </p>
                   )}
+                  {lead.tiene_propiedad_vista && (
+                    <p className={`text-[10px] font-semibold ${lead.tiene_propiedad_vista === 'si' ? 'text-success' : 'text-destructive'}`}>
+                      🏠 Propiedad vista: {lead.tiene_propiedad_vista === 'si' ? `Sí${lead.comuna_propiedad ? ` (${lead.comuna_propiedad})` : ''}` : 'No'}
+                    </p>
+                  )}
+                  {lead.complementa_renta && (
+                    <p className="text-[10px] text-muted-foreground">
+                      👥 Complementa renta: {lead.complementa_renta}
+                    </p>
+                  )}
                   {lead.scheduled_at && (
                     <p className="text-[10px] text-primary/80 font-semibold">
                       🗓️ Agendado: {new Date(lead.scheduled_at).toLocaleString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
@@ -1381,6 +1394,9 @@ function LeadDetailContent({
         <DetailItem label="RUT" value={lead.rut || '—'} />
         <DetailItem label="Sueldo Líquido" value={formatSueldoShort(lead)} />
         <DetailItem label="DICOM" value={lead.en_dicom ? '⚠️ Sí' : '✅ No'} />
+        <DetailItem label="Propiedad vista" value={lead.tiene_propiedad_vista === 'si' ? '✅ Sí' : lead.tiene_propiedad_vista === 'no' ? '❌ No' : '—'} />
+        <DetailItem label="Comuna propiedad" value={lead.comuna_propiedad || '—'} />
+        <DetailItem label="Complementa renta" value={lead.complementa_renta || '—'} />
         <DetailItem label="Fuente" value={lead.source} />
         <DetailItem label="Fecha Lead" value={new Date(lead.created_at).toLocaleDateString('es-CL')} />
         <DetailItem label="Estado" value={ADVISOR_STATUSES.find(s => s.key === lead.status)?.label || lead.status} />
