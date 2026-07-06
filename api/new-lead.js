@@ -115,12 +115,14 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, fuente } = req.body || {};
+  const { nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, complementa_renta, fuente } = req.body || {};
   if (!nombre || !telefono) return res.status(400).json({ error: 'Faltan campos' });
 
   const SUPA_URL = 'https://unptkiyggkuxtkzedluv.supabase.co/rest/v1/leasing_leads';
   const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVucHRraXlnZ2t1eHRremVkbHV2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTMxMTU1OCwiZXhwIjoyMDk0ODg3NTU4fQ.vx78MEuZFpc57IC9I36rmLHUvi8XbWAs3nk-HiQca4E';
   const RESEND_KEY = 're_fFtYwjwm_3YXpMdCWAgcnncKW48RTXSHa';
+  const CRM_URL = 'https://evuxdhvvarfxredghvpu.supabase.co/rest/v1/leads';
+  const CRM_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2dXhkaHZ2YXJmeHJlZGdodnB1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDY2NDg3MywiZXhwIjoyMDk2MjQwODczfQ.CmHahWoYtBcZHHJIF1tEOEfqx9Xe4unRpV2fpyvzVv8';
 
   // 1. Save to Supabase — try with contrato, fallback without
   const supaHeaders = {
@@ -134,22 +136,54 @@ export default async function handler(req, res) {
   // Try with contrato + vivienda columns
   const r1 = await fetch(SUPA_URL, {
     method: 'POST', headers: supaHeaders,
-    body: JSON.stringify({ nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, fuente })
+    body: JSON.stringify({ nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, complementa_renta, fuente })
   });
   if (r1.ok) { saved = true; }
-  // Fallback without new columns (if not yet added in Supabase)
   if (!saved) {
     const r = await fetch(SUPA_URL, {
       method: 'POST', headers: supaHeaders,
-      body: JSON.stringify({ nombre, telefono, email, arriendo, renta, dicom, fuente })
+      body: JSON.stringify({ nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, fuente })
     });
     saved = r.ok;
   }
+
+  // 1b. Dual-write to CRM Supabase (leads table)
+  const normalizePhone = (raw) => {
+    if (!raw) return '';
+    let p = raw.replace(/[\s\-\(\)]/g, '');
+    if (/^9\d{8}$/.test(p)) p = '+56' + p;
+    else if (/^56\d{9}$/.test(p)) p = '+' + p;
+    else if (!p.startsWith('+') && p.length > 0) p = '+' + p;
+    return p;
+  };
+  const crmLead = {
+    name: nombre,
+    phone: normalizePhone(telefono),
+    email: email || null,
+    source: fuente || 'web',
+    status: 'nuevo',
+    is_demo: false,
+    sueldo_liquido_raw: renta || null,
+    en_dicom: dicom === 'si' ? true : dicom === 'no' ? false : null,
+    arriendo: arriendo || null,
+    contrato: contrato || null,
+    vivienda: vivienda || null,
+    tiene_propiedad_vista: tiene_propiedad_vista || null,
+    comuna_propiedad: comuna_propiedad || null,
+    complementa_renta: complementa_renta || null,
+  };
+  await fetch(CRM_URL, {
+    method: 'POST',
+    headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+    body: JSON.stringify(crmLead),
+  }).catch(() => null); // fire-and-forget, don't block response
 
   // 2. Notification email to team
   const contratoLabel  = contrato === 'si' ? '✅ Sí' : contrato === 'no' ? '❌ No' : '—';
   const viviendaLabel  = vivienda === 'si' ? '❌ Sí (tiene vivienda)' : vivienda === 'no' ? '✅ No' : '—';
   const dicomLabel     = dicom === 'si' ? '❌ Sí (en DICOM)' : dicom === 'no' ? '✅ No' : '—';
+  const propVistaLabel = tiene_propiedad_vista === 'si' ? ('✅ Sí' + (comuna_propiedad ? ' — ' + comuna_propiedad : '')) : tiene_propiedad_vista === 'no' ? '⚠️ No tiene propiedad vista' : '—';
+  const complementaLabel = complementa_renta || '—';
   const now = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
   const producto = (fuente || '').toLowerCase().includes('mutuo') ? 'Mutuo Hipotecario' : 'Leasing DS120';
   const waPhone = (telefono || '').replace(/\D/g, '').replace(/^0/, '56');
@@ -175,6 +209,8 @@ export default async function handler(req, res) {
         ['🏠 Arriendo actual',      arriendo || '—'],
         ['📋 Contrato indefinido',  contratoLabel],
         ...(vivienda ? [['🏡 Tiene vivienda propia', viviendaLabel]] : []),
+        ['🏠 Propiedad vista',      propVistaLabel],
+        ['👥 Complementa renta',    complementaLabel],
         ['⚠️ En DICOM',             dicomLabel],
         ['📌 Fuente',               fuente   || '—'],
       ].map(([label, val]) => `
@@ -205,7 +241,7 @@ export default async function handler(req, res) {
     body: JSON.stringify({
       from:    'Llave Propia <notificaciones@llavepropia.cl>',
       to:      ['rodrigo.canas@llavepropia.cl'],
-      bcc:     ['vicente@llavepropia.cl'],
+      bcc:     ['vicente@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'],
       subject: `🏠 Nuevo lead: ${nombre} — ${producto}`,
       html
     })
