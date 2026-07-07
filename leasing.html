@@ -970,6 +970,27 @@ footer{background:var(--navy);padding:56px 40px 28px}
 </div>
 
 <script>
+  // ─── Analytics tracking ───
+  var _sid = sessionStorage.getItem('a_sid');
+  if (!_sid) { _sid = Math.random().toString(36).substr(2,12) + Date.now().toString(36); sessionStorage.setItem('a_sid', _sid); }
+  var _dev = window.innerWidth <= 768 ? 'mobile' : 'desktop';
+  var _sent = {};
+  function aTrack(evt, formId, field, val) {
+    var k = evt + (formId||'') + (field||'');
+    if (_sent[k]) return;
+    _sent[k] = 1;
+    fetch('https://unptkiyggkuxtkzedluv.supabase.co/rest/v1/analytics_events', {
+      method: 'POST',
+      headers: {
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVucHRraXlnZ2t1eHRremVkbHV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMTE1NTgsImV4cCI6MjA5NDg4NzU1OH0.KmkPxj-8RCb4MUOw9mcRKJJJAhGDdsjK9fRdh-omeWc',
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ session_id: _sid, event: evt, form_id: formId||null, field: field||null, value: val||null, device: _dev })
+    }).catch(function(){});
+  }
+  aTrack('page_view');
+
   // progress bar
   const bar = document.getElementById('prog');
   window.addEventListener('scroll', () => {
@@ -1049,12 +1070,14 @@ footer{background:var(--navy);padding:56px 40px 28px}
   }
 
   function handleDicom(formId, val) {
+    aTrack('field_complete', formId, 'dicom', val);
     var err = document.getElementById(formId + '-dicom-err');
     if (err) err.style.display = val === 'si' ? 'flex' : 'none';
     updateButtonState(formId);
   }
 
   function handleRenta(formId, val) {
+    aTrack('field_complete', formId, 'renta', val);
     var err = document.getElementById(formId + '-renta-err');
     if (err) err.style.display = val === 'Menos de $800.000' ? 'flex' : 'none';
     // Show complementa renta obligatoria message for $800k-$1.2M (only if not already complementing)
@@ -1070,12 +1093,14 @@ footer{background:var(--navy);padding:56px 40px 28px}
   }
 
   function handleContrato(formId, val) {
+    aTrack('field_complete', formId, 'contrato', val);
     var err = document.getElementById(formId + '-contrato-err');
     if (err) err.style.display = val === 'no' ? 'flex' : 'none';
     updateButtonState(formId);
   }
 
   function handleVivienda(formId, val) {
+    aTrack('field_complete', formId, 'vivienda', val);
     var err = document.getElementById(formId + '-vivienda-err');
     if (err) err.style.display = val === 'si' ? 'flex' : 'none';
     updateButtonState(formId);
@@ -1158,6 +1183,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
   }
 
   function handlePropVista(formId, val) {
+    aTrack('form_interact', formId, 'propiedad_vista', val);
     var comunaWrap = document.getElementById(formId + '-comuna-prop');
     var precioCheck = document.getElementById(formId + '-precio-check');
     var info = document.getElementById(formId + '-prop-info');
@@ -1394,6 +1420,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
   });
 
   function saveLead(data) {
+    aTrack('form_submit', data.fuente, null, null);
     // Backup local
     const leads = JSON.parse(localStorage.getItem('habita_leads') || '[]');
     leads.push({ ...data, fecha: new Date().toISOString() });

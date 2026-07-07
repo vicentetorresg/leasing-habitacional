@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Analisis Funnel — Llave Propia</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:#f4f2ee;color:#1A150F;padding:20px}
+.container{max-width:900px;margin:0 auto}
+h1{font-size:1.6rem;color:#1B3A6B;margin-bottom:4px}
+.sub{color:#888;font-size:0.85rem;margin-bottom:24px}
+.card{background:#fff;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.card h2{font-size:1.1rem;color:#1B3A6B;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:0.85rem}
+th{text-align:left;padding:10px 8px;border-bottom:2px solid #1B3A6B;color:#1B3A6B;font-weight:800;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.5px}
+td{padding:10px 8px;border-bottom:1px solid #f0ece4}
+tr:hover td{background:#fafaf8}
+.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.pct{color:#888;font-size:0.75rem;font-weight:600}
+.bar-wrap{height:6px;background:#f0ece4;border-radius:3px;margin-top:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width 0.5s}
+.fill-blue{background:#1B3A6B}
+.fill-teal{background:#2DB89E}
+.fill-green{background:#25D366}
+.fill-orange{background:#e67e22}
+.fill-red{background:#e74c3c}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:#fff;border-radius:12px;padding:18px 16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);text-align:center}
+.kpi .val{font-size:2rem;font-weight:900;color:#1B3A6B}
+.kpi .lbl{font-size:0.7rem;color:#888;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px}
+.loading{text-align:center;padding:40px;color:#888}
+.filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filters button{padding:6px 14px;border-radius:50px;border:1.5px solid #ccc;background:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.8rem;cursor:pointer;color:#555}
+.filters button.active{background:#1B3A6B;color:#fff;border-color:#1B3A6B}
+.device-split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.device-card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);text-align:center}
+.device-card .val{font-size:1.5rem;font-weight:900;color:#1B3A6B}
+.device-card .lbl{font-size:0.7rem;color:#888;font-weight:700;text-transform:uppercase}
+.drop-table td:first-child{font-weight:700;color:#1B3A6B}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Funnel de Conversion — Llave Propia</h1>
+  <p class="sub">Datos en tiempo real desde analytics_events</p>
+
+  <div class="filters" id="filters">
+    <button class="active" data-days="1">Hoy</button>
+    <button data-days="7">7 dias</button>
+    <button data-days="30">30 dias</button>
+    <button data-days="0">Todo</button>
+  </div>
+
+  <div id="content"><div class="loading">Cargando datos...</div></div>
+</div>
+
+<script>
+const SUPA_URL = 'https://unptkiyggkuxtkzedluv.supabase.co/rest/v1/analytics_events';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVucHRraXlnZ2t1eHRremVkbHV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMTE1NTgsImV4cCI6MjA5NDg4NzU1OH0.KmkPxj-8RCb4MUOw9mcRKJJJAhGDdsjK9fRdh-omeWc';
+
+let allData = [];
+let currentDays = 1;
+
+async function fetchData() {
+  const res = await fetch(SUPA_URL + '?select=*&order=created_at.desc&limit=10000', {
+    headers: { 'apikey': SUPA_KEY }
+  });
+  allData = await res.json();
+  render();
+}
+
+function filterByDays(days) {
+  if (days === 0) return allData;
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - days);
+  cutoff.setHours(0,0,0,0);
+  return allData.filter(e => new Date(e.created_at) >= cutoff);
+}
+
+function render() {
+  const data = filterByDays(currentDays);
+  const sessions = new Set(data.map(e => e.session_id));
+  const byEvent = {};
+  data.forEach(e => {
+    if (!byEvent[e.event]) byEvent[e.event] = new Set();
+    byEvent[e.event].add(e.session_id);
+  });
+
+  const views = (byEvent['page_view'] || new Set()).size;
+  const interacted = (byEvent['form_interact'] || new Set()).size;
+  const fieldSessions = (byEvent['field_complete'] || new Set()).size;
+  const submitted = (byEvent['form_submit'] || new Set()).size;
+
+  // Device split
+  const mobileViews = data.filter(e => e.event === 'page_view' && e.device === 'mobile').length;
+  const desktopViews = data.filter(e => e.event === 'page_view' && e.device === 'desktop').length;
+
+  // Field dropout analysis
+  const fields = ['propiedad_vista', 'renta', 'dicom', 'contrato', 'vivienda'];
+  const fieldCounts = {};
+  fields.forEach(f => {
+    fieldCounts[f] = new Set(data.filter(e => e.event === 'field_complete' && e.field === f).map(e => e.session_id)).size;
+  });
+
+  // Disqualified (wrong answers)
+  const disqualified = {
+    dicom_si: data.filter(e => e.field === 'dicom' && e.value === 'si').length,
+    contrato_no: data.filter(e => e.field === 'contrato' && e.value === 'no').length,
+    vivienda_si: data.filter(e => e.field === 'vivienda' && e.value === 'si').length,
+    renta_baja: data.filter(e => e.field === 'renta' && e.value === 'Menos de $800.000').length,
+    prop_no: data.filter(e => e.field === 'propiedad_vista' && e.value === 'no').length,
+  };
+
+  // By day
+  const byDay = {};
+  data.forEach(e => {
+    const d = e.created_at.substring(0, 10);
+    if (!byDay[d]) byDay[d] = { views: new Set(), interact: new Set(), fields: new Set(), submit: new Set() };
+    if (e.event === 'page_view') byDay[d].views.add(e.session_id);
+    if (e.event === 'form_interact') byDay[d].interact.add(e.session_id);
+    if (e.event === 'field_complete') byDay[d].fields.add(e.session_id);
+    if (e.event === 'form_submit') byDay[d].submit.add(e.session_id);
+  });
+
+  const pct = (a, b) => b > 0 ? Math.round(a / b * 100) : 0;
+  const barHtml = (val, max, cls) => `<div class="bar-wrap"><div class="bar-fill ${cls}" style="width:${pct(val,max)}%"></div></div>`;
+
+  let html = `
+    <div class="kpi-row">
+      <div class="kpi"><div class="val">${views}</div><div class="lbl">Visitas</div></div>
+      <div class="kpi"><div class="val">${interacted}</div><div class="lbl">Interactuaron</div></div>
+      <div class="kpi"><div class="val">${fieldSessions}</div><div class="lbl">Llenaron campos</div></div>
+      <div class="kpi"><div class="val">${submitted}</div><div class="lbl">Enviaron</div></div>
+      <div class="kpi"><div class="val">${pct(submitted, views)}%</div><div class="lbl">Conversion</div></div>
+    </div>
+
+    <div class="device-split">
+      <div class="device-card"><div class="val">${mobileViews}</div><div class="lbl">Mobile</div></div>
+      <div class="device-card"><div class="val">${desktopViews}</div><div class="lbl">Desktop</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Funnel por paso</h2>
+      <table>
+        <tr><th>Paso</th><th class="n">Sesiones</th><th class="n">% del total</th><th style="width:30%">Drop</th></tr>
+        <tr><td>Visita pagina</td><td class="n">${views}</td><td class="n">100%</td><td>${barHtml(views,views,'fill-blue')}</td></tr>
+        <tr><td>Interactuo con form</td><td class="n">${interacted}</td><td class="n">${pct(interacted,views)}%</td><td>${barHtml(interacted,views,'fill-teal')}</td></tr>
+        <tr><td>Completo campos</td><td class="n">${fieldSessions}</td><td class="n">${pct(fieldSessions,views)}%</td><td>${barHtml(fieldSessions,views,'fill-orange')}</td></tr>
+        <tr><td>Envio formulario</td><td class="n">${submitted}</td><td class="n">${pct(submitted,views)}%</td><td>${barHtml(submitted,views,'fill-green')}</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Dropout por campo</h2>
+      <table class="drop-table">
+        <tr><th>Campo</th><th class="n">Completaron</th><th class="n">% de interactuaron</th></tr>
+        ${fields.map(f => `<tr><td>${f.replace('_',' ')}</td><td class="n">${fieldCounts[f]}</td><td class="n">${pct(fieldCounts[f], interacted)}%</td></tr>`).join('')}
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>No calificaron (respuesta incorrecta)</h2>
+      <table class="drop-table">
+        <tr><th>Motivo</th><th class="n">Cantidad</th></tr>
+        <tr><td>No tiene propiedad vista</td><td class="n">${disqualified.prop_no}</td></tr>
+        <tr><td>Renta menor a $800k</td><td class="n">${disqualified.renta_baja}</td></tr>
+        <tr><td>En DICOM</td><td class="n">${disqualified.dicom_si}</td></tr>
+        <tr><td>Sin contrato indefinido</td><td class="n">${disqualified.contrato_no}</td></tr>
+        <tr><td>Ya tiene vivienda</td><td class="n">${disqualified.vivienda_si}</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Por dia</h2>
+      <table>
+        <tr><th>Dia</th><th class="n">Visitas</th><th class="n">Interaccion</th><th class="n">Campos</th><th class="n">Envios</th><th class="n">Conv %</th></tr>
+        ${Object.keys(byDay).sort().reverse().map(d => {
+          const r = byDay[d];
+          return `<tr><td>${d}</td><td class="n">${r.views.size}</td><td class="n">${r.interact.size}</td><td class="n">${r.fields.size}</td><td class="n">${r.submit.size}</td><td class="n">${pct(r.submit.size, r.views.size)}%</td></tr>`;
+        }).join('')}
+      </table>
+    </div>
+  `;
+
+  document.getElementById('content').innerHTML = html;
+}
+
+// Filter buttons
+document.getElementById('filters').addEventListener('click', function(e) {
+  if (e.target.tagName !== 'BUTTON') return;
+  document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  currentDays = parseInt(e.target.dataset.days);
+  render();
+});
+
+fetchData();
+// Auto-refresh every 30s
+setInterval(fetchData, 30000);
+</script>
+</body>
+</html>
