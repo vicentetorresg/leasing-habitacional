@@ -102,6 +102,39 @@ nav.sc{background:rgba(254,252,247,0.97);backdrop-filter:blur(16px);padding:12px
 .f-btn-white{background:#fff;color:var(--navy)}
 .f-btn-white:hover{background:var(--beige-1);transform:translateY(-2px)}
 .f-stack{display:flex;flex-direction:column;gap:10px}
+.f-field{display:flex;flex-direction:column;gap:4px}
+.f-field-lbl{font-size:12px;font-weight:800;color:var(--navy);letter-spacing:0.2px;padding-left:2px}
+
+/* custom select */
+.cs{position:relative;width:100%}
+.cs-trigger{width:100%;background:var(--beige);border:1.5px solid var(--beige-3);border-radius:var(--rs);padding:0 40px 0 16px;height:52px;color:var(--text);font-size:16px;font-family:'Nunito',sans-serif;cursor:pointer;display:flex;align-items:center;transition:var(--t);-webkit-appearance:none;position:relative;text-align:left}
+.cs-trigger::after{content:'';position:absolute;right:16px;top:50%;transform:translateY(-50%) rotate(0deg);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--text-s);transition:transform 0.2s}
+.cs.open .cs-trigger::after{transform:translateY(-50%) rotate(180deg)}
+.cs-trigger.placeholder{color:var(--text-s)}
+.cs-trigger:hover{border-color:var(--teal)}
+.cs.open .cs-trigger{border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px rgba(45,184,158,0.12);border-bottom-left-radius:0;border-bottom-right-radius:0}
+.cs-opts{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid var(--teal);border-top:none;border-radius:0 0 var(--rs) var(--rs);max-height:260px;overflow-y:auto;z-index:50;box-shadow:0 12px 32px rgba(27,58,107,0.12)}
+.cs.open .cs-opts{display:block}
+.cs-up .cs-opts{top:auto;bottom:100%;border-top:1.5px solid var(--teal);border-bottom:none;border-radius:var(--rs) var(--rs) 0 0;box-shadow:0 -12px 32px rgba(27,58,107,0.12)}
+.cs-up.open .cs-trigger{border-top-left-radius:0;border-top-right-radius:0;border-bottom-left-radius:var(--rs);border-bottom-right-radius:var(--rs);border-bottom:1.5px solid var(--teal);border-top:none}
+.cs-opt{padding:12px 16px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;transition:background 0.15s,color 0.15s;border-bottom:1px solid var(--beige-1)}
+.cs-opt:last-child{border-bottom:none}
+.cs-opt:hover{background:var(--teal-pale);color:var(--navy)}
+.cs-opt.selected{background:var(--teal-pale);color:var(--teal);font-weight:800}
+.cs-opt.blocked{color:#c0392b;font-weight:700}
+.cs-opt.blocked:hover{background:#fdeaea}
+/* dark variant */
+.cs-d .cs-trigger{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15);color:#fff}
+.cs-d .cs-trigger.placeholder{color:rgba(255,255,255,0.4)}
+.cs-d .cs-trigger::after{border-top-color:rgba(255,255,255,0.4)}
+.cs-d .cs-trigger:hover{border-color:var(--teal)}
+.cs-d.open .cs-trigger{background:rgba(255,255,255,0.12);border-color:var(--teal)}
+.cs-d .cs-opts{background:var(--navy);border-color:var(--teal)}
+.cs-d .cs-opt{color:rgba(255,255,255,0.8);border-bottom-color:rgba(255,255,255,0.08)}
+.cs-d .cs-opt:hover{background:rgba(45,184,158,0.15);color:#fff}
+.cs-d .cs-opt.selected{background:rgba(45,184,158,0.2);color:var(--teal-m)}
+.cs-d .cs-opt.blocked{color:#ff7675}
+.cs-d .cs-opt.blocked:hover{background:rgba(231,76,60,0.15)}
 .f-privacy{text-align:center;color:rgba(255,255,255,0.35);font-size:0.72rem;margin-top:8px}
 .f-privacy-d{color:var(--text-s)}
 .f-success{display:none;flex-direction:column;align-items:center;text-align:center;padding:28px 16px}
@@ -127,6 +160,82 @@ nav.sc{background:rgba(254,252,247,0.97);backdrop-filter:blur(16px);padding:12px
 .fc-trust-item svg{stroke:var(--green);fill:none;stroke-width:2.5;width:11px;height:11px}
 .hero-fc .f-input{background:#fff;border-color:#C0AA8E;box-shadow:0 1px 3px rgba(27,58,107,0.06)}
 .hero-fc .f-radio-lbl{background:#fff;border-color:#C0AA8E}
+
+/* hero form progressive disclosure */
+.hf-preview{position:relative;pointer-events:none;opacity:0.55;filter:blur(1px) grayscale(0.15);max-height:300px;overflow:hidden;transition:all 0.6s cubic-bezier(0.22,1,0.36,1)}
+.hf-preview::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,#fff);pointer-events:none;z-index:2}
+.hf-preview.unlocked{pointer-events:auto;opacity:1;filter:none;max-height:3000px;overflow:visible;animation:formReveal 0.7s cubic-bezier(0.22,1,0.36,1)}
+.hf-preview.unlocked::after{display:none}
+@keyframes formReveal{0%{opacity:0.55;filter:blur(1px) grayscale(0.15);transform:translateY(8px)}40%{opacity:1;filter:none;transform:translateY(-3px)}100%{transform:translateY(0)}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(45,184,158,0.4)}50%{box-shadow:0 0 0 8px rgba(45,184,158,0)}}
+.hf-preview.unlocked .f-input,.hf-preview.unlocked .f-radio-lbl{animation:fieldPop 0.4s cubic-bezier(0.22,1,0.36,1) both}
+.hf-preview.unlocked .f-input:nth-child(2){animation-delay:0.05s}
+.hf-preview.unlocked .f-input:nth-child(3){animation-delay:0.1s}
+.hf-preview.unlocked .f-input:nth-child(4){animation-delay:0.15s}
+.hf-preview.unlocked .f-input:nth-child(5){animation-delay:0.2s}
+.hf-preview.unlocked .f-btn{animation:pulseGlow 1.5s ease-in-out 0.6s 3}
+@keyframes fieldPop{0%{opacity:0.5;transform:translateY(6px)}100%{opacity:1;transform:translateY(0)}}
+.hf-lock-hint{text-align:center;margin:6px 0 0;padding:8px;font-size:12px;font-weight:700;color:var(--teal);letter-spacing:0.3px;transition:all 0.3s;background:var(--teal-pale);border-radius:8px;border:1px solid rgba(45,184,158,0.25)}
+.hf-lock-hint.hidden{opacity:0;height:0;margin:0;padding:0;overflow:hidden;border:none}
+
+/* step progress bar */
+.step-bar{display:flex;align-items:center;gap:0;margin:0 0 18px;padding:0}
+.step-item{flex:1;display:flex;flex-direction:column;align-items:center;position:relative}
+.step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:2px solid var(--beige-3);background:#fff;color:var(--text-s);transition:all 0.4s;z-index:2;position:relative}
+.step-dot.active{border-color:var(--teal);background:var(--teal);color:#fff;box-shadow:0 0 0 4px rgba(45,184,158,0.15)}
+.step-dot.done{border-color:var(--teal);background:var(--teal);color:#fff}
+.step-label{font-size:10px;font-weight:700;color:var(--text-s);margin-top:4px;text-align:center;transition:color 0.3s}
+.step-label.active{color:var(--teal)}
+.step-line{position:absolute;top:14px;left:calc(50% + 14px);right:calc(-50% + 14px);height:2px;background:var(--beige-3);z-index:1}
+.step-line.done{background:var(--teal)}
+.step-item:last-child .step-line{display:none}
+
+/* social proof */
+.social-proof{display:flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 0;padding:8px 14px;background:var(--beige-1);border-radius:50px;font-size:11px;font-weight:700;color:var(--text-m)}
+.social-proof .sp-dot{width:6px;height:6px;border-radius:50%;background:#2DB89E;animation:spPulse 2s infinite}
+@keyframes spPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
+.sp-count{font-weight:900;color:var(--navy);font-size:13px}
+
+/* confetti */
+.confetti-container{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:10}
+.confetti-piece{position:absolute;width:8px;height:8px;top:-10px;opacity:0;animation:confettiFall 1.5s ease-out forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}80%{opacity:1}100%{opacity:0;transform:translateY(300px) rotate(720deg) scale(0.3)}}
+
+/* mobile scroll indicator — cascading arrows */
+.scroll-hint{display:none}
+@media(max-width:768px){
+  .scroll-hint{display:flex;flex-direction:column;align-items:center;position:fixed;bottom:68px;left:50%;transform:translateX(-50%);z-index:9997;pointer-events:none;animation:scrollHintIn 0.8s 1.2s both}
+  .scroll-hint-label{font-size:11px;font-weight:800;color:var(--teal);letter-spacing:0.5px;margin-bottom:2px;text-shadow:0 1px 4px rgba(255,255,255,0.9)}
+  .scroll-arrows{display:flex;flex-direction:column;align-items:center;gap:0}
+  .scroll-arrows svg{width:32px;height:32px;opacity:0;animation:arrowCascade 2s infinite}
+  .scroll-arrows svg:nth-child(1){animation-delay:0s}
+  .scroll-arrows svg:nth-child(2){animation-delay:0.2s}
+  .scroll-arrows svg:nth-child(3){animation-delay:0.4s}
+}
+@keyframes scrollHintIn{0%{opacity:0}100%{opacity:1}}
+@keyframes arrowCascade{0%{opacity:0;transform:translateY(-8px)}30%{opacity:1;transform:translateY(0)}60%{opacity:1;transform:translateY(4px)}100%{opacity:0;transform:translateY(12px)}}
+
+/* precio range grid */
+.precio-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.precio-pill{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 6px;border-radius:10px;cursor:pointer;transition:all 0.2s;text-align:center;border:1.5px solid var(--beige-3);background:var(--beige);min-height:52px}
+.precio-pill:hover{border-color:var(--teal);background:#e8f7f5;transform:translateY(-1px)}
+.precio-pill.selected{border-color:var(--teal);background:#d0f0ea;box-shadow:0 0 0 2px rgba(45,184,158,0.25)}
+.precio-pill.blocked{border-color:#e74c3c;opacity:0.5}
+.precio-pill.blocked.selected{background:#fdeaea;border-color:#e74c3c;box-shadow:0 0 0 2px rgba(231,76,60,0.2)}
+.precio-pill .pp-clp{font-size:13px;font-weight:800;color:var(--navy);line-height:1.2}
+.precio-pill .pp-uf{font-size:10px;font-weight:600;color:var(--text-s);margin-top:1px}
+.precio-pill.selected .pp-clp{color:var(--teal)}
+.precio-pill.blocked.selected .pp-clp{color:#c0392b}
+/* dark variant */
+.precio-pill-d{border-color:rgba(255,255,255,0.15);background:rgba(255,255,255,0.06)}
+.precio-pill-d:hover{border-color:var(--teal);background:rgba(45,184,158,0.12)}
+.precio-pill-d.selected{border-color:var(--teal);background:rgba(45,184,158,0.18);box-shadow:0 0 0 2px rgba(45,184,158,0.2)}
+.precio-pill-d.blocked{border-color:rgba(231,76,60,0.5);opacity:0.5}
+.precio-pill-d.blocked.selected{background:rgba(231,76,60,0.15);border-color:#e74c3c}
+.precio-pill-d .pp-clp{color:#fff}
+.precio-pill-d .pp-uf{color:rgba(255,255,255,0.5)}
+.precio-pill-d.selected .pp-clp{color:#2DB89E}
+.precio-pill-d.blocked.selected .pp-clp{color:#e74c3c}
 .hero-fc .f-success{min-height:340px;justify-content:center}
 
 /* ─── QUICK STRIP (phone-only) ─── */
@@ -364,6 +473,9 @@ footer{background:var(--navy);padding:56px 40px 28px}
   .dfs-inner{grid-template-columns:1fr;gap:36px}
   .fps-grid{grid-template-columns:1fr;gap:16px}
   .wa-float{bottom:84px;right:16px;width:52px;height:52px}
+  .f-stack{gap:14px}
+  .hero-fc .f-input,.hero-fc select.f-input{height:50px;font-size:15px;border-radius:12px;border-width:2px}
+  .hero-fc .f-input:focus{box-shadow:0 0 0 4px rgba(45,184,158,0.15)}
 }
   </style>
 </head>
@@ -397,22 +509,30 @@ footer{background:var(--navy);padding:56px 40px 28px}
         <h3>¿Quieres comprar tu casa propia?<br>Ve si calificas</h3>
         <p class="sub">Déjanos tus datos. Te evaluamos y contactamos rápido — sin costo.</p>
         <div id="hf-content">
-          <div style="display:flex;align-items:center;gap:10px;margin:0 0 14px"><div style="flex:1;height:1px;background:var(--beige-2)"></div><span style="font-size:0.72rem;font-weight:800;color:var(--teal);letter-spacing:1px;text-transform:uppercase;white-space:nowrap">Responde y descubre si calificas</span><div style="flex:1;height:1px;background:var(--beige-2)"></div></div>
+          <div class="step-bar" id="hf-step-bar">
+            <div class="step-item"><div class="step-dot active" id="hf-dot-1">1</div><div class="step-label active">Propiedad</div><div class="step-line"></div></div>
+            <div class="step-item"><div class="step-dot" id="hf-dot-2">2</div><div class="step-label">Tus datos</div><div class="step-line"></div></div>
+            <div class="step-item"><div class="step-dot" id="hf-dot-3">3</div><div class="step-label">Enviar</div></div>
+          </div>
           <form class="f-stack" autocomplete="on" onsubmit="return false;">
-            <div class="f-group prop-vista-gate" style="background:#e8f7f5;border-radius:10px;padding:14px 16px;border:1.5px solid rgba(45,184,158,0.3)"><label style="color:#1B3A6B;font-size:13px;font-weight:800">🏠 ¿Ya tienes una propiedad vista para comprar? <span style="color:#c0392b">* OBLIGATORIO</span><br><span style="font-weight:700;font-size:13px;color:#1B3A6B;display:block;margin-top:4px">Debe ser de máximo 2.000 UF (≈ <span class="uf-2000-pesos">$78.000.000</span>). Debes saber qué casa quieres comprar antes de postular.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="prop-vista-hf" value="si" onchange="handlePropVista('hf','si')"> Sí, ya tengo una propiedad vista</label><label class="f-radio-lbl"><input type="radio" name="prop-vista-hf" value="no" onchange="handlePropVista('hf','no')"> No, aún no tengo una propiedad vista</label></div><input class="f-input" type="text" id="hf-comuna-prop" placeholder="Comuna de la propiedad *" style="display:none;margin-top:8px"><div id="hf-precio-check" style="display:none;margin-top:8px"><label style="color:#1B3A6B;font-size:12px;font-weight:700">¿La propiedad vale menos de <span class="uf-2000-pesos">$78.000.000</span>? *</label><div class="f-radios" style="margin-top:4px"><label class="f-radio-lbl"><input type="radio" name="precio-ok-hf" value="si" onchange="handlePrecioOk('hf','si')"> Sí, vale menos</label><label class="f-radio-lbl"><input type="radio" name="precio-ok-hf" value="no" onchange="handlePrecioOk('hf','no')"> No, vale más</label></div><div class="prop-blocked-msg" id="hf-precio-err" style="display:none;margin-top:6px">🚫 <strong>La propiedad debe valer máximo 2.000 UF</strong> (≈ <span class="uf-2000-pesos">$78.000.000</span>) para acceder al Leasing Habitacional.</div></div><div class="prop-blocked-msg" id="hf-prop-info" style="display:none">🚫 <strong>No puedes continuar sin una propiedad vista.</strong> Para postular necesitas tener clara la casa que quieres comprar (máximo 2.000 UF). Vuelve cuando la tengas.</div></div>
-            <div id="hf-rest" style="display:none">
-            <input class="f-input" type="text" id="hf-n" placeholder="Nombre completo *" autocomplete="name">
-            <input class="f-input" type="tel" id="hf-t" placeholder="WhatsApp * (+56 9 XXXX XXXX)" name="phone" autocomplete="tel">
-            <input class="f-input" type="email" id="hf-e" placeholder="Correo electrónico *" autocomplete="email">
-            <select class="f-input" id="hf-a"><option value="">¿Cuánto pagas de arriendo hoy?</option><option>Menos de $200.000</option><option>$200.000 – $300.000</option><option>$300.001 – $400.000</option><option>$400.001 – $500.000</option><option>$500.001 – $600.000</option><option>$600.001 – $700.000</option><option>$700.001 – $800.000</option><option>Más de $800.000</option><option>No pago arriendo</option></select>
-            <select class="f-input" id="hf-r" onchange="handleRenta('hf',this.value)"><option value="">Sueldo líquido mensual *</option><option value="Menos de $700.000">Menos de $700.000</option><option value="$700.000 – $800.000">$700.000 – $800.000</option><option value="$800.001 – $900.000">$800.001 – $900.000</option><option value="$900.001 – $1.000.000">$900.001 – $1.000.000</option><option value="$1.000.001 – $1.100.000">$1.000.001 – $1.100.000</option><option value="$1.100.001 – $1.200.000">$1.100.001 – $1.200.000</option><option value="$1.200.001 – $1.300.000">$1.200.001 – $1.300.000</option><option value="$1.300.001 – $1.400.000">$1.300.001 – $1.400.000</option><option value="$1.400.001 – $1.500.000">$1.400.001 – $1.500.000</option><option value="$1.500.001 – $1.600.000">$1.500.001 – $1.600.000</option><option value="$1.600.001 – $1.700.000">$1.600.001 – $1.700.000</option><option value="$1.700.001 – $1.800.000">$1.700.001 – $1.800.000</option><option value="$1.800.001 – $1.900.000">$1.800.001 – $1.900.000</option><option value="$1.900.001 – $2.000.000">$1.900.001 – $2.000.000</option><option value="Más de $2.000.000">Más de $2.000.000</option></select>
-            <div class="dicom-block" id="hf-renta-err" style="display:none">🚫 La renta mínima requerida es $700.000 líquidos mensuales.</div>
-            <div class="f-group"><label>¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:#666">Pareja, familiar, amigo/a, etc. Esto permite acceder a propiedades de mayor valor.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="si"> Sí, puedo complementar renta</label><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="no"> No, solo con mi renta</label></div><input class="f-input" type="text" id="hf-complementa-quien" placeholder="¿Con quién? (pareja, familiar, amigo/a...)" style="display:none;margin-top:8px"></div>
-            <div class="f-group"><label>¿Estás en DICOM? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="dicom-hf" value="no" onchange="handleDicom('hf','no')"> No estoy en DICOM</label><label class="f-radio-lbl"><input type="radio" name="dicom-hf" value="si" onchange="handleDicom('hf','si')"> Sí estoy en DICOM</label></div><div class="dicom-block" id="hf-dicom-err" style="display:none">❌ Mientras figures en DICOM no es posible acceder al Leasing Habitacional. Regulariza tu situación y vuelve cuando estés listo.</div></div>
-            <div class="f-group"><label>¿Tienes contrato indefinido? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="contrato-hf" value="si" onchange="handleContrato('hf','si')"> Sí, tengo contrato indefinido</label><label class="f-radio-lbl"><input type="radio" name="contrato-hf" value="no" onchange="handleContrato('hf','no')"> No tengo contrato indefinido</label></div><div class="dicom-block" id="hf-contrato-err" style="display:none">⚠️ Se requiere contrato indefinido para acceder al Leasing Habitacional.</div></div>
-            <div class="f-group"><label>¿Tú o tu cónyuge tiene una vivienda actualmente? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="vivienda-hf" value="no" onchange="handleVivienda('hf','no')"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl"><input type="radio" name="vivienda-hf" value="si" onchange="handleVivienda('hf','si')"> Sí, tengo una vivienda</label></div><div class="dicom-block" id="hf-vivienda-err" style="display:none">❌ El Leasing Habitacional es solo para personas sin vivienda propia.</div></div>
-            <button id="hf-btn" class="f-btn f-btn-navy" style="margin-top:16px" onclick="doForm('hf','Leasing - Hero')">Verificar si califico — gratis &rarr;</button>
+            <div class="f-group prop-vista-gate" style="background:#e8f7f5;border-radius:10px;padding:14px 16px;border:1.5px solid rgba(45,184,158,0.3)"><label style="color:#1B3A6B;font-size:13px;font-weight:800">🏠 ¿Ya tienes una propiedad vista para comprar? <span style="color:#c0392b">*</span><br><span style="font-weight:700;font-size:13px;color:#1B3A6B;display:block;margin-top:4px">Debe ser de máximo 2.000 UF (≈ <span class="uf-2000-pesos">$81.673.000</span>). Para postular necesitas tener elegida la vivienda.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="prop-vista-hf" value="si" onchange="handlePropVista('hf','si')"> Sí, ya tengo una propiedad vista</label><label class="f-radio-lbl"><input type="radio" name="prop-vista-hf" value="no" onchange="handlePropVista('hf','no')"> No, aún no tengo una propiedad vista</label></div><div id="hf-comuna-prop" style="display:none;margin-top:10px;background:#fff;border-radius:8px;padding:10px 14px;border:1.5px solid var(--teal)"><label style="color:#1B3A6B;font-size:12px;font-weight:800;display:block;margin-bottom:6px">📍 ¿En qué comuna queda la propiedad? <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="hf-comuna-val" placeholder="Ej: Maipú, Puente Alto, La Florida..." style="margin:0;border:1.5px solid var(--beige-2)"></div><div id="hf-precio-check" style="display:none;margin-top:10px;background:#fff;border-radius:8px;padding:10px 14px;border:1.5px solid var(--teal)"><label style="color:#1B3A6B;font-size:12px;font-weight:800;display:block;margin-bottom:4px">💲 ¿Cuánto vale aproximadamente? <span style="font-weight:600;font-size:11px;display:block;margin-top:2px;opacity:0.7">(Debe ser menor a 2.000 UF)</span> <span style="color:#c0392b">*</span></label><div class="precio-grid precio-range-grid" data-form="hf"></div><input type="hidden" id="hf-precio-range" value=""><div class="prop-blocked-msg" id="hf-precio-err" style="display:none;margin-top:6px">🚫 <strong>La propiedad debe valer máximo 2.000 UF</strong> (≈ <span class="uf-2000-pesos">$81.673.000</span>) para acceder al Leasing Habitacional.</div></div><div class="prop-blocked-msg" id="hf-prop-info" style="display:none">ℹ️ <strong>Para postular necesitas tener una propiedad elegida</strong> (máximo 2.000 UF). Cuando la tengas, vuelve y te evaluamos gratis.</div></div>
+            <div id="hf-rest" class="hf-preview">
+            <div id="hf-califica-msg" style="display:none;margin:16px 0 12px;padding:12px 16px;background:linear-gradient(135deg,#D5F5E3,#e8f7f5);border-radius:10px;border:1.5px solid rgba(45,184,158,0.3);text-align:center"><span style="font-size:15px;font-weight:800;color:#2B7A4E">✅ ¡Perfecto! Tu propiedad califica</span><br><span style="font-size:12px;color:#1B3A6B;font-weight:600">Completa tus datos para verificar si puedes acceder al beneficio</span></div>
+            <div class="f-field"><label class="f-field-lbl">👤 Nombre completo <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="hf-n" placeholder="Ej: Ana García López" autocomplete="name" tabindex="-1"></div>
+            <div class="f-field"><label class="f-field-lbl">📱 WhatsApp <span style="color:#c0392b">*</span></label><input class="f-input" type="tel" id="hf-t" placeholder="+56 9 XXXX XXXX" name="phone" autocomplete="tel" tabindex="-1"></div>
+            <div class="f-field"><label class="f-field-lbl">✉️ Correo electrónico <span style="color:#c0392b">*</span></label><input class="f-input" type="email" id="hf-e" placeholder="tucorreo@email.com" autocomplete="email" tabindex="-1"></div>
+            <div class="f-field"><label class="f-field-lbl">🏠 Arriendo actual</label><div class="cs cs-arriendo" data-target="hf-a"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-a" value=""></div></div>
+            <div class="f-field"><label class="f-field-lbl">💰 Sueldo líquido mensual <span style="color:#c0392b">*</span></label><div class="cs cs-renta" data-target="hf-r" data-form="hf"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-r" value=""></div></div>
+            <div class="dicom-block" id="hf-renta-err" style="display:none">🚫 La renta mínima requerida es $800.000 líquidos mensuales.</div>
+            <div class="f-group"><label>¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:#666">Pareja, familiar, amigo/a, etc. Esto permite acceder a propiedades de mayor valor.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="si" tabindex="-1"> Sí, puedo complementar renta</label><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="no" tabindex="-1"> No, solo con mi renta</label></div><div id="hf-complementa-quien-wrap" style="display:none;margin-top:10px;background:#e8f7f5;border:2px solid var(--teal);border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">👥 ¿Con quién complementas? <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="hf-complementa-quien" placeholder="Ej: Mi pareja, mi hermano/a, etc." style="border:2px solid var(--teal);background:#fff"></div><div class="dicom-block" id="hf-complementa-msg" style="display:none">⚠️ Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
+            <div class="f-group"><label>¿Estás en DICOM? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="dicom-hf" value="no" onchange="handleDicom('hf','no')" tabindex="-1"> No estoy en DICOM</label><label class="f-radio-lbl"><input type="radio" name="dicom-hf" value="si" onchange="handleDicom('hf','si')" tabindex="-1"> Sí estoy en DICOM</label></div><div class="dicom-block" id="hf-dicom-err" style="display:none">❌ Mientras figures en DICOM no es posible acceder al Leasing Habitacional. Regulariza tu situación y vuelve cuando estés listo.</div></div>
+            <div class="f-group"><label>¿Tienes contrato indefinido? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="contrato-hf" value="si" onchange="handleContrato('hf','si')" tabindex="-1"> Sí, tengo contrato indefinido</label><label class="f-radio-lbl"><input type="radio" name="contrato-hf" value="no" onchange="handleContrato('hf','no')" tabindex="-1"> No tengo contrato indefinido</label></div><div class="dicom-block" id="hf-contrato-err" style="display:none">⚠️ Se requiere contrato indefinido para acceder al Leasing Habitacional.</div></div>
+            <div class="f-group"><label>¿Tú o tu cónyuge tiene una vivienda actualmente? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="vivienda-hf" value="no" onchange="handleVivienda('hf','no')" tabindex="-1"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl"><input type="radio" name="vivienda-hf" value="si" onchange="handleVivienda('hf','si')" tabindex="-1"> Sí, tengo una vivienda</label></div><div class="dicom-block" id="hf-vivienda-err" style="display:none">❌ El Leasing Habitacional es solo para personas sin vivienda propia.</div></div>
+            <div class="f-field"><label class="f-field-lbl">📞 ¿Cómo prefieres que te contactemos? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="contacto-hf" value="whatsapp" tabindex="-1"> WhatsApp</label><label class="f-radio-lbl"><input type="radio" name="contacto-hf" value="telefono" tabindex="-1"> Llamada telefónica</label></div></div>
+            <div class="f-field"><label class="f-field-lbl">🕐 ¿A qué hora te acomoda? (entre 9:00 AM y 5:00 PM) *</label><div class="cs cs-up" data-target="hf-hora"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un horario</div><div class="cs-opts cs-hora-opts"></div><input type="hidden" id="hf-hora" value=""></div></div>
+            <button id="hf-btn" class="f-btn f-btn-navy" style="margin-top:16px" onclick="doForm('hf','Leasing - Hero')" tabindex="-1">Verificar si califico — gratis &rarr;</button>
             </div>
+            <p class="hf-lock-hint" id="hf-lock-hint">👆 Responde las preguntas de la propiedad para continuar</p>
           </form>
           <div class="fc-trust">
             <div class="fc-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Sin pie</div>
@@ -420,6 +540,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
             <div class="fc-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> MINVU oficial</div>
             <div class="fc-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Subsidio automático</div>
           </div>
+          <div class="social-proof"><span class="sp-dot"></span> <span class="sp-count" id="sp-count">83</span> familias evaluadas este mes</div>
         </div>
         <div class="f-success f-success-l" id="hf-ok">
           <div class="f-success-icon">✓</div>
@@ -540,18 +661,21 @@ footer{background:var(--navy);padding:56px 40px 28px}
         <div id="f2-content">
           <div style="display:flex;align-items:center;gap:10px;margin:0 0 14px"><div style="flex:1;height:1px;background:rgba(255,255,255,0.12)"></div><span style="font-size:0.72rem;font-weight:800;color:#2DB89E;letter-spacing:1px;text-transform:uppercase;white-space:nowrap">Responde y descubre si calificas</span><div style="flex:1;height:1px;background:rgba(255,255,255,0.12)"></div></div>
           <form class="f-stack" autocomplete="on" onsubmit="return false;">
-            <div class="prop-vista-gate" style="margin-bottom:6px;background:rgba(45,184,158,0.12);border-radius:10px;padding:14px 16px;border:1.5px solid rgba(45,184,158,0.3)"><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:6px">🏠 ¿Ya tienes una propiedad vista para comprar? <span style="color:#e74c3c">* OBLIGATORIO</span><br><span style="font-weight:700;font-size:13px;color:rgba(255,255,255,0.9);display:block;margin-top:4px">Debe ser de máximo 2.000 UF (≈ <span class="uf-2000-pesos">$78.000.000</span>). Debes saber qué casa quieres comprar antes de postular.</span></div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="prop-vista-f2" value="si" onchange="handlePropVista('f2','si')"> Sí, ya tengo una propiedad vista</label><label class="f-radio-lbl-d"><input type="radio" name="prop-vista-f2" value="no" onchange="handlePropVista('f2','no')"> No, aún no tengo una propiedad vista</label></div><input class="f-input f-input-d" type="text" id="f2-comuna-prop" placeholder="Comuna de la propiedad *" style="display:none;margin-top:8px"><div id="f2-precio-check" style="display:none;margin-top:8px"><label style="color:rgba(255,255,255,0.9);font-size:12px;font-weight:700">¿La propiedad vale menos de <span class="uf-2000-pesos">$78.000.000</span>? *</label><div class="f-radios" style="margin-top:4px"><label class="f-radio-lbl-d"><input type="radio" name="precio-ok-f2" value="si" onchange="handlePrecioOk('f2','si')"> Sí, vale menos</label><label class="f-radio-lbl-d"><input type="radio" name="precio-ok-f2" value="no" onchange="handlePrecioOk('f2','no')"> No, vale más</label></div><div class="prop-blocked-msg prop-blocked-msg-d" id="f2-precio-err" style="display:none;margin-top:6px">🚫 <strong>La propiedad debe valer máximo 2.000 UF</strong> (≈ <span class="uf-2000-pesos">$78.000.000</span>) para acceder al Leasing Habitacional.</div></div><div class="prop-blocked-msg prop-blocked-msg-d" id="f2-prop-info" style="display:none">🚫 <strong>No puedes continuar sin una propiedad vista.</strong> Para postular necesitas tener clara la casa que quieres comprar (máximo 2.000 UF). Vuelve cuando la tengas.</div></div>
+            <div class="prop-vista-gate" style="margin-bottom:6px;background:rgba(45,184,158,0.12);border-radius:10px;padding:14px 16px;border:1.5px solid rgba(45,184,158,0.3)"><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:6px">🏠 ¿Ya tienes una propiedad vista para comprar? <span style="color:#e74c3c">*</span><br><span style="font-weight:700;font-size:13px;color:rgba(255,255,255,0.9);display:block;margin-top:4px">Debe ser de máximo 2.000 UF (≈ <span class="uf-2000-pesos">$81.673.000</span>). Para postular necesitas tener elegida la vivienda.</span></div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="prop-vista-f2" value="si" onchange="handlePropVista('f2','si')"> Sí, ya tengo una propiedad vista</label><label class="f-radio-lbl-d"><input type="radio" name="prop-vista-f2" value="no" onchange="handlePropVista('f2','no')"> No, aún no tengo una propiedad vista</label></div><div id="f2-comuna-prop" style="display:none;margin-top:10px;background:rgba(45,184,158,0.08);border-radius:8px;padding:10px 14px;border:1.5px solid rgba(45,184,158,0.5)"><label style="color:#fff;font-size:12px;font-weight:800;display:block;margin-bottom:6px">📍 ¿En qué comuna queda la propiedad? <span style="color:#e74c3c">*</span></label><input class="f-input f-input-d" type="text" id="f2-comuna-val" placeholder="Ej: Maipú, Puente Alto, La Florida..." style="margin:0"></div><div id="f2-precio-check" style="display:none;margin-top:10px;background:rgba(45,184,158,0.08);border-radius:8px;padding:10px 14px;border:1.5px solid rgba(45,184,158,0.5)"><label style="color:#fff;font-size:12px;font-weight:800;display:block;margin-bottom:4px">💲 ¿Cuánto vale aproximadamente? <span style="font-weight:600;font-size:11px;display:block;margin-top:2px;opacity:0.7">(Debe ser menor a 2.000 UF)</span> <span style="color:#e74c3c">*</span></label><div class="precio-grid precio-range-grid" data-form="f2" data-dark="1"></div><input type="hidden" id="f2-precio-range" value=""><div class="prop-blocked-msg prop-blocked-msg-d" id="f2-precio-err" style="display:none;margin-top:6px">🚫 <strong>La propiedad debe valer máximo 2.000 UF</strong> (≈ <span class="uf-2000-pesos">$81.673.000</span>) para acceder al Leasing Habitacional.</div></div><div class="prop-blocked-msg prop-blocked-msg-d" id="f2-prop-info" style="display:none">ℹ️ <strong>Para postular necesitas tener una propiedad elegida</strong> (máximo 2.000 UF). Cuando la tengas, vuelve y te evaluamos gratis.</div></div>
             <div id="f2-rest" style="display:none">
+            <div style="margin:16px 0 12px;padding:12px 16px;background:rgba(45,184,158,0.15);border-radius:10px;border:1.5px solid rgba(45,184,158,0.3);text-align:center"><span style="font-size:15px;font-weight:800;color:#2DB89E">✅ ¡Perfecto! Tu propiedad califica</span><br><span style="font-size:12px;color:rgba(255,255,255,0.85);font-weight:600">Completa tus datos para verificar si puedes acceder al beneficio</span></div>
             <input class="f-input f-input-d" type="text" id="f2-n" placeholder="Nombre completo *" autocomplete="name">
             <input class="f-input f-input-d" type="tel" id="f2-t" placeholder="WhatsApp *" name="phone" autocomplete="tel">
             <input class="f-input f-input-d" type="email" id="f2-e" placeholder="Correo electrónico *" autocomplete="email">
-            <select class="f-input f-input-d" id="f2-a"><option value="">¿Cuánto pagas de arriendo hoy?</option><option>Menos de $200.000</option><option>$200.000 – $300.000</option><option>$300.001 – $400.000</option><option>$400.001 – $500.000</option><option>$500.001 – $600.000</option><option>$600.001 – $700.000</option><option>$700.001 – $800.000</option><option>Más de $800.000</option><option>No pago arriendo</option></select>
-            <select class="f-input f-input-d" id="f2-r" onchange="handleRenta('f2',this.value)"><option value="">Sueldo líquido mensual *</option><option value="Menos de $700.000">Menos de $700.000</option><option value="$700.000 – $800.000">$700.000 – $800.000</option><option value="$800.001 – $900.000">$800.001 – $900.000</option><option value="$900.001 – $1.000.000">$900.001 – $1.000.000</option><option value="$1.000.001 – $1.100.000">$1.000.001 – $1.100.000</option><option value="$1.100.001 – $1.200.000">$1.100.001 – $1.200.000</option><option value="$1.200.001 – $1.300.000">$1.200.001 – $1.300.000</option><option value="$1.300.001 – $1.400.000">$1.300.001 – $1.400.000</option><option value="$1.400.001 – $1.500.000">$1.400.001 – $1.500.000</option><option value="$1.500.001 – $1.600.000">$1.500.001 – $1.600.000</option><option value="$1.600.001 – $1.700.000">$1.600.001 – $1.700.000</option><option value="$1.700.001 – $1.800.000">$1.700.001 – $1.800.000</option><option value="$1.800.001 – $1.900.000">$1.800.001 – $1.900.000</option><option value="$1.900.001 – $2.000.000">$1.900.001 – $2.000.000</option><option value="Más de $2.000.000">Más de $2.000.000</option></select>
-            <div class="dicom-block dicom-block-d" id="f2-renta-err" style="display:none">🚫 La renta mínima requerida es $700.000 líquidos mensuales.</div>
-            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:rgba(255,255,255,0.5)">Pareja, familiar, amigo/a, etc.</span></div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="complementa-f2" value="si"> Sí, puedo complementar renta</label><label class="f-radio-lbl-d"><input type="radio" name="complementa-f2" value="no"> No, solo con mi renta</label></div><input class="f-input f-input-d" type="text" id="f2-complementa-quien" placeholder="¿Con quién? (pareja, familiar, amigo/a...)" style="display:none;margin-top:8px"></div>
+            <div class="cs cs-d cs-arriendo" data-target="f2-a"><div class="cs-trigger placeholder">¿Cuánto pagas de arriendo hoy?</div><div class="cs-opts"></div><input type="hidden" id="f2-a" value=""></div>
+            <div class="cs cs-d cs-renta" data-target="f2-r" data-form="f2"><div class="cs-trigger placeholder">Sueldo líquido mensual *</div><div class="cs-opts"></div><input type="hidden" id="f2-r" value=""></div>
+            <div class="dicom-block dicom-block-d" id="f2-renta-err" style="display:none">🚫 La renta mínima requerida es $800.000 líquidos mensuales.</div>
+            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:rgba(255,255,255,0.5)">Pareja, familiar, amigo/a, etc.</span></div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="complementa-f2" value="si"> Sí, puedo complementar renta</label><label class="f-radio-lbl-d"><input type="radio" name="complementa-f2" value="no"> No, solo con mi renta</label></div><div id="f2-complementa-quien-wrap" style="display:none;margin-top:10px;background:rgba(45,184,158,0.12);border:2px solid var(--teal);border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:#2DB89E;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">👥 ¿Con quién complementas? <span style="color:#ff7675">*</span></label><input class="f-input f-input-d" type="text" id="f2-complementa-quien" placeholder="Ej: Mi pareja, mi hermano/a, etc." style="border:2px solid var(--teal);background:rgba(255,255,255,0.1)"></div><div class="dicom-block dicom-block-d" id="f2-complementa-msg" style="display:none">⚠️ Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Estás en DICOM? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="dicom-f2" value="no" onchange="handleDicom('f2','no')"> No estoy en DICOM</label><label class="f-radio-lbl-d"><input type="radio" name="dicom-f2" value="si" onchange="handleDicom('f2','si')"> Sí estoy en DICOM</label></div><div class="dicom-block dicom-block-d" id="f2-dicom-err" style="display:none">❌ Mientras figures en DICOM no es posible acceder al Leasing Habitacional. Regulariza tu situación y vuelve cuando estés listo.</div></div>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Tienes contrato indefinido? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="contrato-f2" value="si" onchange="handleContrato('f2','si')"> Sí, tengo contrato indefinido</label><label class="f-radio-lbl-d"><input type="radio" name="contrato-f2" value="no" onchange="handleContrato('f2','no')"> No, no tengo contrato indefinido</label></div><div class="dicom-block dicom-block-d" id="f2-contrato-err" style="display:none">⚠️ Se requiere contrato indefinido para acceder al Leasing Habitacional.</div></div>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Tú o tu cónyuge tiene una vivienda actualmente? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="vivienda-f2" value="no" onchange="handleVivienda('f2','no')"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl-d"><input type="radio" name="vivienda-f2" value="si" onchange="handleVivienda('f2','si')"> Sí, tengo una vivienda</label></div><div class="dicom-block dicom-block-d" id="f2-vivienda-err" style="display:none">❌ El Leasing Habitacional es solo para personas sin vivienda propia.</div></div>
+            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">📞 ¿Cómo prefieres que te contactemos? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="contacto-f2" value="whatsapp"> WhatsApp</label><label class="f-radio-lbl-d"><input type="radio" name="contacto-f2" value="telefono"> Llamada telefónica</label></div></div>
+            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">🕐 ¿A qué hora te acomoda? (entre 9:00 AM y 5:00 PM) *</div><div class="cs cs-d cs-up" data-target="f2-hora"><div class="cs-trigger placeholder">Selecciona un horario</div><div class="cs-opts cs-hora-opts"></div><input type="hidden" id="f2-hora" value=""></div></div>
             <button id="f2-btn" class="f-btn f-btn-teal" style="margin-top:16px" onclick="doForm('f2','Leasing - Formulario central')">Verificar si califico gratis &rarr;</button>
             </div>
           </form>
@@ -613,7 +737,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
           <div class="req-item"><div class="req-ck">✓</div>No ser propietario de vivienda (ni cónyuge)</div>
           <div class="req-item"><div class="req-ck">✓</div>No haber recibido subsidios habitacionales antes</div>
           <div class="req-item"><div class="req-ck">✓</div>Inscrito en el Registro Único de SERVIU</div>
-          <div class="req-item"><div class="req-ck">✓</div>Renta líquida desde $700.000 (complementable)</div>
+          <div class="req-item"><div class="req-ck">✓</div>Renta líquida desde $800.000 (complementable)</div>
           <div class="req-item"><div class="req-ck">✓</div>No estar en DICOM</div>
           <div class="req-item"><div class="req-ck">✓</div>Tener una propiedad vista para comprar (máximo 2.000 UF)</div>
           <div class="req-item"><div class="req-ck">✓</div>Cuenta de Ahorro Leasing Habitacional abierta</div>
@@ -624,12 +748,10 @@ footer{background:var(--navy);padding:56px 40px 28px}
         <div class="req-list">
           <div class="req-item"><div class="req-ck">✓</div>Cédula de identidad vigente</div>
           <div class="req-item"><div class="req-ck">✓</div>Cédula del cónyuge (si aplica)</div>
-          <div class="req-item"><div class="req-ck">✓</div>6 últimas liquidaciones de sueldo</div>
           <div class="req-item"><div class="req-ck">✓</div>Certificado de Cotizaciones AFP (12 meses)</div>
           <div class="req-item"><div class="req-ck">✓</div>Certificado de Deuda CMF</div>
-          <div class="req-item"><div class="req-ck">✓</div>Cartola Cuenta de Ahorro Leasing</div>
-          <div class="req-item"><div class="req-ck">✓</div>Trabajadores independientes: boletas de honorarios o declaración de renta</div>
-          <div class="req-item" style="margin-top:8px;padding-top:14px;border-top:1px solid var(--beige-2)"><span style="color:var(--teal);font-weight:700;font-size:0.86rem">Te acompañamos a reunir todo, gratis. 60–90 días de aprobación a llaves.</span></div>
+          <div class="req-item" style="margin-top:8px;padding-top:14px;border-top:1px solid var(--beige-2)"><span style="color:var(--text-m);font-weight:700;font-size:0.82rem">Si complementas renta con otra persona, se requieren los mismos documentos de ella.</span></div>
+          <div class="req-item" style="margin-top:4px"><span style="color:var(--teal);font-weight:700;font-size:0.86rem">Te acompañamos a reunir todo, gratis. 60–90 días de aprobación a llaves.</span></div>
         </div>
       </div>
     </div>
@@ -645,21 +767,24 @@ footer{background:var(--navy);padding:56px 40px 28px}
     <div class="lfs-fc" id="f3c">
       <form autocomplete="on" onsubmit="return false;"><div id="f3-content">
         <div style="display:flex;align-items:center;gap:10px;margin:0 0 14px"><div style="flex:1;height:1px;background:var(--beige-2)"></div><span style="font-size:0.72rem;font-weight:800;color:var(--teal);letter-spacing:1px;text-transform:uppercase;white-space:nowrap">Responde y descubre si calificas</span><div style="flex:1;height:1px;background:var(--beige-2)"></div></div>
-        <div class="f-group prop-vista-gate" style="background:#e8f7f5;border-radius:10px;padding:14px 16px;border:1.5px solid rgba(45,184,158,0.3);margin-bottom:14px"><label style="color:#1B3A6B;font-size:13px;font-weight:800">🏠 ¿Ya tienes una propiedad vista para comprar? <span style="color:#c0392b">* OBLIGATORIO</span><br><span style="font-weight:700;font-size:13px;color:#1B3A6B;display:block;margin-top:4px">Debe ser de máximo 2.000 UF (≈ <span class="uf-2000-pesos">$78.000.000</span>). Debes saber qué casa quieres comprar antes de postular.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="prop-vista-f3" value="si" onchange="handlePropVista('f3','si')"> Sí, ya tengo una propiedad vista</label><label class="f-radio-lbl"><input type="radio" name="prop-vista-f3" value="no" onchange="handlePropVista('f3','no')"> No, aún no tengo una propiedad vista</label></div><input class="f-input" type="text" id="f3-comuna-prop" placeholder="Comuna de la propiedad *" style="display:none;margin-top:8px"><div id="f3-precio-check" style="display:none;margin-top:8px"><label style="color:#1B3A6B;font-size:12px;font-weight:700">¿La propiedad vale menos de <span class="uf-2000-pesos">$78.000.000</span>? *</label><div class="f-radios" style="margin-top:4px"><label class="f-radio-lbl"><input type="radio" name="precio-ok-f3" value="si" onchange="handlePrecioOk('f3','si')"> Sí, vale menos</label><label class="f-radio-lbl"><input type="radio" name="precio-ok-f3" value="no" onchange="handlePrecioOk('f3','no')"> No, vale más</label></div><div class="prop-blocked-msg" id="f3-precio-err" style="display:none;margin-top:6px">🚫 <strong>La propiedad debe valer máximo 2.000 UF</strong> (≈ <span class="uf-2000-pesos">$78.000.000</span>) para acceder al Leasing Habitacional.</div></div><div class="prop-blocked-msg" id="f3-prop-info" style="display:none">🚫 <strong>No puedes continuar sin una propiedad vista.</strong> Para postular necesitas tener clara la casa que quieres comprar (máximo 2.000 UF). Vuelve cuando la tengas.</div></div>
+        <div class="f-group prop-vista-gate" style="background:#e8f7f5;border-radius:10px;padding:14px 16px;border:1.5px solid rgba(45,184,158,0.3);margin-bottom:14px"><label style="color:#1B3A6B;font-size:13px;font-weight:800">🏠 ¿Ya tienes una propiedad vista para comprar? <span style="color:#c0392b">*</span><br><span style="font-weight:700;font-size:13px;color:#1B3A6B;display:block;margin-top:4px">Debe ser de máximo 2.000 UF (≈ <span class="uf-2000-pesos">$81.673.000</span>). Para postular necesitas tener elegida la vivienda.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="prop-vista-f3" value="si" onchange="handlePropVista('f3','si')"> Sí, ya tengo una propiedad vista</label><label class="f-radio-lbl"><input type="radio" name="prop-vista-f3" value="no" onchange="handlePropVista('f3','no')"> No, aún no tengo una propiedad vista</label></div><div id="f3-comuna-prop" style="display:none;margin-top:10px;background:#fff;border-radius:8px;padding:10px 14px;border:1.5px solid var(--teal)"><label style="color:#1B3A6B;font-size:12px;font-weight:800;display:block;margin-bottom:6px">📍 ¿En qué comuna queda la propiedad? <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="f3-comuna-val" placeholder="Ej: Maipú, Puente Alto, La Florida..." style="margin:0;border:1.5px solid var(--beige-2)"></div><div id="f3-precio-check" style="display:none;margin-top:10px;background:#fff;border-radius:8px;padding:10px 14px;border:1.5px solid var(--teal)"><label style="color:#1B3A6B;font-size:12px;font-weight:800;display:block;margin-bottom:4px">💲 ¿Cuánto vale aproximadamente? <span style="font-weight:600;font-size:11px;display:block;margin-top:2px;opacity:0.7">(Debe ser menor a 2.000 UF)</span> <span style="color:#c0392b">*</span></label><div class="precio-grid precio-range-grid" data-form="f3"></div><input type="hidden" id="f3-precio-range" value=""><div class="prop-blocked-msg" id="f3-precio-err" style="display:none;margin-top:6px">🚫 <strong>La propiedad debe valer máximo 2.000 UF</strong> (≈ <span class="uf-2000-pesos">$81.673.000</span>) para acceder al Leasing Habitacional.</div></div><div class="prop-blocked-msg" id="f3-prop-info" style="display:none">ℹ️ <strong>Para postular necesitas tener una propiedad elegida</strong> (máximo 2.000 UF). Cuando la tengas, vuelve y te evaluamos gratis.</div></div>
         <div id="f3-rest" style="display:none">
+        <div style="margin:16px 0 12px;padding:12px 16px;background:linear-gradient(135deg,#D5F5E3,#e8f7f5);border-radius:10px;border:1.5px solid rgba(45,184,158,0.3);text-align:center"><span style="font-size:15px;font-weight:800;color:#2B7A4E">✅ ¡Perfecto! Tu propiedad califica</span><br><span style="font-size:12px;color:#1B3A6B;font-weight:600">Completa tus datos para verificar si puedes acceder al beneficio</span></div>
         <div class="f-row">
           <div class="f-group"><label>Nombre completo *</label><input class="f-input" type="text" id="f3-n" placeholder="Ana García" autocomplete="name"></div>
           <div class="f-group"><label>WhatsApp *</label><input class="f-input" type="tel" id="f3-t" placeholder="+56 9 XXXX XXXX" name="phone" autocomplete="tel"></div>
         </div>
         <div class="f-group"><label>Correo electrónico *</label><input class="f-input" type="email" id="f3-e" placeholder="tucorreo@email.com" autocomplete="email"></div>
         <div class="f-group"><label>¿Cuánto pagas de arriendo hoy?</label>
-          <select class="f-input" id="f3-a"><option value="">Selecciona un rango</option><option>Menos de $200.000</option><option>$200.000 – $300.000</option><option>$300.001 – $400.000</option><option>$400.001 – $500.000</option><option>$500.001 – $600.000</option><option>$600.001 – $700.000</option><option>$700.001 – $800.000</option><option>Más de $800.000</option><option>No pago arriendo actualmente</option></select>
+          <div class="cs cs-arriendo" data-target="f3-a"><div class="cs-trigger placeholder">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="f3-a" value=""></div>
         </div>
-        <div class="f-group"><label>Sueldo líquido mensual *</label><select class="f-input" id="f3-r" onchange="handleRenta('f3',this.value)"><option value="">Selecciona un rango</option><option value="Menos de $700.000">Menos de $700.000</option><option value="$700.000 – $800.000">$700.000 – $800.000</option><option value="$800.001 – $900.000">$800.001 – $900.000</option><option value="$900.001 – $1.000.000">$900.001 – $1.000.000</option><option value="$1.000.001 – $1.100.000">$1.000.001 – $1.100.000</option><option value="$1.100.001 – $1.200.000">$1.100.001 – $1.200.000</option><option value="$1.200.001 – $1.300.000">$1.200.001 – $1.300.000</option><option value="$1.300.001 – $1.400.000">$1.300.001 – $1.400.000</option><option value="$1.400.001 – $1.500.000">$1.400.001 – $1.500.000</option><option value="$1.500.001 – $1.600.000">$1.500.001 – $1.600.000</option><option value="$1.600.001 – $1.700.000">$1.600.001 – $1.700.000</option><option value="$1.700.001 – $1.800.000">$1.700.001 – $1.800.000</option><option value="$1.800.001 – $1.900.000">$1.800.001 – $1.900.000</option><option value="$1.900.001 – $2.000.000">$1.900.001 – $2.000.000</option><option value="Más de $2.000.000">Más de $2.000.000</option></select><div class="dicom-block" id="f3-renta-err" style="display:none">🚫 La renta mínima requerida es $700.000 líquidos mensuales.</div></div>
-        <div class="f-group"><label>¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:#666">Pareja, familiar, amigo/a, etc.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="complementa-f3" value="si"> Sí, puedo complementar renta</label><label class="f-radio-lbl"><input type="radio" name="complementa-f3" value="no"> No, solo con mi renta</label></div><input class="f-input" type="text" id="f3-complementa-quien" placeholder="¿Con quién? (pareja, familiar, amigo/a...)" style="display:none;margin-top:8px"></div>
+        <div class="f-group"><label>Sueldo líquido mensual *</label><div class="cs cs-renta" data-target="f3-r" data-form="f3"><div class="cs-trigger placeholder">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="f3-r" value=""></div><div class="dicom-block" id="f3-renta-err" style="display:none">🚫 La renta mínima requerida es $800.000 líquidos mensuales.</div></div>
+        <div class="f-group"><label>¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:#666">Pareja, familiar, amigo/a, etc.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="complementa-f3" value="si"> Sí, puedo complementar renta</label><label class="f-radio-lbl"><input type="radio" name="complementa-f3" value="no"> No, solo con mi renta</label></div><div id="f3-complementa-quien-wrap" style="display:none;margin-top:10px;background:#e8f7f5;border:2px solid var(--teal);border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">👥 ¿Con quién complementas? <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="f3-complementa-quien" placeholder="Ej: Mi pareja, mi hermano/a, etc." style="border:2px solid var(--teal);background:#fff"></div><div class="dicom-block" id="f3-complementa-msg" style="display:none">⚠️ Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
         <div class="f-group"><label>¿Estás en DICOM? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="dicom-f3" value="no" onchange="handleDicom('f3','no')"> No estoy en DICOM</label><label class="f-radio-lbl"><input type="radio" name="dicom-f3" value="si" onchange="handleDicom('f3','si')"> Sí estoy en DICOM</label></div><div class="dicom-block" id="f3-dicom-err" style="display:none">❌ Mientras figures en DICOM no es posible acceder al Leasing Habitacional. Regulariza tu situación y vuelve cuando estés listo.</div></div>
         <div class="f-group"><label>¿Tienes contrato indefinido? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="contrato-f3" value="si" onchange="handleContrato('f3','si')"> Sí, tengo contrato indefinido</label><label class="f-radio-lbl"><input type="radio" name="contrato-f3" value="no" onchange="handleContrato('f3','no')"> No tengo contrato indefinido</label></div><div class="dicom-block" id="f3-contrato-err" style="display:none">⚠️ Se requiere contrato indefinido para acceder al Leasing Habitacional.</div></div>
         <div class="f-group"><label>¿Tú o tu cónyuge tiene una vivienda actualmente? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="vivienda-f3" value="no" onchange="handleVivienda('f3','no')"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl"><input type="radio" name="vivienda-f3" value="si" onchange="handleVivienda('f3','si')"> Sí, tengo una vivienda</label></div><div class="dicom-block" id="f3-vivienda-err" style="display:none">❌ El Leasing Habitacional es solo para personas sin vivienda propia.</div></div>
+        <div class="f-group"><label>📞 ¿Cómo prefieres que te contactemos? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="contacto-f3" value="whatsapp"> WhatsApp</label><label class="f-radio-lbl"><input type="radio" name="contacto-f3" value="telefono"> Llamada telefónica</label></div></div>
+        <div class="f-group"><label>🕐 ¿A qué hora te acomoda? (entre 9:00 AM y 5:00 PM) *</label><div class="cs cs-up" data-target="f3-hora"><div class="cs-trigger placeholder">Selecciona un horario</div><div class="cs-opts cs-hora-opts"></div><input type="hidden" id="f3-hora" value=""></div></div>
             <button id="f3-btn" class="f-btn f-btn-navy" style="margin-top:16px" onclick="doFormFull('f3','Leasing - Aplica')">Verificar si califico gratis &rarr;</button>
         <p class="f-privacy f-privacy-d" style="margin-top:12px">Tu información es confidencial. Solo la usamos para contactarte.</p>
         </div>
@@ -714,17 +839,20 @@ footer{background:var(--navy);padding:56px 40px 28px}
         <div id="f4-content">
           <div style="display:flex;align-items:center;gap:10px;margin:0 0 14px"><div style="flex:1;height:1px;background:rgba(255,255,255,0.12)"></div><span style="font-size:0.72rem;font-weight:800;color:#2DB89E;letter-spacing:1px;text-transform:uppercase;white-space:nowrap">Responde y descubre si calificas</span><div style="flex:1;height:1px;background:rgba(255,255,255,0.12)"></div></div>
           <form class="f-stack" autocomplete="on" onsubmit="return false;">
-            <div class="prop-vista-gate" style="margin-bottom:6px;background:rgba(45,184,158,0.12);border-radius:10px;padding:14px 16px;border:1.5px solid rgba(45,184,158,0.3)"><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:6px">🏠 ¿Ya tienes una propiedad vista para comprar? <span style="color:#e74c3c">* OBLIGATORIO</span><br><span style="font-weight:700;font-size:13px;color:rgba(255,255,255,0.9);display:block;margin-top:4px">Debe ser de máximo 2.000 UF (≈ <span class="uf-2000-pesos">$78.000.000</span>). Debes saber qué casa quieres comprar antes de postular.</span></div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="prop-vista-f4" value="si" onchange="handlePropVista('f4','si')"> Sí, ya tengo una propiedad vista</label><label class="f-radio-lbl-d"><input type="radio" name="prop-vista-f4" value="no" onchange="handlePropVista('f4','no')"> No, aún no tengo una propiedad vista</label></div><input class="f-input f-input-d" type="text" id="f4-comuna-prop" placeholder="Comuna de la propiedad *" style="display:none;margin-top:8px"><div id="f4-precio-check" style="display:none;margin-top:8px"><label style="color:rgba(255,255,255,0.9);font-size:12px;font-weight:700">¿La propiedad vale menos de <span class="uf-2000-pesos">$78.000.000</span>? *</label><div class="f-radios" style="margin-top:4px"><label class="f-radio-lbl-d"><input type="radio" name="precio-ok-f4" value="si" onchange="handlePrecioOk('f4','si')"> Sí, vale menos</label><label class="f-radio-lbl-d"><input type="radio" name="precio-ok-f4" value="no" onchange="handlePrecioOk('f4','no')"> No, vale más</label></div><div class="prop-blocked-msg prop-blocked-msg-d" id="f4-precio-err" style="display:none;margin-top:6px">🚫 <strong>La propiedad debe valer máximo 2.000 UF</strong> (≈ <span class="uf-2000-pesos">$78.000.000</span>) para acceder al Leasing Habitacional.</div></div><div class="prop-blocked-msg prop-blocked-msg-d" id="f4-prop-info" style="display:none">🚫 <strong>No puedes continuar sin una propiedad vista.</strong> Para postular necesitas tener clara la casa que quieres comprar (máximo 2.000 UF). Vuelve cuando la tengas.</div></div>
+            <div class="prop-vista-gate" style="margin-bottom:6px;background:rgba(45,184,158,0.12);border-radius:10px;padding:14px 16px;border:1.5px solid rgba(45,184,158,0.3)"><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:6px">🏠 ¿Ya tienes una propiedad vista para comprar? <span style="color:#e74c3c">*</span><br><span style="font-weight:700;font-size:13px;color:rgba(255,255,255,0.9);display:block;margin-top:4px">Debe ser de máximo 2.000 UF (≈ <span class="uf-2000-pesos">$81.673.000</span>). Para postular necesitas tener elegida la vivienda.</span></div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="prop-vista-f4" value="si" onchange="handlePropVista('f4','si')"> Sí, ya tengo una propiedad vista</label><label class="f-radio-lbl-d"><input type="radio" name="prop-vista-f4" value="no" onchange="handlePropVista('f4','no')"> No, aún no tengo una propiedad vista</label></div><div id="f4-comuna-prop" style="display:none;margin-top:10px;background:rgba(45,184,158,0.08);border-radius:8px;padding:10px 14px;border:1.5px solid rgba(45,184,158,0.5)"><label style="color:#fff;font-size:12px;font-weight:800;display:block;margin-bottom:6px">📍 ¿En qué comuna queda la propiedad? <span style="color:#e74c3c">*</span></label><input class="f-input f-input-d" type="text" id="f4-comuna-val" placeholder="Ej: Maipú, Puente Alto, La Florida..." style="margin:0"></div><div id="f4-precio-check" style="display:none;margin-top:10px;background:rgba(45,184,158,0.08);border-radius:8px;padding:10px 14px;border:1.5px solid rgba(45,184,158,0.5)"><label style="color:#fff;font-size:12px;font-weight:800;display:block;margin-bottom:4px">💲 ¿Cuánto vale aproximadamente? <span style="font-weight:600;font-size:11px;display:block;margin-top:2px;opacity:0.7">(Debe ser menor a 2.000 UF)</span> <span style="color:#e74c3c">*</span></label><div class="precio-grid precio-range-grid" data-form="f4" data-dark="1"></div><input type="hidden" id="f4-precio-range" value=""><div class="prop-blocked-msg prop-blocked-msg-d" id="f4-precio-err" style="display:none;margin-top:6px">🚫 <strong>La propiedad debe valer máximo 2.000 UF</strong> (≈ <span class="uf-2000-pesos">$81.673.000</span>) para acceder al Leasing Habitacional.</div></div><div class="prop-blocked-msg prop-blocked-msg-d" id="f4-prop-info" style="display:none">ℹ️ <strong>Para postular necesitas tener una propiedad elegida</strong> (máximo 2.000 UF). Cuando la tengas, vuelve y te evaluamos gratis.</div></div>
             <div id="f4-rest" style="display:none">
+            <div style="margin:16px 0 12px;padding:12px 16px;background:rgba(45,184,158,0.15);border-radius:10px;border:1.5px solid rgba(45,184,158,0.3);text-align:center"><span style="font-size:15px;font-weight:800;color:#2DB89E">✅ ¡Perfecto! Tu propiedad califica</span><br><span style="font-size:12px;color:rgba(255,255,255,0.85);font-weight:600">Completa tus datos para verificar si puedes acceder al beneficio</span></div>
             <input class="f-input f-input-d" type="text" id="f4-n" placeholder="Nombre completo *" autocomplete="name">
             <input class="f-input f-input-d" type="tel" id="f4-t" placeholder="WhatsApp *" name="phone" autocomplete="tel">
             <input class="f-input f-input-d" type="email" id="f4-e" placeholder="Correo electrónico *" autocomplete="email">
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Estás en DICOM? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="dicom-f4" value="no" onchange="handleDicom('f4','no')"> No estoy en DICOM</label><label class="f-radio-lbl-d"><input type="radio" name="dicom-f4" value="si" onchange="handleDicom('f4','si')"> Sí estoy en DICOM</label></div><div class="dicom-block dicom-block-d" id="f4-dicom-err" style="display:none">❌ Mientras figures en DICOM no es posible acceder al Leasing Habitacional. Regulariza tu situación y vuelve cuando estés listo.</div></div>
-            <select class="f-input f-input-d" id="f4-r" onchange="handleRenta('f4',this.value)"><option value="">Sueldo líquido mensual *</option><option value="Menos de $700.000">Menos de $700.000</option><option value="$700.000 – $800.000">$700.000 – $800.000</option><option value="$800.001 – $900.000">$800.001 – $900.000</option><option value="$900.001 – $1.000.000">$900.001 – $1.000.000</option><option value="$1.000.001 – $1.100.000">$1.000.001 – $1.100.000</option><option value="$1.100.001 – $1.200.000">$1.100.001 – $1.200.000</option><option value="$1.200.001 – $1.300.000">$1.200.001 – $1.300.000</option><option value="$1.300.001 – $1.400.000">$1.300.001 – $1.400.000</option><option value="$1.400.001 – $1.500.000">$1.400.001 – $1.500.000</option><option value="$1.500.001 – $1.600.000">$1.500.001 – $1.600.000</option><option value="$1.600.001 – $1.700.000">$1.600.001 – $1.700.000</option><option value="$1.700.001 – $1.800.000">$1.700.001 – $1.800.000</option><option value="$1.800.001 – $1.900.000">$1.800.001 – $1.900.000</option><option value="$1.900.001 – $2.000.000">$1.900.001 – $2.000.000</option><option value="Más de $2.000.000">Más de $2.000.000</option></select>
-            <div class="dicom-block dicom-block-d" id="f4-renta-err" style="display:none">🚫 La renta mínima requerida es $700.000 líquidos mensuales.</div>
-            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:rgba(255,255,255,0.5)">Pareja, familiar, amigo/a, etc.</span></div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="complementa-f4" value="si"> Sí, puedo complementar renta</label><label class="f-radio-lbl-d"><input type="radio" name="complementa-f4" value="no"> No, solo con mi renta</label></div><input class="f-input f-input-d" type="text" id="f4-complementa-quien" placeholder="¿Con quién? (pareja, familiar, amigo/a...)" style="display:none;margin-top:8px"></div>
+            <div class="cs cs-d cs-renta" data-target="f4-r" data-form="f4"><div class="cs-trigger placeholder">Sueldo líquido mensual *</div><div class="cs-opts"></div><input type="hidden" id="f4-r" value=""></div>
+            <div class="dicom-block dicom-block-d" id="f4-renta-err" style="display:none">🚫 La renta mínima requerida es $800.000 líquidos mensuales.</div>
+            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:rgba(255,255,255,0.5)">Pareja, familiar, amigo/a, etc.</span></div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="complementa-f4" value="si"> Sí, puedo complementar renta</label><label class="f-radio-lbl-d"><input type="radio" name="complementa-f4" value="no"> No, solo con mi renta</label></div><div id="f4-complementa-quien-wrap" style="display:none;margin-top:10px;background:rgba(45,184,158,0.12);border:2px solid var(--teal);border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:#2DB89E;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">👥 ¿Con quién complementas? <span style="color:#ff7675">*</span></label><input class="f-input f-input-d" type="text" id="f4-complementa-quien" placeholder="Ej: Mi pareja, mi hermano/a, etc." style="border:2px solid var(--teal);background:rgba(255,255,255,0.1)"></div><div class="dicom-block dicom-block-d" id="f4-complementa-msg" style="display:none">⚠️ Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Tienes contrato indefinido? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="contrato-f4" value="si" onchange="handleContrato('f4','si')"> Sí, tengo contrato indefinido</label><label class="f-radio-lbl-d"><input type="radio" name="contrato-f4" value="no" onchange="handleContrato('f4','no')"> No, no tengo contrato indefinido</label></div><div class="dicom-block dicom-block-d" id="f4-contrato-err" style="display:none">⚠️ Se requiere contrato indefinido para acceder al Leasing Habitacional.</div></div>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Tú o tu cónyuge tiene una vivienda actualmente? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="vivienda-f4" value="no" onchange="handleVivienda('f4','no')"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl-d"><input type="radio" name="vivienda-f4" value="si" onchange="handleVivienda('f4','si')"> Sí, tengo una vivienda</label></div><div class="dicom-block dicom-block-d" id="f4-vivienda-err" style="display:none">❌ El Leasing Habitacional es solo para personas sin vivienda propia.</div></div>
+            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">📞 ¿Cómo prefieres que te contactemos? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="contacto-f4" value="whatsapp"> WhatsApp</label><label class="f-radio-lbl-d"><input type="radio" name="contacto-f4" value="telefono"> Llamada telefónica</label></div></div>
+            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">🕐 ¿A qué hora te acomoda? (entre 9:00 AM y 5:00 PM) *</div><div class="cs cs-d cs-up" data-target="f4-hora"><div class="cs-trigger placeholder">Selecciona un horario</div><div class="cs-opts cs-hora-opts"></div><input type="hidden" id="f4-hora" value=""></div></div>
             <button id="f4-btn" class="f-btn f-btn-teal" style="margin-top:16px" onclick="doForm('f4','Leasing - Formulario final')">Quiero mi vivienda propia — es gratis &rarr;</button>
             </div>
           </form>
@@ -765,7 +893,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
       <div class="faq-item"><div class="faq-q">¿Puedo acceder si tengo deudas?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">Estar en DICOM sí es impedimento. Si tienes deudas pero no estás en DICOM, conversemos — en algunos casos se puede regularizar antes de postular.</div></div></div>
       <div class="faq-item"><div class="faq-q">¿En qué se diferencia del DS1?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">El DS120 <strong>no exige antigüedad ni saldo en libreta</strong>. El DS1 funciona por puntaje y todos compiten. El DS120 opera por orden de llegada, disponible todo el año — si cumples los requisitos, avanzas.</div></div></div>
       <div class="faq-item"><div class="faq-q">¿Pueden acceder extranjeros?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">Sí. Extranjeros con <strong>residencia definitiva</strong> en Chile pueden acceder al DS120 sin necesidad de historial crediticio previo en el país. Las condiciones son las mismas que para los chilenos: no ser propietario, no estar en DICOM y cumplir los requisitos de renta.</div></div></div>
-      <div class="faq-item"><div class="faq-q">¿Puedo acceder si soy independiente o trabajador a honorarios?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">Sí. Los trabajadores independientes pueden acreditar renta con boletas de honorarios, declaración de renta o estados financieros. La renta mínima requerida es de $700.000 líquidos mensuales, la que puede complementarse con ingresos del cónyuge.</div></div></div>
+      <div class="faq-item"><div class="faq-q">¿Puedo acceder si soy independiente o trabajador a honorarios?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">Sí. Los trabajadores independientes pueden acreditar renta con boletas de honorarios, declaración de renta o estados financieros. La renta mínima requerida es de $800.000 líquidos mensuales, la que puede complementarse con ingresos del cónyuge.</div></div></div>
     </div>
   </div>
 </section>
@@ -807,18 +935,21 @@ footer{background:var(--navy);padding:56px 40px 28px}
   </div>
 </footer>
 
-<!-- WA FLOAT -->
-<a href="https://wa.me/56962078510?text=Hola%2C%20quiero%20evaluarme%20para%20obtener%20un%20cr%C3%A9dito%20y%20comprar%20una%20casa%20o%20departamento%20con%20subsidio%20DS120" class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp">
-  <span class="wa-pulse"></span>
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-</a>
+<!-- WA FLOAT removed — all leads must go through form filter -->
+
+<!-- SCROLL HINT (mobile) -->
+<div class="scroll-hint" id="scroll-hint">
+  <span class="scroll-hint-label">Completa el formulario</span>
+  <div class="scroll-arrows">
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-top:-14px"><polyline points="6 9 12 15 18 9"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-top:-14px"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</div>
 
 <!-- STICKY MOBILE BAR -->
 <div class="sticky-bar">
-  <a href="#aplica" class="sb-form">Verificar si califico gratis</a>
-  <a href="https://wa.me/56962078510?text=Hola%2C%20quiero%20evaluarme%20para%20obtener%20un%20cr%C3%A9dito%20y%20comprar%20una%20casa%20o%20departamento%20con%20subsidio%20DS120" target="_blank" rel="noopener" class="sb-wa">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp
-  </a>
+  <a href="#aplica" class="sb-form" style="flex:1">Verificar si califico gratis</a>
 </div>
 
 <script>
@@ -874,8 +1005,11 @@ footer{background:var(--navy);padding:56px 40px 28px}
     var vivienda = document.querySelector('input[name="vivienda-' + formId + '"]:checked');
     var rentaEl  = document.getElementById(formId + '-r');
     var blocked = false, msg = '';
+    var compRadio = document.querySelector('input[name="complementa-' + formId + '"]:checked');
+    var needsComp = rentaEl && rentaComplementaObligatoria.indexOf(rentaEl.value) !== -1;
     if      (dicom    && dicom.value    === 'si')              { blocked = true; msg = '🚫 No puedes continuar — estás en DICOM'; }
-    else if (rentaEl  && rentaEl.value  === 'Menos de $700.000'){ blocked = true; msg = '🚫 No puedes continuar — renta mínima $700.000'; }
+    else if (rentaEl  && rentaEl.value  === 'Menos de $800.000'){ blocked = true; msg = '🚫 No puedes continuar — renta mínima $800.000'; }
+    else if (needsComp && compRadio && compRadio.value === 'no'){ blocked = true; msg = '🚫 Con tu renta, es obligatorio complementar con otra persona'; }
     else if (contrato && contrato.value === 'no')              { blocked = true; msg = '🚫 Se requiere contrato indefinido para continuar'; }
     else if (vivienda && vivienda.value === 'si')              { blocked = true; msg = '🚫 El DS120 es solo para personas sin vivienda propia'; }
     if (blocked) {
@@ -896,7 +1030,16 @@ footer{background:var(--navy);padding:56px 40px 28px}
 
   function handleRenta(formId, val) {
     var err = document.getElementById(formId + '-renta-err');
-    if (err) err.style.display = val === 'Menos de $700.000' ? 'flex' : 'none';
+    if (err) err.style.display = val === 'Menos de $800.000' ? 'flex' : 'none';
+    // Show complementa renta obligatoria message for $800k-$1.2M (only if not already complementing)
+    var compMsg = document.getElementById(formId + '-complementa-msg');
+    var needsComp = rentaComplementaObligatoria.indexOf(val) !== -1;
+    var compSi = document.querySelector('input[name="complementa-' + formId + '"][value="si"]');
+    if (compMsg) compMsg.style.display = (needsComp && !(compSi && compSi.checked)) ? 'block' : 'none';
+    // Auto-select "Sí" for complementa renta if in obligatory range
+    if (needsComp && compSi && !compSi.checked) {
+      compSi.checked = true; compSi.dispatchEvent(new Event('change', {bubbles:true}));
+    }
     updateButtonState(formId);
   }
 
@@ -919,31 +1062,106 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (rest) rest.style.display = val === 'si' ? 'block' : 'none';
   }
 
-  function handlePropVista(formId, val) {
-    var comunaInput = document.getElementById(formId + '-comuna-prop');
-    var precioCheck = document.getElementById(formId + '-precio-check');
-    var info = document.getElementById(formId + '-prop-info');
-    var rest = document.getElementById(formId + '-rest');
-    if (comunaInput) comunaInput.style.display = val === 'si' ? 'block' : 'none';
-    if (precioCheck) precioCheck.style.display = val === 'si' ? 'block' : 'none';
-    if (info) info.style.display = val === 'no' ? 'flex' : 'none';
-    // Only show rest if precio-ok is also "si"
-    var precioOk = document.querySelector('input[name="precio-ok-' + formId + '"]:checked');
-    if (rest) rest.style.display = (val === 'si' && precioOk && precioOk.value === 'si') ? 'block' : 'none';
-    // Reset precio if switching back to "no"
-    if (val === 'no') {
-      var precioErr = document.getElementById(formId + '-precio-err');
-      if (precioErr) precioErr.style.display = 'none';
-      var radios = document.querySelectorAll('input[name="precio-ok-' + formId + '"]');
-      radios.forEach(function(r) { r.checked = false; });
+  function setHfStep(step) {
+    for (var i = 1; i <= 3; i++) {
+      var dot = document.getElementById('hf-dot-' + i);
+      var label = dot ? dot.parentElement.querySelector('.step-label') : null;
+      var line = dot ? dot.parentElement.querySelector('.step-line') : null;
+      if (!dot) continue;
+      dot.classList.remove('active', 'done');
+      if (label) label.classList.remove('active');
+      if (i < step) { dot.classList.add('done'); dot.innerHTML = '✓'; if (line) line.classList.add('done'); }
+      else if (i === step) { dot.classList.add('active'); dot.innerHTML = String(i); if (label) label.classList.add('active'); if (line) line.classList.remove('done'); }
+      else { dot.innerHTML = String(i); if (line) line.classList.remove('done'); }
     }
   }
 
-  function handlePrecioOk(formId, val) {
-    var err = document.getElementById(formId + '-precio-err');
+  function spawnConfetti(container) {
+    var colors = ['#2DB89E','#C9871A','#1B3A6B','#D5F5E3','#ff6b6b','#ffd93d'];
+    for (var i = 0; i < 24; i++) {
+      var piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random() * 100 + '%';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDelay = (Math.random() * 0.5) + 's';
+      piece.style.animationDuration = (1 + Math.random() * 1) + 's';
+      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      piece.style.width = (5 + Math.random() * 6) + 'px';
+      piece.style.height = (5 + Math.random() * 6) + 'px';
+      container.appendChild(piece);
+    }
+    setTimeout(function() { container.innerHTML = ''; }, 2500);
+  }
+
+  function unlockHfRest(unlock) {
+    var rest = document.getElementById('hf-rest');
+    var hint = document.getElementById('hf-lock-hint');
+    var msg = document.getElementById('hf-califica-msg');
+    if (!rest) return;
+    if (unlock) {
+      rest.classList.remove('unlocked');
+      void rest.offsetWidth;
+      rest.classList.add('unlocked');
+      if (hint) hint.classList.add('hidden');
+      if (msg) msg.style.display = 'block';
+      setHfStep(2);
+      // Confetti
+      var confettiEl = document.createElement('div');
+      confettiEl.className = 'confetti-container';
+      msg.style.position = 'relative';
+      msg.appendChild(confettiEl);
+      spawnConfetti(confettiEl);
+      rest.querySelectorAll('[tabindex="-1"]').forEach(function(el) { el.removeAttribute('tabindex'); });
+      setTimeout(function() {
+        msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(function() { document.getElementById('hf-n').focus(); }, 500);
+      }, 200);
+    } else {
+      rest.classList.remove('unlocked');
+      if (hint) hint.classList.remove('hidden');
+      if (msg) msg.style.display = 'none';
+      setHfStep(1);
+      rest.querySelectorAll('input,select,button').forEach(function(el) { el.setAttribute('tabindex', '-1'); });
+    }
+  }
+
+  function toggleFormRest(formId, show) {
+    if (formId === 'hf') { unlockHfRest(show); return; }
     var rest = document.getElementById(formId + '-rest');
-    if (err) err.style.display = val === 'no' ? 'flex' : 'none';
-    if (rest) rest.style.display = val === 'si' ? 'block' : 'none';
+    if (rest) rest.style.display = show ? 'block' : 'none';
+  }
+
+  function handlePropVista(formId, val) {
+    var comunaWrap = document.getElementById(formId + '-comuna-prop');
+    var precioCheck = document.getElementById(formId + '-precio-check');
+    var info = document.getElementById(formId + '-prop-info');
+    // Show both comuna AND precio together when "sí"
+    if (comunaWrap) comunaWrap.style.display = val === 'si' ? 'block' : 'none';
+    if (precioCheck) precioCheck.style.display = val === 'si' ? 'block' : 'none';
+    if (info) info.style.display = val === 'no' ? 'flex' : 'none';
+    // Only unlock rest if precio range is selected
+    var precioSel = document.getElementById(formId + '-precio-range');
+    var precioVal = precioSel ? precioSel.value : '';
+    toggleFormRest(formId, val === 'si' && precioVal !== '');
+    // Reset if switching to "no"
+    if (val === 'no') {
+      var precioErr = document.getElementById(formId + '-precio-err');
+      if (precioErr) precioErr.style.display = 'none';
+      if (precioCheck) precioCheck.style.display = 'none';
+      if (precioSel) precioSel.value = '';
+      var grid = document.querySelector('.precio-range-grid[data-form="' + formId + '"]');
+      if (grid) grid.querySelectorAll('.selected').forEach(function(p){p.classList.remove('selected')});
+    }
+    // Auto-focus comuna when showing
+    var comunaVal = document.getElementById(formId + '-comuna-val');
+    if (val === 'si' && comunaVal) setTimeout(function(){ comunaVal.focus(); }, 100);
+  }
+
+  function handlePrecioRange(formId, val) {
+    var err = document.getElementById(formId + '-precio-err');
+    if (err) err.style.display = 'none';
+    // Unlock rest when a precio pill is selected
+    toggleFormRest(formId, val !== '');
   }
 
   // Show/hide "con quién" input for complementa renta
@@ -951,14 +1169,203 @@ footer{background:var(--navy);padding:56px 40px 28px}
     var radio = e.target;
     if (!radio.name || !radio.name.startsWith('complementa-')) return;
     var formId = radio.name.replace('complementa-', '');
-    var quienInput = document.getElementById(formId + '-complementa-quien');
-    if (quienInput) quienInput.style.display = radio.value === 'si' ? 'block' : 'none';
+    var quienWrap = document.getElementById(formId + '-complementa-quien-wrap');
+    if (quienWrap) quienWrap.style.display = radio.value === 'si' ? 'block' : 'none';
+    // Hide warning if already complementing
+    var compMsg = document.getElementById(formId + '-complementa-msg');
+    if (compMsg && radio.value === 'si') compMsg.style.display = 'none';
+    var rentaEl = document.getElementById(formId + '-r');
+    var needsComp = rentaEl && rentaComplementaObligatoria.indexOf(rentaEl.value) !== -1;
+    if (compMsg && radio.value === 'no' && needsComp) compMsg.style.display = 'block';
+    updateButtonState(formId);
   });
+
+  // Precio range pill grid
+  var precioRanges = [
+    {value:'0_800', lo:0, hi:800},
+    {value:'800_1000', lo:800, hi:1000},
+    {value:'1000_1200', lo:1000, hi:1200},
+    {value:'1200_1400', lo:1200, hi:1400},
+    {value:'1400_1600', lo:1400, hi:1600},
+    {value:'1600_1800', lo:1600, hi:1800},
+    {value:'1800_2000', lo:1800, hi:2000}
+  ];
+  function fmtM(n){var m=n/1000000;return '$'+m.toFixed(0)+'M'}
+  function fmtCLP(n){return '$'+n.toLocaleString('es-CL')}
+  function buildPrecioGrid(ufVal) {
+    document.querySelectorAll('.precio-range-grid').forEach(function(grid) {
+      var formId = grid.getAttribute('data-form');
+      var isDark = grid.getAttribute('data-dark') === '1';
+      var hiddenInput = document.getElementById(formId + '-precio-range');
+      var curVal = hiddenInput ? hiddenInput.value : '';
+      grid.innerHTML = '';
+      precioRanges.forEach(function(r) {
+        var pill = document.createElement('div');
+        pill.className = 'precio-pill' + (isDark ? ' precio-pill-d' : '');
+        if (curVal === r.value) pill.classList.add('selected');
+        var lo = Math.round(ufVal * r.lo);
+        var hi = Math.round(ufVal * r.hi);
+        var clpText, ufText;
+        if (r.lo === 0) {
+          clpText = 'Menos de ' + fmtM(hi);
+          ufText = '< ' + r.hi + ' UF';
+        } else {
+          clpText = fmtM(lo) + ' – ' + fmtM(hi);
+          ufText = r.lo.toLocaleString('es-CL') + ' – ' + r.hi.toLocaleString('es-CL') + ' UF';
+        }
+        pill.innerHTML = '<span class="pp-clp">' + clpText + '</span><span class="pp-uf">' + ufText + '</span>';
+        pill.setAttribute('data-value', r.value);
+        pill.setAttribute('data-label', clpText + ' (' + ufText + ')');
+        pill.onclick = function() {
+          grid.querySelectorAll('.precio-pill, .precio-pill-d').forEach(function(p){p.classList.remove('selected')});
+          pill.classList.add('selected');
+          if (hiddenInput) { hiddenInput.value = r.value; }
+          handlePrecioRange(formId, r.value);
+        };
+        grid.appendChild(pill);
+      });
+    });
+  }
+  // Fallback: build with approximate UF
+  buildPrecioGrid(40837);
+
+  // Mobile scroll hint — hide after scrolling or interacting with form
+  var scrollHint = document.getElementById('scroll-hint');
+  if (scrollHint) {
+    var hideHint = function() {
+      scrollHint.style.transition = 'opacity 0.4s, transform 0.4s';
+      scrollHint.style.opacity = '0';
+      scrollHint.style.transform = 'translateX(-50%) translateY(20px)';
+      setTimeout(function() { scrollHint.style.display = 'none'; }, 500);
+    };
+    var scrolled = false;
+    window.addEventListener('scroll', function() {
+      if (!scrolled && window.scrollY > 120) { scrolled = true; hideHint(); }
+    }, { passive: true });
+    // Also hide on any form interaction
+    document.getElementById('hfc').addEventListener('click', function() { if (!scrolled) { scrolled = true; hideHint(); } });
+    // Auto-hide after 6 seconds
+    setTimeout(function() { if (!scrolled) { scrolled = true; hideHint(); } }, 6000);
+  }
+
+  // Social proof — 5 * day of month (resets each month)
+  var spEl = document.getElementById('sp-count');
+  if (spEl) { spEl.textContent = String(new Date().getDate() * 5); }
 
   // Actualizar equivalente en pesos de 2.000 UF
   fetch('/api/uf').then(r=>r.json()).then(d=>{
-    if(d&&d.valor){var p=Math.round(d.valor*2000);var s='$'+p.toLocaleString('es-CL');document.querySelectorAll('.uf-2000-pesos').forEach(el=>{el.textContent=s});}
+    if(d&&d.valor){
+      var p=Math.round(d.valor*2000);var s='$'+p.toLocaleString('es-CL');
+      document.querySelectorAll('.uf-2000-pesos').forEach(el=>{el.textContent=s;});
+      buildPrecioGrid(d.valor);
+    }
   }).catch(()=>{});
+
+  // ─── Custom selects for arriendo & renta ───
+  var arriendoOpts = [
+    'Menos de $200.000','$200.000 – $300.000','$300.001 – $400.000',
+    '$400.001 – $500.000','$500.001 – $600.000','$600.001 – $700.000',
+    '$700.001 – $800.000','Más de $800.000','No pago arriendo'
+  ];
+  var rentaOpts = [
+    {v:'Menos de $800.000',blocked:true},{v:'$800.000 – $900.000'},{v:'$900.001 – $1.000.000'},
+    {v:'$1.000.001 – $1.100.000'},{v:'$1.100.001 – $1.200.000'},
+    {v:'$1.200.001 – $1.300.000'},{v:'$1.300.001 – $1.400.000'},{v:'$1.400.001 – $1.500.000'},
+    {v:'$1.500.001 – $1.600.000'},{v:'$1.600.001 – $1.700.000'},{v:'$1.700.001 – $1.800.000'},
+    {v:'$1.800.001 – $1.900.000'},{v:'$1.900.001 – $2.000.000'},{v:'Más de $2.000.000'}
+  ];
+  var rentaComplementaObligatoria = ['$800.000 – $900.000','$900.001 – $1.000.000','$1.000.001 – $1.100.000','$1.100.001 – $1.200.000'];
+
+  function buildCustomSelects() {
+    // Arriendo selects
+    document.querySelectorAll('.cs-arriendo').forEach(function(cs) {
+      var optsEl = cs.querySelector('.cs-opts');
+      var hidden = cs.querySelector('input[type="hidden"]');
+      var trigger = cs.querySelector('.cs-trigger');
+      optsEl.innerHTML = '';
+      arriendoOpts.forEach(function(label) {
+        var opt = document.createElement('div');
+        opt.className = 'cs-opt';
+        opt.textContent = label;
+        opt.onclick = function(e) {
+          e.stopPropagation();
+          hidden.value = label;
+          trigger.textContent = label;
+          trigger.classList.remove('placeholder');
+          optsEl.querySelectorAll('.cs-opt').forEach(function(o){o.classList.remove('selected')});
+          opt.classList.add('selected');
+          cs.classList.remove('open');
+        };
+        optsEl.appendChild(opt);
+      });
+    });
+    // Renta selects
+    document.querySelectorAll('.cs-renta').forEach(function(cs) {
+      var optsEl = cs.querySelector('.cs-opts');
+      var hidden = cs.querySelector('input[type="hidden"]');
+      var trigger = cs.querySelector('.cs-trigger');
+      var formId = cs.getAttribute('data-form');
+      optsEl.innerHTML = '';
+      rentaOpts.forEach(function(r) {
+        var opt = document.createElement('div');
+        opt.className = 'cs-opt' + (r.blocked ? ' blocked' : '');
+        opt.textContent = r.v;
+        opt.onclick = function(e) {
+          e.stopPropagation();
+          hidden.value = r.v;
+          trigger.textContent = r.v;
+          trigger.classList.remove('placeholder');
+          optsEl.querySelectorAll('.cs-opt').forEach(function(o){o.classList.remove('selected')});
+          opt.classList.add('selected');
+          cs.classList.remove('open');
+          if (formId) handleRenta(formId, r.v);
+        };
+        optsEl.appendChild(opt);
+      });
+    });
+  }
+  buildCustomSelects();
+
+  // Build hora custom selects
+  var horaOpts = ['09:00 – 10:00','10:00 – 11:00','11:00 – 12:00','12:00 – 13:00','13:00 – 14:00','14:00 – 15:00','15:00 – 16:00','16:00 – 17:00'];
+  document.querySelectorAll('.cs-hora-opts').forEach(function(optsEl) {
+    var cs = optsEl.closest('.cs');
+    var hidden = cs.querySelector('input[type="hidden"]');
+    var trigger = cs.querySelector('.cs-trigger');
+    optsEl.innerHTML = '';
+    horaOpts.forEach(function(h) {
+      var opt = document.createElement('div');
+      opt.className = 'cs-opt';
+      opt.textContent = h;
+      opt.onclick = function(e) {
+        e.stopPropagation();
+        hidden.value = h;
+        trigger.textContent = h;
+        trigger.classList.remove('placeholder');
+        optsEl.querySelectorAll('.cs-opt').forEach(function(o){o.classList.remove('selected')});
+        opt.classList.add('selected');
+        cs.classList.remove('open');
+      };
+      optsEl.appendChild(opt);
+    });
+  });
+
+  // Toggle custom select open/close
+  document.addEventListener('click', function(e) {
+    var trigger = e.target.closest('.cs-trigger');
+    if (trigger) {
+      var cs = trigger.closest('.cs');
+      var wasOpen = cs.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.cs.open').forEach(function(c){c.classList.remove('open')});
+      if (!wasOpen) cs.classList.add('open');
+      return;
+    }
+    // Close all if clicking outside
+    if (!e.target.closest('.cs')) {
+      document.querySelectorAll('.cs.open').forEach(function(c){c.classList.remove('open')});
+    }
+  });
 
   function saveLead(data) {
     // Backup local
@@ -994,21 +1401,30 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (viv.value === 'si') { document.getElementById(prefix+'-vivienda-err').style.display = 'flex'; return; }
     const a = document.getElementById(prefix+'-a');
     const r = document.getElementById(prefix+'-r');
-    if (r && (!r.value || r.value === 'Menos de $700.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $700.000).'); return; }
+    if (r && (!r.value || r.value === 'Menos de $800.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $800.000).'); return; }
     const pv = document.querySelector(`input[name="prop-vista-${prefix}"]:checked`);
     if (!pv || pv.value !== 'si') { alert('Debes tener una propiedad vista para continuar.'); return; }
-    const comunaProp = document.getElementById(prefix+'-comuna-prop');
+    const comunaProp = document.getElementById(prefix+'-comuna-val');
     const comunaPropVal = comunaProp ? comunaProp.value.trim() : '';
     if (!comunaPropVal) { alert('Por favor indica en qué comuna queda la propiedad.'); return; }
-    const precioOk = document.querySelector(`input[name="precio-ok-${prefix}"]:checked`);
-    if (!precioOk || precioOk.value !== 'si') { alert('La propiedad debe valer menos de 2.000 UF para continuar.'); return; }
+    const precioSel = document.getElementById(prefix+'-precio-range');
+    const precioVal = precioSel ? precioSel.value : '';
+    if (!precioVal) { alert('Selecciona el rango de precio de la propiedad.'); return; }
+    const selectedPill = document.querySelector('.precio-range-grid[data-form="'+prefix+'"] .precio-pill.selected, .precio-range-grid[data-form="'+prefix+'"] .precio-pill-d.selected');
+    const precioLabel = selectedPill ? selectedPill.getAttribute('data-label') : precioVal;
     const comp = document.querySelector(`input[name="complementa-${prefix}"]:checked`);
     const compQuien = document.getElementById(prefix+'-complementa-quien');
     const compVal = comp ? comp.value : '';
     const compQuienVal = (comp && comp.value === 'si' && compQuien) ? compQuien.value.trim() : '';
+    if (compVal === 'si' && !compQuienVal) { alert('Por favor indica con quién complementas renta.'); return; }
     const complementaRenta = compVal === 'si' ? ('Sí' + (compQuienVal ? ' — ' + compQuienVal : '')) : compVal === 'no' ? 'No' : '';
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:'si', complementa_renta:complementaRenta, fuente:src});
-    markAllFormsSubmitted(n);
+    const contactoPref = document.querySelector(`input[name="contacto-${prefix}"]:checked`);
+    if (!contactoPref) { alert('Por favor indica cómo prefieres que te contactemos.'); return; }
+    const horaEl = document.getElementById(prefix+'-hora');
+    if (!horaEl || !horaEl.value) { alert('Por favor selecciona un horario de contacto.'); return; }
+    if (prefix === 'hf') setHfStep(3);
+    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, preferencia_contacto:contactoPref.value, horario_contacto:horaEl.value, fuente:src});
+    markAllFormsSubmitted(n, contactoPref.value, horaEl.value, r?r.value:'');
   }
 
   // full form (includes radio)
@@ -1029,21 +1445,29 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (viv.value === 'si') { document.getElementById(prefix+'-vivienda-err').style.display = 'flex'; return; }
     const a = document.getElementById(prefix+'-a');
     const r = document.getElementById(prefix+'-r');
-    if (r && (!r.value || r.value === 'Menos de $700.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $700.000).'); return; }
+    if (r && (!r.value || r.value === 'Menos de $800.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $800.000).'); return; }
     const pv = document.querySelector(`input[name="prop-vista-${prefix}"]:checked`);
     if (!pv || pv.value !== 'si') { alert('Debes tener una propiedad vista para continuar.'); return; }
-    const comunaProp = document.getElementById(prefix+'-comuna-prop');
+    const comunaProp = document.getElementById(prefix+'-comuna-val');
     const comunaPropVal = comunaProp ? comunaProp.value.trim() : '';
     if (!comunaPropVal) { alert('Por favor indica en qué comuna queda la propiedad.'); return; }
-    const precioOk = document.querySelector(`input[name="precio-ok-${prefix}"]:checked`);
-    if (!precioOk || precioOk.value !== 'si') { alert('La propiedad debe valer menos de 2.000 UF para continuar.'); return; }
+    const precioSel = document.getElementById(prefix+'-precio-range');
+    const precioVal = precioSel ? precioSel.value : '';
+    if (!precioVal) { alert('Selecciona el rango de precio de la propiedad.'); return; }
+    const selectedPill = document.querySelector('.precio-range-grid[data-form="'+prefix+'"] .precio-pill.selected, .precio-range-grid[data-form="'+prefix+'"] .precio-pill-d.selected');
+    const precioLabel = selectedPill ? selectedPill.getAttribute('data-label') : precioVal;
     const comp = document.querySelector(`input[name="complementa-${prefix}"]:checked`);
     const compQuien = document.getElementById(prefix+'-complementa-quien');
     const compVal = comp ? comp.value : '';
     const compQuienVal = (comp && comp.value === 'si' && compQuien) ? compQuien.value.trim() : '';
+    if (compVal === 'si' && !compQuienVal) { alert('Por favor indica con quién complementas renta.'); return; }
     const complementaRenta = compVal === 'si' ? ('Sí' + (compQuienVal ? ' — ' + compQuienVal : '')) : compVal === 'no' ? 'No' : '';
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:cf.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:'si', complementa_renta:complementaRenta, fuente:src||prefix});
-    markAllFormsSubmitted(n);
+    const contactoPref = document.querySelector(`input[name="contacto-${prefix}"]:checked`);
+    if (!contactoPref) { alert('Por favor indica cómo prefieres que te contactemos.'); return; }
+    const horaEl = document.getElementById(prefix+'-hora');
+    if (!horaEl || !horaEl.value) { alert('Por favor selecciona un horario de contacto.'); return; }
+    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:cf.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, preferencia_contacto:contactoPref.value, horario_contacto:horaEl.value, fuente:src||prefix});
+    markAllFormsSubmitted(n, contactoPref.value, horaEl.value, r?r.value:'');
   }
 
   // quick strips (phone only)
@@ -1092,10 +1516,15 @@ footer{background:var(--navy);padding:56px 40px 28px}
 
   var WA_SVG = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
 
-  function markAllFormsSubmitted(nombre) {
+  function markAllFormsSubmitted(nombre, contactoPref, horario, rentaVal) {
     var firstName = (nombre && nombre !== '1') ? nombre.split(' ')[0] : '';
-    var waMsg = encodeURIComponent('Hola, ya envié mis datos y quiero consultar sobre mi proceso.');
+    var waMsg = encodeURIComponent('Hola ' + (firstName || '') + ', acabo de completar el formulario en llavepropia.cl y quiero avanzar con mi evaluación.');
     var waHref = 'https://wa.me/56962078510?text=' + waMsg;
+    var isCondicionado = rentaComplementaObligatoria.indexOf(rentaVal) !== -1;
+    var badgeText = isCondicionado ? '⚠️ PRE-APROBADO CONDICIONADO' : '✅ PRE-APROBADO';
+    var badgeSubtext = isCondicionado
+      ? 'Condicionado a verificar renta complementaria'
+      : 'Según tus datos, cumples los requisitos iniciales';
 
     // Light forms: hf, f3 — dark forms: f2, f4
     var forms = [
@@ -1110,12 +1539,19 @@ footer{background:var(--navy);padding:56px 40px 28px}
       var ok      = document.getElementById(f.ok);
       if (content) content.style.display = 'none';
       if (!ok) return;
-      var iconCls = f.dark ? 'f-success-icon f-success-icon-teal' : 'f-success-icon';
+      var dark = f.dark;
+      var badgeBg = dark ? 'rgba(45,184,158,0.2)' : 'linear-gradient(135deg,#D5F5E3,#E5F7F4)';
+      var badgeBorder = 'rgba(45,184,158,0.4)';
+      var badgeColor = dark ? '#2DB89E' : '#2B7A4E';
       ok.innerHTML =
-        '<div class="' + iconCls + '">✓</div>' +
-        '<h3 style="' + (f.dark ? 'color:#fff' : '') + '">¡' + (firstName ? firstName + ', ya' : 'Ya') + ' recibimos tus datos!</h3>' +
-        '<p style="' + (f.dark ? 'color:rgba(255,255,255,0.65)' : '') + '">Tu solicitud está registrada. Te contactaremos a la brevedad — o escríbenos ahora por WhatsApp.</p>' +
-        '<a href="' + waHref + '" class="f-wa-btn" target="_blank" rel="noopener" style="margin-top:4px">' + WA_SVG + ' Escribir por WhatsApp</a>';
+        '<div style="background:' + badgeBg + ';border:2px solid ' + badgeBorder + ';border-radius:14px;padding:20px 18px;margin:0 0 16px;text-align:center;width:100%">' +
+          '<p style="font-size:20px;font-weight:900;color:' + badgeColor + ';margin:0 0 4px">' + badgeText + '</p>' +
+          '<p style="font-size:13px;color:' + (dark ? 'rgba(255,255,255,0.7)' : '#1B3A6B') + ';margin:0;font-weight:600">' + badgeSubtext + '</p>' +
+        '</div>' +
+        '<h3 style="font-size:18px;margin:0 0 8px;' + (dark ? 'color:#fff' : '') + '">¡' + (firstName ? firstName + ', felicidades!' : '¡Felicidades!') + '</h3>' +
+        '<p style="font-size:14px;line-height:1.6;margin:0 0 6px;' + (dark ? 'color:rgba(255,255,255,0.7)' : 'color:#5A4A38') + '">Te enviamos un correo con los detalles. Para <strong>continuar con tu evaluación</strong>, escríbenos ahora por WhatsApp:</p>' +
+        '<a href="' + waHref + '" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#25D366;color:#fff;font-size:18px;font-weight:800;padding:18px 24px;border-radius:14px;text-decoration:none;margin:12px 0 8px;box-shadow:0 6px 20px rgba(37,211,102,0.35);transition:transform 0.15s,box-shadow 0.15s">' + WA_SVG + ' Continuar por WhatsApp</a>' +
+        '<p style="font-size:11px;margin:4px 0 0;' + (dark ? 'color:rgba(255,255,255,0.4)' : 'color:#9a8878') + '">Responde rápido para agilizar tu proceso</p>';
       ok.style.display = 'flex';
     });
     // Scroll suave al hero card para que quede visible completo
