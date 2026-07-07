@@ -1454,7 +1454,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (!viv) { alert('Por favor indica si tú o tu cónyuge tiene una vivienda actualmente.'); return; }
     if (viv.value === 'si') { document.getElementById(prefix+'-vivienda-err').style.display = 'flex'; return; }
     const a = document.getElementById(prefix+'-a');
-    if (!a || !a.value) { alert('Por favor indica cuánto pagas de arriendo.'); return; }
+    if (a && !a.value) { alert('Por favor indica cuánto pagas de arriendo.'); return; }
     const r = document.getElementById(prefix+'-r');
     if (r && (!r.value || r.value === 'Menos de $800.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $800.000).'); return; }
     const pv = document.querySelector(`input[name="prop-vista-${prefix}"]:checked`);
@@ -1478,7 +1478,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     const horaEl = document.getElementById(prefix+'-hora');
     if (!horaEl || !horaEl.value) { alert('Por favor selecciona un horario de contacto.'); return; }
     if (prefix === 'hf') setHfStep(3);
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a.value, renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, preferencia_contacto:contactoPref.value, horario_contacto:horaEl.value, fuente:src});
+    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, preferencia_contacto:contactoPref.value, horario_contacto:horaEl.value, fuente:src});
     markAllFormsSubmitted(n, contactoPref.value, horaEl.value, r?r.value:'');
   }
 
@@ -1499,7 +1499,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (!viv) { alert('Por favor indica si tú o tu cónyuge tiene una vivienda actualmente.'); return; }
     if (viv.value === 'si') { document.getElementById(prefix+'-vivienda-err').style.display = 'flex'; return; }
     const a = document.getElementById(prefix+'-a');
-    if (!a || !a.value) { alert('Por favor indica cuánto pagas de arriendo.'); return; }
+    if (a && !a.value) { alert('Por favor indica cuánto pagas de arriendo.'); return; }
     const r = document.getElementById(prefix+'-r');
     if (r && (!r.value || r.value === 'Menos de $800.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $800.000).'); return; }
     const pv = document.querySelector(`input[name="prop-vista-${prefix}"]:checked`);
@@ -1522,7 +1522,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (!contactoPref) { alert('Por favor indica cómo prefieres que te contactemos.'); return; }
     const horaEl = document.getElementById(prefix+'-hora');
     if (!horaEl || !horaEl.value) { alert('Por favor selecciona un horario de contacto.'); return; }
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a.value, renta:r?r.value:'', dicom:d.value, contrato:cf.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, preferencia_contacto:contactoPref.value, horario_contacto:horaEl.value, fuente:src||prefix});
+    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:cf.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, preferencia_contacto:contactoPref.value, horario_contacto:horaEl.value, fuente:src||prefix});
     markAllFormsSubmitted(n, contactoPref.value, horaEl.value, r?r.value:'');
   }
 
