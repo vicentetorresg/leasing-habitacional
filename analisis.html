@@ -58,14 +58,14 @@ tr:hover td{background:#fafaf8}
 
 <script>
 const SUPA_URL = 'https://unptkiyggkuxtkzedluv.supabase.co/rest/v1/analytics_events';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVucHRraXlnZ2t1eHRremVkbHV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMTE1NTgsImV4cCI6MjA5NDg4NzU1OH0.KmkPxj-8RCb4MUOw9mcRKJJJAhGDdsjK9fRdh-omeWc';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVucHRraXlnZ2t1eHRremVkbHV2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTMxMTU1OCwiZXhwIjoyMDk0ODg3NTU4fQ.vx78MEuZFpc57IC9I36rmLHUvi8XbWAs3nk-HiQca4E';
 
 let allData = [];
 let currentDays = 1;
 
 async function fetchData() {
   const res = await fetch(SUPA_URL + '?select=*&order=created_at.desc&limit=10000', {
-    headers: { 'apikey': SUPA_KEY }
+    headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY }
   });
   allData = await res.json();
   render();
