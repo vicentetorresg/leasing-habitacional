@@ -87,6 +87,9 @@ function downloadXlsx(leads: Lead[], filename: string) {
     'Propiedad Vista': l.tiene_propiedad_vista === 'si' ? 'Sí' : l.tiene_propiedad_vista === 'no' ? 'No' : '',
     'Comuna Propiedad': l.comuna_propiedad || '',
     'Complementa Renta': l.complementa_renta || '',
+    'Valor Propiedad': l.precio_propiedad_ok || '',
+    'Prefiere Contacto': l.preferencia_contacto === 'whatsapp' ? 'WhatsApp' : l.preferencia_contacto === 'telefono' ? 'Llamada' : '',
+    'Horario Contacto': l.horario_contacto || '',
     'Fuente': l.source,
     'Estado': ADVISOR_STATUSES.find(s => s.key === l.status)?.label || l.status,
     'Dirección Vivienda': l.direccion_vivienda || '',
@@ -856,9 +859,19 @@ const Advisor = () => {
                       🏠 Propiedad vista: {lead.tiene_propiedad_vista === 'si' ? `Sí${lead.comuna_propiedad ? ` (${lead.comuna_propiedad})` : ''}` : 'No'}
                     </p>
                   )}
+                  {lead.precio_propiedad_ok && (
+                    <p className="text-[10px] font-semibold text-success">
+                      💲 Valor: {lead.precio_propiedad_ok}
+                    </p>
+                  )}
                   {lead.complementa_renta && (
                     <p className="text-[10px] text-muted-foreground">
                       👥 Complementa renta: {lead.complementa_renta}
+                    </p>
+                  )}
+                  {(lead.preferencia_contacto || lead.horario_contacto) && (
+                    <p className="text-[10px] font-semibold text-blue-600">
+                      📞 {lead.preferencia_contacto === 'whatsapp' ? 'WhatsApp' : lead.preferencia_contacto === 'telefono' ? 'Llamada' : ''}{lead.horario_contacto ? ` · ${lead.horario_contacto}` : ''}
                     </p>
                   )}
                   {lead.scheduled_at && (
@@ -1397,6 +1410,9 @@ function LeadDetailContent({
         <DetailItem label="Propiedad vista" value={lead.tiene_propiedad_vista === 'si' ? '✅ Sí' : lead.tiene_propiedad_vista === 'no' ? '❌ No' : '—'} />
         <DetailItem label="Comuna propiedad" value={lead.comuna_propiedad || '—'} />
         <DetailItem label="Complementa renta" value={lead.complementa_renta || '—'} />
+        <DetailItem label="Valor propiedad" value={lead.precio_propiedad_ok || '—'} />
+        <DetailItem label="Prefiere contacto" value={lead.preferencia_contacto === 'whatsapp' ? '💬 WhatsApp' : lead.preferencia_contacto === 'telefono' ? '📞 Llamada' : '—'} />
+        <DetailItem label="Horario contacto" value={lead.horario_contacto || '—'} />
         <DetailItem label="Fuente" value={lead.source} />
         <DetailItem label="Fecha Lead" value={new Date(lead.created_at).toLocaleDateString('es-CL')} />
         <DetailItem label="Estado" value={ADVISOR_STATUSES.find(s => s.key === lead.status)?.label || lead.status} />

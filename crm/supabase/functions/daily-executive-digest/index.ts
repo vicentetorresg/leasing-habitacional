@@ -6,7 +6,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const CC_EMAILS = ['vicente.torres@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'];
+const CC_EMAILS = ['vicente.torres@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'];
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {

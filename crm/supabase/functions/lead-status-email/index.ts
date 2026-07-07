@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 const FROM      = 'Llave Propia <notificaciones@llavepropia.cl>';
-const CC_ADMINS = ['vicente.torres@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'];
+const CC_ADMINS = ['vicente.torres@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'];
 const REPLY_TO  = 'vicente.torres@llavepropia.cl';
 
 const ASESOR_PIPELINE = ['asesoria_agendada', 'recontactar', 'plan_presentado'];

@@ -43,7 +43,10 @@ export interface Lead {
   vivienda: string | null;
   tiene_propiedad_vista: string | null;
   comuna_propiedad: string | null;
+  precio_propiedad_ok: string | null;
   complementa_renta: string | null;
+  preferencia_contacto: string | null;
+  horario_contacto: string | null;
 }
 
 // Statuses that mean the lead is still pending (ejecutiva view)

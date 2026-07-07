@@ -115,7 +115,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, complementa_renta, fuente } = req.body || {};
+  const { nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, precio_propiedad_ok, complementa_renta, preferencia_contacto, horario_contacto, fuente } = req.body || {};
   if (!nombre || !telefono) return res.status(400).json({ error: 'Faltan campos' });
 
   const SUPA_URL = 'https://unptkiyggkuxtkzedluv.supabase.co/rest/v1/leasing_leads';
@@ -136,7 +136,7 @@ export default async function handler(req, res) {
   // Try with contrato + vivienda columns
   const r1 = await fetch(SUPA_URL, {
     method: 'POST', headers: supaHeaders,
-    body: JSON.stringify({ nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, complementa_renta, fuente })
+    body: JSON.stringify({ nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, precio_propiedad_ok, complementa_renta, preferencia_contacto, horario_contacto, fuente })
   });
   if (r1.ok) { saved = true; }
   if (!saved) {
@@ -170,7 +170,10 @@ export default async function handler(req, res) {
     vivienda: vivienda || null,
     tiene_propiedad_vista: tiene_propiedad_vista || null,
     comuna_propiedad: comuna_propiedad || null,
+    precio_propiedad_ok: precio_propiedad_ok || null,
     complementa_renta: complementa_renta || null,
+    preferencia_contacto: preferencia_contacto || null,
+    horario_contacto: horario_contacto || null,
   };
   await fetch(CRM_URL, {
     method: 'POST',
@@ -183,7 +186,10 @@ export default async function handler(req, res) {
   const viviendaLabel  = vivienda === 'si' ? '❌ Sí (tiene vivienda)' : vivienda === 'no' ? '✅ No' : '—';
   const dicomLabel     = dicom === 'si' ? '❌ Sí (en DICOM)' : dicom === 'no' ? '✅ No' : '—';
   const propVistaLabel = tiene_propiedad_vista === 'si' ? ('✅ Sí' + (comuna_propiedad ? ' — ' + comuna_propiedad : '')) : tiene_propiedad_vista === 'no' ? '⚠️ No tiene propiedad vista' : '—';
+  const precioOkLabel = precio_propiedad_ok ? '✅ ' + precio_propiedad_ok : '—';
   const complementaLabel = complementa_renta || '—';
+  const contactoLabel = preferencia_contacto === 'whatsapp' ? '💬 WhatsApp' : preferencia_contacto === 'telefono' ? '📞 Llamada' : '—';
+  const horarioLabel = horario_contacto || '—';
   const now = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
   const producto = (fuente || '').toLowerCase().includes('mutuo') ? 'Mutuo Hipotecario' : 'Leasing DS120';
   const waPhone = (telefono || '').replace(/\D/g, '').replace(/^0/, '56');
@@ -210,8 +216,11 @@ export default async function handler(req, res) {
         ['📋 Contrato indefinido',  contratoLabel],
         ...(vivienda ? [['🏡 Tiene vivienda propia', viviendaLabel]] : []),
         ['🏠 Propiedad vista',      propVistaLabel],
+        ['💲 Valor propiedad',       precioOkLabel],
         ['👥 Complementa renta',    complementaLabel],
         ['⚠️ En DICOM',             dicomLabel],
+        ['📞 Prefiere contacto',    contactoLabel],
+        ['🕐 Horario',              horarioLabel],
         ['📌 Fuente',               fuente   || '—'],
       ].map(([label, val]) => `
       <tr>
@@ -246,6 +255,48 @@ export default async function handler(req, res) {
       html
     })
   });
+
+  // 3. Pre-approval email to the lead (with CC to Vicente)
+  const isLeasing = !(fuente || '').toLowerCase().includes('mutuo');
+  if (isLeasing && email) {
+    const firstName = (nombre || '').trim().split(' ')[0] || nombre;
+    const dicomVal = dicom === 'no' ? 'No ✅' : dicom === 'si' ? 'Sí ❌' : '—';
+    const contratoVal = contrato === 'si' ? 'Sí ✅' : contrato === 'no' ? 'No ❌' : '—';
+    const viviendaVal = vivienda === 'no' ? 'No ✅' : vivienda === 'si' ? 'Sí ❌' : '—';
+    const comunaVal = comuna_propiedad || '—';
+    const precioVal = precio_propiedad_ok || '—';
+    const complementaVal = complementa_renta || '—';
+    const arriendoVal = arriendo || '—';
+    const rentaVal = renta || '—';
+    const telVal = telefono || '—';
+    const rentaCompOblig = ['$800.000 – $900.000','$900.001 – $1.000.000','$1.000.001 – $1.100.000','$1.100.001 – $1.200.000'];
+    const isCondicionado = rentaCompOblig.includes(renta || '');
+    const badgeLabel = isCondicionado ? '⚠️ PRE-APROBADO CONDICIONADO' : '✅ PRE-APROBADO';
+    const badgeColor = isCondicionado ? '#e67e22' : '#2B7A4E';
+    const badgeBg = isCondicionado ? 'linear-gradient(135deg,#FEF3E2,#FFF8EE)' : 'linear-gradient(135deg,#D5F5E3,#E5F7F4)';
+    const badgeBorder = isCondicionado ? 'rgba(230,126,34,0.3)' : 'rgba(45,184,158,0.3)';
+    const badgeSubtext = isCondicionado
+      ? 'Tu renta requiere complementar con otra persona. Sujeto a verificación de ambas rentas.'
+      : 'Según los datos que nos enviaste, pre calificas para comprar una vivienda.';
+    const introText = isCondicionado
+      ? `Hola <strong>${firstName}</strong>! Según la información que declaraste, podrías acceder al Leasing Habitacional DS120, <strong>condicionado a que complementes tu renta con otra persona</strong>.`
+      : `Hola <strong>${firstName}</strong>! Según la información que declaraste, cumples con los requisitos iniciales para acceder al Leasing Habitacional DS120.`;
+
+    const preApprovalHtml = `<div style="font-family:Nunito,Arial,sans-serif;max-width:560px;margin:0 auto;background:#FEFCF7;border-radius:16px;overflow:hidden;border:1px solid #EDE3D4"><div style="background:linear-gradient(135deg,#1B3A6B,#243870);padding:32px 28px;text-align:center"><span style="font-family:Georgia,serif;font-size:24px;font-weight:700;color:#fff">Llave</span> <span style="font-size:10px;font-weight:800;color:#3ACFB8;letter-spacing:2px;text-transform:uppercase">Propia</span></div><div style="padding:32px 28px"><div style="background:${badgeBg};border:1.5px solid ${badgeBorder};border-radius:12px;padding:18px 20px;margin:0 0 24px;text-align:center"><p style="font-size:22px;font-weight:900;color:${badgeColor};margin:0 0 4px">${badgeLabel}</p><p style="font-size:13px;color:#1B3A6B;margin:0;font-weight:600">${badgeSubtext}</p></div><p style="font-size:16px;color:#1A150F;line-height:1.7;margin:0 0 20px">${introText}</p><div style="background:#fff;border:1.5px solid #EDE3D4;border-radius:12px;padding:20px 24px;margin:0 0 20px"><p style="font-size:13px;font-weight:800;color:#1B3A6B;margin:0 0 14px;text-transform:uppercase;letter-spacing:0.5px">📋 Tus datos declarados</p><table cellpadding="0" cellspacing="0" border="0" width="100%" style="font-size:14px;color:#1A150F"><tr><td style="padding:8px 0;border-bottom:1px solid #F7F0E6;font-weight:700;color:#5A4A38;width:45%">Nombre</td><td style="padding:8px 0;border-bottom:1px solid #F7F0E6">${nombre}</td></tr><tr><td style="padding:8px 0;border-bottom:1px solid #F7F0E6;font-weight:700;color:#5A4A38">Teléfono</td><td style="padding:8px 0;border-bottom:1px solid #F7F0E6">${telVal}</td></tr><tr><td style="padding:8px 0;border-bottom:1px solid #F7F0E6;font-weight:700;color:#5A4A38">Arriendo actual</td><td style="padding:8px 0;border-bottom:1px solid #F7F0E6">${arriendoVal}</td></tr><tr><td style="padding:8px 0;border-bottom:1px solid #F7F0E6;font-weight:700;color:#5A4A38">Sueldo líquido</td><td style="padding:8px 0;border-bottom:1px solid #F7F0E6">${rentaVal}</td></tr><tr><td style="padding:8px 0;border-bottom:1px solid #F7F0E6;font-weight:700;color:#5A4A38">DICOM</td><td style="padding:8px 0;border-bottom:1px solid #F7F0E6">${dicomVal}</td></tr><tr><td style="padding:8px 0;border-bottom:1px solid #F7F0E6;font-weight:700;color:#5A4A38">Contrato indefinido</td><td style="padding:8px 0;border-bottom:1px solid #F7F0E6">${contratoVal}</td></tr><tr><td style="padding:8px 0;border-bottom:1px solid #F7F0E6;font-weight:700;color:#5A4A38">Vivienda propia</td><td style="padding:8px 0;border-bottom:1px solid #F7F0E6">${viviendaVal}</td></tr><tr><td style="padding:8px 0;border-bottom:1px solid #F7F0E6;font-weight:700;color:#5A4A38">Comuna propiedad</td><td style="padding:8px 0;border-bottom:1px solid #F7F0E6">${comunaVal}</td></tr><tr><td style="padding:8px 0;border-bottom:1px solid #F7F0E6;font-weight:700;color:#5A4A38">Valor propiedad</td><td style="padding:8px 0;border-bottom:1px solid #F7F0E6">${precioVal}</td></tr><tr><td style="padding:8px 0;font-weight:700;color:#5A4A38">Complementa renta</td><td style="padding:8px 0">${complementaVal}</td></tr></table></div><p style="font-size:15px;color:#1A150F;line-height:1.7;margin:0 0 16px;font-weight:700">Para avanzar con la evaluación, envíanos lo siguiente respondiendo este correo:</p><div style="background:#fff;border:1.5px solid #EDE3D4;border-radius:12px;padding:20px 24px;margin:0 0 20px"><p style="font-size:13px;font-weight:800;color:#1B3A6B;margin:0 0 14px;text-transform:uppercase;letter-spacing:0.5px">📄 Documentos requeridos</p><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td width="32" valign="middle" style="padding:0 0 12px 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">1</div></td><td valign="middle" style="padding:0 0 12px 8px;font-size:14px;color:#1A150F">Cédula de identidad por ambos lados</td></tr><tr><td width="32" valign="middle" style="padding:0 0 12px 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">2</div></td><td valign="middle" style="padding:0 0 12px 8px;font-size:14px;color:#1A150F">6 últimas liquidaciones de sueldo</td></tr><tr><td width="32" valign="middle" style="padding:0 0 12px 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">3</div></td><td valign="middle" style="padding:0 0 12px 8px;font-size:14px;color:#1A150F">Cotizaciones AFP último año</td></tr><tr><td width="32" valign="middle" style="padding:0 0 12px 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">4</div></td><td valign="middle" style="padding:0 0 12px 8px;font-size:14px;color:#1A150F">Contrato de trabajo con antigüedad</td></tr><tr><td width="32" valign="middle" style="padding:0 0 12px 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">5</div></td><td valign="middle" style="padding:0 0 12px 8px;font-size:14px;color:#1A150F">Deuda CMF (se obtiene gratuita)</td></tr><tr><td width="32" valign="middle" style="padding:0 0 0 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">6</div></td><td valign="middle" style="padding:0 0 0 8px;font-size:14px;color:#1A150F">Certificado de matrimonio o no matrimonio</td></tr></table></div><div style="background:#E5F7F4;border:1px solid rgba(45,184,158,0.3);border-radius:10px;padding:14px 18px;margin:0 0 24px"><p style="font-size:13px;color:#1B3A6B;margin:0;line-height:1.6"><strong>Si complementas renta con otra persona</strong>, necesitamos los mismos documentos de ella.</p></div><p style="font-size:14px;color:#5A4A38;line-height:1.7;margin:0 0 24px">Puedes enviarlos respondiendo este correo.</p><p style="font-size:14px;color:#5A4A38;line-height:1.7;margin:0 0 12px;text-align:center">Cualquier duda, puedes escribirnos por WhatsApp:</p><div style="text-align:center"><a href="https://wa.me/56962078510" target="_blank" style="display:inline-block;background:#25D366;color:#fff;font-size:16px;font-weight:800;padding:16px 40px;border-radius:12px;text-decoration:none;letter-spacing:0.3px">💬 WhatsApp</a></div></div><div style="background:#F7F0E6;padding:20px 28px;text-align:center;border-top:1px solid #EDE3D4"><p style="font-size:13px;color:#9A8878;margin:0;line-height:1.6">Saludos,<br><strong style="color:#1B3A6B">Equipo Llave Propia</strong></p><p style="font-size:10px;color:#BBA88A;margin:10px 0 0;line-height:1.5">* Esta pre-aprobación es preliminar y está basada en la información declarada por usted. La aprobación definitiva está sujeta a la verificación formal de antecedentes, documentos y evaluación de la entidad financiera. El monto máximo de la vivienda a financiar dependerá de la renta verificada del solicitante y, en caso de complementar, también de la persona que acompaña.</p></div></div>`;
+
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: 'Llave Propia <notificaciones@llavepropia.cl>',
+        to: [email],
+        cc: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'],
+        reply_to: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'],
+        subject: isCondicionado ? 'PRE-APROBADO CONDICIONADO — Complementar Renta — Llave Propia' : 'PRE-APROBADO — Evaluación Compra Vivienda — Llave Propia',
+        html: preApprovalHtml
+      })
+    }).catch(() => null);
+  }
 
   return res.status(200).json({ saved, emailed: emailRes.ok });
 }
