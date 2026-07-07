@@ -968,6 +968,15 @@ footer{background:var(--navy);padding:56px 40px 28px}
   const nav = document.getElementById('navbar');
   window.addEventListener('scroll', () => nav.classList.toggle('sc', window.scrollY > 40), {passive:true});
 
+  // hide sticky bar when hero form is visible
+  var stickyBar = document.querySelector('.sticky-bar');
+  var heroFc = document.getElementById('hfc');
+  if (stickyBar && heroFc) {
+    new IntersectionObserver(function(entries) {
+      stickyBar.style.display = entries[0].isIntersecting ? 'none' : 'flex';
+    }, {threshold:0.1}).observe(heroFc);
+  }
+
   // counter
   const statsEl = document.getElementById('stats');
   new IntersectionObserver((en) => {
