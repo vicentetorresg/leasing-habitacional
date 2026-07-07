@@ -1205,6 +1205,12 @@ function EditableLeadGrid({ lead, userRole, onSaved }: { lead: Lead; userRole?: 
       {(lead as any).arriendo && <DetailItem label="Arriendo actual" value={(lead as any).arriendo} />}
       {(lead as any).contrato != null && <DetailItem label="Contrato indefinido" value={(lead as any).contrato === 'si' ? '✅ Sí' : '❌ No'} />}
       {(lead as any).vivienda != null && <DetailItem label="Tiene vivienda" value={(lead as any).vivienda === 'si' ? '⚠️ Sí' : '✅ No'} />}
+      {(lead as any).tiene_propiedad_vista && <DetailItem label="Propiedad vista" value={(lead as any).tiene_propiedad_vista === 'si' ? '✅ Sí' : '❌ No'} />}
+      {(lead as any).comuna_propiedad && <DetailItem label="Comuna propiedad" value={(lead as any).comuna_propiedad} />}
+      {(lead as any).precio_propiedad_ok && <DetailItem label="Valor propiedad" value={(lead as any).precio_propiedad_ok} />}
+      {(lead as any).complementa_renta && <DetailItem label="Complementa renta" value={(lead as any).complementa_renta} />}
+      {(lead as any).preferencia_contacto && <DetailItem label="Prefiere contacto" value={(lead as any).preferencia_contacto === 'whatsapp' ? '💬 WhatsApp' : '📞 Llamada'} />}
+      {(lead as any).horario_contacto && <DetailItem label="Horario contacto" value={(lead as any).horario_contacto} />}
       {renderField('email', 'Email', lead.email || '—')}
       {renderField('phone', 'Teléfono', lead.phone)}
     </div>

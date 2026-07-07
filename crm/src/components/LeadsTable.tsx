@@ -76,7 +76,7 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
     const t = setTimeout(() => setSearchQuery(searchInput), 300);
     return () => clearTimeout(t);
   }, [searchInput]);
-  const [sortField, setSortField] = useState<'created_at' | 'name' | 'status' | 'status_changed_at'>('status_changed_at');
+  const [sortField, setSortField] = useState<'created_at' | 'name' | 'status' | 'status_changed_at'>('created_at');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
   const [page, setPage] = useState(0);
 
@@ -245,6 +245,11 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
               <TableHead className="px-2">Arriendo</TableHead>
               <TableHead className="px-2 text-center">Contrato</TableHead>
               <TableHead className="px-2 text-center">Vivienda</TableHead>
+              <TableHead className="px-2">Valor Prop.</TableHead>
+              <TableHead className="px-2">Comuna</TableHead>
+              <TableHead className="px-2">Complementa</TableHead>
+              <TableHead className="px-2">Contacto</TableHead>
+              <TableHead className="px-2">Horario</TableHead>
               <TableHead className="px-2">Fuente</TableHead>
               <TableHead className="px-2">DICOM</TableHead>
               <TableHead className="px-2">Intentos</TableHead>
@@ -265,7 +270,7 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
           <TableBody>
             {sorted.length === 0 && (
               <TableRow>
-                <TableCell colSpan={14} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={18} className="text-center py-8 text-muted-foreground">
                   {searchInput || statusFilter !== 'all' ? 'Sin resultados para este filtro' : 'No hay leads pendientes'}
                 </TableCell>
               </TableRow>
@@ -316,6 +321,21 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
                   </TableCell>
                   <TableCell className="px-2 text-center text-xs">
                     {(lead as any).vivienda === 'si' ? <span className="text-warning font-bold">⚠️</span> : (lead as any).vivienda === 'no' ? <span className="text-success font-bold">✅</span> : <span className="text-muted-foreground">—</span>}
+                  </TableCell>
+                  <TableCell className="px-2 text-[10px] text-muted-foreground max-w-[100px] truncate" title={(lead as any).precio_propiedad_ok || ''}>
+                    {(lead as any).precio_propiedad_ok || '—'}
+                  </TableCell>
+                  <TableCell className="px-2 text-[10px] text-muted-foreground max-w-[80px] truncate" title={(lead as any).comuna_propiedad || ''}>
+                    {(lead as any).comuna_propiedad || '—'}
+                  </TableCell>
+                  <TableCell className="px-2 text-[10px] text-muted-foreground max-w-[80px] truncate" title={(lead as any).complementa_renta || ''}>
+                    {(lead as any).complementa_renta || '—'}
+                  </TableCell>
+                  <TableCell className="px-2 text-[10px] text-muted-foreground whitespace-nowrap">
+                    {(lead as any).preferencia_contacto === 'whatsapp' ? '💬' : (lead as any).preferencia_contacto === 'telefono' ? '📞' : '—'}
+                  </TableCell>
+                  <TableCell className="px-2 text-[10px] text-muted-foreground whitespace-nowrap">
+                    {(lead as any).horario_contacto || '—'}
                   </TableCell>
                   <TableCell className="px-2">
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-bold whitespace-nowrap">
