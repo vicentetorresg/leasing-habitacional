@@ -443,6 +443,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
   .dfs-inner{grid-template-columns:1fr}
   .fps-grid{grid-template-columns:1fr}
 }
+.hide-desk{display:none}
 @media(max-width:768px){
   nav{padding:14px 18px}
   nav.sc{padding:10px 18px}
@@ -461,7 +462,13 @@ footer{background:var(--navy);padding:56px 40px 28px}
   .hero-text>*:nth-child(4){animation-delay:.56s}
   .hero-h1{font-size:2.2rem;margin-bottom:10px}
   .hero-badge{margin-bottom:10px}
-  .hero-sub{font-size:0.88rem;margin-bottom:16px;display:none}
+  .hero-sub{font-size:0.88rem;margin-bottom:12px;display:none}
+  .hide-desk{display:block}
+  .hero-sub-mob{font-size:1rem;color:var(--teal);font-weight:800;margin-bottom:14px;opacity:0;transform:translateY(24px);animation:fadeUp .7s .44s forwards cubic-bezier(0.22,1,0.36,1)}
+  .hero-scroll-hint{display:flex;flex-direction:column;align-items:center;gap:4px;opacity:0;animation:fadeUp .7s .7s forwards cubic-bezier(0.22,1,0.36,1)}
+  .hero-scroll-hint span{font-size:0.75rem;font-weight:700;color:var(--text-s)}
+  .hero-scroll-hint .arrow{width:28px;height:28px;display:flex;align-items:center;justify-content:center;animation:bounceDown 1.5s ease-in-out infinite}
+  @keyframes bounceDown{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
   .hero-trust{gap:8px 14px}
   .qe-grid{grid-template-columns:1fr;gap:32px}
   .bens-grid{grid-template-columns:1fr}
@@ -559,10 +566,15 @@ footer{background:var(--navy);padding:56px 40px 28px}
         <div class="hero-badge"><span class="dot"></span>Programa MINVU &middot; DS120 &middot; Sin Pie</div>
         <h1 class="hero-h1">Deja de pagar arriendo<br>y compra tu vivienda<br><em>sin pie — con DS120.</em></h1>
         <p class="hero-sub">El subsidio DS120 es <strong>automático</strong> y cubre en promedio el <strong>30% del valor</strong> de tu vivienda. Accede a tu primera vivienda <strong>sin pie</strong> — contáctanos y te ayudamos a acceder a tu llave propia.</p>
+        <p class="hero-sub-mob hide-desk">Este es el momento para que compres tu casa propia 🏡</p>
         <div class="hero-trust">
           <div class="ht-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Respaldado por MINVU</div>
           <div class="ht-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Sin ahorro previo</div>
           <div class="ht-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Asesoría gratuita</div>
+        </div>
+        <div class="hero-scroll-hint hide-desk" onclick="document.getElementById('hfc').scrollIntoView({behavior:'smooth',block:'start'})">
+          <span>Verifica si calificas ↓</span>
+          <div class="arrow"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div>
         </div>
       </div>
 
