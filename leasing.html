@@ -970,6 +970,12 @@ footer{background:var(--navy);padding:56px 40px 28px}
 </div>
 
 <script>
+  // UTM capture
+  var _urlParams = new URLSearchParams(window.location.search);
+  var _utm = { source: _urlParams.get('utm_source')||'', medium: _urlParams.get('utm_medium')||'', campaign: _urlParams.get('utm_campaign')||'' };
+  if (_utm.source) sessionStorage.setItem('utm', JSON.stringify(_utm));
+  else { try { _utm = JSON.parse(sessionStorage.getItem('utm')||'{}'); } catch(e){ _utm={}; } }
+
   // ─── Analytics tracking ───
   var _sid = sessionStorage.getItem('a_sid');
   if (!_sid) { _sid = Math.random().toString(36).substr(2,12) + Date.now().toString(36); sessionStorage.setItem('a_sid', _sid); }
@@ -1478,7 +1484,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     const horaEl = document.getElementById(prefix+'-hora');
     if (!horaEl || !horaEl.value) { alert('Por favor selecciona un horario de contacto.'); return; }
     if (prefix === 'hf') setHfStep(3);
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, preferencia_contacto:contactoPref.value, horario_contacto:horaEl.value, fuente:src});
+    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, preferencia_contacto:contactoPref.value, horario_contacto:horaEl.value, fuente:src, utm_source:_utm.source||'', utm_medium:_utm.medium||'', utm_campaign:_utm.campaign||''});
     markAllFormsSubmitted(n, contactoPref.value, horaEl.value, r?r.value:'');
   }
 
@@ -1522,7 +1528,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (!contactoPref) { alert('Por favor indica cómo prefieres que te contactemos.'); return; }
     const horaEl = document.getElementById(prefix+'-hora');
     if (!horaEl || !horaEl.value) { alert('Por favor selecciona un horario de contacto.'); return; }
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:cf.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, preferencia_contacto:contactoPref.value, horario_contacto:horaEl.value, fuente:src||prefix});
+    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:cf.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, preferencia_contacto:contactoPref.value, horario_contacto:horaEl.value, fuente:src||prefix, utm_source:_utm.source||'', utm_medium:_utm.medium||'', utm_campaign:_utm.campaign||''});
     markAllFormsSubmitted(n, contactoPref.value, horaEl.value, r?r.value:'');
   }
 
@@ -1533,7 +1539,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (d.value === 'si') { document.getElementById(id+'-dicom-err').style.display = 'flex'; return; }
     const t = document.getElementById(id+'-t').value.trim();
     if (!t) { alert('Por favor ingresa tu número de WhatsApp.'); return; }
-    saveLead({telefono:t, dicom:d.value, fuente:fuente||id});
+    saveLead({telefono:t, dicom:d.value, fuente:fuente||id, utm_source:_utm.source||'', utm_medium:_utm.medium||'', utm_campaign:_utm.campaign||''});
     document.getElementById(id+'-row').style.display = 'none';
     document.getElementById(id+'-ok').style.display = 'block';
     const msg = encodeURIComponent(`Hola, quiero evaluarme para el DS120.`);

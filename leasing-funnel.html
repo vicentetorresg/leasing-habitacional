@@ -314,6 +314,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
     document.getElementById('hfc').scrollIntoView({behavior:'smooth',block:'start'});
   });
 
+  // UTM capture
+  var _urlParams = new URLSearchParams(window.location.search);
+  var _utm = { source: _urlParams.get('utm_source')||'', medium: _urlParams.get('utm_medium')||'', campaign: _urlParams.get('utm_campaign')||'' };
+  if (_utm.source) sessionStorage.setItem('utm', JSON.stringify(_utm));
+  else { try { _utm = JSON.parse(sessionStorage.getItem('utm')||'{}'); } catch(e){ _utm={}; } }
+
   // Analytics
   var _sid = sessionStorage.getItem('a_sid');
   if (!_sid) { _sid = Math.random().toString(36).substr(2,12) + Date.now().toString(36); sessionStorage.setItem('a_sid', _sid); }
@@ -664,7 +670,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
     var horaEl = document.getElementById(prefix+'-hora');
     if (!horaEl || !horaEl.value) { alert('Por favor selecciona un horario de contacto.'); return; }
     setHfStep(3);
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, preferencia_contacto:contactoPref.value, horario_contacto:horaEl.value, fuente:src});
+    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, preferencia_contacto:contactoPref.value, horario_contacto:horaEl.value, fuente:src, utm_source:_utm.source||'', utm_medium:_utm.medium||'', utm_campaign:_utm.campaign||''});
 
     // Show success
     var content = document.getElementById('hf-content');
