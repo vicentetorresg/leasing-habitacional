@@ -987,7 +987,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
         'Content-Type': 'application/json',
         'Prefer': 'return=minimal'
       },
-      body: JSON.stringify({ session_id: _sid, event: evt, form_id: formId||null, field: field||null, value: val||null, device: _dev })
+      body: JSON.stringify({ session_id: _sid, event: evt, form_id: formId||null, field: field||null, value: val||null, device: _dev, page: 'leasing' })
     }).catch(function(){});
   }
   aTrack('page_view');

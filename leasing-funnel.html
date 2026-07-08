@@ -331,7 +331,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
         'Content-Type': 'application/json',
         'Prefer': 'return=minimal'
       },
-      body: JSON.stringify({ session_id: _sid, event: evt, form_id: formId||null, field: field||null, value: val||null, device: _dev })
+      body: JSON.stringify({ session_id: _sid, event: evt, form_id: formId||null, field: field||null, value: val||null, device: _dev, page: 'funnel' })
     }).catch(function(){});
   }
   aTrack('page_view');

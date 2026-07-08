@@ -52,6 +52,11 @@ tr:hover td{background:#fafaf8}
     <button data-days="30">30 dias</button>
     <button data-days="0">Todo</button>
   </div>
+  <div class="filters" id="page-filters">
+    <button class="active" data-page="all">Todas</button>
+    <button data-page="leasing">Leasing</button>
+    <button data-page="funnel">Funnel</button>
+  </div>
 
   <div id="content"><div class="loading">Cargando datos...</div></div>
 </div>
@@ -62,6 +67,7 @@ const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 
 let allData = [];
 let currentDays = 1;
+let currentPage = 'all';
 
 async function fetchData() {
   const res = await fetch(SUPA_URL + '?select=*&order=created_at.desc&limit=10000', {
@@ -79,8 +85,13 @@ function filterByDays(days) {
   return allData.filter(e => new Date(e.created_at) >= cutoff);
 }
 
+function filterByPage(data) {
+  if (currentPage === 'all') return data;
+  return data.filter(e => e.page === currentPage);
+}
+
 function render() {
-  const data = filterByDays(currentDays);
+  const data = filterByPage(filterByDays(currentDays));
   const sessions = new Set(data.map(e => e.session_id));
   const byEvent = {};
   data.forEach(e => {
@@ -187,12 +198,21 @@ function render() {
   document.getElementById('content').innerHTML = html;
 }
 
-// Filter buttons
+// Filter buttons — days
 document.getElementById('filters').addEventListener('click', function(e) {
   if (e.target.tagName !== 'BUTTON') return;
-  document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#filters button').forEach(b => b.classList.remove('active'));
   e.target.classList.add('active');
   currentDays = parseInt(e.target.dataset.days);
+  render();
+});
+
+// Filter buttons — page
+document.getElementById('page-filters').addEventListener('click', function(e) {
+  if (e.target.tagName !== 'BUTTON') return;
+  document.querySelectorAll('#page-filters button').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  currentPage = e.target.dataset.page;
   render();
 });
 
