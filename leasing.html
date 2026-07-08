@@ -1454,7 +1454,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
         var e = data.email ? await sha256(data.email.toLowerCase().trim()) : '';
         var p = data.telefono ? await sha256(data.telefono.replace(/\D/g,'')) : '';
         if (e || p) ttq.identify({ email: e, phone_number: p });
-        ttq.track('CompleteRegistration');
+        ttq.track('Lead');
       })();
     }
   }
