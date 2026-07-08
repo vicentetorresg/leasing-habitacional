@@ -4,6 +4,7 @@
     { "source": "/flujo-operacional", "destination": "/flujo-operacional.html" },
     { "source": "/casa-pronta", "destination": "/casa-pronta.html" },
     { "source": "/propiedades", "destination": "/assetplan" },
+    { "source": "/leasing-funnel", "destination": "/leasing-funnel.html" },
     { "source": "/crm", "destination": "/crm-dist/index" },
     { "source": "/crm/:path*", "destination": "/crm-dist/index" }
   ],
