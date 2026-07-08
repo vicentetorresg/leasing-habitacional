@@ -47,10 +47,10 @@ tr:hover td{background:#fafaf8}
   <p class="sub">Datos en tiempo real desde analytics_events</p>
 
   <div class="filters" id="filters">
-    <button class="active" data-days="1">Hoy</button>
+    <button class="active" data-days="today">Hoy</button>
     <button data-days="7">7 dias</button>
     <button data-days="30">30 dias</button>
-    <button data-days="0">Todo</button>
+    <button data-days="all">Todo</button>
   </div>
   <div class="filters" id="page-filters">
     <button class="active" data-page="all">Todas</button>
@@ -66,7 +66,7 @@ const SUPA_URL = 'https://unptkiyggkuxtkzedluv.supabase.co/rest/v1/analytics_eve
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVucHRraXlnZ2t1eHRremVkbHV2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTMxMTU1OCwiZXhwIjoyMDk0ODg3NTU4fQ.vx78MEuZFpc57IC9I36rmLHUvi8XbWAs3nk-HiQca4E';
 
 let allData = [];
-let currentDays = 1;
+let currentDays = 'today';
 let currentPage = 'all';
 
 async function fetchData() {
@@ -78,10 +78,14 @@ async function fetchData() {
 }
 
 function filterByDays(days) {
-  if (days === 0) return allData;
+  if (days === 'all') return allData;
   const cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - days);
-  cutoff.setHours(0,0,0,0);
+  if (days === 'today') {
+    cutoff.setHours(0,0,0,0);
+  } else {
+    cutoff.setDate(cutoff.getDate() - parseInt(days));
+    cutoff.setHours(0,0,0,0);
+  }
   return allData.filter(e => new Date(e.created_at) >= cutoff);
 }
 
@@ -203,7 +207,7 @@ document.getElementById('filters').addEventListener('click', function(e) {
   if (e.target.tagName !== 'BUTTON') return;
   document.querySelectorAll('#filters button').forEach(b => b.classList.remove('active'));
   e.target.classList.add('active');
-  currentDays = parseInt(e.target.dataset.days);
+  currentDays = e.target.dataset.days;
   render();
 });
 
