@@ -7,6 +7,7 @@
     { "source": "/leasing-funnel", "destination": "/leasing-funnel.html" },
     { "source": "/leasing-dm-tiktok", "destination": "/leasing-dm-tiktok.html" },
     { "source": "/leasing-dm-meta", "destination": "/leasing-dm-meta.html" },
+    { "source": "/leasing-tiktok-ads", "destination": "/leasing-tiktok-ads.html" },
     { "source": "/crm", "destination": "/crm-dist/index" },
     { "source": "/crm/:path*", "destination": "/crm-dist/index" }
   ],
