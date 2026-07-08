@@ -115,7 +115,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, precio_propiedad_ok, complementa_renta, preferencia_contacto, horario_contacto, fuente } = req.body || {};
+  const { nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, precio_propiedad_ok, complementa_renta, preferencia_contacto, horario_contacto, fuente, utm_source, utm_medium, utm_campaign } = req.body || {};
   if (!nombre || !telefono) return res.status(400).json({ error: 'Faltan campos' });
 
   const SUPA_URL = 'https://unptkiyggkuxtkzedluv.supabase.co/rest/v1/leasing_leads';
@@ -136,7 +136,7 @@ export default async function handler(req, res) {
   // Try with contrato + vivienda columns
   const r1 = await fetch(SUPA_URL, {
     method: 'POST', headers: supaHeaders,
-    body: JSON.stringify({ nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, precio_propiedad_ok, complementa_renta, preferencia_contacto, horario_contacto, fuente })
+    body: JSON.stringify({ nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, precio_propiedad_ok, complementa_renta, preferencia_contacto, horario_contacto, fuente, utm_source, utm_medium, utm_campaign })
   });
   if (r1.ok) { saved = true; }
   if (!saved) {
@@ -174,6 +174,9 @@ export default async function handler(req, res) {
     complementa_renta: complementa_renta || null,
     preferencia_contacto: preferencia_contacto || null,
     horario_contacto: horario_contacto || null,
+    utm_source: utm_source || null,
+    utm_medium: utm_medium || null,
+    utm_campaign: utm_campaign || null,
   };
   await fetch(CRM_URL, {
     method: 'POST',

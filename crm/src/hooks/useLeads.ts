@@ -47,6 +47,9 @@ export interface Lead {
   complementa_renta: string | null;
   preferencia_contacto: string | null;
   horario_contacto: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
 }
 
 // Statuses that mean the lead is still pending (ejecutiva view)

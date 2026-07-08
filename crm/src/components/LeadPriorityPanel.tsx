@@ -1202,6 +1202,7 @@ function EditableLeadGrid({ lead, userRole, onSaved }: { lead: Lead; userRole?: 
       {renderField('rut', 'RUT', lead.rut || '—')}
       {renderField('en_dicom', 'DICOM', lead.en_dicom ? '⚠️ Sí' : '✅ No', lead.en_dicom ?? false)}
       {renderField('source', 'Fuente', formatSource(lead.source))}
+      <DetailItem label="Plataforma" value={(() => { const u = (lead.utm_source || '').toLowerCase(); if (u.includes('facebook') || u.includes('fb') || u.includes('ig') || u.includes('meta')) return '📘 META'; if (u.includes('tiktok') || u.includes('tt')) return '🎵 TikTok'; if (u.includes('google')) return '🔍 Google'; if (u) return u; return '🌐 Orgánico'; })()} />
       {(lead as any).arriendo && <DetailItem label="Arriendo actual" value={(lead as any).arriendo} />}
       {(lead as any).contrato != null && <DetailItem label="Contrato indefinido" value={(lead as any).contrato === 'si' ? '✅ Sí' : '❌ No'} />}
       {(lead as any).vivienda != null && <DetailItem label="Tiene vivienda" value={(lead as any).vivienda === 'si' ? '⚠️ Sí' : '✅ No'} />}

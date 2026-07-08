@@ -39,6 +39,25 @@ function formatSource(source: string): string {
   return source;
 }
 
+function formatAdPlatform(lead: Lead): { label: string; style: string } {
+  const utm = (lead.utm_source || '').toLowerCase();
+  if (utm.includes('facebook') || utm.includes('fb') || utm.includes('ig') || utm.includes('instagram') || utm.includes('meta'))
+    return { label: 'META', style: 'bg-blue-500/15 text-blue-600' };
+  if (utm.includes('tiktok') || utm.includes('tt'))
+    return { label: 'TikTok', style: 'bg-pink-500/15 text-pink-600' };
+  if (utm.includes('google'))
+    return { label: 'Google', style: 'bg-yellow-500/15 text-yellow-700' };
+  if (utm)
+    return { label: utm, style: 'bg-muted text-muted-foreground' };
+  return { label: 'Orgánico', style: 'bg-emerald-500/15 text-emerald-600' };
+}
+
+const PRIORITY_CONFIG: Record<string, { label: string; style: string }> = {
+  alta: { label: '🔴 Alta', style: 'bg-destructive/15 text-destructive' },
+  media: { label: '🟡 Media', style: 'bg-warning/15 text-warning' },
+  baja: { label: '🟢 Baja', style: 'bg-success/15 text-success' },
+};
+
 function formatSueldo(lead: Lead): string {
   if (lead.sueldo_liquido_raw) return lead.sueldo_liquido_raw;
   if (lead.sueldo_liquido) return `$${lead.sueldo_liquido.toLocaleString('es-CL')}`;
@@ -250,7 +269,9 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
               <TableHead className="px-2">Complementa</TableHead>
               <TableHead className="px-2">Contacto</TableHead>
               <TableHead className="px-2">Horario</TableHead>
+              <TableHead className="px-2">Prioridad</TableHead>
               <TableHead className="px-2">Fuente</TableHead>
+              <TableHead className="px-2">Plataforma</TableHead>
               <TableHead className="px-2">DICOM</TableHead>
               <TableHead className="px-2">Intentos</TableHead>
               <TableHead
@@ -270,7 +291,7 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
           <TableBody>
             {sorted.length === 0 && (
               <TableRow>
-                <TableCell colSpan={18} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={20} className="text-center py-8 text-muted-foreground">
                   {searchInput || statusFilter !== 'all' ? 'Sin resultados para este filtro' : 'No hay leads pendientes'}
                 </TableCell>
               </TableRow>
@@ -338,9 +359,19 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
                     {(lead as any).horario_contacto || '—'}
                   </TableCell>
                   <TableCell className="px-2">
+                    {(() => { const p = PRIORITY_CONFIG[lead.priority] || { label: lead.priority, style: 'bg-muted text-muted-foreground' }; return (
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap ${p.style}`}>{p.label}</span>
+                    ); })()}
+                  </TableCell>
+                  <TableCell className="px-2">
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-bold whitespace-nowrap">
                       {formatSource(lead.source)}
                     </span>
+                  </TableCell>
+                  <TableCell className="px-2">
+                    {(() => { const ap = formatAdPlatform(lead); return (
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap ${ap.style}`}>{ap.label}</span>
+                    ); })()}
                   </TableCell>
                   <TableCell className="px-2 text-xs text-center">
                     {lead.en_dicom ? <span className="text-destructive font-bold">⚠️</span> : <span className="text-success">✅</span>}
