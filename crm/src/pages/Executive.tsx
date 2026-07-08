@@ -159,7 +159,7 @@ const Executive = () => {
 
   // Metrics
   const totalToday = todayLeads.length;
-  const answered = todayLeads.filter(l => l.status === 'contactado' || l.status === 'cliente_interesado' || l.status === 'solicitando_documentos').length;
+  const answered = todayLeads.filter(l => l.status === 'contactado' || l.status === 'cliente_interesado' || l.status === 'solicitando_documentos' || l.status === 'esperando_documentos').length;
   const noAnswer = todayLeads.filter(l => l.status === 'recontactar' || l.status === 'no_contesta').length;
   const contactRate = totalToday > 0 ? Math.round((answered / totalToday) * 100) : 0;
 
@@ -227,6 +227,10 @@ const Executive = () => {
         status = 'no_contesta';
         outcome = 'no_contesta';
         break;
+      case 'esperando_documentos':
+        status = 'esperando_documentos';
+        outcome = 'esperando_documentos';
+        break;
     }
 
     const lead = leads.find(l => l.id === leadId);
@@ -285,6 +289,7 @@ const Executive = () => {
       asesoria_agendada: 'Asesoría agendada',
       asesoria_concretada: 'Asesoría concretada',
       recontactar: 'Recontactar',
+      esperando_documentos: 'Esperando Documentos',
       departamento_reservado: 'Departamento reservado',
       reciclado: 'Reciclado',
     };

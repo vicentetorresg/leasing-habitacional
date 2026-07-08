@@ -71,7 +71,7 @@ export function useLeads(userId?: string, isAdmin?: boolean, userEmail?: string,
       .order('created_at', { ascending: false });
 
     // All users see all leads (no assigned_to filter)
-    const EJECUTIVA_STATUSES = ['nuevo', 'contactado', 'recontactar', 'no_contesta', 'no_califica', 'calling'];
+    const EJECUTIVA_STATUSES = ['nuevo', 'contactado', 'recontactar', 'no_contesta', 'no_califica', 'calling', 'esperando_documentos'];
 
     if (isAdmin || userId) {
       query = query.in('status', EJECUTIVA_STATUSES);

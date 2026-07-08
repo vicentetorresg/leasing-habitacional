@@ -934,6 +934,7 @@ const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, animationKey,
           <ActionButton onClick={() => handleAction('no_contesta')} emoji="📵" label="No Contesta" variant="accent" />
           <ActionButton onClick={() => handleAction('no_califica')} emoji="🚫" label="No Califica" variant="muted" />
           <ActionButton onClick={() => handleAction('cliente_interesado')} emoji="⭐" label="Cliente Interesado" variant="success" />
+          <ActionButton onClick={() => handleAction('esperando_documentos')} emoji="📄" label="Esperando Docs" variant="warning" />
         </div>
 
         {/* Tasks Section */}
