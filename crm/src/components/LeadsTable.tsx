@@ -41,6 +41,13 @@ function formatSource(source: string): string {
 
 function formatAdPlatform(lead: Lead): { label: string; style: string } {
   const utm = (lead.utm_source || '').toLowerCase();
+  const src = (lead.source || '').toLowerCase();
+  // DM detection from source field
+  if (src.startsWith('dm tiktok'))
+    return { label: 'DM TikTok', style: 'bg-pink-500/15 text-pink-600' };
+  if (src.startsWith('dm meta'))
+    return { label: 'DM Meta', style: 'bg-blue-500/15 text-blue-600' };
+  // UTM detection from ads
   if (utm.includes('facebook') || utm.includes('fb') || utm.includes('ig') || utm.includes('instagram') || utm.includes('meta'))
     return { label: 'META', style: 'bg-blue-500/15 text-blue-600' };
   if (utm.includes('tiktok') || utm.includes('tt'))
@@ -49,6 +56,11 @@ function formatAdPlatform(lead: Lead): { label: string; style: string } {
     return { label: 'Google', style: 'bg-yellow-500/15 text-yellow-700' };
   if (utm)
     return { label: utm, style: 'bg-muted text-muted-foreground' };
+  // Source-based fallback
+  if (src.startsWith('meta ads'))
+    return { label: 'META', style: 'bg-blue-500/15 text-blue-600' };
+  if (src.startsWith('tiktok ads'))
+    return { label: 'TikTok', style: 'bg-pink-500/15 text-pink-600' };
   return { label: 'Orgánico', style: 'bg-emerald-500/15 text-emerald-600' };
 }
 
