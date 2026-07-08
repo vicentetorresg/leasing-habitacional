@@ -5,6 +5,8 @@
     { "source": "/casa-pronta", "destination": "/casa-pronta.html" },
     { "source": "/propiedades", "destination": "/assetplan" },
     { "source": "/leasing-funnel", "destination": "/leasing-funnel.html" },
+    { "source": "/leasing-dm-tiktok", "destination": "/leasing-dm-tiktok.html" },
+    { "source": "/leasing-dm-meta", "destination": "/leasing-dm-meta.html" },
     { "source": "/crm", "destination": "/crm-dist/index" },
     { "source": "/crm/:path*", "destination": "/crm-dist/index" }
   ],
