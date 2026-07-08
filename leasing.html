@@ -533,7 +533,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
             <div class="f-field"><label class="f-field-lbl">👤 Nombre completo <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="hf-n" placeholder="Ej: Ana García López" autocomplete="name" tabindex="-1"></div>
             <div class="f-field"><label class="f-field-lbl">📱 WhatsApp <span style="color:#c0392b">*</span></label><input class="f-input" type="tel" id="hf-t" placeholder="+56 9 XXXX XXXX" name="phone" autocomplete="tel" tabindex="-1"></div>
             <div class="f-field"><label class="f-field-lbl">✉️ Correo electrónico <span style="color:#c0392b">*</span></label><input class="f-input" type="email" id="hf-e" placeholder="tucorreo@email.com" autocomplete="email" tabindex="-1"></div>
-            <div class="f-field"><label class="f-field-lbl">🏠 Arriendo actual <span style="color:#c0392b">*</span></label><div class="cs cs-arriendo" data-target="hf-a"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-a" value=""></div></div>
+            <div class="f-field"><label class="f-field-lbl">🏠 Arriendo actual</label><div class="cs cs-arriendo" data-target="hf-a"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-a" value=""></div></div>
             <div class="f-field"><label class="f-field-lbl">💰 Sueldo líquido mensual <span style="color:#c0392b">*</span></label><div class="cs cs-renta" data-target="hf-r" data-form="hf"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-r" value=""></div></div>
             <div class="dicom-block" id="hf-renta-err" style="display:none">🚫 La renta mínima requerida es $800.000 líquidos mensuales.</div>
             <div class="f-group"><label>¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:#666">Pareja, familiar, amigo/a, etc. Esto permite acceder a propiedades de mayor valor.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="si" tabindex="-1"> Sí, puedo complementar renta</label><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="no" tabindex="-1"> No, solo con mi renta</label></div><div id="hf-complementa-quien-wrap" style="display:none;margin-top:10px;background:#f7faf9;border:1.5px solid #ccc;border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">👥 ¿Con quién complementas? <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="hf-complementa-quien" placeholder="Ej: Mi pareja, hermano/a, primo/a, amigo/a, padre/madre..." style="border:1.5px solid #ccc;background:#fff"></div><div class="dicom-block" id="hf-complementa-msg" style="display:none">⚠️ Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
@@ -684,7 +684,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
             <input class="f-input f-input-d" type="text" id="f2-n" placeholder="Nombre completo *" autocomplete="name">
             <input class="f-input f-input-d" type="tel" id="f2-t" placeholder="WhatsApp *" name="phone" autocomplete="tel">
             <input class="f-input f-input-d" type="email" id="f2-e" placeholder="Correo electrónico *" autocomplete="email">
-            <div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:4px">🏠 Arriendo actual <span style="color:#e74c3c">*</span></div><div class="cs cs-d cs-arriendo" data-target="f2-a"><div class="cs-trigger placeholder">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="f2-a" value=""></div>
+            <div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:4px">🏠 Arriendo actual</div><div class="cs cs-d cs-arriendo" data-target="f2-a"><div class="cs-trigger placeholder">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="f2-a" value=""></div>
             <div class="cs cs-d cs-renta" data-target="f2-r" data-form="f2"><div class="cs-trigger placeholder">Sueldo líquido mensual *</div><div class="cs-opts"></div><input type="hidden" id="f2-r" value=""></div>
             <div class="dicom-block dicom-block-d" id="f2-renta-err" style="display:none">🚫 La renta mínima requerida es $800.000 líquidos mensuales.</div>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:rgba(255,255,255,0.5)">Pareja, familiar, amigo/a, etc.</span></div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="complementa-f2" value="si"> Sí, puedo complementar renta</label><label class="f-radio-lbl-d"><input type="radio" name="complementa-f2" value="no"> No, solo con mi renta</label></div><div id="f2-complementa-quien-wrap" style="display:none;margin-top:10px;background:rgba(45,184,158,0.12);border:2px solid var(--teal);border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:#2DB89E;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">👥 ¿Con quién complementas? <span style="color:#ff7675">*</span></label><input class="f-input f-input-d" type="text" id="f2-complementa-quien" placeholder="Ej: Mi pareja, hermano/a, primo/a, amigo/a, padre/madre..." style="border:2px solid var(--teal);background:rgba(255,255,255,0.1)"></div><div class="dicom-block dicom-block-d" id="f2-complementa-msg" style="display:none">⚠️ Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
@@ -792,7 +792,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
           <div class="f-group"><label>WhatsApp *</label><input class="f-input" type="tel" id="f3-t" placeholder="+56 9 XXXX XXXX" name="phone" autocomplete="tel"></div>
         </div>
         <div class="f-group"><label>Correo electrónico *</label><input class="f-input" type="email" id="f3-e" placeholder="tucorreo@email.com" autocomplete="email"></div>
-        <div class="f-group"><label>🏠 Arriendo actual <span style="color:#c0392b">*</span></label>
+        <div class="f-group"><label>🏠 Arriendo actual</label>
           <div class="cs cs-arriendo" data-target="f3-a"><div class="cs-trigger placeholder">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="f3-a" value=""></div>
         </div>
         <div class="f-group"><label>Sueldo líquido mensual *</label><div class="cs cs-renta" data-target="f3-r" data-form="f3"><div class="cs-trigger placeholder">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="f3-r" value=""></div><div class="dicom-block" id="f3-renta-err" style="display:none">🚫 La renta mínima requerida es $800.000 líquidos mensuales.</div></div>
@@ -1454,7 +1454,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (!viv) { alert('Por favor indica si tú o tu cónyuge tiene una vivienda actualmente.'); return; }
     if (viv.value === 'si') { document.getElementById(prefix+'-vivienda-err').style.display = 'flex'; return; }
     const a = document.getElementById(prefix+'-a');
-    if (a && !a.value) { alert('Por favor indica cuánto pagas de arriendo.'); return; }
+    // arriendo optional
     const r = document.getElementById(prefix+'-r');
     if (r && (!r.value || r.value === 'Menos de $800.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $800.000).'); return; }
     const pv = document.querySelector(`input[name="prop-vista-${prefix}"]:checked`);
@@ -1499,7 +1499,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (!viv) { alert('Por favor indica si tú o tu cónyuge tiene una vivienda actualmente.'); return; }
     if (viv.value === 'si') { document.getElementById(prefix+'-vivienda-err').style.display = 'flex'; return; }
     const a = document.getElementById(prefix+'-a');
-    if (a && !a.value) { alert('Por favor indica cuánto pagas de arriendo.'); return; }
+    // arriendo optional
     const r = document.getElementById(prefix+'-r');
     if (r && (!r.value || r.value === 'Menos de $800.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $800.000).'); return; }
     const pv = document.querySelector(`input[name="prop-vista-${prefix}"]:checked`);
