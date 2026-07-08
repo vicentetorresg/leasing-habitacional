@@ -978,6 +978,12 @@ footer{background:var(--navy);padding:56px 40px 28px}
   if (_utm.source) sessionStorage.setItem('utm', JSON.stringify(_utm));
   else { try { _utm = JSON.parse(sessionStorage.getItem('utm')||'{}'); } catch(e){ _utm={}; } }
 
+  // SHA-256 for TikTok identify
+  async function sha256(str) {
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
   // ─── Analytics tracking ───
   var _sid = sessionStorage.getItem('a_sid');
   if (!_sid) { _sid = Math.random().toString(36).substr(2,12) + Date.now().toString(36); sessionStorage.setItem('a_sid', _sid); }
@@ -1443,7 +1449,14 @@ footer{background:var(--navy);padding:56px 40px 28px}
     }).catch(() => {});
 
     if (typeof fbq !== 'undefined') fbq('track', 'Lead');
-    if (typeof ttq !== 'undefined') ttq.track('CompleteRegistration');
+    if (typeof ttq !== 'undefined') {
+      (async function(){
+        var e = data.email ? await sha256(data.email.toLowerCase().trim()) : '';
+        var p = data.telefono ? await sha256(data.telefono.replace(/\D/g,'')) : '';
+        if (e || p) ttq.identify({ email: e, phone_number: p });
+        ttq.track('CompleteRegistration');
+      })();
+    }
   }
 
   // generic form handler (nombre, telefono, email, arriendo)
