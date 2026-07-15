@@ -185,3 +185,142 @@
 .animate-card-out {
   animation: card-selected-out 0.3s ease-in forwards;
 }
+
+/* Hide native scrollbar but keep scroll functionality (custom scrollbar replaces it) */
+.kanban-hide-native-scroll::-webkit-scrollbar {
+  display: none;
+}
+.kanban-hide-native-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Styled always-visible scrollbar for leads table */
+.table-styled-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #8a7e6e #d6cfc6;
+}
+.table-styled-scroll::-webkit-scrollbar {
+  height: 12px;
+  display: block !important;
+}
+.table-styled-scroll::-webkit-scrollbar-track {
+  background: #d6cfc6;
+  border-radius: 6px;
+}
+.table-styled-scroll::-webkit-scrollbar-thumb {
+  background: #8a7e6e;
+  border-radius: 6px;
+  border: 2px solid #d6cfc6;
+}
+.table-styled-scroll::-webkit-scrollbar-thumb:hover {
+  background: #6e6458;
+}
+
+/* Force always-visible horizontal scrollbar (overrides macOS overlay) */
+.always-show-hscroll {
+  overflow-x: scroll !important;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-color: #8a7e6e #d6cfc6;
+}
+.always-show-hscroll::-webkit-scrollbar {
+  -webkit-appearance: none;
+  height: 14px;
+}
+.always-show-hscroll::-webkit-scrollbar:vertical {
+  width: 0;
+  display: none;
+}
+.always-show-hscroll::-webkit-scrollbar-track:horizontal {
+  background: #d6cfc6;
+  border-radius: 7px;
+}
+.always-show-hscroll::-webkit-scrollbar-thumb:horizontal {
+  background: #8a7e6e;
+  border-radius: 7px;
+  border: 2px solid #d6cfc6;
+  min-width: 40px;
+}
+.always-show-hscroll::-webkit-scrollbar-thumb:horizontal:hover {
+  background: #6a5f50;
+}
+
+/* For containers that need both axes: show horizontal, hide vertical scrollbar */
+.always-show-hscroll-both {
+  overflow-x: scroll !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-color: #8a7e6e #d6cfc6;
+}
+.always-show-hscroll-both::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+.always-show-hscroll-both::-webkit-scrollbar:horizontal {
+  height: 14px;
+}
+.always-show-hscroll-both::-webkit-scrollbar:vertical {
+  width: 8px;
+}
+.always-show-hscroll-both::-webkit-scrollbar-track {
+  background: #d6cfc6;
+  border-radius: 7px;
+}
+.always-show-hscroll-both::-webkit-scrollbar-thumb {
+  background: #8a7e6e;
+  border-radius: 7px;
+  border: 2px solid #d6cfc6;
+}
+.always-show-hscroll-both::-webkit-scrollbar-thumb:hover {
+  background: #6a5f50;
+}
+
+/* Force persistent scrollbars (override macOS overlay setting) */
+[data-scroll-visible] {
+  overflow: scroll !important;
+  -webkit-overflow-scrolling: touch;
+}
+[data-scroll-x] {
+  overflow-x: scroll !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch;
+}
+[data-scroll-x]::-webkit-scrollbar {
+  -webkit-appearance: none;
+  height: 14px;
+}
+[data-scroll-x]::-webkit-scrollbar-track {
+  background: #e5e0db;
+  border-radius: 7px;
+}
+[data-scroll-x]::-webkit-scrollbar-thumb {
+  background: #a0937e;
+  border-radius: 7px;
+  border: 2px solid #e5e0db;
+}
+[data-scroll-x]::-webkit-scrollbar-thumb:hover {
+  background: #7a6f60;
+}
+[data-scroll-visible]::-webkit-scrollbar {
+  -webkit-appearance: none;
+  height: 14px;
+  width: 14px;
+}
+[data-scroll-visible]::-webkit-scrollbar-track {
+  background: #e5e0db;
+  border-radius: 7px;
+}
+[data-scroll-visible]::-webkit-scrollbar-thumb {
+  background: #a0937e;
+  border-radius: 7px;
+  border: 2px solid #e5e0db;
+}
+[data-scroll-visible]::-webkit-scrollbar-thumb:hover {
+  background: #7a6f60;
+}
+.dark [data-scroll-visible]::-webkit-scrollbar-track {
+  background: #2a2a2a;
+}
+.dark [data-scroll-visible]::-webkit-scrollbar-thumb {
+  background: #666;
+  border-color: #2a2a2a;
+}

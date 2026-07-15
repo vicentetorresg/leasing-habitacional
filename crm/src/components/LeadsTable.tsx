@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import type { Lead } from '@/hooks/useLeads';
 import { supabase } from '@/integrations/supabase/client';
 import {
@@ -103,6 +103,48 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
   const [searchInput, setSearchInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+
+  // Fixed-position horizontal scrollbar — uses direct DOM updates for smooth trackpad scrolling
+  const tableScrollRef = useRef<HTMLDivElement>(null);
+  const thumbRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [tScrollShow, setTScrollShow] = useState(false);
+  const tDrag = useRef<{ startX: number; startScroll: number } | null>(null);
+  const rafId = useRef(0);
+
+  const syncTableScroll = useCallback(() => {
+    cancelAnimationFrame(rafId.current);
+    rafId.current = requestAnimationFrame(() => {
+      const el = tableScrollRef.current;
+      if (!el) return;
+      const r = el.clientWidth / el.scrollWidth;
+      if (r >= 1) { setTScrollShow(false); return; }
+      setTScrollShow(true);
+      const tw = Math.max(60, el.clientWidth * r);
+      const ml = el.clientWidth - tw;
+      const sr = el.scrollLeft / (el.scrollWidth - el.clientWidth);
+      const thumb = thumbRef.current;
+      if (thumb) {
+        thumb.style.width = tw + 'px';
+        thumb.style.transform = `translateX(${ml * sr}px)`;
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    const el = tableScrollRef.current;
+    if (!el) return;
+    syncTableScroll();
+    el.addEventListener('scroll', syncTableScroll, { passive: true });
+    window.addEventListener('resize', syncTableScroll);
+    const iv = setInterval(syncTableScroll, 500);
+    return () => {
+      el.removeEventListener('scroll', syncTableScroll);
+      window.removeEventListener('resize', syncTableScroll);
+      clearInterval(iv);
+      cancelAnimationFrame(rafId.current);
+    };
+  }); // no deps - re-run when data loads
 
   // Debounce search to avoid re-filtering on every keystroke
   useEffect(() => {
@@ -254,8 +296,48 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
         </div>
       )}
 
+      {/* Horizontal scrollbar - above header */}
+      <div
+        ref={trackRef}
+        className="shrink-0"
+        onClick={(e) => {
+          const el = tableScrollRef.current;
+          if (!el || e.target !== e.currentTarget) return;
+          const rect = e.currentTarget.getBoundingClientRect();
+          el.scrollLeft = ((e.clientX - rect.left) / rect.width) * (el.scrollWidth - el.clientWidth);
+        }}
+        style={{ height: 16, background: '#d6cfc6', cursor: 'pointer', borderRadius: '4px 4px 0 0', display: tScrollShow ? 'block' : 'none' }}
+      >
+        <div
+          ref={thumbRef}
+          onPointerDown={(e) => {
+            e.preventDefault();
+            const el = tableScrollRef.current;
+            if (!el) return;
+            tDrag.current = { startX: e.clientX, startScroll: el.scrollLeft };
+            (e.target as HTMLElement).setPointerCapture(e.pointerId);
+          }}
+          onPointerMove={(e) => {
+            if (!tDrag.current) return;
+            const el = tableScrollRef.current;
+            const thumb = thumbRef.current;
+            if (!el || !thumb) return;
+            const thumbW = thumb.offsetWidth || 60;
+            const trackW = el.clientWidth - thumbW;
+            if (trackW > 0) el.scrollLeft = tDrag.current.startScroll + ((e.clientX - tDrag.current.startX) / trackW) * (el.scrollWidth - el.clientWidth);
+          }}
+          onPointerUp={() => { tDrag.current = null; }}
+          onPointerCancel={() => { tDrag.current = null; }}
+          style={{
+            position: 'relative', top: 3, height: 10, borderRadius: 5,
+            background: '#8a7e6e', cursor: 'grab', minWidth: 40,
+            willChange: 'transform, width',
+          }}
+        />
+      </div>
+
       {/* Table */}
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto kanban-hide-native-scroll" ref={tableScrollRef}>
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/30 hover:bg-muted/30">

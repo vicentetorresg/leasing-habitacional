@@ -91,7 +91,7 @@ export default async function handler(req, res) {
         <table width="100%" cellpadding="0" cellspacing="0" style="background:${isLeasing ? '#e8f7f5' : '#fff8ec'};border-radius:10px;border-left:4px solid ${accentColor}">
           <tr><td style="padding:16px 20px">
             <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:${accentColor}">ENVIAR DOCUMENTACIÓN A:</p>
-            <p style="margin:0;font-size:15px;font-weight:600;color:#1B2B5E">Rodrigo.canas@llavepropia.cl</p>
+            <p style="margin:0;font-size:15px;font-weight:600;color:#1B2B5E">contacto@llavepropia.cl</p>
           </td></tr>
         </table>
       </td></tr>
@@ -133,11 +133,11 @@ export default async function handler(req, res) {
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
-      'Authorization': 'Bearer re_fFtYwjwm_3YXpMdCWAgcnncKW48RTXSHa',
+      'Authorization': 'Bearer re_NeVqMbrF_GWVoxSQuwiMo1oLAZ6SEcuDr',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      from:     'Llave Propia Vivienda <notificaciones@llavepropia.cl>',
+      from:     'Llave Propia Vivienda <notificaciones@proppi.cl>',
       to:       [email],
       cc:       ['rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'],
       reply_to: ['rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl'],
