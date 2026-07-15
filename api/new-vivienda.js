@@ -9,8 +9,8 @@ export default async function handler(req, res) {
   if (!nombre || !telefono) return res.status(400).json({ error: 'Faltan campos' });
 
   const SUPA_URL = 'https://unptkiyggkuxtkzedluv.supabase.co/rest/v1/viviendas_leads';
-  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVucHRraXlnZ2t1eHRremVkbHV2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTMxMTU1OCwiZXhwIjoyMDk0ODg3NTU4fQ.vx78MEuZFpc57IC9I36rmLHUvi8XbWAs3nk-HiQca4E';
-  const RESEND_KEY = 're_NeVqMbrF_GWVoxSQuwiMo1oLAZ6SEcuDr';
+  const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const RESEND_KEY = process.env.RESEND_API_KEY;
 
   // 1. Save to Supabase
   const supaHeaders = {

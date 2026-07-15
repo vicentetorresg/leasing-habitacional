@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
 
-  const RESEND_KEY = 're_fFtYwjwm_3YXpMdCWAgcnncKW48RTXSHa';
+  const RESEND_KEY = process.env.RESEND_API_KEY;
   const CC_EMAILS = ['rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl', 'vicente@llavepropia.cl'];
   const REPLY_TO = ['rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl', 'vicente@llavepropia.cl'];
 
