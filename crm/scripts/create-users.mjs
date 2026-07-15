@@ -1,9 +1,9 @@
 // Script para crear usuarios del CRM Llave Propia
 // Ejecutar: node scripts/create-users.mjs
 
-const SUPABASE_URL = 'https://evuxdhvvarfxredghvpu.supabase.co';
-const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2dXhkaHZ2YXJmeHJlZGdodnB1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDY2NDg3MywiZXhwIjoyMDk2MjQwODczfQ.CmHahWoYtBcZHHJIF1tEOEfqx9Xe4unRpV2fpyvzVv8';
-const RESEND_API_KEY = 're_fFtYwjwm_3YXpMdCWAgcnncKW48RTXSHa';
+const SUPABASE_URL = process.env.CRM_SUPABASE_URL || 'https://evuxdhvvarfxredghvpu.supabase.co';
+const SERVICE_ROLE_KEY = process.env.CRM_SERVICE_ROLE_KEY;
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
 function randomPassword(len = 12) {
   const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$';
@@ -102,7 +102,7 @@ async function sendEmail(to, full_name, role, password) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'Llave Propia CRM <notificaciones@llavepropia.cl>',
+      from: 'Llave Propia CRM <notificaciones@proppi.cl>',
       to: [to],
       subject: 'Tu acceso al CRM Llave Propia',
       html,
