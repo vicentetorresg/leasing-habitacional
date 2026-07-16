@@ -1,4 +1,10 @@
 {
+  "crons": [
+    {
+      "path": "/api/vivienda-mailing",
+      "schedule": "0 14 * * *"
+    }
+  ],
   "cleanUrls": true,
   "rewrites": [
     { "source": "/flujo-operacional", "destination": "/flujo-operacional.html" },

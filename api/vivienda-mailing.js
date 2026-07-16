@@ -9,6 +9,11 @@ export default async function handler(req, res) {
 
   if (!CRM_KEY || !RESEND_KEY) return res.status(500).json({ error: 'Missing env vars' });
 
+  // Query params: ?force=1 to skip 2-day check, ?bcc=email to add BCC
+  const url = new URL(req.url, 'https://www.llavepropia.cl');
+  const force = url.searchParams.get('force') === '1';
+  const bccEmail = url.searchParams.get('bcc') || null;
+
   // Fetch viviendas in target statuses
   const vivRes = await fetch(
     `${CRM_URL}/rest/v1/viviendas?status=in.(esperando_ok_propietario,esperando_fotos_tasacion)&select=id,nombre,email,tipo_vivienda,comuna,direccion,status,last_mailing_at,photo_count,created_at`,
@@ -26,10 +31,15 @@ export default async function handler(req, res) {
     // Skip if no email
     if (!viv.email) { results.push({ id: viv.id, skipped: 'no email' }); continue; }
 
+    // Skip if already has photos
+    if (viv.photo_count && viv.photo_count >= 1) { results.push({ id: viv.id, skipped: 'has photos', photo_count: viv.photo_count }); continue; }
+
     // Check if 2 days have passed since last mailing (or since creation if never mailed)
-    const lastDate = viv.last_mailing_at ? new Date(viv.last_mailing_at) : new Date(viv.created_at);
-    const elapsed = now - lastDate;
-    if (elapsed < TWO_DAYS_MS) { results.push({ id: viv.id, skipped: 'too recent', hours_ago: Math.round(elapsed / 3600000) }); continue; }
+    if (!force) {
+      const lastDate = viv.last_mailing_at ? new Date(viv.last_mailing_at) : new Date(viv.created_at);
+      const elapsed = now - lastDate;
+      if (elapsed < TWO_DAYS_MS) { results.push({ id: viv.id, skipped: 'too recent', hours_ago: Math.round(elapsed / 3600000) }); continue; }
+    }
 
     const firstName = (viv.nombre || '').trim().split(' ')[0] || viv.nombre;
     const tipoLabel = viv.tipo_vivienda === 'departamento' ? 'departamento' : 'casa';
@@ -100,7 +110,8 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         from: 'Llave Oferta <notificaciones@proppi.cl>',
         to: [viv.email],
-        reply_to: ['rodrigo.canas@llavepropia.cl'],
+        ...(bccEmail ? { bcc: [bccEmail] } : {}),
+        reply_to: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'],
         subject,
         html
       })

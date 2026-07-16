@@ -62,8 +62,7 @@ export default async function handler(req, res) {
     body: JSON.stringify({
       from: 'Llave Oferta <notificaciones@proppi.cl>',
       to: [viv.email],
-      bcc: ['vicente@llavepropia.cl'],
-      reply_to: ['rodrigo.canas@llavepropia.cl'],
+      reply_to: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'],
       subject: 'Recibimos tus fotos — Llave Oferta',
       html
     })

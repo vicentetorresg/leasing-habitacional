@@ -1421,14 +1421,13 @@ footer{background:var(--navy);padding:56px 40px 28px}
       opt.textContent = r.v;
       opt.onclick = function(e) {
         e.stopPropagation();
-        if (r.blocked) { handleRentaComp(formId, r.v); return; }
         hidden.value = r.v;
         trigger.textContent = r.v;
         trigger.classList.remove('placeholder');
         optsEl.querySelectorAll('.cs-opt').forEach(function(o){o.classList.remove('selected')});
         opt.classList.add('selected');
         cs.classList.remove('open');
-        handleRentaComp(formId, r.v);
+        if (formId) handleRentaComp(formId, r.v);
       };
       optsEl.appendChild(opt);
     });
