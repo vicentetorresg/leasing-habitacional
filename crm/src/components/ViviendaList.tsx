@@ -500,21 +500,21 @@ const ViviendaList = () => {
       <div className="flex-1 overflow-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="bg-white text-left text-xs text-muted-foreground uppercase tracking-wider sticky top-0 z-10 shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
-              <th className="px-3 py-2">Estado</th>
-              <th className="px-3 py-2">Propietario</th>
-              <th className="px-3 py-2">Tipo</th>
-              <th className="px-3 py-2">Dirección</th>
-              <th className="px-3 py-2">Comuna</th>
-              <th className="px-3 py-2">Valor</th>
-              <th className="px-3 py-2">m2</th>
-              <th className="px-3 py-2">Dorm</th>
-              <th className="px-3 py-2">Baños</th>
-              <th className="px-3 py-2">Fotos</th>
-              <th className="px-3 py-2">Lead Interesado</th>
-              <th className="px-3 py-2">Notas</th>
-              <th className="px-3 py-2">Fecha</th>
-              <th className="px-3 py-2"></th>
+            <tr className="text-left text-xs text-muted-foreground uppercase tracking-wider sticky top-0 z-10" style={{ background: '#ffffff', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+              <th className="px-3 py-2 bg-white">Estado</th>
+              <th className="px-3 py-2 bg-white">Propietario</th>
+              <th className="px-3 py-2 bg-white">Tipo</th>
+              <th className="px-3 py-2 bg-white">Dirección</th>
+              <th className="px-3 py-2 bg-white">Comuna</th>
+              <th className="px-3 py-2 bg-white">Valor</th>
+              <th className="px-3 py-2 bg-white">m2</th>
+              <th className="px-3 py-2 bg-white">Dorm</th>
+              <th className="px-3 py-2 bg-white">Baños</th>
+              <th className="px-3 py-2 bg-white">Fotos</th>
+              <th className="px-3 py-2 bg-white">Lead Interesado</th>
+              <th className="px-3 py-2 bg-white">Notas</th>
+              <th className="px-3 py-2 bg-white">Fecha</th>
+              <th className="px-3 py-2 bg-white"></th>
             </tr>
           </thead>
           <tbody>
