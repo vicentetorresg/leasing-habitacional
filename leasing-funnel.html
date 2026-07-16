@@ -266,8 +266,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
         <div class="f-field"><label class="f-field-lbl">Correo electronico <span style="color:#c0392b">*</span></label><input class="f-input" type="email" id="hf-e" placeholder="tucorreo@email.com" autocomplete="email" tabindex="-1"></div>
         <div class="f-field"><label class="f-field-lbl">Arriendo actual</label><div class="cs cs-arriendo" data-target="hf-a"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-a" value=""></div></div>
         <div class="f-field"><label class="f-field-lbl">Sueldo liquido mensual <span style="color:#c0392b">*</span></label><div class="cs cs-renta" data-target="hf-r" data-form="hf"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-r" value=""></div></div>
-        <div class="dicom-block" id="hf-renta-err" style="display:none">La renta minima requerida es $900.000 liquidos mensuales.</div>
-        <div class="f-group"><label>¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:#666">Pareja, familiar, amigo/a, etc. Esto permite acceder a propiedades de mayor valor.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="si" tabindex="-1"> Si, puedo complementar renta</label><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="no" tabindex="-1"> No, solo con mi renta</label></div><div id="hf-complementa-quien-wrap" style="display:none;margin-top:10px;background:#f7faf9;border:1.5px solid #ccc;border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">¿Con quién complementas? <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="hf-complementa-quien" placeholder="Ej: Mi pareja, hermano/a, primo/a, amigo/a, padre/madre..." style="border:1.5px solid #ccc;background:#fff"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.5px">Sueldo liquido de esa persona <span style="color:#c0392b">*</span></label><div class="cs cs-renta-comp" data-target="hf-rc" data-form="hf"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-rc" value=""></div><div class="dicom-block" id="hf-renta-comp-err" style="display:none">La renta minima de quien complementa es $900.000 liquidos mensuales.</div></div><div class="dicom-block" id="hf-complementa-msg" style="display:none">Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
+        <div class="dicom-block" id="hf-renta-err" style="display:none">La renta minima requerida es $850.000 liquidos mensuales.</div>
+        <div class="f-group"><label>¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:#666">Pareja, familiar, amigo/a, etc. Esto permite acceder a propiedades de mayor valor.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="si" tabindex="-1"> Si, puedo complementar renta</label><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="no" tabindex="-1"> No, solo con mi renta</label></div><div id="hf-complementa-quien-wrap" style="display:none;margin-top:10px;background:#f7faf9;border:1.5px solid #ccc;border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">¿Con quién complementas? <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="hf-complementa-quien" placeholder="Ej: Mi pareja, hermano/a, primo/a, amigo/a, padre/madre..." style="border:1.5px solid #ccc;background:#fff"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.5px">Sueldo liquido de esa persona <span style="color:#c0392b">*</span></label><div class="cs cs-renta-comp" data-target="hf-rc" data-form="hf"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-rc" value=""></div><div class="dicom-block" id="hf-renta-comp-err" style="display:none">La renta minima de quien complementa es $850.000 liquidos mensuales.</div></div><div class="dicom-block" id="hf-complementa-msg" style="display:none">Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
         <div class="f-group"><label>¿Estás en DICOM? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="dicom-hf" value="no" onchange="handleDicom('hf','no')" tabindex="-1"> No estoy en DICOM</label><label class="f-radio-lbl"><input type="radio" name="dicom-hf" value="si" onchange="handleDicom('hf','si')" tabindex="-1"> Si estoy en DICOM</label></div><div class="dicom-block" id="hf-dicom-err" style="display:none">Mientras figures en DICOM no es posible acceder al Leasing Habitacional.</div></div>
         <div class="f-group"><label>¿Tienes contrato indefinido? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="contrato-hf" value="si" onchange="handleContrato('hf','si')" tabindex="-1"> Si, tengo contrato indefinido</label><label class="f-radio-lbl"><input type="radio" name="contrato-hf" value="no" onchange="handleContrato('hf','no')" tabindex="-1"> No tengo contrato indefinido</label></div><div class="dicom-block" id="hf-contrato-err" style="display:none">Se requiere contrato indefinido para acceder al Leasing Habitacional.</div></div>
         <div class="f-group"><label>¿Tú o tu cónyuge tiene una vivienda actualmente? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="vivienda-hf" value="no" onchange="handleVivienda('hf','no')" tabindex="-1"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl"><input type="radio" name="vivienda-hf" value="si" onchange="handleVivienda('hf','si')" tabindex="-1"> Si, tengo una vivienda</label></div><div class="dicom-block" id="hf-vivienda-err" style="display:none">El Leasing Habitacional es solo para personas sin vivienda propia.</div></div>
@@ -355,7 +355,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
   if (spEl) { spEl.textContent = String(new Date().getDate() * 5); }
 
   // Renta ranges that require complementa
-  var rentaComplementaObligatoria = ['$900.000 – $1.000.000','$1.000.001 – $1.100.000','$1.100.001 – $1.200.000'];
+  var rentaComplementaObligatoria = ['$850.000 – $1.000.000','$1.000.001 – $1.100.000','$1.100.001 – $1.200.000'];
 
   function updateButtonState(formId) {
     var btn = document.getElementById(formId + '-btn');
@@ -368,10 +368,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
     var compRadio = document.querySelector('input[name="complementa-' + formId + '"]:checked');
     var needsComp = rentaEl && rentaComplementaObligatoria.indexOf(rentaEl.value) !== -1;
     if      (dicom    && dicom.value    === 'si')              { blocked = true; msg = 'No puedes continuar — estas en DICOM'; }
-    else if (rentaEl  && rentaEl.value  === 'Menos de $900.000'){ blocked = true; msg = 'No puedes continuar — renta minima $900.000'; }
+    else if (rentaEl  && rentaEl.value  === 'Menos de $850.000'){ blocked = true; msg = 'No puedes continuar — renta minima $850.000'; }
     else if (needsComp && compRadio && compRadio.value === 'no'){ blocked = true; msg = 'Con tu renta, es obligatorio complementar con otra persona'; }
     var rcEl = document.getElementById(formId + '-rc');
-    if (!blocked && compRadio && compRadio.value === 'si' && rcEl && rcEl.value === 'Menos de $900.000') { blocked = true; msg = 'La persona que complementa no alcanza la renta minima ($900.000)'; }
+    if (!blocked && compRadio && compRadio.value === 'si' && rcEl && rcEl.value === 'Menos de $850.000') { blocked = true; msg = 'La persona que complementa no alcanza la renta minima ($850.000)'; }
     if (contrato && contrato.value === 'no')              { blocked = true; msg = 'Se requiere contrato indefinido para continuar'; }
     else if (vivienda && vivienda.value === 'si')              { blocked = true; msg = 'El DS120 es solo para personas sin vivienda propia'; }
     if (blocked) {
@@ -394,7 +394,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
   function handleRenta(formId, val) {
     aTrack('field_complete', formId, 'renta', val);
     var err = document.getElementById(formId + '-renta-err');
-    if (err) err.style.display = val === 'Menos de $900.000' ? 'flex' : 'none';
+    if (err) err.style.display = val === 'Menos de $850.000' ? 'flex' : 'none';
     var compMsg = document.getElementById(formId + '-complementa-msg');
     var needsComp = rentaComplementaObligatoria.indexOf(val) !== -1;
     var compSi = document.querySelector('input[name="complementa-' + formId + '"][value="si"]');
@@ -519,7 +519,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
   // Handle renta complemento select
   function handleRentaComp(formId, val) {
     var err = document.getElementById(formId + '-renta-comp-err');
-    if (err) err.style.display = val === 'Menos de $900.000' ? 'flex' : 'none';
+    if (err) err.style.display = val === 'Menos de $850.000' ? 'flex' : 'none';
     updateButtonState(formId);
   }
 
@@ -585,7 +585,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
   // Custom selects
   var arriendoOpts = ['No pago arriendo','Menos de $200.000','$200.000 – $300.000','$300.001 – $400.000','$400.001 – $500.000','$500.001 – $600.000','$600.001 – $700.000','$700.001 – $800.000','Mas de $800.000'];
   var rentaOpts = [
-    {v:'Menos de $900.000',blocked:true},{v:'$900.000 – $1.000.000'},
+    {v:'Menos de $850.000',blocked:true},{v:'$850.000 – $1.000.000'},
     {v:'$1.000.001 – $1.100.000'},{v:'$1.100.001 – $1.200.000'},
     {v:'$1.200.001 – $1.300.000'},{v:'$1.300.001 – $1.400.000'},{v:'$1.400.001 – $1.500.000'},
     {v:'$1.500.001 – $1.600.000'},{v:'$1.600.001 – $1.700.000'},{v:'$1.700.001 – $1.800.000'},
@@ -693,7 +693,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
     if (viv.value === 'si') { document.getElementById(prefix+'-vivienda-err').style.display = 'flex'; return; }
     var a = document.getElementById(prefix+'-a');
     var r = document.getElementById(prefix+'-r');
-    if (r && (!r.value || r.value === 'Menos de $900.000')) { alert('Por favor indica tu sueldo liquido mensual (minimo $900.000).'); return; }
+    if (r && (!r.value || r.value === 'Menos de $850.000')) { alert('Por favor indica tu sueldo liquido mensual (minimo $850.000).'); return; }
     var pv = document.querySelector('input[name="prop-vista-'+prefix+'"]:checked');
     if (!pv || pv.value !== 'si') { alert('Debes tener una propiedad vista para continuar.'); return; }
     var comunaProp = document.getElementById(prefix+'-comuna-val');
@@ -711,7 +711,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
     if (compVal === 'si' && !compQuienVal) { alert('Por favor indica con quien complementas renta.'); return; }
     var rcEl = document.getElementById(prefix+'-rc');
     var rentaCompVal = (compVal === 'si' && rcEl) ? rcEl.value : '';
-    if (compVal === 'si' && (!rentaCompVal || rentaCompVal === 'Menos de $900.000')) { alert('Por favor indica el sueldo liquido de quien complementa (minimo $900.000).'); return; }
+    if (compVal === 'si' && (!rentaCompVal || rentaCompVal === 'Menos de $850.000')) { alert('Por favor indica el sueldo liquido de quien complementa (minimo $850.000).'); return; }
     var complementaRenta = compVal === 'si' ? ('Si' + (compQuienVal ? ' — ' + compQuienVal : '')) : compVal === 'no' ? 'No' : '';
     var cuandoEl = document.querySelector('input[name="cuando-'+prefix+'"]:checked');
     if (!cuandoEl) { alert('Por favor indica cuando piensas comprar.'); return; }
