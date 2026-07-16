@@ -500,7 +500,7 @@ const ViviendaList = () => {
       <div className="flex-1 overflow-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="bg-muted/30 text-left text-xs text-muted-foreground uppercase tracking-wider sticky top-0 z-10">
+            <tr className="bg-white text-left text-xs text-muted-foreground uppercase tracking-wider sticky top-0 z-10 shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
               <th className="px-3 py-2">Estado</th>
               <th className="px-3 py-2">Propietario</th>
               <th className="px-3 py-2">Tipo</th>
