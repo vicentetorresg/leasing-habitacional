@@ -274,7 +274,7 @@ export default async function handler(req, res) {
     const rentaVal = renta || '—';
     const telVal = telefono || '—';
     const cuandoComprarVal = cuando_comprar === 'lo_antes_posible' ? 'Lo antes posible' : cuando_comprar === 'dentro_3_meses' ? 'Dentro de 3 meses' : cuando_comprar === 'mas_3_meses' ? 'En más de 3 meses' : '—';
-    const rentaCompOblig = ['$900.000 – $1.000.000','$1.000.001 – $1.100.000','$1.100.001 – $1.200.000'];
+    const rentaCompOblig = ['$850.000 – $1.000.000','$1.000.001 – $1.100.000','$1.100.001 – $1.200.000'];
     const isCondicionado = rentaCompOblig.includes(renta || '');
     const badgeLabel = isCondicionado ? '⚠️ PRE-APROBADO CONDICIONADO' : '✅ PRE-APROBADO';
     const badgeColor = isCondicionado ? '#e67e22' : '#2B7A4E';
