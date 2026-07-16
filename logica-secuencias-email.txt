@@ -1,0 +1,110 @@
+LOGICA DE SECUENCIAS DE EMAIL AUTOMATICAS - LLAVE PROPIA
+=========================================================
+
+RESUMEN GENERAL
+---------------
+Las secuencias se ejecutan via la edge function "email-sequences" en Supabase.
+Se activan automaticamente (cron o invocacion manual).
+Cada lead recibe maximo 1 email por ejecucion.
+Maximo 40 emails por ejecucion (MAX_PER_RUN = 40).
+Pausa de 500ms entre cada envio.
+
+CONDICIONES PARA QUE UN LEAD RECIBA EMAIL
+------------------------------------------
+1. El lead debe estar en uno de los estados con secuencia activa (ver abajo).
+2. El lead debe tener email (no nulo, no vacio).
+3. El lead NO debe ser demo (is_demo = false).
+4. El lead debe tener status_changed_at (fecha de cuando cambio a ese estado).
+5. Deben haber pasado los dias definidos desde el cambio de estado.
+6. El email de ese paso NO debe haberse enviado antes (se revisa en tabla email_sequence_log).
+
+TABLA DE CONTROL: email_sequence_log
+--------------------------------------
+Columnas: lead_id, sequence_key, step
+Cada vez que se envia un email, se registra ahi.
+Si ya existe el registro (lead_id + sequence_key + step), no se reenvia.
+
+=====================================================================
+SECUENCIA 1: NO CONTESTA
+=====================================================================
+Estado del lead: "no_contesta"
+Clave: "no_contesta"
+
+  Mail 1 - "Intentamos contactarte"
+    Se envia: 2 dias despues del cambio a "no_contesta"
+    Contenido: Aviso de que intentaron llamarlo, invitacion a escribir por WhatsApp.
+
+  Mail 2 - "Sigues interesado en tu casa propia?"
+    Se envia: 4 dias despues del cambio a "no_contesta"
+    Contenido: Recordatorio de beneficios del DS120 (sin pie, sin credito, subsidio, asesoria gratis).
+    Invitacion a agendar llamada por WhatsApp.
+
+  Mail 3 - "Ultima oportunidad"
+    Se envia: 6 dias despues del cambio a "no_contesta"
+    Contenido: Ultimo intento. Urgencia (cupos limitados). Si no responde, no se envian mas.
+
+=====================================================================
+SECUENCIA 2: ESPERANDO DOCUMENTOS
+=====================================================================
+Estado del lead: "esperando_documentos"
+Clave: "esperando_documentos"
+
+  Mail 1 - "Necesitas ayuda con los documentos?"
+    Se envia: 2 dias despues del cambio a "esperando_documentos"
+    Contenido: Lista de 6 documentos requeridos. Ofrecimiento de ayuda paso a paso.
+    Nota sobre complementar renta.
+
+  Mail 2 - "Solo faltan tus documentos para avanzar"
+    Se envia: 4 dias despues del cambio a "esperando_documentos"
+    Contenido: Refuerzo de que la pre-aprobacion esta lista. Tip sobre CMF gratis.
+    Urgencia suave.
+
+  Mail 3 - "No pierdas tu pre-aprobacion"
+    Se envia: 6 dias despues del cambio a "esperando_documentos"
+    Contenido: Ultimo recordatorio. Cupos limitados. Lista de ventajas.
+    Ofrecimiento de ayuda.
+
+=====================================================================
+SECUENCIA 3: CONTACTADO
+=====================================================================
+Estado del lead: "contactado"
+Clave: "contactado"
+
+  Mail 1 - "Tienes dudas sobre el proceso?"
+    Se envia: 3 dias despues del cambio a "contactado"
+    Contenido: FAQ con 4 preguntas frecuentes (pie, subsidio, dividendo, tiempo).
+    Invitacion a preguntar por WhatsApp.
+
+  Mail 2 - "Tu casa propia puede ser realidad"
+    Se envia: 5 dias despues del cambio a "contactado"
+    Contenido: Requisitos minimos (renta, contrato, DICOM, vivienda vista).
+    Invitacion a retomar proceso.
+
+=====================================================================
+DOCUMENTOS REQUERIDOS (listados en mails de esperando_documentos)
+=====================================================================
+1. Cedula de identidad por ambos lados
+2. 6 ultimas liquidaciones de sueldo
+3. Cotizaciones AFP ultimo anio
+4. Contrato de trabajo con antiguedad
+5. Deuda CMF (se obtiene gratuita)
+6. Certificado de matrimonio o no matrimonio
+
+=====================================================================
+CONFIGURACION TECNICA
+=====================================================================
+- Edge function: crm/supabase/functions/email-sequences/index.ts
+- From: Llave Propia <notificaciones@proppi.cl>
+- Reply-to: vicente@llavepropia.cl, rodrigo.canas@llavepropia.cl, karina.valenzuela@llavepropia.cl
+- API de envio: Resend (api.resend.com)
+- Si Resend responde 429 (rate limit), se detiene la ejecucion y retorna lo enviado hasta ese punto.
+- Firma de los mails: "Karina V. - Llave Propia - Leasing Habitacional"
+- Todos los mails incluyen boton de WhatsApp al +56 9 6207 8510
+
+=====================================================================
+IMPORTANTE
+=====================================================================
+- Si un lead cambia de estado, la secuencia anterior deja de aplicar (ya no esta en ese status).
+- Si un lead vuelve al mismo estado, los mails ya enviados NO se reenvian (estan en el log).
+- Cada ejecucion procesa todas las secuencias en orden: no_contesta -> esperando_documentos -> contactado.
+- Dentro de cada secuencia, se envia solo el primer paso pendiente por lead (no todos de golpe).

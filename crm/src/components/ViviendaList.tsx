@@ -1,0 +1,760 @@
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+
+interface Vivienda {
+  id: string;
+  created_at: string;
+  nombre: string;
+  telefono: string;
+  email: string | null;
+  tipo_vivienda: string | null;
+  valor_pesos: string | null;
+  direccion: string | null;
+  detalle_depto: string | null;
+  comuna: string | null;
+  superficie: number | null;
+  dormitorios: string | null;
+  banos: string | null;
+  fuente: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+  status: string;
+  linked_lead_id: string | null;
+  notes: string | null;
+  updated_at: string;
+}
+
+interface LinkedLead {
+  id: string;
+  name: string;
+  phone: string;
+}
+
+const STATUSES = [
+  { value: 'esperando_ok_propietario', label: 'Esperando OK de propietario para ofrecer su vivienda', color: 'bg-gray-100 text-gray-700 border-gray-200', dot: 'bg-gray-400' },
+  { value: 'esperando_fotos_tasacion', label: 'Esperando envío de fotos y tasación', color: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-400' },
+  { value: 'coordinando_visitas', label: 'Coordinando visitas con potenciales compradores', color: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-400' },
+  { value: 'firma_mandato', label: 'Coordinando firma de mandato de venta con propietario', color: 'bg-purple-50 text-purple-700 border-purple-200', dot: 'bg-purple-400' },
+  { value: 'eett_tasacion', label: 'EE.TT y tasación en proceso', color: 'bg-cyan-50 text-cyan-700 border-cyan-200', dot: 'bg-cyan-400' },
+  { value: 'borrador_escritura', label: 'Borrador de escritura en notaría', color: 'bg-teal-50 text-teal-700 border-teal-200', dot: 'bg-teal-400' },
+  { value: 'escritura_firmada', label: 'Escritura firmada, esperando Inscripción', color: 'bg-indigo-50 text-indigo-700 border-indigo-200', dot: 'bg-indigo-400' },
+  { value: 'inscrito_cbr', label: 'Inscrito CBR. Cobrar comisión propietario', color: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-400' },
+  { value: 'finalizado', label: 'Negocio finalizado', color: 'bg-green-50 text-green-700 border-green-200', dot: 'bg-green-500' },
+];
+
+const STATUS_MAP: Record<string, typeof STATUSES[0]> = {};
+STATUSES.forEach(s => { STATUS_MAP[s.value] = s; });
+
+const UF_LABELS: Record<string, string> = {
+  '0_800': '< 800 UF',
+  '800_1000': '800 - 1.000 UF',
+  '1000_1200': '1.000 - 1.200 UF',
+  '1200_1400': '1.200 - 1.400 UF',
+  '1400_1600': '1.400 - 1.600 UF',
+  '1600_1800': '1.600 - 1.800 UF',
+  '1800_2000': '1.800 - 2.000 UF',
+};
+
+/* Custom status dropdown */
+const StatusDropdown = ({ value, onChange }: { value: string; onChange: (v: string) => void }) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const st = STATUS_MAP[value] || STATUSES[0];
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className={`inline-flex items-center gap-1.5 text-[11px] font-semibold rounded-md px-2 py-1 border cursor-pointer transition-all hover:shadow-sm ${st.color}`}
+      >
+        <span className={`w-2 h-2 rounded-full ${st.dot}`} />
+        {st.label}
+        <svg className="w-3 h-3 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+      </button>
+      {open && (
+        <div className="absolute left-0 top-full mt-1 z-50 bg-white rounded-lg shadow-xl border border-border/60 py-1 min-w-[180px] animate-in fade-in-0 zoom-in-95 duration-100">
+          {STATUSES.map(s => (
+            <button
+              key={s.value}
+              onClick={() => { onChange(s.value); setOpen(false); }}
+              className={`w-full text-left px-3 py-1.5 text-xs flex items-center gap-2 transition-colors ${value === s.value ? 'bg-muted/60 font-bold' : 'hover:bg-muted/40'}`}
+            >
+              <span className={`w-2.5 h-2.5 rounded-full ${s.dot}`} />
+              <span>{s.label}</span>
+              {value === s.value && <svg className="w-3.5 h-3.5 ml-auto text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* Lead search dropdown for table rows */
+const LeadPicker = ({ vivId, currentLead, linkedLeads, setLinkedLeads, onPick }: {
+  vivId: string;
+  currentLead: LinkedLead | null;
+  linkedLeads: Record<string, LinkedLead>;
+  setLinkedLeads: React.Dispatch<React.SetStateAction<Record<string, LinkedLead>>>;
+  onPick: (vivId: string, leadId: string | null) => void;
+}) => {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const [results, setResults] = useState<LinkedLead[]>([]);
+  const [searching, setSearching] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) { setOpen(false); setSearch(''); setResults([]); }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  useEffect(() => {
+    if (open && inputRef.current) inputRef.current.focus();
+  }, [open]);
+
+  const doSearch = async (q: string) => {
+    setSearch(q);
+    if (q.length < 2) { setResults([]); return; }
+    setSearching(true);
+    const { data } = await supabase.from('leads').select('id, name, phone').ilike('name', `%${q}%`).eq('is_demo', false).limit(8);
+    setResults((data || []) as LinkedLead[]);
+    setSearching(false);
+  };
+
+  if (currentLead) {
+    return (
+      <div className="flex items-center gap-1.5">
+        <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-md text-[11px] font-semibold max-w-[130px] truncate">
+          <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+          <span className="truncate">{currentLead.name}</span>
+        </span>
+        <button
+          onClick={() => onPick(vivId, null)}
+          className="text-gray-400 hover:text-destructive transition-colors"
+          title="Quitar lead"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground border border-dashed border-border rounded-md px-2 py-1 transition-colors hover:border-primary/40"
+      >
+        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+        Asignar lead
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1 z-50 bg-white rounded-lg shadow-xl border border-border/60 w-[240px] animate-in fade-in-0 zoom-in-95 duration-100">
+          <div className="p-2 border-b border-border/40">
+            <div className="relative">
+              <svg className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+              <input
+                ref={inputRef}
+                value={search}
+                onChange={e => doSearch(e.target.value)}
+                placeholder="Buscar lead..."
+                className="w-full pl-7 pr-2 py-1.5 rounded border border-border bg-muted/30 text-sm focus:outline-none focus:ring-1 focus:ring-primary/30"
+              />
+            </div>
+          </div>
+          <div className="max-h-[200px] overflow-y-auto">
+            {searching && <div className="px-3 py-2 text-xs text-muted-foreground text-center">Buscando...</div>}
+            {!searching && search.length >= 2 && results.length === 0 && (
+              <div className="px-3 py-3 text-xs text-muted-foreground text-center">Sin resultados</div>
+            )}
+            {!searching && search.length < 2 && (
+              <div className="px-3 py-3 text-xs text-muted-foreground text-center">Escribe 2+ letras</div>
+            )}
+            {results.map(l => (
+              <button
+                key={l.id}
+                onClick={() => {
+                  onPick(vivId, l.id);
+                  setLinkedLeads(prev => ({ ...prev, [l.id]: l }));
+                  setOpen(false);
+                  setSearch('');
+                  setResults([]);
+                }}
+                className="w-full text-left px-3 py-2 flex items-center gap-2 hover:bg-blue-50/60 transition-colors border-b border-border/20 last:border-0"
+              >
+                <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold flex-shrink-0">
+                  {l.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="min-w-0">
+                  <div className="text-xs font-semibold text-foreground truncate">{l.name}</div>
+                  <div className="text-[10px] text-muted-foreground font-mono">{l.phone}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+interface VivFile {
+  name: string;
+  url: string;
+}
+
+const BUCKET = 'vivienda-files';
+const SUPA_STORAGE_URL = 'https://evuxdhvvarfxredghvpu.supabase.co/storage/v1/object/public/vivienda-files';
+
+const ViviendaList = () => {
+  const [viviendas, setViviendas] = useState<Vivienda[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [editViv, setEditViv] = useState<Vivienda | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [editLeadSearch, setEditLeadSearch] = useState('');
+  const [editLeadResults, setEditLeadResults] = useState<LinkedLead[]>([]);
+  const [linkedLeads, setLinkedLeads] = useState<Record<string, LinkedLead>>({});
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [editFiles, setEditFiles] = useState<VivFile[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [sendingEmailId, setSendingEmailId] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const fetchViviendas = useCallback(async () => {
+    const { data, error } = await (supabase.from('viviendas' as any).select('*') as any)
+      .order('created_at', { ascending: false });
+    if (error) { console.error(error); return; }
+    setViviendas(data || []);
+    setLoading(false);
+
+    const leadIds = (data || []).map((v: Vivienda) => v.linked_lead_id).filter(Boolean) as string[];
+    if (leadIds.length > 0) {
+      const { data: leads } = await supabase.from('leads').select('id, name, phone').in('id', leadIds);
+      const map: Record<string, LinkedLead> = {};
+      (leads || []).forEach((l: any) => { map[l.id] = l; });
+      setLinkedLeads(map);
+    }
+  }, []);
+
+  useEffect(() => { fetchViviendas(); }, [fetchViviendas]);
+
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    await (supabase.from('viviendas' as any) as any).update({ status: newStatus, updated_at: new Date().toISOString() }).eq('id', id);
+    toast.success('Estado actualizado');
+    fetchViviendas();
+  };
+
+  const handleLeadPick = async (vivId: string, leadId: string | null) => {
+    await (supabase.from('viviendas' as any) as any).update({ linked_lead_id: leadId, updated_at: new Date().toISOString() }).eq('id', vivId);
+    toast.success(leadId ? 'Lead asignado' : 'Lead removido');
+    fetchViviendas();
+  };
+
+  const handleSendMatchEmail = async (v: Vivienda) => {
+    const lead = v.linked_lead_id ? linkedLeads[v.linked_lead_id] : null;
+    if (!lead) { toast.error('Primero asigna un lead interesado'); return; }
+    // Get lead email from DB
+    const { data: leadData } = await supabase.from('leads').select('email').eq('id', lead.id).single();
+    const leadEmail = leadData?.email;
+    if (!leadEmail) { toast.error(`${lead.name} no tiene email registrado`); return; }
+
+    setSendingEmailId(v.id);
+    try {
+      const res = await fetch('/api/send-vivienda-match', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lead_name: lead.name,
+          lead_email: leadEmail,
+          tipo_vivienda: v.tipo_vivienda,
+          direccion: v.direccion,
+          detalle_depto: v.detalle_depto,
+          comuna: v.comuna,
+          superficie: v.superficie,
+          dormitorios: v.dormitorios,
+          banos: v.banos,
+          valor_pesos: v.valor_pesos,
+        }),
+      });
+      if (res.ok) {
+        toast.success(`Email enviado a ${lead.name} (${leadEmail})`);
+      } else {
+        const err = await res.json();
+        console.error('Email error:', err);
+        toast.error('Error enviando email');
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error('Error de red');
+    }
+    setSendingEmailId(null);
+  };
+
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    await (supabase.from('viviendas' as any) as any).delete().eq('id', deleteId);
+    toast.success('Vivienda eliminada');
+    setDeleteId(null);
+    fetchViviendas();
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editViv) return;
+    const { id, created_at, ...rest } = editViv;
+    await (supabase.from('viviendas' as any) as any).update({ ...rest, updated_at: new Date().toISOString() }).eq('id', id);
+    toast.success('Vivienda actualizada');
+    setEditViv(null);
+    setEditLeadSearch('');
+    setEditLeadResults([]);
+    fetchViviendas();
+  };
+
+  const fetchFiles = async (vivId: string) => {
+    const { data } = await supabase.storage.from(BUCKET).list(vivId, { limit: 100 });
+    if (!data) { setEditFiles([]); return; }
+    setEditFiles(data.filter(f => f.name !== '.emptyFolderPlaceholder').map(f => ({
+      name: f.name,
+      url: `${SUPA_STORAGE_URL}/${vivId}/${f.name}`,
+    })));
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!editViv || !e.target.files?.length) return;
+    setUploading(true);
+    const files = Array.from(e.target.files);
+    for (const file of files) {
+      const safeName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+      const path = `${editViv.id}/${safeName}`;
+      const { error } = await supabase.storage.from(BUCKET).upload(path, file, { upsert: false });
+      if (error) {
+        console.error('Upload error:', error);
+        toast.error(`Error subiendo ${file.name}`);
+      }
+    }
+    await fetchFiles(editViv.id);
+    setUploading(false);
+    toast.success(`${files.length} archivo${files.length > 1 ? 's' : ''} subido${files.length > 1 ? 's' : ''}`);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleFileDelete = async (fileName: string) => {
+    if (!editViv) return;
+    const { error } = await supabase.storage.from(BUCKET).remove([`${editViv.id}/${fileName}`]);
+    if (error) { toast.error('Error eliminando archivo'); return; }
+    setEditFiles(prev => prev.filter(f => f.name !== fileName));
+    toast.success('Archivo eliminado');
+  };
+
+  const openEdit = (v: Vivienda) => {
+    setEditViv({ ...v });
+    setEditLeadSearch('');
+    setEditLeadResults([]);
+    fetchFiles(v.id);
+  };
+
+  const searchEditLeads = async (q: string) => {
+    setEditLeadSearch(q);
+    if (q.length < 2) { setEditLeadResults([]); return; }
+    const { data } = await supabase.from('leads').select('id, name, phone').ilike('name', `%${q}%`).eq('is_demo', false).limit(8);
+    setEditLeadResults((data || []) as LinkedLead[]);
+  };
+
+  const filtered = viviendas.filter(v => {
+    if (statusFilter !== 'all' && v.status !== statusFilter) return false;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const linked = v.linked_lead_id ? linkedLeads[v.linked_lead_id] : null;
+      const haystack = [v.nombre, v.telefono, v.email, v.tipo_vivienda, v.direccion, v.detalle_depto, v.comuna, v.notes, linked?.name].filter(Boolean).join(' ').toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
+    return true;
+  });
+
+  if (loading) return <div className="p-6 text-center text-muted-foreground">Cargando viviendas...</div>;
+
+  return (
+    <div className="flex flex-col h-full bg-card border border-border rounded-lg overflow-hidden">
+      {/* Header */}
+      <div className="p-3 border-b border-border space-y-2">
+        <div className="flex items-center gap-3">
+          <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
+            Viviendas ({filtered.length})
+          </h3>
+          <div className="relative flex-1 max-w-xs">
+            <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            <input
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Buscar..."
+              className="w-full pl-8 pr-2 py-1.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-1 focus:ring-primary/30"
+            />
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-1">
+          <button
+            onClick={() => setStatusFilter('all')}
+            className={`px-2 py-1.5 rounded-md text-[10px] font-medium transition-all ${statusFilter === 'all' ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-muted text-muted-foreground hover:bg-muted/80'}`}
+          >
+            Todos
+          </button>
+          {STATUSES.map(s => (
+            <button
+              key={s.value}
+              onClick={() => setStatusFilter(s.value)}
+              className={`inline-flex items-center gap-1 px-2 py-1.5 rounded-md text-[10px] font-medium transition-all ${statusFilter === s.value ? 'bg-primary text-primary-foreground shadow-sm' : `${s.color} hover:shadow-sm`}`}
+            >
+              <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${statusFilter === s.value ? 'bg-white' : s.dot}`} />
+              {s.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="flex-1 overflow-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="bg-muted/30 text-left text-xs text-muted-foreground uppercase tracking-wider sticky top-0 z-10">
+              <th className="px-3 py-2">Estado</th>
+              <th className="px-3 py-2">Propietario</th>
+              <th className="px-3 py-2">Tipo</th>
+              <th className="px-3 py-2">Dirección</th>
+              <th className="px-3 py-2">Comuna</th>
+              <th className="px-3 py-2">Valor</th>
+              <th className="px-3 py-2">m2</th>
+              <th className="px-3 py-2">Dorm</th>
+              <th className="px-3 py-2">Baños</th>
+              <th className="px-3 py-2">Lead Interesado</th>
+              <th className="px-3 py-2">Notas</th>
+              <th className="px-3 py-2">Fecha</th>
+              <th className="px-3 py-2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map(v => {
+              const linked = v.linked_lead_id ? linkedLeads[v.linked_lead_id] : null;
+              return (
+                <tr key={v.id} className="border-b border-border/40 hover:bg-muted/20 transition-colors">
+                  <td className="px-3 py-2">
+                    <StatusDropdown value={v.status} onChange={s => handleStatusChange(v.id, s)} />
+                  </td>
+                  <td className="px-3 py-2">
+                    <div className="font-bold text-foreground">{v.nombre}</div>
+                    <div className="text-xs text-muted-foreground">{v.telefono}</div>
+                    {v.email && <div className="text-xs text-muted-foreground">{v.email}</div>}
+                  </td>
+                  <td className="px-3 py-2 text-xs capitalize">{v.tipo_vivienda || '—'}</td>
+                  <td className="px-3 py-2 text-xs">
+                    {v.direccion || '—'}
+                    {v.detalle_depto && <div className="text-muted-foreground">Depto: {v.detalle_depto}</div>}
+                  </td>
+                  <td className="px-3 py-2 text-xs">{v.comuna || '—'}</td>
+                  <td className="px-3 py-2 text-xs font-medium">{v.valor_pesos ? (UF_LABELS[v.valor_pesos] || v.valor_pesos) : '—'}</td>
+                  <td className="px-3 py-2 text-xs text-center">{v.superficie ? `${v.superficie}` : '—'}</td>
+                  <td className="px-3 py-2 text-xs text-center">{v.dormitorios || '—'}</td>
+                  <td className="px-3 py-2 text-xs text-center">{v.banos || '—'}</td>
+                  <td className="px-3 py-2">
+                    <div className="flex items-center gap-1.5">
+                      <LeadPicker
+                        vivId={v.id}
+                        currentLead={linked || null}
+                        linkedLeads={linkedLeads}
+                        setLinkedLeads={setLinkedLeads}
+                        onPick={handleLeadPick}
+                      />
+                      <button
+                        onClick={() => linked && handleSendMatchEmail(v)}
+                        disabled={!linked || sendingEmailId === v.id}
+                        title={linked ? "Enviar email con la propiedad al lead" : "Asigna un lead primero"}
+                        className={`inline-flex items-center justify-center w-7 h-7 rounded-md border transition-colors flex-shrink-0 ${linked ? 'bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100' : 'bg-muted/30 text-muted-foreground/30 border-border/40 cursor-not-allowed'} disabled:opacity-50`}
+                      >
+                        {sendingEmailId === v.id ? (
+                          <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                        ) : (
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                        )}
+                      </button>
+                    </div>
+                  </td>
+                  <td className="px-3 py-2 text-xs max-w-[150px] truncate" title={v.notes || ''}>
+                    {v.notes || '—'}
+                  </td>
+                  <td className="px-3 py-2 text-xs text-muted-foreground whitespace-nowrap">
+                    {new Date(v.created_at).toLocaleDateString('es-CL', { day: '2-digit', month: 'short' })}
+                    {v.updated_at !== v.created_at && (
+                      <div className="text-[10px]">act. {new Date(v.updated_at).toLocaleDateString('es-CL', { day: '2-digit', month: 'short' })}</div>
+                    )}
+                  </td>
+                  <td className="px-3 py-2">
+                    <div className="flex gap-1">
+                      <button onClick={() => openEdit(v)} className="text-xs px-2 py-1 rounded bg-muted hover:bg-accent transition-colors font-bold">Editar</button>
+                      <button onClick={() => setDeleteId(v.id)} className="text-xs px-2 py-1 rounded bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors font-bold">X</button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+            {filtered.length === 0 && (
+              <tr><td colSpan={13} className="px-3 py-8 text-center text-muted-foreground">Sin viviendas</td></tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Edit Dialog */}
+      <Dialog open={!!editViv} onOpenChange={open => { if (!open) { setEditViv(null); setEditLeadSearch(''); setEditLeadResults([]); setEditFiles([]); } }}>
+        <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Editar Vivienda</DialogTitle>
+          </DialogHeader>
+          {editViv && (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-bold text-muted-foreground mb-1 block">Nombre</label>
+                  <input value={editViv.nombre} onChange={e => setEditViv({ ...editViv, nombre: e.target.value })} className="w-full px-2 py-1.5 rounded border border-border bg-background text-sm" />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-muted-foreground mb-1 block">Teléfono</label>
+                  <input value={editViv.telefono} onChange={e => setEditViv({ ...editViv, telefono: e.target.value })} className="w-full px-2 py-1.5 rounded border border-border bg-background text-sm font-mono" />
+                </div>
+              </div>
+              <div>
+                <label className="text-xs font-bold text-muted-foreground mb-1 block">Email</label>
+                <input value={editViv.email || ''} onChange={e => setEditViv({ ...editViv, email: e.target.value || null })} className="w-full px-2 py-1.5 rounded border border-border bg-background text-sm" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-bold text-muted-foreground mb-1 block">Tipo</label>
+                  <select value={editViv.tipo_vivienda || ''} onChange={e => setEditViv({ ...editViv, tipo_vivienda: e.target.value || null })} className="w-full px-2 py-1.5 rounded border border-border bg-background text-sm">
+                    <option value="">—</option>
+                    <option value="casa">Casa</option>
+                    <option value="departamento">Departamento</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-muted-foreground mb-1 block">Valor (UF)</label>
+                  <select value={editViv.valor_pesos || ''} onChange={e => setEditViv({ ...editViv, valor_pesos: e.target.value || null })} className="w-full px-2 py-1.5 rounded border border-border bg-background text-sm">
+                    <option value="">—</option>
+                    {Object.entries(UF_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="text-xs font-bold text-muted-foreground mb-1 block">Dirección</label>
+                <input value={editViv.direccion || ''} onChange={e => setEditViv({ ...editViv, direccion: e.target.value || null })} className="w-full px-2 py-1.5 rounded border border-border bg-background text-sm" />
+              </div>
+              {editViv.tipo_vivienda === 'departamento' && (
+                <div>
+                  <label className="text-xs font-bold text-muted-foreground mb-1 block">Detalle depto</label>
+                  <input value={editViv.detalle_depto || ''} onChange={e => setEditViv({ ...editViv, detalle_depto: e.target.value || null })} className="w-full px-2 py-1.5 rounded border border-border bg-background text-sm" />
+                </div>
+              )}
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="text-xs font-bold text-muted-foreground mb-1 block">Comuna</label>
+                  <input value={editViv.comuna || ''} onChange={e => setEditViv({ ...editViv, comuna: e.target.value || null })} className="w-full px-2 py-1.5 rounded border border-border bg-background text-sm" />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-muted-foreground mb-1 block">Superficie m2</label>
+                  <input type="number" value={editViv.superficie || ''} onChange={e => setEditViv({ ...editViv, superficie: e.target.value ? parseInt(e.target.value) : null })} className="w-full px-2 py-1.5 rounded border border-border bg-background text-sm" />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-xs font-bold text-muted-foreground mb-1 block">Dorm</label>
+                    <input value={editViv.dormitorios || ''} onChange={e => setEditViv({ ...editViv, dormitorios: e.target.value || null })} className="w-full px-2 py-1.5 rounded border border-border bg-background text-sm" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-muted-foreground mb-1 block">Baños</label>
+                    <input value={editViv.banos || ''} onChange={e => setEditViv({ ...editViv, banos: e.target.value || null })} className="w-full px-2 py-1.5 rounded border border-border bg-background text-sm" />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label className="text-xs font-bold text-muted-foreground mb-1 block">Estado</label>
+                <div className="flex flex-wrap gap-1.5">
+                  {STATUSES.map(s => (
+                    <button
+                      key={s.value}
+                      onClick={() => setEditViv({ ...editViv, status: s.value })}
+                      className={`inline-flex items-center gap-1 text-[11px] font-semibold rounded-md px-2.5 py-1.5 border transition-all ${editViv.status === s.value ? `${s.color} ring-2 ring-offset-1 ring-primary/30 shadow-sm` : 'bg-muted/40 text-muted-foreground border-border hover:bg-muted/60'}`}
+                    >
+                      <span className={`w-2 h-2 rounded-full ${editViv.status === s.value ? s.dot : 'bg-muted-foreground/30'}`} />
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-xs font-bold text-muted-foreground mb-1 block">Lead Interesado</label>
+                {editViv.linked_lead_id && linkedLeads[editViv.linked_lead_id] ? (
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-md text-xs font-semibold">
+                      <div className="w-5 h-5 rounded-full bg-blue-200 text-blue-700 flex items-center justify-center text-[9px] font-bold">
+                        {linkedLeads[editViv.linked_lead_id].name.charAt(0).toUpperCase()}
+                      </div>
+                      {linkedLeads[editViv.linked_lead_id].name} — {linkedLeads[editViv.linked_lead_id].phone}
+                    </span>
+                    <button onClick={() => setEditViv({ ...editViv, linked_lead_id: null })} className="text-xs text-destructive hover:underline">Quitar</button>
+                  </div>
+                ) : null}
+                <div className="relative">
+                  <svg className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                  <input
+                    value={editLeadSearch}
+                    onChange={e => searchEditLeads(e.target.value)}
+                    placeholder="Buscar lead por nombre..."
+                    className="w-full pl-7 pr-2 py-1.5 rounded border border-border bg-background text-sm"
+                  />
+                </div>
+                {editLeadResults.length > 0 && (
+                  <div className="mt-1 border border-border rounded-lg bg-white shadow-lg max-h-40 overflow-y-auto">
+                    {editLeadResults.map(l => (
+                      <button
+                        key={l.id}
+                        onClick={() => {
+                          setEditViv({ ...editViv, linked_lead_id: l.id });
+                          setLinkedLeads(prev => ({ ...prev, [l.id]: l }));
+                          setEditLeadSearch('');
+                          setEditLeadResults([]);
+                        }}
+                        className="w-full text-left px-3 py-2 flex items-center gap-2 hover:bg-blue-50/60 transition-colors border-b border-border/20 last:border-0"
+                      >
+                        <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold flex-shrink-0">
+                          {l.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-foreground">{l.name}</div>
+                          <div className="text-[10px] text-muted-foreground font-mono">{l.phone}</div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {/* Archivos */}
+              <div>
+                <label className="text-xs font-bold text-muted-foreground mb-1.5 block">Archivos / Fotos</label>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold border border-dashed border-border rounded-lg px-3 py-2 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors mb-2 disabled:opacity-50"
+                >
+                  {uploading ? (
+                    <>
+                      <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                      Subiendo...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                      Subir archivos
+                    </>
+                  )}
+                </button>
+                {editFiles.length > 0 && (
+                  <div className="grid grid-cols-3 gap-2">
+                    {editFiles.map(f => {
+                      const isImage = /\.(jpg|jpeg|png|gif|webp|heic)$/i.test(f.name);
+                      return (
+                        <div key={f.name} className="relative group border border-border rounded-lg overflow-hidden bg-muted/30">
+                          {isImage ? (
+                            <a href={f.url} target="_blank" rel="noreferrer">
+                              <img src={f.url} alt={f.name} className="w-full h-20 object-cover" />
+                            </a>
+                          ) : (
+                            <a href={f.url} target="_blank" rel="noreferrer" className="flex items-center justify-center h-20 p-2">
+                              <div className="text-center">
+                                <svg className="w-6 h-6 mx-auto text-muted-foreground mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                <span className="text-[9px] text-muted-foreground truncate block max-w-full">{f.name.split('-').slice(1).join('-')}</span>
+                              </div>
+                            </a>
+                          )}
+                          <button
+                            onClick={() => handleFileDelete(f.name)}
+                            className="absolute top-1 right-1 w-5 h-5 rounded-full bg-destructive text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                            title="Eliminar"
+                          >
+                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+                {editFiles.length === 0 && !uploading && (
+                  <p className="text-[11px] text-muted-foreground">Sin archivos subidos</p>
+                )}
+              </div>
+              <div>
+                <label className="text-xs font-bold text-muted-foreground mb-1 block">Notas</label>
+                <textarea
+                  value={editViv.notes || ''}
+                  onChange={e => setEditViv({ ...editViv, notes: e.target.value || null })}
+                  rows={3}
+                  className="w-full px-2 py-1.5 rounded border border-border bg-background text-sm resize-none"
+                  placeholder="Notas adicionales..."
+                />
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setEditViv(null); setEditLeadSearch(''); setEditLeadResults([]); setEditFiles([]); }}>Cancelar</Button>
+            <Button onClick={handleSaveEdit}>Guardar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Dialog */}
+      <Dialog open={!!deleteId} onOpenChange={open => { if (!open) setDeleteId(null); }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Eliminar vivienda</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">Esta acción no se puede deshacer.</p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteId(null)}>Cancelar</Button>
+            <Button variant="destructive" onClick={handleDelete}>Eliminar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default ViviendaList;

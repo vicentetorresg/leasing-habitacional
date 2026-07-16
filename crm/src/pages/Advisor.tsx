@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import LeadDocuments from '@/components/LeadDocuments';
 import EmailButtonsComponent from '@/components/EmailButtons';
 import { useAuth } from '@/hooks/useAuth';
@@ -63,13 +64,15 @@ function formatSueldoShort(lead: Lead): string {
 }
 
 const ADVISOR_STATUSES = [
-  { key: 'solicitando_documentos', label: 'Solicitando Documentos', emoji: '📋', color: 'bg-primary/15 border-primary/30' },
+  { key: 'solicitando_documentos', label: 'Documentación Incompleta', emoji: '📋', color: 'bg-primary/15 border-primary/30' },
   { key: 'enviado_a_evaluar', label: 'Enviado a Evaluar', emoji: '📤', color: 'bg-yellow-500/15 border-yellow-500/30' },
-  { key: 'aprobado', label: 'Aprobado', emoji: '✅', color: 'bg-green-500/15 border-green-500/30' },
-  { key: 'buscando_vivienda', label: 'Buscando Vivienda', emoji: '🏠', color: 'bg-blue-500/15 border-blue-500/30' },
+  { key: 'aprobado', label: 'Aprobado - Buscando Vivienda', emoji: '✅', color: 'bg-green-500/15 border-green-500/30' },
+  { key: 'buscando_vivienda', label: 'Aprobado - Quiere Mayor Monto', emoji: '🔄', color: 'bg-blue-500/15 border-blue-500/30' },
+  { key: 'aprobado_ok', label: 'Aprobado OK Todo', emoji: '🎯', color: 'bg-teal-500/15 border-teal-500/30' },
   { key: 'set_hipotecario_firmado', label: 'Set Hipotecario Firmado', emoji: '✍️', color: 'bg-violet-500/15 border-violet-500/30' },
   { key: 'escritura_firmada', label: 'Escritura Firmada', emoji: '📜', color: 'bg-indigo-500/15 border-indigo-500/30' },
   { key: 'cbr_listo', label: 'CBR Listo', emoji: '🎉', color: 'bg-emerald-500/15 border-emerald-500/30' },
+  { key: 'rechaza_oferta', label: 'Aprobado - Rechaza Oferta', emoji: '🚫', color: 'bg-orange-500/15 border-orange-500/30' },
   { key: 'rechazado', label: 'Rechazado', emoji: '❌', color: 'bg-red-500/15 border-red-500/30' },
   { key: 'archivado', label: 'Archivado', emoji: '📦', color: 'bg-muted border-muted-foreground/20' },
 ];
@@ -87,15 +90,19 @@ function downloadXlsx(leads: Lead[], filename: string) {
     'Propiedad Vista': l.tiene_propiedad_vista === 'si' ? 'Sí' : l.tiene_propiedad_vista === 'no' ? 'No' : '',
     'Comuna Propiedad': l.comuna_propiedad || '',
     'Complementa Renta': l.complementa_renta || '',
+    'Renta Complemento': l.renta_complemento || '',
     'Valor Propiedad': l.precio_propiedad_ok || '',
-    'Prefiere Contacto': l.preferencia_contacto === 'whatsapp' ? 'WhatsApp' : l.preferencia_contacto === 'telefono' ? 'Llamada' : '',
-    'Horario Contacto': l.horario_contacto || '',
+    'Cuándo Comprar': l.cuando_comprar === 'lo_antes_posible' ? 'Lo antes posible' : l.cuando_comprar === 'dentro_3_meses' ? 'Dentro de 3 meses' : l.cuando_comprar === 'mas_3_meses' ? 'En más de 3 meses' : '',
     'Fuente': l.source,
     'Estado': ADVISOR_STATUSES.find(s => s.key === l.status)?.label || l.status,
     'Dirección Vivienda': l.direccion_vivienda || '',
-    'Valor Vivienda UF': l.valor_vivienda_uf || '',
-    'Valor Financiamiento UF': l.valor_financiamiento_uf || '',
-    'Fecha Reserva': l.fecha_reserva || '',
+    'UF Aprobado Austral': l.uf_aprobado_austra || '',
+    'UF Aprobado Casa Pronta': l.uf_aprobado_casa_pronta || '',
+    'UF Propiedad que Quiere': l.uf_propiedad_quiere || '',
+    'Con Codeudor': l.con_codeudor ? 'Sí' : 'No',
+    'Fecha Aprobacion': l.fecha_aprobacion || '',
+    'Dias desde Aprobacion': l.fecha_aprobacion ? Math.floor((Date.now() - new Date(l.fecha_aprobacion).getTime()) / 86400000) : '',
+    'Dias Restantes (30d)': l.fecha_aprobacion ? Math.max(0, 30 - Math.floor((Date.now() - new Date(l.fecha_aprobacion).getTime()) / 86400000)) : '',
     'Mes Cierre': l.mes_cierre || '',
     'Prioridad': l.priority || 'media',
     'Fecha Lead': new Date(l.created_at).toLocaleDateString('es-CL'),
@@ -153,6 +160,33 @@ const Advisor = () => {
   const [projectsList, setProjectsList] = useState<string[]>([]);
   const [showAddLead, setShowAddLead] = useState(false);
   const [newLeadData, setNewLeadData] = useState({ name: '', phone: '', email: '', rut: '', sueldo_liquido_raw: '' });
+  const [sendingReminder, setSendingReminder] = useState(false);
+
+  const sendDocReminder = async () => {
+    const docLeads = leads.filter(l => l.status === 'solicitando_documentos' && l.email);
+    if (docLeads.length === 0) {
+      toast.error('No hay leads con email en Documentación Incompleta');
+      return;
+    }
+    setSendingReminder(true);
+    try {
+      const r = await fetch('/api/send-doc-reminder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leads: docLeads.map(l => ({ name: l.name, email: l.email })) }),
+      });
+      const data = await r.json();
+      if (r.ok) {
+        toast.success(`Recordatorio enviado a ${data.sent} lead${data.sent !== 1 ? 's' : ''}${data.failed ? ` (${data.failed} fallaron)` : ''}`);
+      } else {
+        toast.error(data.error || 'Error al enviar recordatorios');
+      }
+    } catch {
+      toast.error('Error de red al enviar recordatorios');
+    } finally {
+      setSendingReminder(false);
+    }
+  };
 
   // Fetch advisors for reassignment + all profiles for note authors
   const DEMO_ADVISOR_NAMES = ['Alejandro Reyes', 'Camila Fuentes', 'Sebastián Mora', 'Daniela Pinto'];
@@ -346,6 +380,8 @@ const Advisor = () => {
         return;
       }
       setNewNote('');
+      // Reset "días sin movimiento" — a note counts as activity
+      await supabase.from('leads').update({ status_changed_at: new Date().toISOString() }).eq('id', leadId);
       await fetchNotesForLead(leadId);
       toast.success('Nota agregada');
     } catch (err: any) {
@@ -399,9 +435,68 @@ const Advisor = () => {
     fetchLeads();
   };
 
+  const kanbanRef = useRef<HTMLDivElement>(null);
+  const dragScrollRef = useRef<number>(0);
+
+  // Fixed-position horizontal scrollbar for kanban
+  const [kanbanScrollInfo, setKanbanScrollInfo] = useState({ thumbWidth: 0, thumbLeft: 0, hasOverflow: false });
+  const kanbanDragging = useRef<{ startX: number; startScroll: number } | null>(null);
+
+  const syncKanbanScrollbar = useCallback(() => {
+    const el = kanbanRef.current;
+    if (!el) return;
+    const ratio = el.clientWidth / el.scrollWidth;
+    if (ratio >= 1) {
+      setKanbanScrollInfo(prev => prev.hasOverflow ? { thumbWidth: 0, thumbLeft: 0, hasOverflow: false } : prev);
+      return;
+    }
+    const tw = Math.max(60, el.clientWidth * ratio);
+    const maxLeft = el.clientWidth - tw;
+    const sr = el.scrollLeft / (el.scrollWidth - el.clientWidth);
+    setKanbanScrollInfo({ thumbWidth: tw, thumbLeft: maxLeft * sr, hasOverflow: true });
+  }, []);
+
+  useEffect(() => {
+    const el = kanbanRef.current;
+    if (!el) return;
+    syncKanbanScrollbar();
+    el.addEventListener('scroll', syncKanbanScrollbar, { passive: true });
+    window.addEventListener('resize', syncKanbanScrollbar);
+    const iv = setInterval(syncKanbanScrollbar, 500);
+    return () => {
+      el.removeEventListener('scroll', syncKanbanScrollbar);
+      window.removeEventListener('resize', syncKanbanScrollbar);
+      clearInterval(iv);
+    };
+  }); // no deps - must re-run after loading state changes
+
   const handleDragStart = (leadId: string, e: React.DragEvent) => {
     setDragLead(leadId);
     e.dataTransfer.effectAllowed = 'move';
+  };
+
+  // Auto-scroll kanban when dragging near edges
+  const handleKanbanDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    const container = kanbanRef.current;
+    if (!container) return;
+    const rect = container.getBoundingClientRect();
+    const edgeZone = 80;
+    const x = e.clientX;
+    cancelAnimationFrame(dragScrollRef.current);
+    if (x < rect.left + edgeZone) {
+      const speed = Math.max(4, (edgeZone - (x - rect.left)) * 0.4);
+      const scroll = () => { container.scrollLeft -= speed; dragScrollRef.current = requestAnimationFrame(scroll); };
+      dragScrollRef.current = requestAnimationFrame(scroll);
+    } else if (x > rect.right - edgeZone) {
+      const speed = Math.max(4, (edgeZone - (rect.right - x)) * 0.4);
+      const scroll = () => { container.scrollLeft += speed; dragScrollRef.current = requestAnimationFrame(scroll); };
+      dragScrollRef.current = requestAnimationFrame(scroll);
+    }
+  };
+
+  const handleKanbanDragEnd = () => {
+    cancelAnimationFrame(dragScrollRef.current);
   };
 
   const handleDropOnColumn = (status: string) => {
@@ -720,7 +815,7 @@ const Advisor = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen bg-background flex flex-col overflow-hidden">
       <TopBar
         role={role}
         signOut={signOut}
@@ -746,19 +841,30 @@ const Advisor = () => {
       />
 
       {/* Kanban Board */}
-      <div data-tour="kanban-board" className={`grid gap-4 p-4 h-[calc(100vh-60px)]`} style={{ gridTemplateColumns: `repeat(${kanbanStatuses.length}, minmax(0, 1fr))` }}>
+      <div ref={kanbanRef} data-tour="kanban-board" className="flex gap-3 p-4 pb-8 overflow-x-auto kanban-hide-native-scroll flex-1 min-h-0" onDragOver={handleKanbanDragOver} onDragEnd={handleKanbanDragEnd} onDrop={handleKanbanDragEnd}>
         {kanbanStatuses.map(status => (
           <div
             key={status.key}
             onDragOver={e => e.preventDefault()}
             onDrop={() => handleDropOnColumn(status.key)}
-            className={`flex flex-col rounded-xl border-2 ${status.color} overflow-hidden`}
+            className={`flex flex-col rounded-xl border-2 ${status.color} overflow-hidden shrink-0`}
+            style={{ width: '280px', minWidth: '280px' }}
           >
             <div className="p-3 border-b border-border/30 flex items-center justify-between">
               <h3 className="text-xs font-bold text-foreground">
                 {status.emoji} {status.label}
               </h3>
               <div className="flex items-center gap-1.5">
+                {status.key === 'solicitando_documentos' && getLeadsByStatus(status.key).length > 0 && (
+                  <button
+                    onClick={sendDocReminder}
+                    disabled={sendingReminder}
+                    className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 hover:bg-blue-500/30 text-blue-700 font-bold transition-colors disabled:opacity-50"
+                    title="Enviar recordatorio de documentos a todos los leads con email"
+                  >
+                    {sendingReminder ? '...' : '✉️ Recordar'}
+                  </button>
+                )}
                 {getLeadsByStatus(status.key).length > 0 && (
                   <button
                     onClick={() => downloadXlsx(getLeadsByStatus(status.key), `leads-${status.key}`)}
@@ -869,9 +975,14 @@ const Advisor = () => {
                       👥 Complementa renta: {lead.complementa_renta}
                     </p>
                   )}
-                  {(lead.preferencia_contacto || lead.horario_contacto) && (
+                  {lead.renta_complemento && (
+                    <p className="text-[10px] text-muted-foreground">
+                      💰 Renta complemento: {lead.renta_complemento}
+                    </p>
+                  )}
+                  {lead.cuando_comprar && (
                     <p className="text-[10px] font-semibold text-blue-600">
-                      📞 {lead.preferencia_contacto === 'whatsapp' ? 'WhatsApp' : lead.preferencia_contacto === 'telefono' ? 'Llamada' : ''}{lead.horario_contacto ? ` · ${lead.horario_contacto}` : ''}
+                      🗓️ {lead.cuando_comprar === 'lo_antes_posible' ? '🔥 Lo antes posible' : lead.cuando_comprar === 'dentro_3_meses' ? 'Dentro de 3 meses' : lead.cuando_comprar === 'mas_3_meses' ? 'En más de 3 meses' : lead.cuando_comprar}
                     </p>
                   )}
                   {lead.scheduled_at && (
@@ -885,14 +996,19 @@ const Advisor = () => {
                   {lead.proyecto && (
                     <p className="text-xs text-muted-foreground truncate">🏗️ {lead.proyecto}</p>
                   )}
-                  <div className="flex gap-2 text-[10px] text-muted-foreground">
-                    {lead.fecha_reserva && (
-                      <span>📅 Res: {getMonthLabel(lead.fecha_reserva)}</span>
-                    )}
-                    {lead.mes_cierre && (
-                      <span>🎯 Cierre: {lead.mes_cierre}</span>
-                    )}
-                  </div>
+                  {lead.fecha_aprobacion && (() => {
+                    const days = Math.floor((Date.now() - new Date(lead.fecha_aprobacion).getTime()) / 86400000);
+                    const remaining = 30 - days;
+                    const colorClass = remaining <= 5 ? 'text-red-500 font-bold' : remaining <= 10 ? 'text-yellow-500 font-semibold' : 'text-green-500';
+                    return (
+                      <p className={`text-[10px] ${colorClass}`}>
+                        📅 Aprob: {new Date(lead.fecha_aprobacion).toLocaleDateString('es-CL')} · {remaining > 0 ? `${remaining}d restantes` : '⚠️ Vencido'}
+                      </p>
+                    );
+                  })()}
+                  {lead.mes_cierre && (
+                    <p className="text-[10px] text-muted-foreground">🎯 Cierre: {lead.mes_cierre}</p>
+                  )}
                   {/* Advisor name (admin/ejecutiva only) */}
                   {isAdminOrEjecutiva && lead.advisor_id && allProfiles[lead.advisor_id] && (
                     <p className="text-[10px] text-primary font-semibold truncate">
@@ -1102,6 +1218,48 @@ const Advisor = () => {
       </Dialog>
 
       <GuidedTour page="advisor" isDemo={isDemo} />
+
+      {/* Fixed horizontal scrollbar at viewport bottom */}
+      {kanbanScrollInfo.hasOverflow && createPortal(
+        <div
+          onClick={(e) => {
+            const el = kanbanRef.current;
+            if (!el || e.target !== e.currentTarget) return;
+            const rect = e.currentTarget.getBoundingClientRect();
+            el.scrollLeft = ((e.clientX - rect.left) / rect.width) * (el.scrollWidth - el.clientWidth);
+          }}
+          style={{
+            position: 'fixed', bottom: 0, left: 0, right: 0,
+            height: 18, background: '#d6cfc6', zIndex: 9999, cursor: 'pointer',
+          }}
+        >
+          <div
+            onPointerDown={(e) => {
+              e.preventDefault();
+              const el = kanbanRef.current;
+              if (!el) return;
+              kanbanDragging.current = { startX: e.clientX, startScroll: el.scrollLeft };
+              (e.target as HTMLElement).setPointerCapture(e.pointerId);
+            }}
+            onPointerMove={(e) => {
+              if (!kanbanDragging.current) return;
+              const el = kanbanRef.current;
+              if (!el) return;
+              const tw = kanbanScrollInfo.thumbWidth || 60;
+              const trackW = el.clientWidth - tw;
+              if (trackW > 0) el.scrollLeft = kanbanDragging.current.startScroll + ((e.clientX - kanbanDragging.current.startX) / trackW) * (el.scrollWidth - el.clientWidth);
+            }}
+            onPointerUp={() => { kanbanDragging.current = null; }}
+            onPointerCancel={() => { kanbanDragging.current = null; }}
+            style={{
+              position: 'absolute', top: 3, height: 12, borderRadius: 6,
+              background: '#8a7e6e', cursor: 'grab', minWidth: 40,
+              width: kanbanScrollInfo.thumbWidth, left: kanbanScrollInfo.thumbLeft,
+            }}
+          />
+        </div>,
+        document.body
+      )}
     </div>
   );
 };
@@ -1314,11 +1472,14 @@ function LeadDetailContent({
   const fmtUf = (v: number | null) => v != null ? v.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
   const parseUf = (s: string) => { const n = parseFloat(s.replace(/\./g, '').replace(',', '.')); return isNaN(n) ? null : n; };
   const [ufSinBp, setUfSinBp] = useState(lead.uf_sin_bp?.toString() ?? '');
-  const [valorViviendaUf, setValorViviendaUf] = useState(fmtUf(lead.valor_vivienda_uf));
-  const [valorFinanciamientoUf, setValorFinanciamientoUf] = useState(fmtUf(lead.valor_financiamiento_uf));
+  const [ufAprobadoAustra, setUfAprobadoAustra] = useState(fmtUf(lead.uf_aprobado_austra));
+  const [ufAprobadoCasaPronta, setUfAprobadoCasaPronta] = useState(fmtUf(lead.uf_aprobado_casa_pronta));
+  const [ufPropiedadQuiere, setUfPropiedadQuiere] = useState(fmtUf(lead.uf_propiedad_quiere));
+  const [conCodeudor, setConCodeudor] = useState(lead.con_codeudor ?? false);
+  const [comunaPropiedad, setComunaPropiedad] = useState(lead.comuna_propiedad ?? '');
   const [direccionVivienda, setDireccionVivienda] = useState(lead.direccion_vivienda ?? '');
   const [proyecto, setProyecto] = useState(lead.proyecto ?? '');
-  const [fechaReserva, setFechaReserva] = useState(lead.fecha_reserva ?? '');
+  const [fechaAprobacion, setFechaAprobacion] = useState(lead.fecha_aprobacion ?? '');
   const [mesCierre, setMesCierre] = useState(lead.mes_cierre ?? '');
   const [confirmTelemarketing, setConfirmTelemarketing] = useState(false);
   const [showTaskForm, setShowTaskForm] = useState(false);
@@ -1358,14 +1519,44 @@ function LeadDetailContent({
   const { tasks, createTask, completeTask, deleteTask } = useTasks(currentUser?.id);
   const leadTasks = tasks.filter(t => t.lead_id === lead.id);
 
+  const saveField = (fields: Record<string, any>) => {
+    updateLeadFields(lead.id, fields as any);
+  };
+
+  // Debounced auto-save for UF and text fields (500ms after typing stops)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    // Skip the initial render
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      updateLeadFields(lead.id, {
+        uf_aprobado_austra: parseUf(ufAprobadoAustra),
+        uf_aprobado_casa_pronta: parseUf(ufAprobadoCasaPronta),
+        uf_propiedad_quiere: parseUf(ufPropiedadQuiere),
+        comuna_propiedad: comunaPropiedad || null,
+        direccion_vivienda: direccionVivienda || null,
+      } as any);
+    }, 500);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [ufAprobadoAustra, ufAprobadoCasaPronta, ufPropiedadQuiere, comunaPropiedad, direccionVivienda]);
+
   const saveFields = () => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
     updateLeadFields(lead.id, {
       uf_sin_bp: ufSinBp ? parseFloat(ufSinBp) : null,
-      valor_vivienda_uf: parseUf(valorViviendaUf),
-      valor_financiamiento_uf: parseUf(valorFinanciamientoUf),
+      uf_aprobado_austra: parseUf(ufAprobadoAustra),
+      uf_aprobado_casa_pronta: parseUf(ufAprobadoCasaPronta),
+      uf_propiedad_quiere: parseUf(ufPropiedadQuiere),
+      con_codeudor: conCodeudor,
+      comuna_propiedad: comunaPropiedad || null,
       direccion_vivienda: direccionVivienda || null,
       proyecto: proyecto || null,
-      fecha_reserva: fechaReserva || null,
+      fecha_aprobacion: fechaAprobacion || null,
       mes_cierre: mesCierre || null,
     } as any);
   };
@@ -1394,27 +1585,26 @@ function LeadDetailContent({
   }, [showTaskForm]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Email Buttons — prominent at top */}
       {lead.email && (
         <EmailButtonsComponent leadId={lead.id} leadEmail={lead.email} />
       )}
 
-      {/* Lead Info Grid */}
-      <div className="grid grid-cols-2 gap-3 p-4 bg-secondary/50 rounded-lg text-sm">
+      {/* Lead Info Grid - compact */}
+      <div className="grid grid-cols-3 gap-x-3 gap-y-1 p-3 bg-secondary/50 rounded-lg text-sm">
         <DetailItem label="Teléfono" value={lead.phone} />
         <DetailItem label="Email" value={lead.email || '—'} />
         <DetailItem label="RUT" value={lead.rut || '—'} />
-        <DetailItem label="Sueldo Líquido" value={formatSueldoShort(lead)} />
+        <DetailItem label="Sueldo" value={formatSueldoShort(lead)} />
         <DetailItem label="DICOM" value={lead.en_dicom ? '⚠️ Sí' : '✅ No'} />
         <DetailItem label="Propiedad vista" value={lead.tiene_propiedad_vista === 'si' ? '✅ Sí' : lead.tiene_propiedad_vista === 'no' ? '❌ No' : '—'} />
-        <DetailItem label="Comuna propiedad" value={lead.comuna_propiedad || '—'} />
+        <DetailItem label="Comuna" value={lead.comuna_propiedad || '—'} />
         <DetailItem label="Complementa renta" value={lead.complementa_renta || '—'} />
+        <DetailItem label="Renta complemento" value={lead.renta_complemento || '—'} />
         <DetailItem label="Valor propiedad" value={lead.precio_propiedad_ok || '—'} />
-        <DetailItem label="Prefiere contacto" value={lead.preferencia_contacto === 'whatsapp' ? '💬 WhatsApp' : lead.preferencia_contacto === 'telefono' ? '📞 Llamada' : '—'} />
-        <DetailItem label="Horario contacto" value={lead.horario_contacto || '—'} />
+        <DetailItem label="Cuándo comprar" value={lead.cuando_comprar === 'lo_antes_posible' ? '🔥 Lo antes posible' : lead.cuando_comprar === 'dentro_3_meses' ? 'Dentro de 3 meses' : lead.cuando_comprar === 'mas_3_meses' ? 'En más de 3 meses' : '—'} />
         <DetailItem label="Fuente" value={lead.source} />
-        <DetailItem label="Fecha Lead" value={new Date(lead.created_at).toLocaleDateString('es-CL')} />
         <DetailItem label="Estado" value={ADVISOR_STATUSES.find(s => s.key === lead.status)?.label || lead.status} />
       </div>
 
@@ -1497,31 +1687,68 @@ function LeadDetailContent({
       </div>
 
       {/* Editable fields */}
-      <div className="grid grid-cols-2 gap-3 p-4 bg-muted/50 rounded-lg">
+      <div className="grid grid-cols-2 gap-2 p-3 bg-muted/50 rounded-lg">
         <div>
-          <label className="text-xs text-muted-foreground uppercase">Valor Vivienda UF</label>
+          <label className="text-xs text-muted-foreground uppercase">UF Aprobado Austral</label>
           <input
             type="text"
             inputMode="decimal"
-            value={valorViviendaUf}
-            onChange={e => setValorViviendaUf(e.target.value.replace(/[^0-9,]/g, ''))}
-            onBlur={() => { const n = parseUf(valorViviendaUf); setValorViviendaUf(fmtUf(n)); }}
-            onFocus={() => setValorViviendaUf(v => v.replace(/\./g, '').replace(',', '.'))}
+            value={ufAprobadoAustra}
+            onChange={e => setUfAprobadoAustra(e.target.value.replace(/[^0-9,]/g, ''))}
+            onBlur={() => { const n = parseUf(ufAprobadoAustra); setUfAprobadoAustra(fmtUf(n)); }}
+            onFocus={() => setUfAprobadoAustra(v => v.replace(/\./g, '').replace(',', '.'))}
             disabled={!canEditAdvisorFields}
             placeholder="0,00"
             className={`w-full mt-1 px-2 py-1.5 rounded border border-border bg-background text-sm text-foreground ${!canEditAdvisorFields ? 'opacity-50 cursor-not-allowed' : ''}`} />
         </div>
         <div>
-          <label className="text-xs text-muted-foreground uppercase">Valor Financiamiento UF</label>
+          <label className="text-xs text-muted-foreground uppercase">UF Aprobado Casa Pronta</label>
           <input
             type="text"
             inputMode="decimal"
-            value={valorFinanciamientoUf}
-            onChange={e => setValorFinanciamientoUf(e.target.value.replace(/[^0-9,]/g, ''))}
-            onBlur={() => { const n = parseUf(valorFinanciamientoUf); setValorFinanciamientoUf(fmtUf(n)); }}
-            onFocus={() => setValorFinanciamientoUf(v => v.replace(/\./g, '').replace(',', '.'))}
+            value={ufAprobadoCasaPronta}
+            onChange={e => setUfAprobadoCasaPronta(e.target.value.replace(/[^0-9,]/g, ''))}
+            onBlur={() => { const n = parseUf(ufAprobadoCasaPronta); setUfAprobadoCasaPronta(fmtUf(n)); }}
+            onFocus={() => setUfAprobadoCasaPronta(v => v.replace(/\./g, '').replace(',', '.'))}
             disabled={!canEditAdvisorFields}
             placeholder="0,00"
+            className={`w-full mt-1 px-2 py-1.5 rounded border border-border bg-background text-sm text-foreground ${!canEditAdvisorFields ? 'opacity-50 cursor-not-allowed' : ''}`} />
+        </div>
+        <div>
+          <label className="text-xs text-muted-foreground uppercase">UF Propiedad que Quiere</label>
+          <input
+            type="text"
+            inputMode="decimal"
+            value={ufPropiedadQuiere}
+            onChange={e => setUfPropiedadQuiere(e.target.value.replace(/[^0-9,]/g, ''))}
+            onBlur={() => { const n = parseUf(ufPropiedadQuiere); setUfPropiedadQuiere(fmtUf(n)); }}
+            onFocus={() => setUfPropiedadQuiere(v => v.replace(/\./g, '').replace(',', '.'))}
+            disabled={!canEditAdvisorFields}
+            placeholder="0,00"
+            className={`w-full mt-1 px-2 py-1.5 rounded border border-border bg-background text-sm text-foreground ${!canEditAdvisorFields ? 'opacity-50 cursor-not-allowed' : ''}`} />
+        </div>
+        <div>
+          <label className="text-xs text-muted-foreground uppercase">Con Codeudor</label>
+          <div className="mt-1 flex gap-2">
+            <button
+              type="button"
+              onClick={() => { if (canEditAdvisorFields) { setConCodeudor(true); saveField({ con_codeudor: true }); } }}
+              disabled={!canEditAdvisorFields}
+              className={`flex-1 py-1.5 rounded border text-sm font-bold transition-all ${conCodeudor ? 'bg-green-500/20 border-green-500/50 text-green-700' : 'border-border bg-background text-muted-foreground'} ${!canEditAdvisorFields ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >Sí</button>
+            <button
+              type="button"
+              onClick={() => { if (canEditAdvisorFields) { setConCodeudor(false); saveField({ con_codeudor: false }); } }}
+              disabled={!canEditAdvisorFields}
+              className={`flex-1 py-1.5 rounded border text-sm font-bold transition-all ${!conCodeudor ? 'bg-red-500/20 border-red-500/50 text-red-700' : 'border-border bg-background text-muted-foreground'} ${!canEditAdvisorFields ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >No</button>
+          </div>
+        </div>
+        <div>
+          <label className="text-xs text-muted-foreground uppercase">Comuna Propiedad</label>
+          <input type="text" value={comunaPropiedad} onChange={e => setComunaPropiedad(e.target.value)}
+            disabled={!canEditAdvisorFields}
+            placeholder="Ej: Santiago, Puente Alto"
             className={`w-full mt-1 px-2 py-1.5 rounded border border-border bg-background text-sm text-foreground ${!canEditAdvisorFields ? 'opacity-50 cursor-not-allowed' : ''}`} />
         </div>
         <div>
@@ -1532,14 +1759,23 @@ function LeadDetailContent({
             className={`w-full mt-1 px-2 py-1.5 rounded border border-border bg-background text-sm text-foreground ${!canEditAdvisorFields ? 'opacity-50 cursor-not-allowed' : ''}`} />
         </div>
         <div>
-          <label className="text-xs text-muted-foreground uppercase">Fecha Reserva</label>
-          <input type="date" value={fechaReserva} onChange={e => setFechaReserva(e.target.value)}
+          <label className="text-xs text-muted-foreground uppercase">Fecha Aprobación</label>
+          <input type="date" value={fechaAprobacion} onChange={e => { setFechaAprobacion(e.target.value); saveField({ fecha_aprobacion: e.target.value || null }); }}
             disabled={!canEditAdvisorFields}
             className={`w-full mt-1 px-2 py-1.5 rounded border border-border bg-background text-sm text-foreground ${!canEditAdvisorFields ? 'opacity-50 cursor-not-allowed' : ''}`} />
+          {fechaAprobacion && (() => {
+            const days = Math.floor((Date.now() - new Date(fechaAprobacion).getTime()) / 86400000);
+            const remaining = 30 - days;
+            return (
+              <p className={`text-[10px] mt-1 font-semibold ${remaining <= 5 ? 'text-red-500' : remaining <= 10 ? 'text-yellow-500' : 'text-green-500'}`}>
+                {remaining > 0 ? `${remaining} días restantes de 30` : '⚠️ Vencido'}
+              </p>
+            );
+          })()}
         </div>
         <div>
           <label className="text-xs text-muted-foreground uppercase">Mes Cierre</label>
-          <Select value={mesCierre} onValueChange={setMesCierre} disabled={!canEditAdvisorFields}>
+          <Select value={mesCierre} onValueChange={v => { setMesCierre(v); saveField({ mes_cierre: v || null }); }} disabled={!canEditAdvisorFields}>
             <SelectTrigger className={`w-full mt-1 ${!canEditAdvisorFields ? 'opacity-50 cursor-not-allowed' : ''}`}>
               <SelectValue placeholder="Seleccionar mes" />
             </SelectTrigger>
@@ -1588,12 +1824,12 @@ function LeadDetailContent({
       )}
 
       {/* Phone Display */}
-      <div className="w-full py-3 rounded-xl text-center text-lg font-black bg-muted border border-border">
+      <div className="w-full py-2 rounded-lg text-center text-base font-black bg-muted border border-border">
         📞 {lead.phone}
       </div>
 
       {/* Status Change */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-3 gap-1.5">
         {ADVISOR_STATUSES.filter(s => s.key !== lead.status).map(s => (
           <button
             key={s.key}
@@ -1601,7 +1837,7 @@ function LeadDetailContent({
               updateStatus(lead.id, s.key);
               setSelectedLead({ ...lead, status: s.key });
             }}
-            className={`py-2 px-3 rounded-lg border text-xs font-bold transition-all hover:scale-105 ${s.color}`}
+            className={`py-1.5 px-2 rounded-lg border text-[10px] font-bold transition-all hover:scale-105 ${s.color}`}
           >
             {s.emoji} {s.label}
           </button>
@@ -1717,9 +1953,9 @@ function LeadDetailContent({
 
 function DetailItem({ label, value }: { label: string; value: string }) {
   return (
-    <div>
-      <p className="text-xs text-muted-foreground uppercase tracking-wider">{label}</p>
-      <p className="text-sm font-bold text-foreground">{value}</p>
+    <div className="min-w-0 overflow-hidden">
+      <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{label}</p>
+      <p className="text-sm font-bold text-foreground truncate" title={value}>{value}</p>
     </div>
   );
 }

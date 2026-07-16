@@ -6,7 +6,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const FROM      = 'Llave Propia <notificaciones@llavepropia.cl>';
+const FROM      = 'Llave Propia <notificaciones@proppi.cl>';
 const CC_ADMINS = ['vicente.torres@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'];
 const REPLY_TO  = 'vicente.torres@llavepropia.cl';
 
@@ -114,7 +114,7 @@ function baseTemplate({
                   <td>
                     <div style="font-size:12px;color:#64748B;line-height:1.6;">
                       Este mensaje fue enviado a ${firstName} desde <strong style="color:#0369A1;">Llave Propia CRM</strong>.<br/>
-                      <a href="https://llavepropia.cl" style="color:#0EA5E9;text-decoration:none;">llavepropia.cl</a> &nbsp;·&nbsp; notificaciones@llavepropia.cl
+                      <a href="https://llavepropia.cl" style="color:#0EA5E9;text-decoration:none;">llavepropia.cl</a> &nbsp;·&nbsp; notificaciones@proppi.cl
                     </div>
                   </td>
                   <td align="right" style="vertical-align:bottom;">
@@ -336,7 +336,7 @@ function emailNoContestoManual(firstName: string) {
     ${divider()}
     <p style="margin:0;font-size:14px;color:#475569;line-height:1.6;">
       Saludos,<br/>
-      <strong style="color:#0F172A;">Katherine D.</strong><br/>
+      <strong style="color:#0F172A;">Karina V.</strong><br/>
       <span style="color:#64748B;">Llave Propia · Leasing Habitacional</span>
     </p>
   `;
@@ -353,41 +353,77 @@ function emailNoContestoManual(firstName: string) {
 }
 
 function emailClienteInteresadoManual(firstName: string) {
-  const body = `
-    ${p(`¡Hola <strong>${firstName}</strong>!`)}
-    ${p('Nos alegra que estés interesado/a en Llave Propia. Como siguiente paso, comenzaremos a recopilar tu documentación para evaluar tu caso y avanzar juntos en el proceso.')}
-    ${infoBox('', '¿Qué documentos necesitaremos?', 'Te iremos solicitando los documentos de forma ordenada. Nuestro equipo te acompañará en cada etapa para que el proceso sea lo más simple posible.')}
-    ${divider()}
-    <div style="font-size:14px;font-weight:700;color:#0F172A;margin-bottom:12px;">¿Cómo será el proceso?</div>
-    ${stepsList([
-      { num: '1', text: '<strong>Recopilación de documentos</strong> — te pediremos la documentación necesaria paso a paso.' },
-      { num: '2', text: '<strong>Evaluación financiera</strong> — analizaremos tu situación para encontrar el mejor financiamiento.' },
-      { num: '3', text: '<strong>Aprobación y búsqueda de vivienda</strong> — una vez aprobado, te ayudamos a encontrar tu casa ideal.' },
-    ])}
-    ${infoBox('', 'Estamos contigo', 'Si tienes preguntas o necesitas orientación en algún momento, no dudes en responder este correo o escribirnos por WhatsApp.')}
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 8px;">
-      <tr>
-        <td align="center">
-          <a href="https://wa.me/56962078510?text=Hola%2C%20me%20contactaron%20de%20Llave%20Propia%20y%20quiero%20más%20información" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:12px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35);">Escríbenos por WhatsApp</a>
-        </td>
-      </tr>
+  const html = `<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#FEFCF7;font-family:Arial,Helvetica,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#FEFCF7;padding:40px 20px"><tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(27,58,107,0.08)">
+
+<!-- Header -->
+<tr><td style="background:linear-gradient(135deg,#1B3A6B,#243870);padding:32px 28px;text-align:center">
+  <span style="font-family:Georgia,serif;font-size:24px;font-weight:700;color:#fff">Llave</span> <span style="font-size:10px;font-weight:800;color:#3ACFB8;letter-spacing:2px;text-transform:uppercase">Propia</span>
+</td></tr>
+
+<!-- Body -->
+<tr><td style="padding:36px 28px">
+
+  <div style="background:linear-gradient(135deg,#E5F7F4,#D5F5E3);border:1.5px solid rgba(45,184,158,0.3);border-radius:12px;padding:18px 20px;margin:0 0 24px;text-align:center">
+    <p style="font-size:20px;font-weight:900;color:#2B7A4E;margin:0 0 4px">✅ ¡Comenzamos el proceso!</p>
+    <p style="font-size:13px;color:#1B3A6B;margin:0;font-weight:600">El siguiente paso es reunir tu documentación</p>
+  </div>
+
+  <p style="font-size:16px;color:#1A150F;line-height:1.7;margin:0 0 20px">¡Hola <strong>${firstName}</strong>!</p>
+  <p style="font-size:16px;color:#1A150F;line-height:1.7;margin:0 0 20px">Nos alegra que estés interesado/a en <strong>Llave Propia</strong>. Para avanzar con tu evaluación, necesitamos que nos envíes los siguientes documentos.</p>
+
+  <div style="background:#fff;border:1.5px solid #EDE3D4;border-radius:12px;padding:20px 24px;margin:0 0 20px">
+    <p style="font-size:13px;font-weight:800;color:#1B3A6B;margin:0 0 14px;text-transform:uppercase;letter-spacing:0.5px">📄 Documentos requeridos</p>
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+      <tr><td width="32" valign="middle" style="padding:0 0 12px 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">1</div></td><td valign="middle" style="padding:0 0 12px 8px;font-size:14px;color:#1A150F">Cédula de identidad por ambos lados</td></tr>
+      <tr><td width="32" valign="middle" style="padding:0 0 12px 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">2</div></td><td valign="middle" style="padding:0 0 12px 8px;font-size:14px;color:#1A150F">6 últimas liquidaciones de sueldo</td></tr>
+      <tr><td width="32" valign="middle" style="padding:0 0 12px 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">3</div></td><td valign="middle" style="padding:0 0 12px 8px;font-size:14px;color:#1A150F">Cotizaciones AFP último año</td></tr>
+      <tr><td width="32" valign="middle" style="padding:0 0 12px 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">4</div></td><td valign="middle" style="padding:0 0 12px 8px;font-size:14px;color:#1A150F">Contrato de trabajo con antigüedad</td></tr>
+      <tr><td width="32" valign="middle" style="padding:0 0 12px 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">5</div></td><td valign="middle" style="padding:0 0 12px 8px;font-size:14px;color:#1A150F">Deuda CMF (se obtiene gratuita)</td></tr>
+      <tr><td width="32" valign="middle" style="padding:0 0 0 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">6</div></td><td valign="middle" style="padding:0 0 0 8px;font-size:14px;color:#1A150F">Certificado de matrimonio o no matrimonio</td></tr>
     </table>
-    ${divider()}
-    <p style="margin:0;font-size:14px;color:#475569;line-height:1.6;">
-      ¡Gracias!<br/>
-      <strong style="color:#0F172A;">Katherine D.</strong><br/>
-      <span style="color:#64748B;">Llave Propia · Leasing Habitacional</span>
+  </div>
+
+  <div style="background:#E5F7F4;border:1px solid rgba(45,184,158,0.3);border-radius:10px;padding:14px 18px;margin:0 0 24px">
+    <p style="font-size:13px;color:#1B3A6B;margin:0;line-height:1.6"><strong>Si complementas renta con otra persona</strong>, necesitamos los mismos documentos de ella.</p>
+  </div>
+
+  <div style="font-size:14px;font-weight:700;color:#1B3A6B;margin-bottom:12px">¿Cómo será el proceso?</div>
+  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 24px">
+    <tr><td width="32" valign="middle" style="padding:0 0 12px 0"><div style="background:#1B3A6B;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">1</div></td><td valign="middle" style="padding:0 0 12px 8px;font-size:14px;color:#1A150F"><strong>Recopilación de documentos</strong> — te pediremos la documentación necesaria paso a paso.</td></tr>
+    <tr><td width="32" valign="middle" style="padding:0 0 12px 0"><div style="background:#1B3A6B;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">2</div></td><td valign="middle" style="padding:0 0 12px 8px;font-size:14px;color:#1A150F"><strong>Evaluación financiera</strong> — analizaremos tu situación para encontrar el mejor financiamiento.</td></tr>
+    <tr><td width="32" valign="middle" style="padding:0 0 0 0"><div style="background:#1B3A6B;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">3</div></td><td valign="middle" style="padding:0 0 0 8px;font-size:14px;color:#1A150F"><strong>Aprobación</strong> — una vez aprobado, avanzamos con el proceso de compra de tu vivienda.</td></tr>
+  </table>
+
+  <p style="font-size:14px;color:#5A4A38;line-height:1.7;margin:0 0 24px">Puedes enviar los documentos <strong>respondiendo este correo</strong> o por WhatsApp:</p>
+
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px"><tr><td align="center">
+    <a href="https://wa.me/56962078510?text=Hola%2C%20me%20contactaron%20de%20Llave%20Propia%20y%20quiero%20enviar%20mis%20documentos" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:50px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35)">💬 Enviar documentos por WhatsApp</a>
+  </td></tr></table>
+
+  <div style="border-top:1px solid #EDE3D4;padding-top:20px">
+    <p style="margin:0;font-size:14px;color:#5A4A38;line-height:1.6">
+      Saludos,<br/>
+      <strong style="color:#1B3A6B">Karina V.</strong><br/>
+      <span style="color:#9A8878">Llave Propia · Leasing Habitacional</span>
     </p>
-  `;
+  </div>
+
+</td></tr>
+
+<!-- Footer -->
+<tr><td style="background:#1B3A6B;padding:20px 28px;text-align:center">
+  <p style="color:#9A8878;font-size:12px;margin:0;line-height:1.6">Llave Propia · <a href="https://llavepropia.cl" style="color:#3ACFB8;text-decoration:none">www.llavepropia.cl</a></p>
+</td></tr>
+
+</table></td></tr></table>
+</body></html>`;
+
   return {
     subject: `${firstName}, comenzamos a solicitar tu documentación — Llave Propia`,
-    html: baseTemplate({
-      firstName,
-      headerEmoji: '',
-      headerTitle: '¡Comenzamos el proceso!',
-      headerSubtitle: 'El siguiente paso es reunir tu documentación',
-      bodyHtml: body,
-    }),
+    html,
   };
 }
 
@@ -506,12 +542,12 @@ serve(async (req) => {
 
     // CC según pipeline
     const MANUAL_TEMPLATES = ['no_contesto_manual', 'asesoria_agendada_manual', 'cliente_interesado_manual'];
-    const CC_KATHERINE = 'katherine@llavepropia.cl';
+    const CC_KARINA = 'karina.valenzuela@llavepropia.cl';
     // Solo agregar a Susan en CC si ella es la ejecutiva asignada al lead
-    const ejecutivaIsKatherine = ejecutivaEmail === CC_KATHERINE;
+    const ejecutivaIsKarina = ejecutivaEmail === CC_KARINA;
     let cc: string[];
     if (MANUAL_TEMPLATES.includes(new_status)) {
-      cc = ejecutivaIsKatherine ? [...CC_ADMINS, CC_KATHERINE] : CC_ADMINS;
+      cc = ejecutivaIsKarina ? [...CC_ADMINS, CC_KARINA] : CC_ADMINS;
     } else {
       const ccContact = ASESOR_PIPELINE.includes(new_status) ? asesorEmail : ejecutivaEmail;
       cc = [...CC_ADMINS, ccContact].filter(Boolean) as string[];
@@ -524,8 +560,8 @@ serve(async (req) => {
       return new Response(JSON.stringify({ skipped: true, reason: 'No template for status' }), { status: 200, headers: corsHeaders });
     }
 
-    const replyTo = (MANUAL_TEMPLATES.includes(new_status) && ejecutivaIsKatherine)
-      ? [REPLY_TO, CC_KATHERINE]
+    const replyTo = (MANUAL_TEMPLATES.includes(new_status) && ejecutivaIsKarina)
+      ? [REPLY_TO, CC_KARINA]
       : [REPLY_TO];
 
     const emailPayload = {

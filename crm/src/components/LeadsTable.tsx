@@ -363,8 +363,8 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
               <TableHead className="px-2">Valor Prop.</TableHead>
               <TableHead className="px-2">Comuna</TableHead>
               <TableHead className="px-2">Complementa</TableHead>
-              <TableHead className="px-2">Contacto</TableHead>
-              <TableHead className="px-2">Horario</TableHead>
+              <TableHead className="px-2">Renta Comp.</TableHead>
+              <TableHead className="px-2">Cuándo</TableHead>
               <TableHead className="px-2">Prioridad</TableHead>
               <TableHead className="px-2">Fuente</TableHead>
               <TableHead className="px-2">Plataforma</TableHead>
@@ -448,11 +448,11 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
                   <TableCell className="px-2 text-[10px] text-muted-foreground max-w-[80px] truncate" title={(lead as any).complementa_renta || ''}>
                     {(lead as any).complementa_renta || '—'}
                   </TableCell>
-                  <TableCell className="px-2 text-[10px] text-muted-foreground whitespace-nowrap">
-                    {(lead as any).preferencia_contacto === 'whatsapp' ? '💬' : (lead as any).preferencia_contacto === 'telefono' ? '📞' : '—'}
+                  <TableCell className="px-2 text-[10px] text-muted-foreground max-w-[80px] truncate" title={(lead as any).renta_complemento || ''}>
+                    {(lead as any).renta_complemento || '—'}
                   </TableCell>
                   <TableCell className="px-2 text-[10px] text-muted-foreground whitespace-nowrap">
-                    {(lead as any).horario_contacto || '—'}
+                    {(lead as any).cuando_comprar === 'lo_antes_posible' ? '🔥 Pronto' : (lead as any).cuando_comprar === 'dentro_3_meses' ? '3 meses' : (lead as any).cuando_comprar === 'mas_3_meses' ? '+3 meses' : '—'}
                   </TableCell>
                   <TableCell className="px-2">
                     {(() => { const p = PRIORITY_CONFIG[lead.priority] || { label: lead.priority, style: 'bg-muted text-muted-foreground' }; return (

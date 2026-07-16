@@ -9,6 +9,7 @@
     { "source": "/leasing-dm-meta", "destination": "/leasing-dm-meta.html" },
     { "source": "/leasing-tiktok-ads", "destination": "/leasing-tiktok-ads.html" },
     { "source": "/viviendas-form", "destination": "/viviendas-form.html" },
+    { "source": "/viviendas-form-dos", "destination": "/viviendas-form-dos.html" },
     { "source": "/crm", "destination": "/crm-dist/index" },
     { "source": "/crm/:path*", "destination": "/crm-dist/index" }
   ],

@@ -14,8 +14,8 @@ import MetricsBar from '@/components/MetricsBar';
 import DailyGoalsBar from '@/components/DailyGoalsBar';
 import LeadsTable from '@/components/LeadsTable';
 import GuidedTour from '@/components/GuidedTour';
+import WeeklyReport from '@/components/WeeklyReport';
 import { toast } from 'sonner';
-import * as XLSX from 'xlsx';
 import {
   Dialog,
   DialogContent,
@@ -41,7 +41,11 @@ const Executive = () => {
   const mainScrollRef = useRef<HTMLDivElement>(null);
   const [advisorsList, setAdvisorsList] = useState<{ user_id: string; full_name: string }[]>([]);
   const [showNewLeadForm, setShowNewLeadForm] = useState(false);
+  const [showDailyPlan, setShowDailyPlan] = useState(false);
+  const [dailyPlanLeads, setDailyPlanLeads] = useState<any[]>([]);
+  const [dailyPlanFilter, setDailyPlanFilter] = useState('all');
   const [executiveEditorMode, setExecutiveEditorMode] = useState(false);
+  const [showWeeklyReport, setShowWeeklyReport] = useState(false);
 
   const [newLeadName, setNewLeadName] = useState('');
   const [newLeadPhone, setNewLeadPhone] = useState('');
@@ -377,60 +381,37 @@ const Executive = () => {
               ➕ Nuevo Lead
             </button>
           )}
-          {!isDemo && (user?.email === 'katherine@llavepropia.cl' || role === 'admin' || isRecicladora) && (
+          {!isDemo && (
             <button
               onClick={async () => {
-                const { data, error } = await supabase
+                const EXCLUDED = ['set_hipotecario_firmado', 'escritura_firmada', 'cbr_listo', 'rechazado', 'archived'];
+                const { data } = await supabase
                   .from('leads')
-                  .select('*')
-                  .eq('status', 'reciclado');
-                if (error || !data || data.length === 0) {
-                  toast.error('No hay leads reciclados para descargar');
-                  return;
-                }
-                // Fetch ejecutiva names for all assigned_to user ids
-                const userIds = [...new Set(data.map((l: any) => l.assigned_to).filter(Boolean))];
-                let profileMap: Record<string, string> = {};
-                if (userIds.length > 0) {
-                  const { data: profiles } = await supabase
-                    .from('profiles')
-                    .select('user_id, full_name')
-                    .in('user_id', userIds);
-                  (profiles ?? []).forEach((p: any) => { profileMap[p.user_id] = p.full_name; });
-                }
-                const rows = data.map((l: any) => ({
-                  Nombre: l.name,
-                  Teléfono: l.phone,
-                  Email: l.email || '',
-                  RUT: l.rut || '',
-                  Ejecutiva: l.assigned_to ? (profileMap[l.assigned_to] || '—') : '—',
-                  Estado: 'Reciclado',
-                  Fuente: l.source || '',
-                  'Renta Líquida': l.sueldo_liquido_raw || (l.sueldo_liquido ? `$${l.sueldo_liquido.toLocaleString('es-CL')}` : ''),
-                  DICOM: l.en_dicom ? 'Sí' : 'No',
-                  Proyecto: l.proyecto || '',
-                  Prioridad: l.priority || '',
-                  'Fecha Creación': new Date(l.created_at).toLocaleString('es-CL'),
-                  'Último Cambio': l.status_changed_at ? new Date(l.status_changed_at).toLocaleString('es-CL') : '',
-                  'Último Intento': l.last_attempt_at ? new Date(l.last_attempt_at).toLocaleString('es-CL') : '',
-                }));
-                const wb = XLSX.utils.book_new();
-                const ws = XLSX.utils.json_to_sheet(rows);
-                const colWidths = Object.keys(rows[0]).map(key => ({
-                  wch: Math.max(key.length, ...rows.map((r: any) => String(r[key]).length).slice(0, 50)) + 2,
-                }));
-                ws['!cols'] = colWidths;
-                XLSX.utils.book_append_sheet(wb, ws, 'Reciclados');
-                const now = new Date();
-                const dateStr = now.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
-                XLSX.writeFile(wb, `RECICLADOS - ${dateStr}.xlsx`, { bookType: 'xlsx' });
-                toast.success(`${data.length} leads reciclados descargados`);
+                  .select('id, name, phone, status, cuando_comprar, source, created_at')
+                  .eq('is_demo', false)
+                  .not('cuando_comprar', 'is', null)
+                  .neq('cuando_comprar', '')
+                  .order('cuando_comprar', { ascending: true });
+                setDailyPlanLeads((data || []).filter((l: any) => !EXCLUDED.includes(l.status)));
+                setDailyPlanFilter('all');
+                setShowDailyPlan(true);
               }}
-              className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-700 transition-colors"
+              className="px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-sm font-bold hover:bg-primary/20 transition-colors"
             >
-              ♻️ Descargar Reciclados
+              📅 Planificación Diaria
             </button>
           )}
+          {!isDemo && (
+            <button
+              onClick={() => setShowWeeklyReport(true)}
+              className="px-3 py-1.5 rounded-lg bg-violet-500/10 text-violet-600 text-sm font-bold hover:bg-violet-500/20 transition-colors"
+            >
+              📊 Reporte Semanal
+            </button>
+          )}
+          <NavLink to="/viviendas" className="px-3 py-1.5 rounded-lg text-sm font-bold bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 transition-colors">
+            Viviendas
+          </NavLink>
           <NavLink data-tour="nav-advisor" to="/advisor" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Seguimiento
           </NavLink>
@@ -466,8 +447,8 @@ const Executive = () => {
       <div className="flex gap-3 p-3" style={{ minHeight: 'calc(100vh - 140px)' }}>
         {/* Left: Table + Today's Calls stacked */}
         <div className="flex-1 min-w-0 flex flex-col gap-3">
-          {/* Leads table - fixed height to keep its size */}
-          <div style={{ height: 'calc(60vh - 70px)', minHeight: '350px' }}>
+          {/* Leads table or Viviendas */}
+          <div style={{ height: 'calc(75vh - 70px)', minHeight: '450px' }}>
             <LeadsTable
               leads={executiveLeads}
               selectedLeadId={selectedPendingId ?? priorityLead?.id}
@@ -478,7 +459,7 @@ const Executive = () => {
             />
           </div>
 
-          {/* Today's Calls - generous height */}
+          {/* Today's Calls */}
           <div className="bg-card border border-border rounded-lg overflow-hidden flex flex-col" style={{ height: 'calc(30vh - 30px)', minHeight: '180px' }}>
             <div className="px-3 py-2 text-sm font-bold text-muted-foreground uppercase tracking-wider border-b border-border shrink-0">
               📊 Llamadas de Hoy ({todayLeads.length})
@@ -637,7 +618,61 @@ const Executive = () => {
       </Dialog>
       {/* Twilio desactivado — sin llamada manual ni botón flotante */}
 
+      {/* Daily Plan Dialog */}
+      <Dialog open={showDailyPlan} onOpenChange={setShowDailyPlan}>
+        <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>📅 Planificación Diaria</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {['all', ...Array.from(new Set(dailyPlanLeads.map((l: any) => l.cuando_comprar).filter(Boolean))).sort()].map((h) => (
+              <button
+                key={h}
+                onClick={() => setDailyPlanFilter(h)}
+                className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                  dailyPlanFilter === h
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                }`}
+              >
+                {h === 'all' ? 'Todos' : h === 'lo_antes_posible' ? '🔥 Lo antes posible' : h === 'dentro_3_meses' ? 'Dentro de 3 meses' : h === 'mas_3_meses' ? 'En más de 3 meses' : h}
+              </button>
+            ))}
+          </div>
+          {(() => {
+            const filtered = dailyPlanFilter === 'all'
+              ? dailyPlanLeads
+              : dailyPlanLeads.filter((l: any) => l.cuando_comprar === dailyPlanFilter);
+            if (filtered.length === 0) return <p className="text-sm text-muted-foreground text-center py-4">No hay leads con intención de compra declarada.</p>;
+            const statusLabels: Record<string, string> = {
+              nuevo: '🟡 Nuevo', contactado: '🔵 Contactado', recontactar: '🟠 Recontactar',
+              no_contesta: '📵 No Contesta', no_califica: '⛔ No Califica', calling: '📞 Llamando',
+              esperando_documentos: '📄 Esperando Docs', interesado: '🟢 Interesado',
+              cotizacion_enviada: '📧 Cotización', aprobado: '✅ Aprobado',
+            };
+            return (
+              <div className="space-y-2">
+                {filtered.map((l: any) => (
+                  <div key={l.id} className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm truncate">{l.name}</p>
+                      <p className="text-xs text-muted-foreground">{l.phone}</p>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-xs bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full">{l.cuando_comprar === 'lo_antes_posible' ? '🔥 Pronto' : l.cuando_comprar === 'dentro_3_meses' ? '3 meses' : l.cuando_comprar === 'mas_3_meses' ? '+3 meses' : l.cuando_comprar}</span>
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-muted">{statusLabels[l.status] || l.status}</span>
+                    </div>
+                  </div>
+                ))}
+                <p className="text-xs text-muted-foreground text-center pt-2">{filtered.length} lead{filtered.length !== 1 ? 's' : ''}</p>
+              </div>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
+
       <GuidedTour page="executive" isDemo={isDemo} />
+      <WeeklyReport open={showWeeklyReport} onClose={() => setShowWeeklyReport(false)} />
     </div>
   );
 };

@@ -1211,8 +1211,8 @@ function EditableLeadGrid({ lead, userRole, onSaved }: { lead: Lead; userRole?: 
       {(lead as any).comuna_propiedad && <DetailItem label="Comuna propiedad" value={(lead as any).comuna_propiedad} />}
       {(lead as any).precio_propiedad_ok && <DetailItem label="Valor propiedad" value={(lead as any).precio_propiedad_ok} />}
       {(lead as any).complementa_renta && <DetailItem label="Complementa renta" value={(lead as any).complementa_renta} />}
-      {(lead as any).preferencia_contacto && <DetailItem label="Prefiere contacto" value={(lead as any).preferencia_contacto === 'whatsapp' ? '💬 WhatsApp' : '📞 Llamada'} />}
-      {(lead as any).horario_contacto && <DetailItem label="Horario contacto" value={(lead as any).horario_contacto} />}
+      {(lead as any).renta_complemento && <DetailItem label="Renta complemento" value={(lead as any).renta_complemento} />}
+      {(lead as any).cuando_comprar && <DetailItem label="Cuándo comprar" value={(lead as any).cuando_comprar === 'lo_antes_posible' ? '🔥 Lo antes posible' : (lead as any).cuando_comprar === 'dentro_3_meses' ? 'Dentro de 3 meses' : (lead as any).cuando_comprar === 'mas_3_meses' ? 'En más de 3 meses' : (lead as any).cuando_comprar} />}
       {renderField('email', 'Email', lead.email || '—')}
       {renderField('phone', 'Teléfono', lead.phone)}
     </div>

@@ -16,6 +16,7 @@ import Dialer from "./pages/Dialer";
 import NotFound from "./pages/NotFound";
 import Demo from "./pages/Demo";
 import MailingOportunidad from "./pages/MailingOportunidad";
+import Viviendas from "./pages/Viviendas";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,7 @@ function AppRoutes() {
         <Route path="/backoffice" element={role === 'admin' ? <Backoffice /> : <Navigate to={defaultRoute} replace />} />
         <Route path="/advisor" element={role === 'asesor' || role === 'admin' || role === 'ejecutiva' || role === 'recicladora' ? <Advisor /> : <Navigate to={defaultRoute} replace />} />
         <Route path="/dialer" element={role === 'dialer' || role === 'admin' ? <Dialer /> : <Navigate to={defaultRoute} replace />} />
+        <Route path="/viviendas" element={role === 'asesor' ? <Navigate to={defaultRoute} replace /> : <Viviendas />} />
         <Route path="/demo" element={<Demo />} />
         <Route path="/mailing-oportunidad" element={<MailingOportunidad />} />
         <Route path="*" element={<NotFound />} />

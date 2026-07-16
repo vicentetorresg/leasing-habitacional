@@ -171,7 +171,7 @@ serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'Llave Propia <notificaciones@llavepropia.cl>',
+          from: 'Llave Propia <notificaciones@proppi.cl>',
           to: [lead.email],
           cc: CC_EMAILS,
           subject: emailData.subject,

@@ -77,7 +77,7 @@ export default async function handler(req, res) {
         method: 'POST',
         headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          from: 'Llave Propia <notificaciones@llavepropia.cl>',
+          from: 'Llave Propia <notificaciones@proppi.cl>',
           to: [lead.email],
           cc: CC_EMAILS,
           reply_to: REPLY_TO,

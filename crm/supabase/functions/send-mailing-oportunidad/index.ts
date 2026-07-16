@@ -72,7 +72,7 @@ serve(async (req) => {
         const res = await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ from: 'Llave Propia <notificaciones@llavepropia.cl>', to: [email.trim()], subject: `[PRUEBA] ${subject}`, html }),
+          body: JSON.stringify({ from: 'Llave Propia <notificaciones@proppi.cl>', to: [email.trim()], subject: `[PRUEBA] ${subject}`, html }),
         });
         if (res.ok) { sent++; } else { const e = await res.json(); errors.push(`${email}: ${e.message}`); }
         await delay(400);
@@ -119,7 +119,7 @@ serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'Llave Propia <notificaciones@llavepropia.cl>',
+          from: 'Llave Propia <notificaciones@proppi.cl>',
           to: [lead.email],
           subject,
           html: personalizedHtml,

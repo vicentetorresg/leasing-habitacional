@@ -45,11 +45,16 @@ export interface Lead {
   comuna_propiedad: string | null;
   precio_propiedad_ok: string | null;
   complementa_renta: string | null;
-  preferencia_contacto: string | null;
-  horario_contacto: string | null;
+  renta_complemento: string | null;
+  cuando_comprar: string | null;
   utm_source: string | null;
   utm_medium: string | null;
   utm_campaign: string | null;
+  uf_aprobado_austra: number | null;
+  uf_aprobado_casa_pronta: number | null;
+  uf_propiedad_quiere: number | null;
+  con_codeudor: boolean | null;
+  fecha_aprobacion: string | null;
 }
 
 // Statuses that mean the lead is still pending (ejecutiva view)

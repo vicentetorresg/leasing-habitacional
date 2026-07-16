@@ -43,6 +43,31 @@ export default async function handler(req, res) {
 
   const saved = supaRes.ok;
 
+  // 1b. Dual-write to CRM Supabase (viviendas table)
+  const CRM_URL = 'https://evuxdhvvarfxredghvpu.supabase.co/rest/v1/viviendas';
+  const CRM_KEY = process.env.CRM_SERVICE_ROLE_KEY;
+  await fetch(CRM_URL, {
+    method: 'POST',
+    headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+    body: JSON.stringify({
+      nombre, telefono,
+      email: email || null,
+      tipo_vivienda: tipo_vivienda || null,
+      valor_pesos: rango_uf || null,
+      direccion: direccion || null,
+      detalle_depto: detalle_depto || null,
+      comuna: comuna || null,
+      superficie: superficie ? parseInt(superficie) : null,
+      dormitorios: dormitorios || null,
+      banos: banos || null,
+      fuente: fuente || 'viviendas-form',
+      utm_source: utm_source || null,
+      utm_medium: utm_medium || null,
+      utm_campaign: utm_campaign || null,
+      status: 'esperando_ok_propietario',
+    }),
+  }).catch(() => null);
+
   // 2. Team notification email
   const now = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
   const waPhone = (telefono || '').replace(/\D/g, '').replace(/^0/, '56');

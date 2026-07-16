@@ -161,22 +161,22 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
         <span class="hero-logo-b">una marca de Llave Propia</span>
       </div>
     </div>
-    <span class="hero-headline">Buscamos casas en venta en todo Chile</span>
-    <h1>Vendemos tu casa rápido<span class="hero-big">bajo 2.000 UF</span></h1>
-    <p class="hero-sub">Tenemos compradores aprobados buscando casas. También recibimos departamentos.</p>
-    <p>Registra tu propiedad en <strong>60 segundos</strong> y la conectamos con compradores pre-aprobados con subsidio DS120. Sin exclusividad, sin costos iniciales.</p>
+    <span class="hero-headline">Tenemos compradores aprobados para tu casa</span>
+    <h1>Revisa si hay alguien interesado<span class="hero-big">en comprar tu casa</span></h1>
+    <p class="hero-sub">Más de 100 clientes aprobados buscan casa. Revisa si hay uno para la tuya.</p>
+    <p>Registra tu casa en <strong>60 segundos</strong> y te decimos si tenemos un comprador que calza. Clientes con subsidio DS120, pre-aprobados y listos para comprar.</p>
     <div class="hero-badges">
-      <span class="hero-badge">&#10003; 1% comisión</span>
-      <span class="hero-badge">&#10003; Sin exclusividad</span>
-      <span class="hero-badge">&#10003; Compradores reales</span>
-      <span class="hero-badge">&#9889; Respuesta en menos de 1 minuto</span>
+      <span class="hero-badge">&#10003; Compradores listos</span>
+      <span class="hero-badge">&#10003; Sin costos para ti</span>
+      <span class="hero-badge">&#10003; 1% comisión solo al vender</span>
+      <span class="hero-badge">&#9889; Te respondemos en menos de 1 minuto</span>
     </div>
     <a href="#formCard" class="hero-cta-arrow" onclick="document.getElementById('formCard').scrollIntoView({behavior:'smooth',block:'start'});return false;">&#8595;</a>
   </div>
 </div>
 
 <!-- FORM SECTION -->
-<div class="form-section-label" id="formCard"><span>Registra tu propiedad</span></div>
+<div class="form-section-label" id="formCard"><span>Registra tu casa en 60 segundos</span></div>
 <div class="card">
   <div class="progress" id="progress">
     <div class="progress-dot current"></div>
@@ -188,15 +188,15 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
   <!-- STEP 1: ¿Tiene vivienda? -->
   <div class="step active" id="step1">
     <h2 class="step-title">¿Tienes una casa para vender?</h2>
-    <p class="step-sub">También recibimos departamentos. Conectamos propietarios con compradores aprobados.</p>
+    <p class="step-sub">Queremos ver si tenemos un comprador para tu propiedad</p>
     <div class="choice-grid">
       <div class="choice-btn" onclick="answer1('si')">
         <span class="icon">&#127968;</span>
-        Sí, quiero vender
+        Sí, tengo una casa
       </div>
       <div class="choice-btn" onclick="answer1('no')">
         <span class="icon">&#10060;</span>
-        No tengo vivienda
+        No tengo casa
       </div>
     </div>
     <div class="no-qualify" id="nq1">
@@ -506,7 +506,7 @@ function submitForm(){
     superficie: document.getElementById('superficie').value.trim()||null,
     dormitorios: selectedDorm||null,
     banos: selectedBano||null,
-    fuente: 'viviendas-form',
+    fuente: 'viviendas-form-dos',
     utm_source: utmSource||null,
     utm_medium: utmMedium||null,
     utm_campaign: utmCampaign||null
