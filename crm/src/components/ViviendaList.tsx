@@ -35,6 +35,7 @@ interface Vivienda {
   updated_at: string;
   photo_count: number | null;
   last_mailing_at: string | null;
+  archived: boolean;
 }
 
 interface LinkedLead {
@@ -53,6 +54,7 @@ const STATUSES = [
   { value: 'escritura_firmada', label: 'Escritura firmada, esperando Inscripción', color: 'bg-indigo-50 text-indigo-700 border-indigo-200', dot: 'bg-indigo-400' },
   { value: 'inscrito_cbr', label: 'Inscrito CBR. Cobrar comisión propietario', color: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-400' },
   { value: 'finalizado', label: 'Negocio finalizado', color: 'bg-green-50 text-green-700 border-green-200', dot: 'bg-green-500' },
+  { value: 'propietario_no_interesado', label: 'Propietario no interesado en vender', color: 'bg-red-50 text-red-700 border-red-200', dot: 'bg-red-400' },
 ];
 
 const STATUS_MAP: Record<string, typeof STATUSES[0]> = {};
@@ -238,7 +240,8 @@ const ViviendaList = () => {
   const [viviendas, setViviendas] = useState<Vivienda[]>([]);
   const [loading, setLoading] = useState(true);
   const [editViv, setEditViv] = useState<Vivienda | null>(null);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [archiveId, setArchiveId] = useState<string | null>(null);
+  const [showArchived, setShowArchived] = useState(false);
   const [editLeadSearch, setEditLeadSearch] = useState('');
   const [editLeadResults, setEditLeadResults] = useState<LinkedLead[]>([]);
   const [linkedLeads, setLinkedLeads] = useState<Record<string, LinkedLead>>({});
@@ -323,11 +326,17 @@ const ViviendaList = () => {
     setSendingEmailId(null);
   };
 
-  const handleDelete = async () => {
-    if (!deleteId) return;
-    await (supabase.from('viviendas' as any) as any).delete().eq('id', deleteId);
-    toast.success('Vivienda eliminada');
-    setDeleteId(null);
+  const handleArchive = async () => {
+    if (!archiveId) return;
+    await (supabase.from('viviendas' as any) as any).update({ archived: true, updated_at: new Date().toISOString() }).eq('id', archiveId);
+    toast.success('Vivienda archivada');
+    setArchiveId(null);
+    fetchViviendas();
+  };
+
+  const handleUnarchive = async (id: string) => {
+    await (supabase.from('viviendas' as any) as any).update({ archived: false, updated_at: new Date().toISOString() }).eq('id', id);
+    toast.success('Vivienda desarchivada');
     fetchViviendas();
   };
 
@@ -446,6 +455,11 @@ const ViviendaList = () => {
   };
 
   const filtered = viviendas.filter(v => {
+    if (showArchived) {
+      if (!v.archived) return false;
+    } else {
+      if (v.archived) return false;
+    }
     if (statusFilter !== 'all' && v.status !== statusFilter) return false;
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -464,7 +478,7 @@ const ViviendaList = () => {
       <div className="p-3 border-b border-border space-y-2">
         <div className="flex items-center gap-3">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
-            Viviendas ({filtered.length})
+            {showArchived ? 'Archivadas' : 'Viviendas'} ({filtered.length})
           </h3>
           <div className="relative flex-1 max-w-xs">
             <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -475,6 +489,13 @@ const ViviendaList = () => {
               className="w-full pl-8 pr-2 py-1.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-1 focus:ring-primary/30"
             />
           </div>
+          <button
+            onClick={() => { setShowArchived(!showArchived); setStatusFilter('all'); }}
+            className={`ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${showArchived ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-muted text-muted-foreground hover:bg-muted/80 border border-border'}`}
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+            {showArchived ? 'Ver activas' : 'Ver archivadas'}
+          </button>
         </div>
         <div className="flex flex-wrap gap-1">
           <button
@@ -501,20 +522,20 @@ const ViviendaList = () => {
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left text-xs text-muted-foreground uppercase tracking-wider sticky top-0 z-10" style={{ background: '#ffffff', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-              <th className="px-3 py-2 bg-white">Estado</th>
-              <th className="px-3 py-2 bg-white">Propietario</th>
-              <th className="px-3 py-2 bg-white">Tipo</th>
-              <th className="px-3 py-2 bg-white">Dirección</th>
-              <th className="px-3 py-2 bg-white">Comuna</th>
-              <th className="px-3 py-2 bg-white">Valor</th>
-              <th className="px-3 py-2 bg-white">m2</th>
-              <th className="px-3 py-2 bg-white">Dorm</th>
-              <th className="px-3 py-2 bg-white">Baños</th>
-              <th className="px-3 py-2 bg-white">Fotos</th>
-              <th className="px-3 py-2 bg-white">Lead Interesado</th>
-              <th className="px-3 py-2 bg-white">Notas</th>
-              <th className="px-3 py-2 bg-white">Fecha</th>
-              <th className="px-3 py-2 bg-white"></th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2">Estado</th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2">Propietario</th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2">Tipo</th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2">Dirección</th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2">Comuna</th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2">Valor</th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2">m2</th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2">Dorm</th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2">Baños</th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2">Fotos</th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2">Lead Interesado</th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2">Notas</th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2">Fecha</th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2"></th>
             </tr>
           </thead>
           <tbody>
@@ -597,8 +618,16 @@ const ViviendaList = () => {
                   </td>
                   <td className="px-3 py-2">
                     <div className="flex gap-1">
-                      <button onClick={() => openEdit(v)} className="text-xs px-2 py-1 rounded bg-muted hover:bg-accent transition-colors font-bold">Editar</button>
-                      <button onClick={() => setDeleteId(v.id)} className="text-xs px-2 py-1 rounded bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors font-bold">X</button>
+                      {showArchived ? (
+                        <button onClick={() => handleUnarchive(v.id)} className="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors font-bold">Desarchivar</button>
+                      ) : (
+                        <>
+                          <button onClick={() => openEdit(v)} className="text-xs px-2 py-1 rounded bg-muted hover:bg-accent transition-colors font-bold">Editar</button>
+                          <button onClick={() => setArchiveId(v.id)} className="text-xs px-2 py-1 rounded bg-amber-50 text-amber-700 hover:bg-amber-100 transition-colors font-bold" title="Archivar">
+                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+                          </button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -864,21 +893,27 @@ const ViviendaList = () => {
             }}>
               Link para Interesados
             </Button>
+            <Button variant="outline" size="sm" onClick={() => {
+              navigator.clipboard.writeText(`https://www.llavepropia.cl/subir-fotos?id=${photoViewViv?.id}`);
+              toast.success('Link de subida copiado');
+            }}>
+              Link subir fotos
+            </Button>
             <Button variant="outline" size="sm" onClick={() => { setPhotoViewViv(null); setPhotoViewFiles([]); }}>Cerrar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Delete Dialog */}
-      <Dialog open={!!deleteId} onOpenChange={open => { if (!open) setDeleteId(null); }}>
+      {/* Archive Dialog */}
+      <Dialog open={!!archiveId} onOpenChange={open => { if (!open) setArchiveId(null); }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Eliminar vivienda</DialogTitle>
+            <DialogTitle>Archivar vivienda</DialogTitle>
           </DialogHeader>
-          <p className="text-sm text-muted-foreground">Esta acción no se puede deshacer.</p>
+          <p className="text-sm text-muted-foreground">La vivienda se moverá a archivadas. Podrás desarchivarla en cualquier momento.</p>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteId(null)}>Cancelar</Button>
-            <Button variant="destructive" onClick={handleDelete}>Eliminar</Button>
+            <Button variant="outline" onClick={() => setArchiveId(null)}>Cancelar</Button>
+            <Button onClick={handleArchive} className="bg-amber-600 hover:bg-amber-700 text-white">Archivar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
