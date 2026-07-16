@@ -110,6 +110,12 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
 .depto-slide{max-height:0;opacity:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.3s ease,margin 0.35s ease;margin-top:0;margin-bottom:0}
 .depto-slide.open{max-height:80px;opacity:1;margin-bottom:12px}
 
+.tipo-required{max-height:0;opacity:0;overflow:hidden;transition:max-height 0.5s ease,opacity 0.4s ease;pointer-events:none}
+.tipo-required.revealed{max-height:1200px;opacity:1;pointer-events:auto}
+.tipo-prompt{text-align:center;color:var(--gold);font-size:0.85rem;font-weight:700;padding:16px 0 0;animation:pulse-prompt 2s ease-in-out infinite}
+.tipo-prompt.hidden{display:none}
+@keyframes pulse-prompt{0%,100%{opacity:1}50%{opacity:0.5}}
+
 .f-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
 .btn{width:100%;height:52px;border:none;border-radius:50px;font-size:0.95rem;font-weight:900;font-family:'Nunito',sans-serif;cursor:pointer;transition:var(--t);display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:0.3px}
@@ -240,52 +246,56 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
       </div>
     </div>
 
-    <div class="f-field" style="margin-top:16px">
-      <label>Dirección (calle y número)</label>
-      <input class="f-input" type="text" id="direccion" placeholder="Ej: Av. Los Aromos 1234" oninput="checkStep3()">
-    </div>
+    <p class="tipo-prompt" id="tipoPrompt">&#8593; Selecciona casa o departamento para continuar</p>
 
-    <div class="f-field depto-slide" id="deptoField">
-      <label>Detalle depto (piso, N°, block)</label>
-      <input class="f-input" type="text" id="detalleDepto" placeholder="Ej: Piso 3, depto 302, torre A" oninput="checkStep3()">
-    </div>
-
-    <div class="f-field">
-      <label>Comuna</label>
-      <input class="f-input" type="text" id="comuna" placeholder="Ej: Maipú, Rancagua, Temuco..." oninput="checkStep3()">
-    </div>
-
-    <div class="f-field">
-      <label>Superficie total aprox (m²) <span style="font-weight:600;font-size:0.75rem;color:var(--text-s)">— máximo 82 m²</span></label>
-      <input class="f-input" type="number" id="superficie" placeholder="Ej: 42" oninput="checkStep3()" min="1" max="82">
-      <div class="no-qualify" id="nqSup" style="margin-top:6px;margin-bottom:0">
-        <h4>Superficie máxima excedida</h4>
-        <p>Solo trabajamos con viviendas de hasta 82 m². Tu propiedad no califica.</p>
+    <div class="tipo-required" id="tipoFields">
+      <div class="f-field" style="margin-top:16px">
+        <label>Dirección (calle y número)</label>
+        <input class="f-input" type="text" id="direccion" placeholder="Ej: Av. Los Aromos 1234" oninput="checkStep3()">
       </div>
-    </div>
 
-    <div class="f-field">
-      <label>Dormitorios</label>
-      <div class="pill-row" id="dormPills">
-        <div class="pill-opt" onclick="selectPill('dorm','1',this)">1</div>
-        <div class="pill-opt" onclick="selectPill('dorm','2',this)">2</div>
-        <div class="pill-opt" onclick="selectPill('dorm','3',this)">3</div>
-        <div class="pill-opt" onclick="selectPill('dorm','4',this)">4</div>
-        <div class="pill-opt" onclick="selectPill('dorm','5',this)">5+</div>
+      <div class="f-field depto-slide" id="deptoField">
+        <label>Detalle depto (piso, N°, block)</label>
+        <input class="f-input" type="text" id="detalleDepto" placeholder="Ej: Piso 3, depto 302, torre A" oninput="checkStep3()">
       </div>
-    </div>
 
-    <div class="f-field">
-      <label>Baños</label>
-      <div class="pill-row" id="banoPills">
-        <div class="pill-opt" onclick="selectPill('bano','1',this)">1</div>
-        <div class="pill-opt" onclick="selectPill('bano','2',this)">2</div>
-        <div class="pill-opt" onclick="selectPill('bano','3',this)">3+</div>
+      <div class="f-field">
+        <label>Comuna</label>
+        <input class="f-input" type="text" id="comuna" placeholder="Ej: Maipú, Rancagua, Temuco..." oninput="checkStep3()">
       </div>
-    </div>
 
-    <p class="fields-hint" id="hint3">Completa todos los campos para continuar</p>
-    <button class="btn btn-navy" id="btnStep3" disabled onclick="goStep(4)">Continuar &#8594;</button>
+      <div class="f-field">
+        <label>Superficie total aprox (m²) <span style="font-weight:600;font-size:0.75rem;color:var(--text-s)">— máximo 82 m²</span></label>
+        <input class="f-input" type="number" id="superficie" placeholder="Ej: 42" oninput="checkStep3()" min="1" max="82">
+        <div class="no-qualify" id="nqSup" style="margin-top:6px;margin-bottom:0">
+          <h4>Superficie máxima excedida</h4>
+          <p>Solo trabajamos con viviendas de hasta 82 m². Tu propiedad no califica.</p>
+        </div>
+      </div>
+
+      <div class="f-field">
+        <label>Dormitorios</label>
+        <div class="pill-row" id="dormPills">
+          <div class="pill-opt" onclick="selectPill('dorm','1',this)">1</div>
+          <div class="pill-opt" onclick="selectPill('dorm','2',this)">2</div>
+          <div class="pill-opt" onclick="selectPill('dorm','3',this)">3</div>
+          <div class="pill-opt" onclick="selectPill('dorm','4',this)">4</div>
+          <div class="pill-opt" onclick="selectPill('dorm','5',this)">5+</div>
+        </div>
+      </div>
+
+      <div class="f-field">
+        <label>Baños</label>
+        <div class="pill-row" id="banoPills">
+          <div class="pill-opt" onclick="selectPill('bano','1',this)">1</div>
+          <div class="pill-opt" onclick="selectPill('bano','2',this)">2</div>
+          <div class="pill-opt" onclick="selectPill('bano','3',this)">3+</div>
+        </div>
+      </div>
+
+      <p class="fields-hint" id="hint3">Completa todos los campos para continuar</p>
+      <button class="btn btn-navy" id="btnStep3" disabled onclick="goStep(4)">Continuar &#8594;</button>
+    </div>
     <button class="btn-back" onclick="goBack(2)">&larr; Volver</button>
   </div>
 
@@ -419,6 +429,8 @@ function selectTipo(val,el){
   el.classList.add('selected');
   document.getElementById('deptoField').classList.toggle('open',val==='departamento');
   if(val==='casa') document.getElementById('detalleDepto').value='';
+  document.getElementById('tipoFields').classList.add('revealed');
+  document.getElementById('tipoPrompt').classList.add('hidden');
   checkStep3();
 }
 
