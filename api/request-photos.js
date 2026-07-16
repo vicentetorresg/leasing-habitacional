@@ -69,7 +69,7 @@ export default async function handler(req, res) {
     body: JSON.stringify({
       from: 'Llave Oferta <notificaciones@proppi.cl>',
       to: [viv.email],
-      bcc: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'],
+      cc: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'],
       reply_to: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'],
       subject: `${firstName}, alguien quiere ver fotos de tu ${tipoLabel}`,
       html
