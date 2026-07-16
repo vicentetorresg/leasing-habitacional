@@ -277,6 +277,19 @@ const ViviendaList = () => {
 
   useEffect(() => { fetchViviendas(); }, [fetchViviendas]);
 
+  // Auto-open photo viewer if ?fotos=ID is in URL
+  useEffect(() => {
+    if (loading || viviendas.length === 0) return;
+    const params = new URLSearchParams(window.location.search);
+    const fotosId = params.get('fotos');
+    if (fotosId) {
+      const viv = viviendas.find(v => v.id === fotosId);
+      if (viv) openPhotoView(viv);
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [loading, viviendas]);
+
   const handleStatusChange = async (id: string, newStatus: string) => {
     await (supabase.from('viviendas' as any) as any).update({ status: newStatus, updated_at: new Date().toISOString() }).eq('id', id);
     toast.success('Estado actualizado');

@@ -77,7 +77,7 @@ export default async function handler(req, res) {
       to: ['rodrigo.canas@llavepropia.cl'],
       bcc: ['vicente@llavepropia.cl'],
       subject: `Fotos subidas: ${viv.nombre} — ${tipoLabel} en ${viv.comuna || '?'} (${photo_count} fotos)`,
-      html: `<p><strong>${viv.nombre}</strong> subio <strong>${photo_count} foto(s)</strong> de su ${tipoLabel} en ${viv.comuna || '?'}.</p><p><a href="https://www.llavepropia.cl/crm/viviendas">Ver en CRM</a></p>`
+      html: `<p><strong>${viv.nombre}</strong> subio <strong>${photo_count} foto(s)</strong> de su ${tipoLabel} en ${viv.comuna || '?'}.</p><p><a href="https://www.llavepropia.cl/crm/viviendas?fotos=${vivienda_id}">Ver fotos en CRM</a></p>`
     })
   }).catch(() => null);
 
