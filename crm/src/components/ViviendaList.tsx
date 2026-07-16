@@ -246,7 +246,9 @@ const ViviendaList = () => {
   const [editFiles, setEditFiles] = useState<VivFile[]>([]);
   const [uploading, setUploading] = useState(false);
   const [sendingEmailId, setSendingEmailId] = useState<string | null>(null);
-  const [photoCounts, setPhotoCounts] = useState<Record<string, number>>({});
+  const [photoViewViv, setPhotoViewViv] = useState<Vivienda | null>(null);
+  const [photoViewFiles, setPhotoViewFiles] = useState<VivFile[]>([]);
+  const [photoViewLoading, setPhotoViewLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchViviendas = useCallback(async () => {
@@ -374,6 +376,18 @@ const ViviendaList = () => {
     toast.success('Archivo eliminado');
   };
 
+  const openPhotoView = async (v: Vivienda) => {
+    setPhotoViewViv(v);
+    setPhotoViewLoading(true);
+    setPhotoViewFiles([]);
+    const { data } = await supabase.storage.from(BUCKET).list(v.id, { limit: 100 });
+    if (data) {
+      const imgs = data.filter(f => f.name !== '.emptyFolderPlaceholder' && /\.(jpg|jpeg|png|gif|webp|heic)$/i.test(f.name));
+      setPhotoViewFiles(imgs.map(f => ({ name: f.name, url: `${SUPA_STORAGE_URL}/${v.id}/${f.name}` })));
+    }
+    setPhotoViewLoading(false);
+  };
+
   const openEdit = (v: Vivienda) => {
     setEditViv({ ...v });
     setEditLeadSearch('');
@@ -486,23 +500,23 @@ const ViviendaList = () => {
                   <td className="px-3 py-2 text-center">
                     {(() => {
                       const count = v.photo_count || 0;
-                      const uploadUrl = `https://www.llavepropia.cl/subir-fotos?id=${v.id}`;
                       return count > 0 ? (
-                        <a href={uploadUrl} target="_blank" rel="noreferrer"
-                          className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1 rounded-md text-[11px] font-bold hover:bg-emerald-100 transition-colors"
-                          title={`${count} foto${count > 1 ? 's' : ''} — ver/subir mas`}
+                        <button
+                          onClick={() => openPhotoView(v)}
+                          className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1 rounded-md text-[11px] font-bold hover:bg-emerald-100 transition-colors cursor-pointer"
+                          title={`Ver ${count} foto${count > 1 ? 's' : ''}`}
                         >
                           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                           {count}
-                        </a>
+                        </button>
                       ) : (
-                        <a href={uploadUrl} target="_blank" rel="noreferrer"
-                          className="inline-flex items-center gap-1 bg-muted/30 text-muted-foreground/40 border border-border/30 px-2 py-1 rounded-md text-[11px] font-medium hover:text-muted-foreground/70 hover:border-border/60 transition-colors"
-                          title="Sin fotos — copiar link de subida"
+                        <span
+                          className="inline-flex items-center gap-1 bg-muted/30 text-muted-foreground/40 border border-border/30 px-2 py-1 rounded-md text-[11px] font-medium"
+                          title="Sin fotos"
                         >
                           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                           0
-                        </a>
+                        </span>
                       );
                     })()}
                   </td>
@@ -763,6 +777,47 @@ const ViviendaList = () => {
           <DialogFooter>
             <Button variant="outline" onClick={() => { setEditViv(null); setEditLeadSearch(''); setEditLeadResults([]); setEditFiles([]); }}>Cancelar</Button>
             <Button onClick={handleSaveEdit}>Guardar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Photo Viewer Dialog */}
+      <Dialog open={!!photoViewViv} onOpenChange={open => { if (!open) { setPhotoViewViv(null); setPhotoViewFiles([]); } }}>
+        <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              Fotos — {photoViewViv?.nombre}
+              <span className="ml-2 text-sm font-normal text-muted-foreground">
+                {photoViewViv?.tipo_vivienda === 'departamento' ? 'Depto' : 'Casa'} en {photoViewViv?.comuna || '—'}
+              </span>
+            </DialogTitle>
+          </DialogHeader>
+          {photoViewLoading ? (
+            <div className="py-8 text-center text-muted-foreground text-sm">Cargando fotos...</div>
+          ) : photoViewFiles.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3">
+              {photoViewFiles.map(f => (
+                <a key={f.name} href={f.url} target="_blank" rel="noreferrer" className="block border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                  <img src={f.url} alt={f.name} className="w-full h-36 object-cover" />
+                </a>
+              ))}
+            </div>
+          ) : (
+            <div className="py-8 text-center text-muted-foreground text-sm">Sin fotos subidas</div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" size="sm" asChild>
+              <a href={`https://www.llavepropia.cl/subir-fotos?id=${photoViewViv?.id}`} target="_blank" rel="noreferrer">
+                Link de subida
+              </a>
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => {
+              navigator.clipboard.writeText(`https://www.llavepropia.cl/subir-fotos?id=${photoViewViv?.id}`);
+              toast.success('Link copiado al portapapeles');
+            }}>
+              Copiar link
+            </Button>
+            <Button onClick={() => { setPhotoViewViv(null); setPhotoViewFiles([]); }}>Cerrar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
