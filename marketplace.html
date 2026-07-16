@@ -40,9 +40,12 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige);m
 .card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,0.1)}
 .card-img{position:relative;width:100%;height:200px;background:#ede3d4;overflow:hidden}
 .card-img img{width:100%;height:100%;object-fit:cover}
-.card-img-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#bfb5a3;gap:8px}
-.card-img-placeholder svg{width:48px;height:48px}
-.card-img-placeholder span{font-size:0.8rem;font-weight:700}
+.card-img-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
+.card-img-placeholder.casa-ph{background:linear-gradient(135deg,#e8dcc8 0%,#d4c4a8 40%,#c9b896 100%)}
+.card-img-placeholder.depto-ph{background:linear-gradient(135deg,#cdd5e0 0%,#b8c4d4 40%,#a8b8cc 100%)}
+.card-img-placeholder svg.ph-icon{width:64px;height:64px;opacity:0.35}
+.card-img-placeholder span{font-size:0.75rem;font-weight:800;color:rgba(0,0,0,0.25);text-transform:uppercase;letter-spacing:1px}
+.card-img-placeholder .ph-pattern{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.15) 1px,transparent 1px);background-size:20px 20px}
 .card-badge{position:absolute;top:10px;left:10px;background:var(--navy);color:#fff;font-size:0.68rem;font-weight:800;padding:4px 10px;border-radius:50px;text-transform:uppercase;letter-spacing:0.5px}
 .card-photos-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.55);color:#fff;font-size:0.72rem;font-weight:700;padding:4px 10px;border-radius:50px;display:flex;align-items:center;gap:4px}
 .card-body{padding:18px 20px;flex:1;display:flex;flex-direction:column}
@@ -274,7 +277,11 @@ function renderGrid(list) {
       imgHtml = '<img src="' + photoUrl + '" alt="' + tipo + ' en ' + (v.comuna || '') + '" loading="lazy">';
       imgHtml += '<span class="card-photos-badge"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>' + v.photo_count + '</span>';
     } else {
-      imgHtml = '<div class="card-img-placeholder"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><span>Sin fotos</span></div>';
+      var phClass = v.tipo_vivienda === 'departamento' ? 'depto-ph' : 'casa-ph';
+      var phSvg = v.tipo_vivienda === 'departamento'
+        ? '<svg class="ph-icon" fill="none" viewBox="0 0 64 64" stroke="rgba(0,0,0,0.2)" stroke-width="1.5"><rect x="14" y="10" width="36" height="46" rx="2"/><rect x="20" y="16" width="8" height="6" rx="1"/><rect x="36" y="16" width="8" height="6" rx="1"/><rect x="20" y="26" width="8" height="6" rx="1"/><rect x="36" y="26" width="8" height="6" rx="1"/><rect x="20" y="36" width="8" height="6" rx="1"/><rect x="36" y="36" width="8" height="6" rx="1"/><rect x="26" y="46" width="12" height="10" rx="1"/></svg>'
+        : '<svg class="ph-icon" fill="none" viewBox="0 0 64 64" stroke="rgba(0,0,0,0.2)" stroke-width="1.5"><path d="M8 30L32 10L56 30"/><rect x="12" y="28" width="40" height="26" rx="1"/><rect x="24" y="40" width="16" height="14" rx="1"/><rect x="18" y="32" width="8" height="6" rx="1"/><rect x="38" y="32" width="8" height="6" rx="1"/><path d="M28 10L28 4L36 4L36 16"/></svg>';
+      imgHtml = '<div class="card-img-placeholder ' + phClass + '"><div class="ph-pattern"></div>' + phSvg + '<span>Fotos pendientes</span></div>';
     }
 
     var address = v.direccion || tipo + ' en ' + (v.comuna || 'Chile');
