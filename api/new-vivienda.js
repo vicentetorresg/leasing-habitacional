@@ -46,27 +46,32 @@ export default async function handler(req, res) {
   // 1b. Dual-write to CRM Supabase (viviendas table)
   const CRM_URL = 'https://evuxdhvvarfxredghvpu.supabase.co/rest/v1/viviendas';
   const CRM_KEY = process.env.CRM_SERVICE_ROLE_KEY;
-  await fetch(CRM_URL, {
-    method: 'POST',
-    headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-    body: JSON.stringify({
-      nombre, telefono,
-      email: email || null,
-      tipo_vivienda: tipo_vivienda || null,
-      valor_pesos: rango_uf || null,
-      direccion: direccion || null,
-      detalle_depto: detalle_depto || null,
-      comuna: comuna || null,
-      superficie: superficie ? parseInt(superficie) : null,
-      dormitorios: dormitorios || null,
-      banos: banos || null,
-      fuente: fuente || 'viviendas-form',
-      utm_source: utm_source || null,
-      utm_medium: utm_medium || null,
-      utm_campaign: utm_campaign || null,
-      status: 'esperando_ok_propietario',
-    }),
-  }).catch(() => null);
+  let viviendaId = null;
+  try {
+    const crmRes = await fetch(CRM_URL, {
+      method: 'POST',
+      headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+      body: JSON.stringify({
+        nombre, telefono,
+        email: email || null,
+        tipo_vivienda: tipo_vivienda || null,
+        valor_pesos: rango_uf || null,
+        direccion: direccion || null,
+        detalle_depto: detalle_depto || null,
+        comuna: comuna || null,
+        superficie: superficie ? parseInt(superficie) : null,
+        dormitorios: dormitorios || null,
+        banos: banos || null,
+        fuente: fuente || 'viviendas-form',
+        utm_source: utm_source || null,
+        utm_medium: utm_medium || null,
+        utm_campaign: utm_campaign || null,
+        status: 'esperando_ok_propietario',
+      }),
+    });
+    const crmData = await crmRes.json();
+    if (Array.isArray(crmData) && crmData[0]) viviendaId = crmData[0].id;
+  } catch(e) { /* ignore */ }
 
   // 2. Team notification email
   const now = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
@@ -170,7 +175,17 @@ export default async function handler(req, res) {
       </table>
     </div>
   </td></tr>
-  <tr><td style="padding:0 32px 28px;text-align:center">
+  ${viviendaId ? `<tr><td style="padding:0 32px 8px">
+    <div style="background:#E5F7F4;border:1.5px solid rgba(45,184,158,0.3);border-radius:12px;padding:20px 24px;text-align:center">
+      <p style="margin:0 0 8px;font-size:15px;font-weight:800;color:#1B3A6B">📸 Sube fotos de tu propiedad</p>
+      <p style="margin:0 0 16px;font-size:14px;color:#555;line-height:1.6">Las viviendas con fotos tienen <strong style="color:#C9871A">más de un 50% más de probabilidad</strong> de venderse. Sube fotos ahora y destaca tu propiedad.</p>
+      <a href="https://www.llavepropia.cl/subir-fotos?id=${viviendaId}" target="_blank"
+         style="display:inline-block;background:#C9871A;color:#fff;padding:14px 32px;border-radius:50px;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 4px 14px rgba(201,135,26,0.3)">
+        📷 Subir fotos aquí
+      </a>
+    </div>
+  </td></tr>` : ''}
+  <tr><td style="padding:16px 32px 28px;text-align:center">
     <p style="margin:0 0 16px;font-size:14px;color:#555">¿Tienes dudas? Escríbenos por WhatsApp:</p>
     <a href="https://wa.me/56957823672" target="_blank"
        style="display:inline-block;background:#25D366;color:#fff;padding:14px 32px;border-radius:50px;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 4px 14px rgba(37,211,102,0.3)">
