@@ -297,7 +297,7 @@ export default async function handler(req, res) {
         to: [email],
         cc: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'],
         reply_to: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'],
-        subject: isCondicionado ? 'PRE-APROBADO CONDICIONADO — Complementar Renta — Llave Propia' : 'PRE-APROBADO — Evaluación Compra Vivienda — Llave Propia',
+        subject: isCondicionado ? 'PRE-APROBADO CONDICIONADO — ENVÍANOS TUS DOCUMENTOS PARA APROBAR' : 'PRE-APROBADO — ENVÍANOS TUS DOCUMENTOS PARA APROBAR',
         html: preApprovalHtml
       })
     }).catch(() => null);
