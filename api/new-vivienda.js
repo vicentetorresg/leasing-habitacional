@@ -78,18 +78,6 @@ export default async function handler(req, res) {
   const waPhone = (telefono || '').replace(/\D/g, '').replace(/^0/, '56');
   const rangoLabel = rango_uf ? rango_uf.replace('_', ' - ') + ' UF' : '—';
 
-  // Commission calc (1% + IVA) for client email
-  let comisionLabel = null;
-  if (rango_uf) {
-    const parts = rango_uf.split('_').map(Number).filter(n => !isNaN(n) && n > 0);
-    if (parts.length === 2) {
-      const low = Math.round(parts[0] * 0.01);
-      const high = Math.round(parts[1] * 0.01);
-      comisionLabel = `${low} - ${high} UF + IVA`;
-    } else if (parts.length === 1) {
-      comisionLabel = `${Math.round(parts[0] * 0.01)} UF + IVA`;
-    }
-  }
 
   const teamHtml = `<!DOCTYPE html>
 <html lang="es">
@@ -174,10 +162,10 @@ export default async function handler(req, res) {
       <p style="margin:0 0 6px;font-size:14px;font-weight:800;color:#C9871A">¿Qué sigue?</p>
       <p style="margin:0;font-size:14px;color:#1B3A6B;line-height:1.7">Te contactaremos cuando tengamos compradores interesados en una vivienda con las características de la tuya. No tienes que hacer nada más por ahora.</p>
     </div>
-    ${comisionLabel ? `<div style="background:#E8F0FE;border:1.5px solid rgba(27,58,107,0.2);border-radius:12px;padding:18px 20px;margin:0 0 20px">
+    <div style="background:#E8F0FE;border:1.5px solid rgba(27,58,107,0.2);border-radius:12px;padding:18px 20px;margin:0 0 20px">
       <p style="margin:0 0 6px;font-size:14px;font-weight:800;color:#1B3A6B">💰 Comisión de venta</p>
-      <p style="margin:0;font-size:14px;color:#555;line-height:1.7">Nuestra comisión es de solo el <strong style="color:#C9871A">1% del valor de venta + IVA</strong>. Para tu rango de precio, esto equivale a aprox. <strong style="color:#1B3A6B">${comisionLabel}</strong>. Sin costos iniciales, solo cobramos al concretar la venta.</p>
-    </div>` : ''}
+      <p style="margin:0;font-size:14px;color:#555;line-height:1.7">Nuestra comisión es de solo el <strong style="color:#C9871A">1% del valor de venta + IVA</strong>. Sin costos iniciales, solo cobramos al concretar la venta.</p>
+    </div>
     <div style="background:#f8f7f4;border-radius:12px;padding:20px 24px;margin:0 0 20px">
       <p style="font-size:13px;font-weight:800;color:#1B3A6B;margin:0 0 12px;text-transform:uppercase;letter-spacing:0.5px">Tu vivienda registrada</p>
       <table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;color:#1A150F">
