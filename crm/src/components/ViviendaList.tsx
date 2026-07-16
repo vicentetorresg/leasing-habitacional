@@ -255,6 +255,8 @@ const ViviendaList = () => {
   const [photoViewFiles, setPhotoViewFiles] = useState<VivFile[]>([]);
   const [photoViewLoading, setPhotoViewLoading] = useState(false);
   const [downloadingZip, setDownloadingZip] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkSending, setBulkSending] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchViviendas = useCallback(async () => {
@@ -471,6 +473,55 @@ const ViviendaList = () => {
     toast.success(`${rows.length} viviendas exportadas`);
   };
 
+  const toggleSelect = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === filtered.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(filtered.map(v => v.id)));
+    }
+  };
+
+  const bulkRequestPhotos = async () => {
+    const targets = filtered.filter(v => selectedIds.has(v.id) && v.email && (v.photo_count || 0) === 0);
+    if (targets.length === 0) {
+      toast.error('Ninguna vivienda seleccionada tiene email y 0 fotos');
+      return;
+    }
+    setBulkSending(true);
+    let sent = 0;
+    let noEmail = 0;
+    let failed = 0;
+    for (const v of targets) {
+      try {
+        const res = await fetch('/api/request-photos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ vivienda_id: v.id }),
+        });
+        const data = await res.json();
+        if (data.sent) sent++;
+        else noEmail++;
+      } catch {
+        failed++;
+      }
+    }
+    setBulkSending(false);
+    setSelectedIds(new Set());
+    const skipped = selectedIds.size - targets.length;
+    let msg = `${sent} email${sent !== 1 ? 's' : ''} enviado${sent !== 1 ? 's' : ''}`;
+    if (skipped > 0) msg += ` · ${skipped} omitidas (ya tienen fotos o sin email)`;
+    if (failed > 0) msg += ` · ${failed} fallaron`;
+    toast.success(msg);
+  };
+
   const openEdit = (v: Vivienda) => {
     setEditViv({ ...v });
     setEditLeadSearch('');
@@ -571,6 +622,14 @@ const ViviendaList = () => {
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left text-xs text-muted-foreground uppercase tracking-wider sticky top-0 z-10" style={{ background: '#ffffff', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2 w-8">
+                <input
+                  type="checkbox"
+                  checked={filtered.length > 0 && selectedIds.size === filtered.length}
+                  onChange={toggleSelectAll}
+                  className="w-3.5 h-3.5 rounded border-gray-300 cursor-pointer accent-blue-600"
+                />
+              </th>
               <th style={{ background: '#ffffff' }} className="px-3 py-2">Estado</th>
               <th style={{ background: '#ffffff' }} className="px-3 py-2">Propietario</th>
               <th style={{ background: '#ffffff' }} className="px-3 py-2">Tipo</th>
@@ -591,7 +650,15 @@ const ViviendaList = () => {
             {filtered.map(v => {
               const linked = v.linked_lead_id ? linkedLeads[v.linked_lead_id] : null;
               return (
-                <tr key={v.id} className="border-b border-border/40 hover:bg-muted/20 transition-colors">
+                <tr key={v.id} className={`border-b border-border/40 transition-colors ${selectedIds.has(v.id) ? 'bg-blue-50/60' : 'hover:bg-muted/20'}`}>
+                  <td className="px-3 py-2">
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.has(v.id)}
+                      onChange={() => toggleSelect(v.id)}
+                      className="w-3.5 h-3.5 rounded border-gray-300 cursor-pointer accent-blue-600"
+                    />
+                  </td>
                   <td className="px-3 py-2">
                     <StatusDropdown value={v.status} onChange={s => handleStatusChange(v.id, s)} />
                   </td>
@@ -683,11 +750,36 @@ const ViviendaList = () => {
               );
             })}
             {filtered.length === 0 && (
-              <tr><td colSpan={14} className="px-3 py-8 text-center text-muted-foreground">Sin viviendas</td></tr>
+              <tr><td colSpan={15} className="px-3 py-8 text-center text-muted-foreground">Sin viviendas</td></tr>
             )}
           </tbody>
         </table>
       </div>
+
+      {/* Bulk action bar */}
+      {selectedIds.size > 0 && (
+        <div className="sticky bottom-0 z-20 bg-white border-t border-border shadow-[0_-4px_16px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center gap-3">
+          <span className="text-sm font-bold text-foreground">{selectedIds.size} seleccionada{selectedIds.size !== 1 ? 's' : ''}</span>
+          <button
+            onClick={bulkRequestPhotos}
+            disabled={bulkSending}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold bg-amber-500 text-white hover:bg-amber-600 transition-all disabled:opacity-50 shadow-sm"
+          >
+            {bulkSending ? (
+              <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+            ) : (
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            )}
+            {bulkSending ? 'Enviando...' : 'Pedir fotos'}
+          </button>
+          <button
+            onClick={() => setSelectedIds(new Set())}
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors ml-auto"
+          >
+            Deseleccionar
+          </button>
+        </div>
+      )}
 
       {/* Edit Dialog */}
       <Dialog open={!!editViv} onOpenChange={open => { if (!open) { setEditViv(null); setEditLeadSearch(''); setEditLeadResults([]); setEditFiles([]); } }}>
