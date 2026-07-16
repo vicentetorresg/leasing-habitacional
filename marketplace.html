@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Propiedades en venta — Llave Propia</title>
+<meta name="description" content="Encuentra casas y departamentos en venta bajo 2.000 UF en todo Chile. Propiedades verificadas con compradores pre-aprobados.">
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1B3A6B;--gold:#C9871A;--gold-pale:#FFF8EC;--beige:#f4f2ee;--white:#fff;--text:#1A150F;--text-m:#5A4A38;--text-s:#9A8878;--r:14px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige);min-height:100vh}
+
+/* Header */
+.header{background:var(--white);border-bottom:3px solid var(--gold);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.header-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.header-logo span{font-size:1.3rem;font-weight:900;color:var(--navy)}
+.header-logo span em{font-style:normal;color:var(--gold)}
+.header-count{font-size:0.8rem;font-weight:700;color:var(--text-s)}
+
+/* Filters */
+.filters{background:var(--white);border-bottom:1px solid #ede3d4;padding:14px 24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.filter-group{display:flex;flex-direction:column;gap:3px}
+.filter-group label{font-size:0.65rem;font-weight:800;color:var(--text-s);text-transform:uppercase;letter-spacing:0.5px}
+.filter-select,.filter-input{height:36px;border:1.5px solid #dfd0bb;border-radius:8px;padding:0 10px;font-size:0.82rem;font-family:'Nunito',sans-serif;color:var(--text);background:var(--white);min-width:120px}
+.filter-select:focus,.filter-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 2px rgba(201,135,26,0.15)}
+.filter-input{width:80px;min-width:80px}
+.filter-clear{height:36px;align-self:flex-end;border:none;background:none;color:var(--gold);font-weight:800;font-size:0.8rem;cursor:pointer;font-family:'Nunito',sans-serif;padding:0 8px}
+.filter-clear:hover{text-decoration:underline}
+
+/* Grid */
+.grid-wrap{max-width:1200px;margin:0 auto;padding:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+
+/* Card */
+.card{background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:transform 0.2s,box-shadow 0.2s;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,0.1)}
+.card-img{position:relative;width:100%;height:200px;background:#ede3d4;overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:cover}
+.card-img-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#bfb5a3;gap:8px}
+.card-img-placeholder svg{width:48px;height:48px}
+.card-img-placeholder span{font-size:0.8rem;font-weight:700}
+.card-badge{position:absolute;top:10px;left:10px;background:var(--navy);color:#fff;font-size:0.68rem;font-weight:800;padding:4px 10px;border-radius:50px;text-transform:uppercase;letter-spacing:0.5px}
+.card-photos-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.55);color:#fff;font-size:0.72rem;font-weight:700;padding:4px 10px;border-radius:50px;display:flex;align-items:center;gap:4px}
+.card-body{padding:18px 20px;flex:1;display:flex;flex-direction:column}
+.card-location{font-size:0.78rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.card-address{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:12px;line-height:1.3}
+.card-specs{display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.card-spec{display:flex;align-items:center;gap:4px;font-size:0.8rem;font-weight:700;color:var(--text-m)}
+.card-spec svg{width:16px;height:16px;color:var(--text-s)}
+.card-price{font-size:1.1rem;font-weight:900;color:var(--navy);margin-bottom:16px}
+.card-price span{font-size:0.78rem;font-weight:600;color:var(--text-s);margin-left:4px}
+.card-actions{margin-top:auto;display:flex;gap:8px}
+.btn-wa{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#25D366;color:#fff;border:none;border-radius:50px;padding:11px 16px;font-size:0.82rem;font-weight:800;cursor:pointer;text-decoration:none;font-family:'Nunito',sans-serif;transition:all 0.2s}
+.btn-wa:hover{background:#1fba58;transform:translateY(-1px)}
+.btn-photos{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--gold);color:#fff;border:none;border-radius:50px;padding:11px 16px;font-size:0.82rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.2s}
+.btn-photos:hover{background:#b07616;transform:translateY(-1px)}
+.btn-photos:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.btn-gallery{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--navy);color:#fff;border:none;border-radius:50px;padding:11px 16px;font-size:0.82rem;font-weight:800;cursor:pointer;text-decoration:none;font-family:'Nunito',sans-serif;transition:all 0.2s}
+.btn-gallery:hover{background:#122850;transform:translateY(-1px)}
+
+/* Empty */
+.empty{text-align:center;padding:60px 24px;color:var(--text-s)}
+.empty h3{font-size:1.2rem;color:var(--navy);margin-bottom:8px}
+.empty p{font-size:0.9rem}
+
+/* Loading */
+.loading{text-align:center;padding:60px;color:var(--text-s);font-weight:700}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--navy);color:#fff;padding:12px 24px;border-radius:50px;font-size:0.85rem;font-weight:700;box-shadow:0 4px 20px rgba(0,0,0,0.2);transition:transform 0.3s ease;z-index:100;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:640px){
+  .header{padding:12px 16px}
+  .filters{padding:10px 16px;gap:8px}
+  .filter-select,.filter-input{height:34px;min-width:100px;font-size:0.78rem}
+  .grid-wrap{padding:16px}
+  .grid{grid-template-columns:1fr;gap:14px}
+  .card-img{height:180px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="/" class="header-logo">
+    <img src="/logo-lp.png" alt="Llave Propia" height="28" style="height:28px">
+    <span>Llave<em>Oferta</em></span>
+  </a>
+  <span class="header-count" id="count"></span>
+</div>
+
+<div class="filters" id="filters">
+  <div class="filter-group">
+    <label>Tipo</label>
+    <select class="filter-select" id="fTipo" onchange="applyFilters()">
+      <option value="">Todos</option>
+      <option value="casa">Casa</option>
+      <option value="departamento">Departamento</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>Comuna</label>
+    <select class="filter-select" id="fComuna" onchange="applyFilters()">
+      <option value="">Todas</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>Valor UF</label>
+    <select class="filter-select" id="fValor" onchange="applyFilters()">
+      <option value="">Todos</option>
+      <option value="0_800">&lt; 800 UF</option>
+      <option value="800_1000">800 - 1.000 UF</option>
+      <option value="1000_1200">1.000 - 1.200 UF</option>
+      <option value="1200_1400">1.200 - 1.400 UF</option>
+      <option value="1400_1600">1.400 - 1.600 UF</option>
+      <option value="1600_1800">1.600 - 1.800 UF</option>
+      <option value="1800_2000">1.800 - 2.000 UF</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>Dormitorios</label>
+    <select class="filter-select" id="fDorm" onchange="applyFilters()">
+      <option value="">Todos</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4+</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>Banos</label>
+    <select class="filter-select" id="fBano" onchange="applyFilters()">
+      <option value="">Todos</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3+</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>m2 min</label>
+    <input class="filter-input" type="number" id="fM2Min" placeholder="0" oninput="applyFilters()">
+  </div>
+  <div class="filter-group">
+    <label>m2 max</label>
+    <input class="filter-input" type="number" id="fM2Max" placeholder="82" oninput="applyFilters()">
+  </div>
+  <button class="filter-clear" onclick="clearFilters()">Limpiar</button>
+</div>
+
+<div class="grid-wrap">
+  <div id="loading" class="loading">Cargando propiedades...</div>
+  <div id="grid" class="grid" style="display:none"></div>
+  <div id="empty" class="empty" style="display:none">
+    <h3>No hay propiedades con estos filtros</h3>
+    <p>Intenta cambiar los filtros para ver mas resultados</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var CRM_URL = 'https://evuxdhvvarfxredghvpu.supabase.co';
+var CRM_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2dXhkaHZ2YXJmeHJlZGdodnB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NjQ4NzMsImV4cCI6MjA5NjI0MDg3M30.9Rv6MNHeNwb2-2shyaP9f2aUSrbDN_0syN7PTp6mLUs';
+var STORAGE_URL = CRM_URL + '/storage/v1/object/public/vivienda-files';
+var allViviendas = [];
+var photoCache = {};
+var requestedIds = {};
+
+var UF_LABELS = {
+  '0_800': '< 800 UF','800_1000':'800 - 1.000 UF','1000_1200':'1.000 - 1.200 UF',
+  '1200_1400':'1.200 - 1.400 UF','1400_1600':'1.400 - 1.600 UF',
+  '1600_1800':'1.600 - 1.800 UF','1800_2000':'1.800 - 2.000 UF'
+};
+
+async function init() {
+  var res = await fetch(CRM_URL + '/rest/v1/viviendas?archived=eq.false&status=neq.propietario_no_interesado&select=id,tipo_vivienda,direccion,detalle_depto,comuna,superficie,dormitorios,banos,valor_pesos,photo_count,status&order=created_at.desc', {
+    headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY }
+  });
+  allViviendas = await res.json();
+  if (!Array.isArray(allViviendas)) allViviendas = [];
+
+  // Build comuna filter
+  var comunas = {};
+  allViviendas.forEach(function(v) { if (v.comuna) comunas[v.comuna] = true; });
+  var sel = document.getElementById('fComuna');
+  Object.keys(comunas).sort().forEach(function(c) {
+    var o = document.createElement('option');
+    o.value = c; o.textContent = c;
+    sel.appendChild(o);
+  });
+
+  // Load first photo for viviendas with photos
+  var withPhotos = allViviendas.filter(function(v) { return v.photo_count && v.photo_count > 0; });
+  var photoPromises = withPhotos.map(function(v) {
+    return fetch(CRM_URL + '/storage/v1/object/list/vivienda-files', {
+      method: 'POST',
+      headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prefix: v.id + '/', limit: 1, sortBy: { column: 'name', order: 'asc' } })
+    }).then(function(r) { return r.json(); }).then(function(files) {
+      if (Array.isArray(files)) {
+        var img = files.find(function(f) { return f.name !== '.emptyFolderPlaceholder' && /\.(jpg|jpeg|png|gif|webp|heic)$/i.test(f.name); });
+        if (img) photoCache[v.id] = STORAGE_URL + '/' + v.id + '/' + img.name;
+      }
+    }).catch(function() {});
+  });
+
+  await Promise.all(photoPromises);
+
+  document.getElementById('loading').style.display = 'none';
+  applyFilters();
+}
+
+function applyFilters() {
+  var fTipo = document.getElementById('fTipo').value;
+  var fComuna = document.getElementById('fComuna').value;
+  var fValor = document.getElementById('fValor').value;
+  var fDorm = document.getElementById('fDorm').value;
+  var fBano = document.getElementById('fBano').value;
+  var fM2Min = parseInt(document.getElementById('fM2Min').value) || 0;
+  var fM2Max = parseInt(document.getElementById('fM2Max').value) || 9999;
+
+  var filtered = allViviendas.filter(function(v) {
+    if (fTipo && v.tipo_vivienda !== fTipo) return false;
+    if (fComuna && v.comuna !== fComuna) return false;
+    if (fValor && v.valor_pesos !== fValor) return false;
+    if (fDorm) {
+      var d = parseInt(v.dormitorios) || 0;
+      if (fDorm === '4') { if (d < 4) return false; }
+      else { if (d !== parseInt(fDorm)) return false; }
+    }
+    if (fBano) {
+      var b = parseInt(v.banos) || 0;
+      if (fBano === '3') { if (b < 3) return false; }
+      else { if (b !== parseInt(fBano)) return false; }
+    }
+    if (v.superficie) {
+      if (v.superficie < fM2Min || v.superficie > fM2Max) return false;
+    }
+    return true;
+  });
+
+  document.getElementById('count').textContent = filtered.length + ' propiedad' + (filtered.length !== 1 ? 'es' : '');
+  renderGrid(filtered);
+}
+
+function renderGrid(list) {
+  var grid = document.getElementById('grid');
+  var empty = document.getElementById('empty');
+  grid.innerHTML = '';
+
+  if (list.length === 0) {
+    grid.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+
+  empty.style.display = 'none';
+  grid.style.display = 'grid';
+
+  list.forEach(function(v) {
+    var hasPhotos = v.photo_count && v.photo_count > 0;
+    var photoUrl = photoCache[v.id] || null;
+    var tipo = v.tipo_vivienda === 'departamento' ? 'Departamento' : 'Casa';
+    var tipoBadge = v.tipo_vivienda === 'departamento' ? 'Depto' : 'Casa';
+    var ufLabel = UF_LABELS[v.valor_pesos] || '';
+
+    var imgHtml;
+    if (hasPhotos && photoUrl) {
+      imgHtml = '<img src="' + photoUrl + '" alt="' + tipo + ' en ' + (v.comuna || '') + '" loading="lazy">';
+      imgHtml += '<span class="card-photos-badge"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>' + v.photo_count + '</span>';
+    } else {
+      imgHtml = '<div class="card-img-placeholder"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><span>Sin fotos</span></div>';
+    }
+
+    var address = v.direccion || tipo + ' en ' + (v.comuna || 'Chile');
+    if (v.tipo_vivienda === 'departamento' && v.detalle_depto) address += ', ' + v.detalle_depto;
+
+    var specs = '';
+    if (v.superficie) specs += '<div class="card-spec"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>' + v.superficie + ' m2</div>';
+    if (v.dormitorios) specs += '<div class="card-spec"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4"/></svg>' + v.dormitorios + ' dorm</div>';
+    if (v.banos) specs += '<div class="card-spec"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14v4a2 2 0 01-2 2H7a2 2 0 01-2-2v-4m14-2H5a2 2 0 00-2 2v2h18v-2a2 2 0 00-2-2zM7 4v6"/></svg>' + v.banos + ' ban</div>';
+
+    var actionsHtml = '';
+    if (hasPhotos) {
+      actionsHtml += '<a class="btn-gallery" href="/galeria?id=' + v.id + '" target="_blank">Ver fotos</a>';
+    } else {
+      var btnId = 'req-' + v.id;
+      var disabled = requestedIds[v.id] ? ' disabled' : '';
+      var label = requestedIds[v.id] ? 'Solicitadas' : 'Solicitar fotos';
+      actionsHtml += '<button class="btn-photos" id="' + btnId + '"' + disabled + ' onclick="requestPhotos(\'' + v.id + '\')"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>' + label + '</button>';
+    }
+    actionsHtml += '<a class="btn-wa" href="https://wa.me/56957823672?text=' + encodeURIComponent('Hola! Me interesa la propiedad: ' + tipo + ' en ' + (v.comuna || '') + (v.direccion ? ' — ' + v.direccion : '')) + '" target="_blank"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.108-1.137l-.29-.174-3.012.79.803-2.934-.19-.301A7.963 7.963 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></svg>WhatsApp</a>';
+
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = '<div class="card-img"><span class="card-badge">' + tipoBadge + '</span>' + imgHtml + '</div>' +
+      '<div class="card-body">' +
+        '<div class="card-location">' + (v.comuna || 'Chile') + '</div>' +
+        '<div class="card-address">' + address + '</div>' +
+        '<div class="card-specs">' + specs + '</div>' +
+        (ufLabel ? '<div class="card-price">' + ufLabel + '</div>' : '') +
+        '<div class="card-actions">' + actionsHtml + '</div>' +
+      '</div>';
+    grid.appendChild(card);
+  });
+}
+
+async function requestPhotos(id) {
+  if (requestedIds[id]) return;
+  var btn = document.getElementById('req-' + id);
+  if (btn) { btn.disabled = true; btn.innerHTML = 'Enviando...'; }
+
+  try {
+    var res = await fetch('/api/request-photos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ vivienda_id: id })
+    });
+    var data = await res.json();
+    requestedIds[id] = true;
+    if (btn) btn.innerHTML = 'Solicitadas';
+    showToast('Solicitud enviada al propietario');
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.innerHTML = 'Solicitar fotos'; }
+    showToast('Error al enviar solicitud');
+  }
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3000);
+}
+
+function clearFilters() {
+  document.getElementById('fTipo').value = '';
+  document.getElementById('fComuna').value = '';
+  document.getElementById('fValor').value = '';
+  document.getElementById('fDorm').value = '';
+  document.getElementById('fBano').value = '';
+  document.getElementById('fM2Min').value = '';
+  document.getElementById('fM2Max').value = '';
+  applyFilters();
+}
+
+init();
+</script>
+</body>
+</html>
