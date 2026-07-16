@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Subir Fotos — Llave Propia</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f4f2ee;color:#1B3A6B;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.08);max-width:520px;width:100%;overflow:hidden}
+.header{background:linear-gradient(135deg,#1B3A6B 0%,#C9871A 100%);padding:28px 32px;text-align:center}
+.header img{height:36px;margin-bottom:12px}
+.header h1{color:#fff;font-size:22px;font-weight:700;margin:0}
+.header p{color:rgba(255,255,255,.7);font-size:13px;margin-top:6px}
+.body{padding:28px 32px}
+.info-box{background:#FFF8EC;border:1.5px solid rgba(201,135,26,.3);border-radius:12px;padding:16px 18px;margin-bottom:24px}
+.info-box p{font-size:14px;color:#1B3A6B;line-height:1.6}
+.info-box strong{color:#C9871A}
+.prop-name{font-size:15px;font-weight:700;color:#1B3A6B;margin-bottom:4px}
+.prop-detail{font-size:13px;color:#888;margin-bottom:20px}
+.upload-zone{border:2.5px dashed #d4cfc5;border-radius:14px;padding:36px 20px;text-align:center;cursor:pointer;transition:all .2s;background:#fafaf8}
+.upload-zone:hover,.upload-zone.dragover{border-color:#C9871A;background:#FFF8EC}
+.upload-zone svg{width:48px;height:48px;color:#C9871A;margin-bottom:12px}
+.upload-zone h3{font-size:16px;font-weight:700;color:#1B3A6B;margin-bottom:4px}
+.upload-zone p{font-size:13px;color:#888}
+.upload-zone input{display:none}
+.photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}
+.photo-item{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:1;background:#f0ece4}
+.photo-item img{width:100%;height:100%;object-fit:cover}
+.photo-item .uploading-overlay{position:absolute;inset:0;background:rgba(27,58,107,.6);display:flex;align-items:center;justify-content:center}
+.photo-item .uploading-overlay .spinner{width:24px;height:24px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+.photo-item .check{position:absolute;top:6px;right:6px;width:22px;height:22px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.photo-item .check svg{width:14px;height:14px;color:#fff}
+.counter{text-align:center;margin-top:16px;font-size:13px;color:#888;font-weight:600}
+.counter strong{color:#1B3A6B}
+.btn-upload{display:block;width:100%;background:#C9871A;color:#fff;border:none;border-radius:50px;padding:16px;font-size:16px;font-weight:800;cursor:pointer;margin-top:20px;transition:all .2s;box-shadow:0 4px 16px rgba(201,135,26,.3)}
+.btn-upload:hover{background:#b07616;transform:translateY(-1px)}
+.btn-upload:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.success-msg{text-align:center;padding:40px 20px}
+.success-msg svg{width:64px;height:64px;color:#25D366;margin-bottom:16px}
+.success-msg h2{font-size:20px;font-weight:700;color:#1B3A6B;margin-bottom:8px}
+.success-msg p{font-size:14px;color:#555;line-height:1.6}
+.error-msg{text-align:center;padding:40px 20px}
+.error-msg h2{font-size:18px;color:#dc2626;margin-bottom:8px}
+.error-msg p{font-size:14px;color:#555}
+.limit-warn{background:#FEE2E2;border:1px solid #FECACA;border-radius:8px;padding:10px 14px;margin-top:12px;font-size:13px;color:#991B1B;text-align:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <img src="/logo-lp.png" alt="Llave Propia">
+    <h1>Sube fotos de tu propiedad</h1>
+    <p>Mientras mas fotos subas, mas probable es venderla</p>
+  </div>
+  <div class="body" id="main-body">
+    <div id="loading-state" style="text-align:center;padding:40px 0">
+      <p style="color:#888">Cargando...</p>
+    </div>
+    <div id="upload-state" style="display:none">
+      <div class="info-box">
+        <p>Tenemos <strong>clientes interesados</strong> en propiedades como la tuya. Sube fotos para que puedan verla y aumentar las probabilidades de venta.</p>
+      </div>
+      <p class="prop-name" id="prop-name"></p>
+      <p class="prop-detail" id="prop-detail"></p>
+
+      <div class="upload-zone" id="drop-zone">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        <h3>Toca aqui para elegir fotos</h3>
+        <p>o arrastra imagenes aqui</p>
+        <p style="margin-top:6px;font-size:11px;color:#aaa">JPG, PNG o WEBP. Max 5 MB c/u</p>
+        <input type="file" id="file-input" multiple accept="image/jpeg,image/png,image/webp,image/heic">
+      </div>
+
+      <div id="photos-grid" class="photos-grid"></div>
+      <div id="counter" class="counter" style="display:none"></div>
+      <div id="limit-warn" class="limit-warn" style="display:none">Has alcanzado el limite de 15 fotos.</div>
+    </div>
+
+    <div id="success-state" style="display:none" class="success-msg">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <h2>Fotos recibidas!</h2>
+      <p>Hemos recibido tus fotos correctamente. Te enviaremos un email de confirmacion. Si quieres agregar mas fotos, puedes volver a esta pagina en cualquier momento.</p>
+    </div>
+
+    <div id="error-state" style="display:none" class="error-msg">
+      <h2>Link invalido</h2>
+      <p>Este enlace no es valido o la propiedad no existe. Si crees que es un error, contactanos por WhatsApp.</p>
+      <div style="margin-top:20px">
+        <a href="https://wa.me/56957823672" style="display:inline-block;background:#25D366;color:#fff;padding:12px 28px;border-radius:50px;font-weight:700;font-size:14px;text-decoration:none">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const MAX_PHOTOS = 15;
+const MAX_SIZE_MB = 5;
+const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+const params = new URLSearchParams(location.search);
+const vivId = params.get('id');
+
+let existingCount = 0;
+let pendingFiles = [];
+let uploadedPreviews = [];
+
+const CRM_URL = 'https://evuxdhvvarfxredghvpu.supabase.co';
+const CRM_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2dXhkaHZ2YXJmeHJlZGdodnB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NjQ4NzMsImV4cCI6MjA5NjI0MDg3M30.9Rv6MNHeNwb2-2shyaP9f2aUSrbDN_0syN7PTp6mLUs';
+
+async function init() {
+  if (!vivId) { showError(); return; }
+
+  // Fetch vivienda info
+  const res = await fetch(`${CRM_URL}/rest/v1/viviendas?id=eq.${vivId}&select=id,nombre,tipo_vivienda,direccion,comuna,photo_count`, {
+    headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY }
+  });
+  const data = await res.json();
+  if (!data || !data.length) { showError(); return; }
+
+  const viv = data[0];
+  existingCount = viv.photo_count || 0;
+
+  document.getElementById('prop-name').textContent = (viv.tipo_vivienda === 'departamento' ? 'Departamento' : 'Casa') + ' en ' + (viv.comuna || 'tu comuna');
+  document.getElementById('prop-detail').textContent = viv.direccion || '';
+
+  // Load existing photos
+  const listRes = await fetch(`${CRM_URL}/storage/v1/object/list/vivienda-files/${vivId}`, {
+    method: 'POST',
+    headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ limit: 100, offset: 0 })
+  });
+  const files = await listRes.json();
+  if (Array.isArray(files)) {
+    const imgs = files.filter(f => f.name !== '.emptyFolderPlaceholder' && /\.(jpg|jpeg|png|gif|webp|heic)$/i.test(f.name));
+    existingCount = imgs.length;
+    imgs.forEach(f => {
+      uploadedPreviews.push({
+        url: `${CRM_URL}/storage/v1/object/public/vivienda-files/${vivId}/${f.name}`,
+        done: true
+      });
+    });
+    renderGrid();
+  }
+
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('upload-state').style.display = 'block';
+
+  if (existingCount >= MAX_PHOTOS) {
+    document.getElementById('limit-warn').style.display = 'block';
+    document.getElementById('drop-zone').style.display = 'none';
+  }
+}
+
+function showError() {
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('error-state').style.display = 'block';
+}
+
+function renderGrid() {
+  const grid = document.getElementById('photos-grid');
+  const counter = document.getElementById('counter');
+  grid.innerHTML = '';
+  uploadedPreviews.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'photo-item';
+    div.innerHTML = `<img src="${p.url}" alt="Foto">` +
+      (p.done ? '<div class="check"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></div>' :
+      '<div class="uploading-overlay"><div class="spinner"></div></div>');
+    grid.appendChild(div);
+  });
+  const total = uploadedPreviews.length;
+  if (total > 0) {
+    counter.style.display = 'block';
+    counter.innerHTML = '<strong>' + total + '</strong> de ' + MAX_PHOTOS + ' fotos';
+  } else {
+    counter.style.display = 'none';
+  }
+}
+
+// Drop zone
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+
+dropZone.addEventListener('click', () => { if (uploadedPreviews.length < MAX_PHOTOS) fileInput.click(); });
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  handleFiles(e.dataTransfer.files);
+});
+fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+async function handleFiles(fileList) {
+  const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+  if (!files.length) return;
+
+  const remaining = MAX_PHOTOS - uploadedPreviews.length;
+  if (remaining <= 0) {
+    document.getElementById('limit-warn').style.display = 'block';
+    return;
+  }
+
+  const toUpload = files.slice(0, remaining);
+  const oversized = toUpload.filter(f => f.size > MAX_SIZE_BYTES);
+  if (oversized.length) {
+    alert('Algunas fotos superan los ' + MAX_SIZE_MB + ' MB y no se subiran: ' + oversized.map(f => f.name).join(', '));
+  }
+  const valid = toUpload.filter(f => f.size <= MAX_SIZE_BYTES);
+  if (!valid.length) return;
+
+  // Add previews
+  const startIdx = uploadedPreviews.length;
+  valid.forEach(f => {
+    uploadedPreviews.push({ url: URL.createObjectURL(f), done: false, file: f });
+  });
+  renderGrid();
+
+  // Upload each
+  let uploaded = 0;
+  for (let i = 0; i < valid.length; i++) {
+    const file = valid[i];
+    const idx = startIdx + i;
+    const safeName = Date.now() + '-' + Math.random().toString(36).slice(2, 6) + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const path = vivId + '/' + safeName;
+
+    const uploadRes = await fetch(`${CRM_URL}/storage/v1/object/vivienda-files/${path}`, {
+      method: 'POST',
+      headers: {
+        'apikey': CRM_KEY,
+        'Authorization': 'Bearer ' + CRM_KEY,
+        'Content-Type': file.type,
+        'x-upsert': 'false'
+      },
+      body: file
+    });
+
+    if (uploadRes.ok) {
+      uploadedPreviews[idx].url = `${CRM_URL}/storage/v1/object/public/vivienda-files/${path}`;
+      uploadedPreviews[idx].done = true;
+      uploaded++;
+    } else {
+      uploadedPreviews[idx].done = true; // mark done anyway to remove spinner
+    }
+    renderGrid();
+  }
+
+  // Update photo_count and notify
+  if (uploaded > 0) {
+    const newCount = uploadedPreviews.filter(p => p.done).length;
+    // Update photo_count in DB
+    await fetch(`${CRM_URL}/rest/v1/viviendas?id=eq.${vivId}`, {
+      method: 'PATCH',
+      headers: {
+        'apikey': CRM_KEY,
+        'Authorization': 'Bearer ' + CRM_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ photo_count: newCount, updated_at: new Date().toISOString() })
+    });
+
+    // Send confirmation email via API
+    await fetch('/api/photo-confirm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ vivienda_id: vivId, photo_count: newCount })
+    }).catch(() => null);
+  }
+
+  if (uploadedPreviews.length >= MAX_PHOTOS) {
+    document.getElementById('limit-warn').style.display = 'block';
+    document.getElementById('drop-zone').style.display = 'none';
+  }
+
+  fileInput.value = '';
+}
+
+init();
+</script>
+</body>
+</html>

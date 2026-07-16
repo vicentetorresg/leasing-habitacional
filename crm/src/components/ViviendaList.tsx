@@ -32,6 +32,8 @@ interface Vivienda {
   linked_lead_id: string | null;
   notes: string | null;
   updated_at: string;
+  photo_count: number | null;
+  last_mailing_at: string | null;
 }
 
 interface LinkedLead {
@@ -244,6 +246,7 @@ const ViviendaList = () => {
   const [editFiles, setEditFiles] = useState<VivFile[]>([]);
   const [uploading, setUploading] = useState(false);
   const [sendingEmailId, setSendingEmailId] = useState<string | null>(null);
+  const [photoCounts, setPhotoCounts] = useState<Record<string, number>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchViviendas = useCallback(async () => {
@@ -450,6 +453,7 @@ const ViviendaList = () => {
               <th className="px-3 py-2">m2</th>
               <th className="px-3 py-2">Dorm</th>
               <th className="px-3 py-2">Baños</th>
+              <th className="px-3 py-2">Fotos</th>
               <th className="px-3 py-2">Lead Interesado</th>
               <th className="px-3 py-2">Notas</th>
               <th className="px-3 py-2">Fecha</th>
@@ -479,6 +483,29 @@ const ViviendaList = () => {
                   <td className="px-3 py-2 text-xs text-center">{v.superficie ? `${v.superficie}` : '—'}</td>
                   <td className="px-3 py-2 text-xs text-center">{v.dormitorios || '—'}</td>
                   <td className="px-3 py-2 text-xs text-center">{v.banos || '—'}</td>
+                  <td className="px-3 py-2 text-center">
+                    {(() => {
+                      const count = v.photo_count || 0;
+                      const uploadUrl = `https://www.llavepropia.cl/subir-fotos?id=${v.id}`;
+                      return count > 0 ? (
+                        <a href={uploadUrl} target="_blank" rel="noreferrer"
+                          className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1 rounded-md text-[11px] font-bold hover:bg-emerald-100 transition-colors"
+                          title={`${count} foto${count > 1 ? 's' : ''} — ver/subir mas`}
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                          {count}
+                        </a>
+                      ) : (
+                        <a href={uploadUrl} target="_blank" rel="noreferrer"
+                          className="inline-flex items-center gap-1 bg-muted/30 text-muted-foreground/40 border border-border/30 px-2 py-1 rounded-md text-[11px] font-medium hover:text-muted-foreground/70 hover:border-border/60 transition-colors"
+                          title="Sin fotos — copiar link de subida"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                          0
+                        </a>
+                      );
+                    })()}
+                  </td>
                   <td className="px-3 py-2">
                     <div className="flex items-center gap-1.5">
                       <LeadPicker
@@ -521,7 +548,7 @@ const ViviendaList = () => {
               );
             })}
             {filtered.length === 0 && (
-              <tr><td colSpan={13} className="px-3 py-8 text-center text-muted-foreground">Sin viviendas</td></tr>
+              <tr><td colSpan={14} className="px-3 py-8 text-center text-muted-foreground">Sin viviendas</td></tr>
             )}
           </tbody>
         </table>
