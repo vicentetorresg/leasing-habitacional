@@ -19,7 +19,7 @@
   <meta name="twitter:title" content="Llave Propia | Leasing Habitacional DS120">
   <meta name="twitter:description" content="Compra tu primera vivienda con el Subsidio DS120 del MINVU. Sin pie, sin ahorro previo. Asesoría gratuita. Evaluación gratuita y rápida.">
   <meta name="twitter:image" content="https://www.llavepropia.cl/og-image.png">
-  <script>if(location.hash)history.replaceState(null,'',location.pathname+location.search);if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);document.addEventListener('DOMContentLoaded',function(){window.scrollTo(0,0)});window.addEventListener('load',function(){window.scrollTo(0,0);setTimeout(function(){window.scrollTo(0,0)},100);setTimeout(function(){window.scrollTo(0,0)},500)});window.addEventListener('pageshow',function(){window.scrollTo(0,0)});</script>
+  <script>if(location.hash)history.replaceState(null,'',location.pathname+location.search);</script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -538,13 +538,12 @@ footer{background:var(--navy);padding:56px 40px 28px}
             <div class="f-field"><label class="f-field-lbl">✉️ Correo electrónico <span style="color:#c0392b">*</span></label><input class="f-input" type="email" id="hf-e" placeholder="tucorreo@email.com" autocomplete="email" tabindex="-1"></div>
             <div class="f-field"><label class="f-field-lbl">🏠 Arriendo actual</label><div class="cs cs-arriendo" data-target="hf-a"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-a" value=""></div></div>
             <div class="f-field"><label class="f-field-lbl">💰 Sueldo líquido mensual <span style="color:#c0392b">*</span></label><div class="cs cs-renta" data-target="hf-r" data-form="hf"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-r" value=""></div></div>
-            <div class="dicom-block" id="hf-renta-err" style="display:none">🚫 La renta mínima requerida es $800.000 líquidos mensuales.</div>
-            <div class="f-group"><label>¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:#666">Pareja, familiar, amigo/a, etc. Esto permite acceder a propiedades de mayor valor.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="si" tabindex="-1"> Sí, puedo complementar renta</label><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="no" tabindex="-1"> No, solo con mi renta</label></div><div id="hf-complementa-quien-wrap" style="display:none;margin-top:10px;background:#f7faf9;border:1.5px solid #ccc;border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">👥 ¿Con quién complementas? <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="hf-complementa-quien" placeholder="Ej: Mi pareja, hermano/a, primo/a, amigo/a, padre/madre..." style="border:1.5px solid #ccc;background:#fff"></div><div class="dicom-block" id="hf-complementa-msg" style="display:none">⚠️ Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
+            <div class="dicom-block" id="hf-renta-err" style="display:none">🚫 La renta mínima requerida es $900.000 líquidos mensuales.</div>
+            <div class="f-group"><label>¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:#666">Pareja, familiar, amigo/a, etc. Esto permite acceder a propiedades de mayor valor.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="si" tabindex="-1"> Sí, puedo complementar renta</label><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="no" tabindex="-1"> No, solo con mi renta</label></div><div id="hf-complementa-quien-wrap" style="display:none;margin-top:10px;background:#f7faf9;border:1.5px solid #ccc;border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">👥 ¿Con quién complementas? <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="hf-complementa-quien" placeholder="Ej: Mi pareja, hermano/a, primo/a, amigo/a, padre/madre..." style="border:1.5px solid #ccc;background:#fff"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.5px">Sueldo liquido de esa persona <span style="color:#c0392b">*</span></label><div class="cs cs-renta-comp" data-target="hf-rc" data-form="hf"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-rc" value=""></div><div class="dicom-block" id="hf-renta-comp-err" style="display:none">La renta minima de quien complementa es $900.000 liquidos mensuales.</div></div><div class="dicom-block" id="hf-complementa-msg" style="display:none">⚠️ Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
             <div class="f-group"><label>¿Estás en DICOM? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="dicom-hf" value="no" onchange="handleDicom('hf','no')" tabindex="-1"> No estoy en DICOM</label><label class="f-radio-lbl"><input type="radio" name="dicom-hf" value="si" onchange="handleDicom('hf','si')" tabindex="-1"> Sí estoy en DICOM</label></div><div class="dicom-block" id="hf-dicom-err" style="display:none">❌ Mientras figures en DICOM no es posible acceder al Leasing Habitacional. Regulariza tu situación y vuelve cuando estés listo.</div></div>
             <div class="f-group"><label>¿Tienes contrato indefinido? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="contrato-hf" value="si" onchange="handleContrato('hf','si')" tabindex="-1"> Sí, tengo contrato indefinido</label><label class="f-radio-lbl"><input type="radio" name="contrato-hf" value="no" onchange="handleContrato('hf','no')" tabindex="-1"> No tengo contrato indefinido</label></div><div class="dicom-block" id="hf-contrato-err" style="display:none">⚠️ Se requiere contrato indefinido para acceder al Leasing Habitacional.</div></div>
             <div class="f-group"><label>¿Tú o tu cónyuge tiene una vivienda actualmente? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="vivienda-hf" value="no" onchange="handleVivienda('hf','no')" tabindex="-1"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl"><input type="radio" name="vivienda-hf" value="si" onchange="handleVivienda('hf','si')" tabindex="-1"> Sí, tengo una vivienda</label></div><div class="dicom-block" id="hf-vivienda-err" style="display:none">❌ El Leasing Habitacional es solo para personas sin vivienda propia.</div></div>
-            <div class="f-field"><label class="f-field-lbl">📞 ¿Cómo prefieres que te contactemos? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="contacto-hf" value="whatsapp" tabindex="-1"> WhatsApp</label><label class="f-radio-lbl"><input type="radio" name="contacto-hf" value="telefono" tabindex="-1"> Llamada telefónica</label></div></div>
-            <div class="f-field"><label class="f-field-lbl">🕐 ¿A qué hora te acomoda que te contactemos? (entre 9:00 AM y 5:00 PM) *</label><div class="cs cs-up" data-target="hf-hora"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un horario</div><div class="cs-opts cs-hora-opts"></div><input type="hidden" id="hf-hora" value=""></div></div>
+            <div class="f-field"><label class="f-field-lbl">¿Cuándo piensas comprar esta vivienda? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="cuando-hf" value="lo_antes_posible" tabindex="-1"> Lo antes posible</label><label class="f-radio-lbl"><input type="radio" name="cuando-hf" value="dentro_3_meses" tabindex="-1"> Dentro de 3 meses</label><label class="f-radio-lbl"><input type="radio" name="cuando-hf" value="mas_3_meses" tabindex="-1"> En más de 3 meses</label></div></div>
             <button id="hf-btn" class="f-btn f-btn-navy" style="margin-top:16px" onclick="doForm('hf','Meta Ads - Hero')" tabindex="-1">Verificar si califico — gratis &rarr;</button>
             </div>
             <p class="hf-lock-hint" id="hf-lock-hint">👆 Responde las preguntas de la propiedad para continuar</p>
@@ -689,13 +688,12 @@ footer{background:var(--navy);padding:56px 40px 28px}
             <input class="f-input f-input-d" type="email" id="f2-e" placeholder="Correo electrónico *" autocomplete="email">
             <div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:4px">🏠 Arriendo actual</div><div class="cs cs-d cs-arriendo" data-target="f2-a"><div class="cs-trigger placeholder">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="f2-a" value=""></div>
             <div class="cs cs-d cs-renta" data-target="f2-r" data-form="f2"><div class="cs-trigger placeholder">Sueldo líquido mensual *</div><div class="cs-opts"></div><input type="hidden" id="f2-r" value=""></div>
-            <div class="dicom-block dicom-block-d" id="f2-renta-err" style="display:none">🚫 La renta mínima requerida es $800.000 líquidos mensuales.</div>
-            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:rgba(255,255,255,0.5)">Pareja, familiar, amigo/a, etc.</span></div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="complementa-f2" value="si"> Sí, puedo complementar renta</label><label class="f-radio-lbl-d"><input type="radio" name="complementa-f2" value="no"> No, solo con mi renta</label></div><div id="f2-complementa-quien-wrap" style="display:none;margin-top:10px;background:rgba(45,184,158,0.12);border:2px solid var(--teal);border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:#2DB89E;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">👥 ¿Con quién complementas? <span style="color:#ff7675">*</span></label><input class="f-input f-input-d" type="text" id="f2-complementa-quien" placeholder="Ej: Mi pareja, hermano/a, primo/a, amigo/a, padre/madre..." style="border:2px solid var(--teal);background:rgba(255,255,255,0.1)"></div><div class="dicom-block dicom-block-d" id="f2-complementa-msg" style="display:none">⚠️ Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
+            <div class="dicom-block dicom-block-d" id="f2-renta-err" style="display:none">🚫 La renta mínima requerida es $900.000 líquidos mensuales.</div>
+            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:rgba(255,255,255,0.5)">Pareja, familiar, amigo/a, etc.</span></div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="complementa-f2" value="si"> Sí, puedo complementar renta</label><label class="f-radio-lbl-d"><input type="radio" name="complementa-f2" value="no"> No, solo con mi renta</label></div><div id="f2-complementa-quien-wrap" style="display:none;margin-top:10px;background:rgba(45,184,158,0.12);border:2px solid var(--teal);border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:#2DB89E;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">👥 ¿Con quién complementas? <span style="color:#ff7675">*</span></label><input class="f-input f-input-d" type="text" id="f2-complementa-quien" placeholder="Ej: Mi pareja, hermano/a, primo/a, amigo/a, padre/madre..." style="border:2px solid var(--teal);background:rgba(255,255,255,0.1)"><label style="display:block;font-size:12px;font-weight:800;color:#2DB89E;margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.5px">Sueldo liquido de esa persona <span style="color:#ff7675">*</span></label><div class="cs cs-renta-comp" data-target="f2-rc" data-form="f2"><div class="cs-trigger placeholder" tabindex="-1" style="background:rgba(255,255,255,0.08);border:2px solid var(--teal);color:#fff">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="f2-rc" value=""></div><div class="dicom-block dicom-block-d" id="f2-renta-comp-err" style="display:none">La renta minima de quien complementa es $900.000 liquidos mensuales.</div></div><div class="dicom-block dicom-block-d" id="f2-complementa-msg" style="display:none">⚠️ Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Estás en DICOM? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="dicom-f2" value="no" onchange="handleDicom('f2','no')"> No estoy en DICOM</label><label class="f-radio-lbl-d"><input type="radio" name="dicom-f2" value="si" onchange="handleDicom('f2','si')"> Sí estoy en DICOM</label></div><div class="dicom-block dicom-block-d" id="f2-dicom-err" style="display:none">❌ Mientras figures en DICOM no es posible acceder al Leasing Habitacional. Regulariza tu situación y vuelve cuando estés listo.</div></div>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Tienes contrato indefinido? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="contrato-f2" value="si" onchange="handleContrato('f2','si')"> Sí, tengo contrato indefinido</label><label class="f-radio-lbl-d"><input type="radio" name="contrato-f2" value="no" onchange="handleContrato('f2','no')"> No, no tengo contrato indefinido</label></div><div class="dicom-block dicom-block-d" id="f2-contrato-err" style="display:none">⚠️ Se requiere contrato indefinido para acceder al Leasing Habitacional.</div></div>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Tú o tu cónyuge tiene una vivienda actualmente? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="vivienda-f2" value="no" onchange="handleVivienda('f2','no')"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl-d"><input type="radio" name="vivienda-f2" value="si" onchange="handleVivienda('f2','si')"> Sí, tengo una vivienda</label></div><div class="dicom-block dicom-block-d" id="f2-vivienda-err" style="display:none">❌ El Leasing Habitacional es solo para personas sin vivienda propia.</div></div>
-            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">📞 ¿Cómo prefieres que te contactemos? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="contacto-f2" value="whatsapp"> WhatsApp</label><label class="f-radio-lbl-d"><input type="radio" name="contacto-f2" value="telefono"> Llamada telefónica</label></div></div>
-            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">🕐 ¿A qué hora te acomoda que te contactemos? (entre 9:00 AM y 5:00 PM) *</div><div class="cs cs-d cs-up" data-target="f2-hora"><div class="cs-trigger placeholder">Selecciona un horario</div><div class="cs-opts cs-hora-opts"></div><input type="hidden" id="f2-hora" value=""></div></div>
+            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Cuándo piensas comprar esta vivienda? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="cuando-f2" value="lo_antes_posible"> Lo antes posible</label><label class="f-radio-lbl-d"><input type="radio" name="cuando-f2" value="dentro_3_meses"> Dentro de 3 meses</label><label class="f-radio-lbl-d"><input type="radio" name="cuando-f2" value="mas_3_meses"> En más de 3 meses</label></div></div>
             <button id="f2-btn" class="f-btn f-btn-teal" style="margin-top:16px" onclick="doForm('f2','Meta Ads - Formulario central')">Verificar si califico gratis &rarr;</button>
             </div>
           </form>
@@ -757,7 +755,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
           <div class="req-item"><div class="req-ck">✓</div>No ser propietario de vivienda (ni cónyuge)</div>
           <div class="req-item"><div class="req-ck">✓</div>No haber recibido subsidios habitacionales antes</div>
           <div class="req-item"><div class="req-ck">✓</div>Inscrito en el Registro Único de SERVIU</div>
-          <div class="req-item"><div class="req-ck">✓</div>Renta líquida desde $800.000 (complementable)</div>
+          <div class="req-item"><div class="req-ck">✓</div>Renta líquida desde $900.000 (complementable)</div>
           <div class="req-item"><div class="req-ck">✓</div>No estar en DICOM</div>
           <div class="req-item"><div class="req-ck">✓</div>Tener una propiedad vista para comprar (máximo 2.000 UF)</div>
           <div class="req-item"><div class="req-ck">✓</div>Cuenta de Ahorro Leasing Habitacional abierta</div>
@@ -798,13 +796,12 @@ footer{background:var(--navy);padding:56px 40px 28px}
         <div class="f-group"><label>🏠 Arriendo actual</label>
           <div class="cs cs-arriendo" data-target="f3-a"><div class="cs-trigger placeholder">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="f3-a" value=""></div>
         </div>
-        <div class="f-group"><label>Sueldo líquido mensual *</label><div class="cs cs-renta" data-target="f3-r" data-form="f3"><div class="cs-trigger placeholder">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="f3-r" value=""></div><div class="dicom-block" id="f3-renta-err" style="display:none">🚫 La renta mínima requerida es $800.000 líquidos mensuales.</div></div>
-        <div class="f-group"><label>¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:#666">Pareja, familiar, amigo/a, etc.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="complementa-f3" value="si"> Sí, puedo complementar renta</label><label class="f-radio-lbl"><input type="radio" name="complementa-f3" value="no"> No, solo con mi renta</label></div><div id="f3-complementa-quien-wrap" style="display:none;margin-top:10px;background:#f7faf9;border:1.5px solid #ccc;border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">👥 ¿Con quién complementas? <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="f3-complementa-quien" placeholder="Ej: Mi pareja, hermano/a, primo/a, amigo/a, padre/madre..." style="border:1.5px solid #ccc;background:#fff"></div><div class="dicom-block" id="f3-complementa-msg" style="display:none">⚠️ Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
+        <div class="f-group"><label>Sueldo líquido mensual *</label><div class="cs cs-renta" data-target="f3-r" data-form="f3"><div class="cs-trigger placeholder">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="f3-r" value=""></div><div class="dicom-block" id="f3-renta-err" style="display:none">🚫 La renta mínima requerida es $900.000 líquidos mensuales.</div></div>
+        <div class="f-group"><label>¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:#666">Pareja, familiar, amigo/a, etc.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="complementa-f3" value="si"> Sí, puedo complementar renta</label><label class="f-radio-lbl"><input type="radio" name="complementa-f3" value="no"> No, solo con mi renta</label></div><div id="f3-complementa-quien-wrap" style="display:none;margin-top:10px;background:#f7faf9;border:1.5px solid #ccc;border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">👥 ¿Con quién complementas? <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="f3-complementa-quien" placeholder="Ej: Mi pareja, hermano/a, primo/a, amigo/a, padre/madre..." style="border:1.5px solid #ccc;background:#fff"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.5px">Sueldo liquido de esa persona <span style="color:#c0392b">*</span></label><div class="cs cs-renta-comp" data-target="f3-rc" data-form="f3"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="f3-rc" value=""></div><div class="dicom-block" id="f3-renta-comp-err" style="display:none">La renta minima de quien complementa es $900.000 liquidos mensuales.</div></div><div class="dicom-block" id="f3-complementa-msg" style="display:none">⚠️ Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
         <div class="f-group"><label>¿Estás en DICOM? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="dicom-f3" value="no" onchange="handleDicom('f3','no')"> No estoy en DICOM</label><label class="f-radio-lbl"><input type="radio" name="dicom-f3" value="si" onchange="handleDicom('f3','si')"> Sí estoy en DICOM</label></div><div class="dicom-block" id="f3-dicom-err" style="display:none">❌ Mientras figures en DICOM no es posible acceder al Leasing Habitacional. Regulariza tu situación y vuelve cuando estés listo.</div></div>
         <div class="f-group"><label>¿Tienes contrato indefinido? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="contrato-f3" value="si" onchange="handleContrato('f3','si')"> Sí, tengo contrato indefinido</label><label class="f-radio-lbl"><input type="radio" name="contrato-f3" value="no" onchange="handleContrato('f3','no')"> No tengo contrato indefinido</label></div><div class="dicom-block" id="f3-contrato-err" style="display:none">⚠️ Se requiere contrato indefinido para acceder al Leasing Habitacional.</div></div>
         <div class="f-group"><label>¿Tú o tu cónyuge tiene una vivienda actualmente? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="vivienda-f3" value="no" onchange="handleVivienda('f3','no')"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl"><input type="radio" name="vivienda-f3" value="si" onchange="handleVivienda('f3','si')"> Sí, tengo una vivienda</label></div><div class="dicom-block" id="f3-vivienda-err" style="display:none">❌ El Leasing Habitacional es solo para personas sin vivienda propia.</div></div>
-        <div class="f-group"><label>📞 ¿Cómo prefieres que te contactemos? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="contacto-f3" value="whatsapp"> WhatsApp</label><label class="f-radio-lbl"><input type="radio" name="contacto-f3" value="telefono"> Llamada telefónica</label></div></div>
-        <div class="f-group"><label>🕐 ¿A qué hora te acomoda que te contactemos? (entre 9:00 AM y 5:00 PM) *</label><div class="cs cs-up" data-target="f3-hora"><div class="cs-trigger placeholder">Selecciona un horario</div><div class="cs-opts cs-hora-opts"></div><input type="hidden" id="f3-hora" value=""></div></div>
+        <div class="f-field"><label class="f-field-lbl">¿Cuándo piensas comprar esta vivienda? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="cuando-f3" value="lo_antes_posible" tabindex="-1"> Lo antes posible</label><label class="f-radio-lbl"><input type="radio" name="cuando-f3" value="dentro_3_meses" tabindex="-1"> Dentro de 3 meses</label><label class="f-radio-lbl"><input type="radio" name="cuando-f3" value="mas_3_meses" tabindex="-1"> En más de 3 meses</label></div></div>
             <button id="f3-btn" class="f-btn f-btn-navy" style="margin-top:16px" onclick="doFormFull('f3','Meta Ads - Aplica')">Verificar si califico gratis &rarr;</button>
         <p class="f-privacy f-privacy-d" style="margin-top:12px">Tu información es confidencial. Solo la usamos para contactarte.</p>
         </div>
@@ -867,12 +864,11 @@ footer{background:var(--navy);padding:56px 40px 28px}
             <input class="f-input f-input-d" type="email" id="f4-e" placeholder="Correo electrónico *" autocomplete="email">
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Estás en DICOM? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="dicom-f4" value="no" onchange="handleDicom('f4','no')"> No estoy en DICOM</label><label class="f-radio-lbl-d"><input type="radio" name="dicom-f4" value="si" onchange="handleDicom('f4','si')"> Sí estoy en DICOM</label></div><div class="dicom-block dicom-block-d" id="f4-dicom-err" style="display:none">❌ Mientras figures en DICOM no es posible acceder al Leasing Habitacional. Regulariza tu situación y vuelve cuando estés listo.</div></div>
             <div class="cs cs-d cs-renta" data-target="f4-r" data-form="f4"><div class="cs-trigger placeholder">Sueldo líquido mensual *</div><div class="cs-opts"></div><input type="hidden" id="f4-r" value=""></div>
-            <div class="dicom-block dicom-block-d" id="f4-renta-err" style="display:none">🚫 La renta mínima requerida es $800.000 líquidos mensuales.</div>
-            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:rgba(255,255,255,0.5)">Pareja, familiar, amigo/a, etc.</span></div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="complementa-f4" value="si"> Sí, puedo complementar renta</label><label class="f-radio-lbl-d"><input type="radio" name="complementa-f4" value="no"> No, solo con mi renta</label></div><div id="f4-complementa-quien-wrap" style="display:none;margin-top:10px;background:rgba(45,184,158,0.12);border:2px solid var(--teal);border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:#2DB89E;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">👥 ¿Con quién complementas? <span style="color:#ff7675">*</span></label><input class="f-input f-input-d" type="text" id="f4-complementa-quien" placeholder="Ej: Mi pareja, hermano/a, primo/a, amigo/a, padre/madre..." style="border:2px solid var(--teal);background:rgba(255,255,255,0.1)"></div><div class="dicom-block dicom-block-d" id="f4-complementa-msg" style="display:none">⚠️ Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
+            <div class="dicom-block dicom-block-d" id="f4-renta-err" style="display:none">🚫 La renta mínima requerida es $900.000 líquidos mensuales.</div>
+            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:rgba(255,255,255,0.5)">Pareja, familiar, amigo/a, etc.</span></div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="complementa-f4" value="si"> Sí, puedo complementar renta</label><label class="f-radio-lbl-d"><input type="radio" name="complementa-f4" value="no"> No, solo con mi renta</label></div><div id="f4-complementa-quien-wrap" style="display:none;margin-top:10px;background:rgba(45,184,158,0.12);border:2px solid var(--teal);border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:#2DB89E;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">👥 ¿Con quién complementas? <span style="color:#ff7675">*</span></label><input class="f-input f-input-d" type="text" id="f4-complementa-quien" placeholder="Ej: Mi pareja, hermano/a, primo/a, amigo/a, padre/madre..." style="border:2px solid var(--teal);background:rgba(255,255,255,0.1)"><label style="display:block;font-size:12px;font-weight:800;color:#2DB89E;margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.5px">Sueldo liquido de esa persona <span style="color:#ff7675">*</span></label><div class="cs cs-renta-comp" data-target="f4-rc" data-form="f4"><div class="cs-trigger placeholder" tabindex="-1" style="background:rgba(255,255,255,0.08);border:2px solid var(--teal);color:#fff">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="f4-rc" value=""></div><div class="dicom-block dicom-block-d" id="f4-renta-comp-err" style="display:none">La renta minima de quien complementa es $900.000 liquidos mensuales.</div></div><div class="dicom-block dicom-block-d" id="f4-complementa-msg" style="display:none">⚠️ Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Tienes contrato indefinido? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="contrato-f4" value="si" onchange="handleContrato('f4','si')"> Sí, tengo contrato indefinido</label><label class="f-radio-lbl-d"><input type="radio" name="contrato-f4" value="no" onchange="handleContrato('f4','no')"> No, no tengo contrato indefinido</label></div><div class="dicom-block dicom-block-d" id="f4-contrato-err" style="display:none">⚠️ Se requiere contrato indefinido para acceder al Leasing Habitacional.</div></div>
             <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Tú o tu cónyuge tiene una vivienda actualmente? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="vivienda-f4" value="no" onchange="handleVivienda('f4','no')"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl-d"><input type="radio" name="vivienda-f4" value="si" onchange="handleVivienda('f4','si')"> Sí, tengo una vivienda</label></div><div class="dicom-block dicom-block-d" id="f4-vivienda-err" style="display:none">❌ El Leasing Habitacional es solo para personas sin vivienda propia.</div></div>
-            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">📞 ¿Cómo prefieres que te contactemos? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="contacto-f4" value="whatsapp"> WhatsApp</label><label class="f-radio-lbl-d"><input type="radio" name="contacto-f4" value="telefono"> Llamada telefónica</label></div></div>
-            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">🕐 ¿A qué hora te acomoda que te contactemos? (entre 9:00 AM y 5:00 PM) *</div><div class="cs cs-d cs-up" data-target="f4-hora"><div class="cs-trigger placeholder">Selecciona un horario</div><div class="cs-opts cs-hora-opts"></div><input type="hidden" id="f4-hora" value=""></div></div>
+            <div style="margin-bottom:6px"><div style="font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px">¿Cuándo piensas comprar esta vivienda? *</div><div class="f-radios"><label class="f-radio-lbl-d"><input type="radio" name="cuando-f4" value="lo_antes_posible"> Lo antes posible</label><label class="f-radio-lbl-d"><input type="radio" name="cuando-f4" value="dentro_3_meses"> Dentro de 3 meses</label><label class="f-radio-lbl-d"><input type="radio" name="cuando-f4" value="mas_3_meses"> En más de 3 meses</label></div></div>
             <button id="f4-btn" class="f-btn f-btn-teal" style="margin-top:16px" onclick="doForm('f4','Meta Ads - Formulario final')">Quiero mi vivienda propia — es gratis &rarr;</button>
             </div>
           </form>
@@ -913,7 +909,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
       <div class="faq-item"><div class="faq-q">¿Puedo acceder si tengo deudas?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">Estar en DICOM sí es impedimento. Si tienes deudas pero no estás en DICOM, conversemos — en algunos casos se puede regularizar antes de postular.</div></div></div>
       <div class="faq-item"><div class="faq-q">¿En qué se diferencia del DS1?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">El DS120 <strong>no exige antigüedad ni saldo en libreta</strong>. El DS1 funciona por puntaje y todos compiten. El DS120 opera por orden de llegada, disponible todo el año — si cumples los requisitos, avanzas.</div></div></div>
       <div class="faq-item"><div class="faq-q">¿Pueden acceder extranjeros?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">Sí. Extranjeros con <strong>residencia definitiva</strong> en Chile pueden acceder al DS120 sin necesidad de historial crediticio previo en el país. Las condiciones son las mismas que para los chilenos: no ser propietario, no estar en DICOM y cumplir los requisitos de renta.</div></div></div>
-      <div class="faq-item"><div class="faq-q">¿Puedo acceder si soy independiente o trabajador a honorarios?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">Sí. Los trabajadores independientes pueden acreditar renta con boletas de honorarios, declaración de renta o estados financieros. La renta mínima requerida es de $800.000 líquidos mensuales, la que puede complementarse con ingresos del cónyuge.</div></div></div>
+      <div class="faq-item"><div class="faq-q">¿Puedo acceder si soy independiente o trabajador a honorarios?<span class="faq-ic">+</span></div><div class="faq-a"><div class="faq-ai">Sí. Los trabajadores independientes pueden acreditar renta con boletas de honorarios, declaración de renta o estados financieros. La renta mínima requerida es de $900.000 líquidos mensuales, la que puede complementarse con ingresos del cónyuge.</div></div></div>
     </div>
   </div>
 </section>
@@ -1071,10 +1067,12 @@ footer{background:var(--navy);padding:56px 40px 28px}
     var compRadio = document.querySelector('input[name="complementa-' + formId + '"]:checked');
     var needsComp = rentaEl && rentaComplementaObligatoria.indexOf(rentaEl.value) !== -1;
     if      (dicom    && dicom.value    === 'si')              { blocked = true; msg = '🚫 No puedes continuar — estás en DICOM'; }
-    else if (rentaEl  && rentaEl.value  === 'Menos de $800.000'){ blocked = true; msg = '🚫 No puedes continuar — renta mínima $800.000'; }
+    else if (rentaEl  && rentaEl.value  === 'Menos de $900.000'){ blocked = true; msg = '🚫 No puedes continuar — renta mínima $900.000'; }
     else if (needsComp && compRadio && compRadio.value === 'no'){ blocked = true; msg = '🚫 Con tu renta, es obligatorio complementar con otra persona'; }
     else if (contrato && contrato.value === 'no')              { blocked = true; msg = '🚫 Se requiere contrato indefinido para continuar'; }
     else if (vivienda && vivienda.value === 'si')              { blocked = true; msg = '🚫 El DS120 es solo para personas sin vivienda propia'; }
+    var rcEl = document.getElementById(formId + '-rc');
+    if (!blocked && compRadio && compRadio.value === 'si' && rcEl && rcEl.value === 'Menos de $900.000') { blocked = true; msg = '🚫 La persona que complementa no alcanza la renta mínima ($900.000)'; }
     if (blocked) {
       if (!btn.dataset.origText) btn.dataset.origText = btn.innerHTML;
       btn.innerHTML = msg;
@@ -1095,8 +1093,8 @@ footer{background:var(--navy);padding:56px 40px 28px}
   function handleRenta(formId, val) {
     aTrack('field_complete', formId, 'renta', val);
     var err = document.getElementById(formId + '-renta-err');
-    if (err) err.style.display = val === 'Menos de $800.000' ? 'flex' : 'none';
-    // Show complementa renta obligatoria message for $800k-$1.2M (only if not already complementing)
+    if (err) err.style.display = val === 'Menos de $900.000' ? 'flex' : 'none';
+    // Show complementa renta obligatoria message for $900k-$1.2M (only if not already complementing)
     var compMsg = document.getElementById(formId + '-complementa-msg');
     var needsComp = rentaComplementaObligatoria.indexOf(val) !== -1;
     var compSi = document.querySelector('input[name="complementa-' + formId + '"][value="si"]');
@@ -1105,6 +1103,12 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (needsComp && compSi && !compSi.checked) {
       compSi.checked = true; compSi.dispatchEvent(new Event('change', {bubbles:true}));
     }
+    updateButtonState(formId);
+  }
+
+  function handleRentaComp(formId, val) {
+    var err = document.getElementById(formId + '-renta-comp-err');
+    if (err) err.style.display = val === 'Menos de $900.000' ? 'flex' : 'none';
     updateButtonState(formId);
   }
 
@@ -1239,6 +1243,14 @@ footer{background:var(--navy);padding:56px 40px 28px}
     var formId = radio.name.replace('complementa-', '');
     var quienWrap = document.getElementById(formId + '-complementa-quien-wrap');
     if (quienWrap) quienWrap.style.display = radio.value === 'si' ? 'block' : 'none';
+    if (radio.value === 'no') {
+      var rcInput = document.getElementById(formId + '-rc');
+      if (rcInput) rcInput.value = '';
+      var rcErr = document.getElementById(formId + '-renta-comp-err');
+      if (rcErr) rcErr.style.display = 'none';
+      var rcTrigger = quienWrap ? quienWrap.querySelector('.cs-renta-comp .cs-trigger') : null;
+      if (rcTrigger) { rcTrigger.textContent = 'Selecciona un rango'; rcTrigger.classList.add('placeholder'); }
+    }
     // Hide warning if already complementing
     var compMsg = document.getElementById(formId + '-complementa-msg');
     if (compMsg && radio.value === 'si') compMsg.style.display = 'none';
@@ -1338,13 +1350,13 @@ footer{background:var(--navy);padding:56px 40px 28px}
     '$700.001 – $800.000','Más de $800.000'
   ];
   var rentaOpts = [
-    {v:'Menos de $800.000',blocked:true},{v:'$800.000 – $900.000'},{v:'$900.001 – $1.000.000'},
+    {v:'Menos de $900.000',blocked:true},{v:'$900.000 – $1.000.000'},
     {v:'$1.000.001 – $1.100.000'},{v:'$1.100.001 – $1.200.000'},
     {v:'$1.200.001 – $1.300.000'},{v:'$1.300.001 – $1.400.000'},{v:'$1.400.001 – $1.500.000'},
     {v:'$1.500.001 – $1.600.000'},{v:'$1.600.001 – $1.700.000'},{v:'$1.700.001 – $1.800.000'},
     {v:'$1.800.001 – $1.900.000'},{v:'$1.900.001 – $2.000.000'},{v:'Más de $2.000.000'}
   ];
-  var rentaComplementaObligatoria = ['$800.000 – $900.000','$900.001 – $1.000.000','$1.000.001 – $1.100.000','$1.100.001 – $1.200.000'];
+  var rentaComplementaObligatoria = ['$900.000 – $1.000.000','$1.000.001 – $1.100.000','$1.100.001 – $1.200.000'];
 
   function buildCustomSelects() {
     // Arriendo selects
@@ -1395,6 +1407,32 @@ footer{background:var(--navy);padding:56px 40px 28px}
     });
   }
   buildCustomSelects();
+
+  // Build renta complemento selects
+  document.querySelectorAll('.cs-renta-comp').forEach(function(cs) {
+    var optsEl = cs.querySelector('.cs-opts');
+    var hidden = cs.querySelector('input[type="hidden"]');
+    var trigger = cs.querySelector('.cs-trigger');
+    var formId = cs.getAttribute('data-form');
+    optsEl.innerHTML = '';
+    rentaOpts.forEach(function(r) {
+      var opt = document.createElement('div');
+      opt.className = 'cs-opt' + (r.blocked ? ' blocked' : '');
+      opt.textContent = r.v;
+      opt.onclick = function(e) {
+        e.stopPropagation();
+        if (r.blocked) { handleRentaComp(formId, r.v); return; }
+        hidden.value = r.v;
+        trigger.textContent = r.v;
+        trigger.classList.remove('placeholder');
+        optsEl.querySelectorAll('.cs-opt').forEach(function(o){o.classList.remove('selected')});
+        opt.classList.add('selected');
+        cs.classList.remove('open');
+        handleRentaComp(formId, r.v);
+      };
+      optsEl.appendChild(opt);
+    });
+  });
 
   // Build hora custom selects
   var horaOpts = ['09:00 – 10:00','10:00 – 11:00','11:00 – 12:00','12:00 – 13:00','13:00 – 14:00','14:00 – 15:00','15:00 – 16:00','16:00 – 17:00'];
@@ -1485,7 +1523,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     const a = document.getElementById(prefix+'-a');
     // arriendo optional
     const r = document.getElementById(prefix+'-r');
-    if (r && (!r.value || r.value === 'Menos de $800.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $800.000).'); return; }
+    if (r && (!r.value || r.value === 'Menos de $900.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $900.000).'); return; }
     const pv = document.querySelector(`input[name="prop-vista-${prefix}"]:checked`);
     if (!pv || pv.value !== 'si') { alert('Debes tener una propiedad vista para continuar.'); return; }
     const comunaProp = document.getElementById(prefix+'-comuna-val');
@@ -1502,13 +1540,14 @@ footer{background:var(--navy);padding:56px 40px 28px}
     const compQuienVal = (comp && comp.value === 'si' && compQuien) ? compQuien.value.trim() : '';
     if (compVal === 'si' && !compQuienVal) { alert('Por favor indica con quién complementas renta.'); return; }
     const complementaRenta = compVal === 'si' ? ('Sí' + (compQuienVal ? ' — ' + compQuienVal : '')) : compVal === 'no' ? 'No' : '';
-    const contactoPref = document.querySelector(`input[name="contacto-${prefix}"]:checked`);
-    if (!contactoPref) { alert('Por favor indica cómo prefieres que te contactemos.'); return; }
-    const horaEl = document.getElementById(prefix+'-hora');
-    if (!horaEl || !horaEl.value) { alert('Por favor selecciona un horario de contacto.'); return; }
+    var rcEl = document.getElementById(prefix+'-rc');
+    var rentaCompVal = (compVal === 'si' && rcEl) ? rcEl.value : '';
+    if (compVal === 'si' && (!rentaCompVal || rentaCompVal === 'Menos de $900.000')) { alert('Por favor indica el sueldo líquido de quien complementa (mínimo $900.000).'); return; }
+    var cuandoEl = document.querySelector('input[name="cuando-'+prefix+'"]:checked');
+    if (!cuandoEl) { alert('Por favor indica cuándo piensas comprar.'); return; }
     if (prefix === 'hf') setHfStep(3);
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, preferencia_contacto:contactoPref.value, horario_contacto:horaEl.value, fuente:src, utm_source:_utm.source||'', utm_medium:_utm.medium||'', utm_campaign:_utm.campaign||''});
-    markAllFormsSubmitted(n, contactoPref.value, horaEl.value, r?r.value:'');
+    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, renta_complemento:rentaCompVal||'', cuando_comprar:cuandoEl.value, fuente:src, utm_source:_utm.source||'', utm_medium:_utm.medium||'', utm_campaign:_utm.campaign||''});
+    markAllFormsSubmitted(n, cuandoEl.value, '', r?r.value:'');
   }
 
   // full form (includes radio)
@@ -1530,7 +1569,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     const a = document.getElementById(prefix+'-a');
     // arriendo optional
     const r = document.getElementById(prefix+'-r');
-    if (r && (!r.value || r.value === 'Menos de $800.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $800.000).'); return; }
+    if (r && (!r.value || r.value === 'Menos de $900.000')) { alert('Por favor indica tu sueldo líquido mensual (mínimo $900.000).'); return; }
     const pv = document.querySelector(`input[name="prop-vista-${prefix}"]:checked`);
     if (!pv || pv.value !== 'si') { alert('Debes tener una propiedad vista para continuar.'); return; }
     const comunaProp = document.getElementById(prefix+'-comuna-val');
@@ -1547,12 +1586,13 @@ footer{background:var(--navy);padding:56px 40px 28px}
     const compQuienVal = (comp && comp.value === 'si' && compQuien) ? compQuien.value.trim() : '';
     if (compVal === 'si' && !compQuienVal) { alert('Por favor indica con quién complementas renta.'); return; }
     const complementaRenta = compVal === 'si' ? ('Sí' + (compQuienVal ? ' — ' + compQuienVal : '')) : compVal === 'no' ? 'No' : '';
-    const contactoPref = document.querySelector(`input[name="contacto-${prefix}"]:checked`);
-    if (!contactoPref) { alert('Por favor indica cómo prefieres que te contactemos.'); return; }
-    const horaEl = document.getElementById(prefix+'-hora');
-    if (!horaEl || !horaEl.value) { alert('Por favor selecciona un horario de contacto.'); return; }
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:cf.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, preferencia_contacto:contactoPref.value, horario_contacto:horaEl.value, fuente:src||prefix, utm_source:_utm.source||'', utm_medium:_utm.medium||'', utm_campaign:_utm.campaign||''});
-    markAllFormsSubmitted(n, contactoPref.value, horaEl.value, r?r.value:'');
+    var rcEl2 = document.getElementById(prefix+'-rc');
+    var rentaCompVal2 = (compVal === 'si' && rcEl2) ? rcEl2.value : '';
+    if (compVal === 'si' && (!rentaCompVal2 || rentaCompVal2 === 'Menos de $900.000')) { alert('Por favor indica el sueldo líquido de quien complementa (mínimo $900.000).'); return; }
+    var cuandoEl = document.querySelector('input[name="cuando-'+prefix+'"]:checked');
+    if (!cuandoEl) { alert('Por favor indica cuándo piensas comprar.'); return; }
+    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:cf.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, renta_complemento:rentaCompVal2||'', cuando_comprar:cuandoEl.value, fuente:src||prefix, utm_source:_utm.source||'', utm_medium:_utm.medium||'', utm_campaign:_utm.campaign||''});
+    markAllFormsSubmitted(n, cuandoEl.value, '', r?r.value:'');
   }
 
   // quick strips (phone only)
