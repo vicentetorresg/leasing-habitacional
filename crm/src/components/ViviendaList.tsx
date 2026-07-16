@@ -589,7 +589,7 @@ const ViviendaList = () => {
               Excel
             </button>
             <button
-              onClick={() => { setShowArchived(!showArchived); setStatusFilter('all'); }}
+              onClick={() => { setShowArchived(!showArchived); setStatusFilter('all'); setSelectedIds(new Set()); }}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${showArchived ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-muted text-muted-foreground hover:bg-muted/80 border border-border'}`}
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
@@ -599,7 +599,7 @@ const ViviendaList = () => {
         </div>
         <div className="flex flex-wrap gap-1">
           <button
-            onClick={() => setStatusFilter('all')}
+            onClick={() => { setStatusFilter('all'); setSelectedIds(new Set()); }}
             className={`px-2 py-1.5 rounded-md text-[10px] font-medium transition-all ${statusFilter === 'all' ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-muted text-muted-foreground hover:bg-muted/80'}`}
           >
             Todos
@@ -607,7 +607,7 @@ const ViviendaList = () => {
           {STATUSES.map(s => (
             <button
               key={s.value}
-              onClick={() => setStatusFilter(s.value)}
+              onClick={() => { setStatusFilter(s.value); setSelectedIds(new Set()); }}
               className={`inline-flex items-center gap-1 px-2 py-1.5 rounded-md text-[10px] font-medium transition-all ${statusFilter === s.value ? 'bg-primary text-primary-foreground shadow-sm' : `${s.color} hover:shadow-sm`}`}
             >
               <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${statusFilter === s.value ? 'bg-white' : s.dot}`} />
