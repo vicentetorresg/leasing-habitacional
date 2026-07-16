@@ -14,7 +14,7 @@ export default async function handler(req, res) {
 
   // Fetch vivienda info
   const vivRes = await fetch(
-    `${CRM_URL}/rest/v1/viviendas?id=eq.${vivienda_id}&select=id,nombre,email,tipo_vivienda,comuna,direccion`,
+    `${CRM_URL}/rest/v1/viviendas?id=eq.${vivienda_id}&select=id,nombre,email,tipo_vivienda,comuna,direccion,status,archived`,
     { headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY } }
   );
   const data = await vivRes.json();
@@ -22,6 +22,10 @@ export default async function handler(req, res) {
 
   const viv = data[0];
   if (!viv.email) return res.status(200).json({ sent: false, reason: 'no email' });
+
+  // Skip archived or advanced-status viviendas
+  const blockedStatuses = ['firma_mandato','eett_tasacion','borrador_escritura','escritura_firmada','inscrito_cbr','finalizado','propietario_no_interesado'];
+  if (viv.archived || blockedStatuses.includes(viv.status)) return res.status(200).json({ sent: false, reason: 'excluded status' });
 
   const firstName = (viv.nombre || '').trim().split(' ')[0] || viv.nombre;
   const tipoLabel = viv.tipo_vivienda === 'departamento' ? 'departamento' : 'casa';

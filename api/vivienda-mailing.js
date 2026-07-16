@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
   // Fetch viviendas in target statuses
   const vivRes = await fetch(
-    `${CRM_URL}/rest/v1/viviendas?status=in.(esperando_ok_propietario,esperando_fotos_tasacion)&select=id,nombre,email,tipo_vivienda,comuna,direccion,status,last_mailing_at,photo_count,created_at`,
+    `${CRM_URL}/rest/v1/viviendas?status=in.(esperando_ok_propietario,esperando_fotos_tasacion)&archived=eq.false&select=id,nombre,email,tipo_vivienda,comuna,direccion,status,last_mailing_at,photo_count,created_at`,
     { headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY } }
   );
   const viviendas = await vivRes.json();

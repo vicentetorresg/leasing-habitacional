@@ -489,8 +489,10 @@ const ViviendaList = () => {
     }
   };
 
+  const BLOCKED_STATUSES = ['firma_mandato','eett_tasacion','borrador_escritura','escritura_firmada','inscrito_cbr','finalizado','propietario_no_interesado'];
+
   const bulkRequestPhotos = async () => {
-    const targets = filtered.filter(v => selectedIds.has(v.id) && v.email && (v.photo_count || 0) === 0);
+    const targets = filtered.filter(v => selectedIds.has(v.id) && v.email && (v.photo_count || 0) === 0 && !v.archived && !BLOCKED_STATUSES.includes(v.status));
     if (targets.length === 0) {
       toast.error('Ninguna vivienda seleccionada tiene email y 0 fotos');
       return;
