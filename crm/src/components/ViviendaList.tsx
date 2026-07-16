@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import JSZip from 'jszip';
+import * as XLSX from 'xlsx';
 import {
   Dialog,
   DialogContent,
@@ -440,6 +441,36 @@ const ViviendaList = () => {
     setDownloadingZip(false);
   };
 
+  const downloadExcel = () => {
+    const rows = filtered.map(v => ({
+      'Estado': STATUS_MAP[v.status]?.label || v.status,
+      'Nombre': v.nombre,
+      'Teléfono': v.telefono,
+      'Email': v.email || '',
+      'Tipo': v.tipo_vivienda || '',
+      'Dirección': v.direccion || '',
+      'Detalle Depto': v.detalle_depto || '',
+      'Comuna': v.comuna || '',
+      'Valor UF': v.valor_pesos ? (UF_LABELS[v.valor_pesos] || v.valor_pesos) : '',
+      'Superficie m2': v.superficie || '',
+      'Dormitorios': v.dormitorios || '',
+      'Baños': v.banos || '',
+      'Fotos': v.photo_count || 0,
+      'Lead Interesado': v.linked_lead_id && linkedLeads[v.linked_lead_id] ? linkedLeads[v.linked_lead_id].name : '',
+      'Notas': v.notes || '',
+      'Fuente': v.fuente || '',
+      'Fecha Creación': new Date(v.created_at).toLocaleDateString('es-CL'),
+      'Última Actualización': new Date(v.updated_at).toLocaleDateString('es-CL'),
+      'Archivada': v.archived ? 'Sí' : 'No',
+    }));
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Viviendas');
+    const today = new Date().toISOString().slice(0, 10);
+    XLSX.writeFile(wb, `Viviendas-LlavePropia-${today}.xlsx`);
+    toast.success(`${rows.length} viviendas exportadas`);
+  };
+
   const openEdit = (v: Vivienda) => {
     setEditViv({ ...v });
     setEditLeadSearch('');
@@ -489,13 +520,22 @@ const ViviendaList = () => {
               className="w-full pl-8 pr-2 py-1.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-1 focus:ring-primary/30"
             />
           </div>
-          <button
-            onClick={() => { setShowArchived(!showArchived); setStatusFilter('all'); }}
-            className={`ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${showArchived ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-muted text-muted-foreground hover:bg-muted/80 border border-border'}`}
-          >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
-            {showArchived ? 'Ver activas' : 'Ver archivadas'}
-          </button>
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              onClick={downloadExcel}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-all"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+              Excel
+            </button>
+            <button
+              onClick={() => { setShowArchived(!showArchived); setStatusFilter('all'); }}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${showArchived ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-muted text-muted-foreground hover:bg-muted/80 border border-border'}`}
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+              {showArchived ? 'Ver activas' : 'Ver archivadas'}
+            </button>
+          </div>
         </div>
         <div className="flex flex-wrap gap-1">
           <button
