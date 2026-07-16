@@ -432,7 +432,7 @@ function selectTipo(val,el){
   document.getElementById('tipoFields').classList.add('revealed');
   document.getElementById('tipoPrompt').classList.add('hidden');
   checkStep3();
-  setTimeout(function(){ document.getElementById('direccion').scrollIntoView({behavior:'smooth',block:'start'}); },100);
+  setTimeout(function(){ document.getElementById('tipoFields').scrollIntoView({behavior:'smooth',block:'nearest'}); },150);
 }
 
 function selectPill(type,val,el){
