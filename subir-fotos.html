@@ -127,10 +127,10 @@ async function init() {
   document.getElementById('prop-detail').textContent = viv.direccion || '';
 
   // Load existing photos
-  const listRes = await fetch(`${CRM_URL}/storage/v1/object/list/vivienda-files/${vivId}`, {
+  const listRes = await fetch(`${CRM_URL}/storage/v1/object/list/vivienda-files`, {
     method: 'POST',
     headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ limit: 100, offset: 0 })
+    body: JSON.stringify({ prefix: vivId + '/', limit: 100, offset: 0 })
   });
   const files = await listRes.json();
   if (Array.isArray(files)) {
