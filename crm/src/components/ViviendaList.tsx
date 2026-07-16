@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import JSZip from 'jszip';
 import {
   Dialog,
   DialogContent,
@@ -249,6 +250,7 @@ const ViviendaList = () => {
   const [photoViewViv, setPhotoViewViv] = useState<Vivienda | null>(null);
   const [photoViewFiles, setPhotoViewFiles] = useState<VivFile[]>([]);
   const [photoViewLoading, setPhotoViewLoading] = useState(false);
+  const [downloadingZip, setDownloadingZip] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchViviendas = useCallback(async () => {
@@ -363,6 +365,13 @@ const ViviendaList = () => {
       }
     }
     await fetchFiles(editViv.id);
+    // Sync photo_count after upload
+    const { data: allFiles } = await supabase.storage.from(BUCKET).list(editViv.id, { limit: 100 });
+    if (allFiles) {
+      const imgCount = allFiles.filter(f => f.name !== '.emptyFolderPlaceholder' && /\.(jpg|jpeg|png|gif|webp|heic)$/i.test(f.name)).length;
+      await (supabase.from('viviendas' as any) as any).update({ photo_count: imgCount, updated_at: new Date().toISOString() }).eq('id', editViv.id);
+      setViviendas(prev => prev.map(v => v.id === editViv.id ? { ...v, photo_count: imgCount } : v));
+    }
     setUploading(false);
     toast.success(`${files.length} archivo${files.length > 1 ? 's' : ''} subido${files.length > 1 ? 's' : ''}`);
     if (fileInputRef.current) fileInputRef.current.value = '';
@@ -372,7 +381,12 @@ const ViviendaList = () => {
     if (!editViv) return;
     const { error } = await supabase.storage.from(BUCKET).remove([`${editViv.id}/${fileName}`]);
     if (error) { toast.error('Error eliminando archivo'); return; }
-    setEditFiles(prev => prev.filter(f => f.name !== fileName));
+    const remaining = editFiles.filter(f => f.name !== fileName);
+    setEditFiles(remaining);
+    // Update photo_count (count only images)
+    const imgCount = remaining.filter(f => /\.(jpg|jpeg|png|gif|webp|heic)$/i.test(f.name)).length;
+    await (supabase.from('viviendas' as any) as any).update({ photo_count: imgCount, updated_at: new Date().toISOString() }).eq('id', editViv.id);
+    setViviendas(prev => prev.map(v => v.id === editViv.id ? { ...v, photo_count: imgCount } : v));
     toast.success('Archivo eliminado');
   };
 
@@ -386,6 +400,35 @@ const ViviendaList = () => {
       setPhotoViewFiles(imgs.map(f => ({ name: f.name, url: `${SUPA_STORAGE_URL}/${v.id}/${f.name}` })));
     }
     setPhotoViewLoading(false);
+  };
+
+  const downloadAllPhotos = async () => {
+    if (!photoViewViv || photoViewFiles.length === 0) return;
+    setDownloadingZip(true);
+    try {
+      const zip = new JSZip();
+      for (let i = 0; i < photoViewFiles.length; i++) {
+        const f = photoViewFiles[i];
+        const ext = f.name.split('.').pop() || 'jpg';
+        const res = await fetch(f.url);
+        const blob = await res.blob();
+        zip.file(`foto_${i + 1}.${ext}`, blob);
+      }
+      const content = await zip.generateAsync({ type: 'blob' });
+      const tipo = photoViewViv.tipo_vivienda === 'departamento' ? 'Depto' : 'Casa';
+      const comuna = (photoViewViv.comuna || 'sin-comuna').replace(/\s+/g, '-');
+      const nombre = (photoViewViv.nombre || 'propietario').split(' ').slice(0, 2).join('-').replace(/\s+/g, '-');
+      const fileName = `${tipo}-${comuna}-${nombre}.zip`;
+      const url = URL.createObjectURL(content);
+      const a = document.createElement('a');
+      a.href = url; a.download = fileName; a.click();
+      URL.revokeObjectURL(url);
+      toast.success(`${photoViewFiles.length} fotos descargadas`);
+    } catch (e) {
+      console.error(e);
+      toast.error('Error descargando fotos');
+    }
+    setDownloadingZip(false);
   };
 
   const openEdit = (v: Vivienda) => {
@@ -805,19 +848,23 @@ const ViviendaList = () => {
           ) : (
             <div className="py-8 text-center text-muted-foreground text-sm">Sin fotos subidas</div>
           )}
-          <DialogFooter>
-            <Button variant="outline" size="sm" asChild>
-              <a href={`https://www.llavepropia.cl/subir-fotos?id=${photoViewViv?.id}`} target="_blank" rel="noreferrer">
-                Link de subida
-              </a>
-            </Button>
+          <DialogFooter className="flex-wrap gap-1.5">
+            {photoViewFiles.length > 0 && (
+              <Button variant="default" size="sm" onClick={downloadAllPhotos} disabled={downloadingZip} className="bg-emerald-600 hover:bg-emerald-700">
+                {downloadingZip ? (
+                  <><svg className="w-3.5 h-3.5 animate-spin mr-1" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Descargando...</>
+                ) : (
+                  <><svg className="w-3.5 h-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>Descargar ZIP</>
+                )}
+              </Button>
+            )}
             <Button variant="outline" size="sm" onClick={() => {
-              navigator.clipboard.writeText(`https://www.llavepropia.cl/subir-fotos?id=${photoViewViv?.id}`);
-              toast.success('Link copiado al portapapeles');
+              navigator.clipboard.writeText(`https://www.llavepropia.cl/galeria?id=${photoViewViv?.id}`);
+              toast.success('Link de galeria copiado');
             }}>
-              Copiar link
+              Copiar link galeria
             </Button>
-            <Button onClick={() => { setPhotoViewViv(null); setPhotoViewFiles([]); }}>Cerrar</Button>
+            <Button variant="outline" size="sm" onClick={() => { setPhotoViewViv(null); setPhotoViewFiles([]); }}>Cerrar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

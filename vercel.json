@@ -17,6 +17,7 @@
     { "source": "/viviendas-form", "destination": "/viviendas-form.html" },
     { "source": "/viviendas-form-dos", "destination": "/viviendas-form-dos.html" },
     { "source": "/subir-fotos", "destination": "/subir-fotos.html" },
+    { "source": "/galeria", "destination": "/galeria.html" },
     { "source": "/crm", "destination": "/crm-dist/index" },
     { "source": "/crm/:path*", "destination": "/crm-dist/index" }
   ],
