@@ -181,7 +181,7 @@ var UF_LABELS = {
 };
 
 async function init() {
-  var res = await fetch(CRM_URL + '/rest/v1/viviendas?archived=eq.false&status=neq.propietario_no_interesado&select=id,tipo_vivienda,direccion,detalle_depto,comuna,superficie,dormitorios,banos,valor_pesos,photo_count,status&order=created_at.desc', {
+  var res = await fetch(CRM_URL + '/rest/v1/viviendas?archived=eq.false&status=in.(esperando_ok_propietario,esperando_fotos_tasacion,coordinando_visitas)&select=id,tipo_vivienda,direccion,detalle_depto,comuna,superficie,dormitorios,banos,valor_pesos,photo_count,status&order=created_at.desc', {
     headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY }
   });
   allViviendas = await res.json();
