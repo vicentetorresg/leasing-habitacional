@@ -860,9 +860,9 @@ const ViviendaList = () => {
             )}
             <Button variant="outline" size="sm" onClick={() => {
               navigator.clipboard.writeText(`https://www.llavepropia.cl/galeria?id=${photoViewViv?.id}`);
-              toast.success('Link de galeria copiado');
+              toast.success('Link copiado');
             }}>
-              Copiar link galeria
+              Link para Interesados
             </Button>
             <Button variant="outline" size="sm" onClick={() => { setPhotoViewViv(null); setPhotoViewFiles([]); }}>Cerrar</Button>
           </DialogFooter>

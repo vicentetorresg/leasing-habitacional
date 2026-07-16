@@ -3,93 +3,116 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Galeria — Llave Propia</title>
+<title>Propiedad — Llave Propia</title>
 <link rel="icon" href="/favicon.ico">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f4f2ee;color:#1B3A6B;min-height:100vh}
-.top-bar{background:linear-gradient(135deg,#1B3A6B 0%,#C9871A 100%);padding:18px 24px;text-align:center}
-.top-bar img{height:32px;margin-bottom:8px}
-.top-bar h1{color:#fff;font-size:20px;font-weight:700;margin:0}
-.top-bar p{color:rgba(255,255,255,.65);font-size:13px;margin-top:4px}
-.container{max-width:900px;margin:0 auto;padding:24px 16px}
-.prop-card{background:#fff;border-radius:14px;padding:20px 24px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-.prop-info h2{font-size:18px;font-weight:700;color:#1B3A6B;margin:0 0 4px}
-.prop-info p{font-size:13px;color:#888;margin:0}
-.btn-download{display:inline-flex;align-items:center;gap:8px;background:#C9871A;color:#fff;border:none;border-radius:50px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 3px 12px rgba(201,135,26,.25);text-decoration:none}
-.btn-download:hover{background:#b07616;transform:translateY(-1px)}
-.btn-download:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.btn-download svg{width:18px;height:18px}
-.photos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-.photo-item{border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.06);cursor:pointer;transition:transform .15s,box-shadow .15s}
-.photo-item:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
-.photo-item img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
-.counter{text-align:center;margin:16px 0 4px;font-size:13px;color:#888;font-weight:600}
-.counter strong{color:#1B3A6B}
-.loading{text-align:center;padding:60px 20px;color:#888;font-size:15px}
-.error-state{text-align:center;padding:60px 20px}
+.top-bar{background:linear-gradient(135deg,#1B3A6B 0%,#C9871A 100%);padding:16px 24px;display:flex;align-items:center;justify-content:center;gap:12px}
+.top-bar img{height:30px}
+.top-bar span{color:#fff;font-size:14px;font-weight:700;letter-spacing:.5px}
+.container{max-width:720px;margin:0 auto;padding:20px 16px 40px}
+
+/* Carousel */
+.carousel{position:relative;background:#000;border-radius:16px;overflow:hidden;margin-bottom:20px;aspect-ratio:16/10}
+.carousel img{width:100%;height:100%;object-fit:contain;display:none;user-select:none}
+.carousel img.active{display:block}
+.carousel .nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);backdrop-filter:blur(4px);border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.carousel .nav:hover{background:rgba(255,255,255,.4)}
+.carousel .nav-prev{left:12px}
+.carousel .nav-next{right:12px}
+.carousel .badge{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);color:#fff;font-size:12px;font-weight:700;padding:5px 12px;border-radius:50px}
+
+/* Thumbnails */
+.thumbs{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.thumbs::-webkit-scrollbar{display:none}
+.thumb{flex-shrink:0;width:72px;height:54px;border-radius:8px;overflow:hidden;cursor:pointer;border:2.5px solid transparent;transition:border-color .15s,opacity .15s;opacity:.6}
+.thumb:hover{opacity:.9}
+.thumb.active{border-color:#C9871A;opacity:1}
+.thumb img{width:100%;height:100%;object-fit:cover}
+
+/* Property card */
+.prop-card{background:#fff;border-radius:16px;box-shadow:0 2px 14px rgba(0,0,0,.06);overflow:hidden}
+.prop-header{padding:24px 24px 0}
+.prop-header h1{font-size:22px;font-weight:800;color:#1B3A6B;margin:0 0 4px}
+.prop-header p{font-size:14px;color:#888;margin:0}
+.prop-specs{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid #f0ece4;border-bottom:1px solid #f0ece4;margin-top:20px}
+.spec{text-align:center;padding:16px 8px;border-right:1px solid #f0ece4}
+.spec:last-child{border-right:none}
+.spec .spec-val{font-size:20px;font-weight:800;color:#1B3A6B}
+.spec .spec-label{font-size:11px;color:#999;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.prop-details{padding:20px 24px}
+.detail-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f5f3ef}
+.detail-row:last-child{border-bottom:none}
+.detail-label{font-size:13px;color:#999;font-weight:600}
+.detail-value{font-size:13px;color:#1B3A6B;font-weight:700;text-align:right}
+.prop-footer{padding:16px 24px 20px;display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:50px;padding:13px 28px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none}
+.btn-primary{background:#C9871A;color:#fff;box-shadow:0 3px 12px rgba(201,135,26,.25)}
+.btn-primary:hover{background:#b07616;transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-wa{background:#25D366;color:#fff;box-shadow:0 3px 12px rgba(37,211,102,.25)}
+.btn-wa:hover{background:#1fb855;transform:translateY(-1px)}
+.btn svg{width:18px;height:18px}
+
+.loading{text-align:center;padding:80px 20px;color:#888;font-size:15px}
+.error-state{text-align:center;padding:80px 20px}
 .error-state h2{font-size:18px;color:#dc2626;margin-bottom:8px}
 .error-state p{font-size:14px;color:#555}
-/* Lightbox */
-.lightbox{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:20px}
-.lightbox.open{display:flex}
-.lightbox img{max-width:90vw;max-height:85vh;border-radius:8px;object-fit:contain}
-.lightbox .close-btn{position:absolute;top:16px;right:20px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.lightbox .close-btn:hover{background:rgba(255,255,255,.3)}
-.lightbox .nav-btn{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.lightbox .nav-btn:hover{background:rgba(255,255,255,.3)}
-.lightbox .nav-prev{left:16px}
-.lightbox .nav-next{right:16px}
-.lightbox .counter-lb{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.6);font-size:13px;font-weight:600}
 .footer{text-align:center;padding:24px;font-size:12px;color:#bbb}
 .footer a{color:#bbb}
 @media(max-width:500px){
-  .photos-grid{grid-template-columns:repeat(2,1fr);gap:8px}
-  .prop-card{flex-direction:column;text-align:center}
+  .carousel{border-radius:12px;aspect-ratio:4/3}
+  .prop-specs{grid-template-columns:repeat(2,1fr)}
+  .spec{border-bottom:1px solid #f0ece4}
+  .spec:nth-child(2){border-right:none}
+  .prop-footer{flex-direction:column}
+  .btn{justify-content:center}
 }
 </style>
 </head>
 <body>
 <div class="top-bar">
   <img src="/logo-lp.png" alt="Llave Propia">
-  <h1 id="page-title">Galeria de fotos</h1>
-  <p id="page-subtitle"></p>
+  <span>LLAVE OFERTA</span>
 </div>
 
 <div class="container">
-  <div id="loading" class="loading">Cargando fotos...</div>
+  <div id="loading" class="loading">Cargando propiedad...</div>
 
   <div id="content" style="display:none">
+    <!-- Carousel -->
+    <div class="carousel" id="carousel"></div>
+    <div class="thumbs" id="thumbs"></div>
+
+    <!-- Property card -->
     <div class="prop-card">
-      <div class="prop-info">
-        <h2 id="prop-name"></h2>
-        <p id="prop-detail"></p>
+      <div class="prop-header">
+        <h1 id="prop-title"></h1>
+        <p id="prop-address"></p>
       </div>
-      <button class="btn-download" id="btn-download" disabled>
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17v3a2 2 0 002 2h14a2 2 0 002-2v-3"/></svg>
-        <span id="btn-download-text">Descargar todas</span>
-      </button>
+      <div class="prop-specs" id="prop-specs"></div>
+      <div class="prop-details" id="prop-details"></div>
+      <div class="prop-footer">
+        <button class="btn btn-primary" id="btn-download" disabled>
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17v3a2 2 0 002 2h14a2 2 0 002-2v-3"/></svg>
+          <span id="btn-dl-text">Descargar fotos</span>
+        </button>
+        <a class="btn btn-wa" href="https://wa.me/56957823672?text=Hola%2C%20me%20interesa%20una%20propiedad%20que%20vi%20en%20Llave%20Oferta" target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.612l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.386 0-4.592-.823-6.338-2.2l-.442-.362-3.258 1.093 1.093-3.258-.362-.442A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          Consultar
+        </a>
+      </div>
     </div>
-    <div id="photos-grid" class="photos-grid"></div>
-    <div id="counter" class="counter"></div>
   </div>
 
   <div id="error" style="display:none" class="error-state">
-    <h2>Galeria no encontrada</h2>
-    <p>Este enlace no es valido o no hay fotos disponibles.</p>
+    <h2>Propiedad no encontrada</h2>
+    <p>Este enlace no es valido o la propiedad no tiene fotos disponibles.</p>
   </div>
 </div>
 
 <div class="footer">Llave Oferta &middot; <a href="https://www.llavepropia.cl">llavepropia.cl</a></div>
-
-<!-- Lightbox -->
-<div class="lightbox" id="lightbox">
-  <button class="close-btn" id="lb-close">&times;</button>
-  <button class="nav-btn nav-prev" id="lb-prev">&lsaquo;</button>
-  <button class="nav-btn nav-next" id="lb-next">&rsaquo;</button>
-  <img id="lb-img" src="" alt="Foto">
-  <div class="counter-lb" id="lb-counter"></div>
-</div>
 
 <script>
 const CRM_URL = 'https://evuxdhvvarfxredghvpu.supabase.co';
@@ -99,23 +122,23 @@ const vivId = new URLSearchParams(location.search).get('id');
 let photos = [];
 let currentIdx = 0;
 
+const UF_LABELS = {
+  '0_800':'< 800 UF','800_1000':'800 – 1.000 UF','1000_1200':'1.000 – 1.200 UF',
+  '1200_1400':'1.200 – 1.400 UF','1400_1600':'1.400 – 1.600 UF',
+  '1600_1800':'1.600 – 1.800 UF','1800_2000':'1.800 – 2.000 UF'
+};
+
 async function init() {
   if (!vivId) { showError(); return; }
 
-  // Fetch vivienda info (read-only, public fields only)
-  const res = await fetch(`${CRM_URL}/rest/v1/viviendas?id=eq.${vivId}&select=id,nombre,tipo_vivienda,direccion,comuna`, {
+  const res = await fetch(`${CRM_URL}/rest/v1/viviendas?id=eq.${vivId}&select=id,tipo_vivienda,direccion,detalle_depto,comuna,superficie,dormitorios,banos,valor_pesos`, {
     headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY }
   });
   const data = await res.json();
   if (!data || !data.length) { showError(); return; }
 
-  const viv = data[0];
-  const tipo = viv.tipo_vivienda === 'departamento' ? 'Departamento' : 'Casa';
-
-  document.getElementById('page-title').textContent = tipo + ' en ' + (viv.comuna || 'propiedad');
-  document.getElementById('page-subtitle').textContent = 'Galeria de fotos';
-  document.getElementById('prop-name').textContent = tipo + ' en ' + (viv.comuna || '');
-  document.getElementById('prop-detail').textContent = viv.direccion || '';
+  const v = data[0];
+  const tipo = v.tipo_vivienda === 'departamento' ? 'Departamento' : 'Casa';
 
   // List photos
   const listRes = await fetch(`${CRM_URL}/storage/v1/object/list/vivienda-files`, {
@@ -124,82 +147,123 @@ async function init() {
     body: JSON.stringify({ prefix: vivId + '/', limit: 100, offset: 0 })
   });
   const files = await listRes.json();
-
   if (!Array.isArray(files)) { showError(); return; }
   photos = files
     .filter(f => f.name !== '.emptyFolderPlaceholder' && /\.(jpg|jpeg|png|gif|webp|heic)$/i.test(f.name))
     .map(f => `${CRM_URL}/storage/v1/object/public/vivienda-files/${vivId}/${f.name}`);
-
   if (photos.length === 0) { showError(); return; }
 
-  // Render grid
-  const grid = document.getElementById('photos-grid');
-  photos.forEach((url, i) => {
-    const div = document.createElement('div');
-    div.className = 'photo-item';
-    div.innerHTML = '<img src="' + url + '" alt="Foto ' + (i+1) + '">';
-    div.onclick = () => openLightbox(i);
-    grid.appendChild(div);
-  });
+  // Title
+  document.title = tipo + ' en ' + (v.comuna || '') + ' — Llave Propia';
+  document.getElementById('prop-title').textContent = tipo + ' en ' + (v.comuna || '');
+  var addr = v.direccion || '';
+  if (v.tipo_vivienda === 'departamento' && v.detalle_depto) addr += (addr ? ' — ' : '') + 'Depto ' + v.detalle_depto;
+  document.getElementById('prop-address').textContent = addr;
 
-  document.getElementById('counter').innerHTML = '<strong>' + photos.length + '</strong> foto' + (photos.length > 1 ? 's' : '');
+  // Specs
+  var specs = [];
+  if (v.superficie) specs.push({ val: v.superficie, label: 'm²' });
+  if (v.dormitorios) specs.push({ val: v.dormitorios, label: 'Dormitorios' });
+  if (v.banos) specs.push({ val: v.banos, label: 'Baños' });
+  if (v.valor_pesos) specs.push({ val: UF_LABELS[v.valor_pesos] || v.valor_pesos, label: 'Valor UF' });
+  var specsEl = document.getElementById('prop-specs');
+  if (specs.length) {
+    specsEl.innerHTML = specs.map(s => '<div class="spec"><div class="spec-val">' + s.val + '</div><div class="spec-label">' + s.label + '</div></div>').join('');
+  } else {
+    specsEl.style.display = 'none';
+  }
+
+  // Details
+  var details = [];
+  details.push({ label: 'Tipo', value: tipo });
+  if (v.comuna) details.push({ label: 'Comuna', value: v.comuna });
+  if (v.direccion) details.push({ label: 'Direccion', value: v.direccion });
+  if (v.tipo_vivienda === 'departamento' && v.detalle_depto) details.push({ label: 'Departamento', value: v.detalle_depto });
+  if (v.superficie) details.push({ label: 'Superficie', value: v.superficie + ' m²' });
+  if (v.dormitorios) details.push({ label: 'Dormitorios', value: v.dormitorios });
+  if (v.banos) details.push({ label: 'Baños', value: v.banos });
+  if (v.valor_pesos) details.push({ label: 'Rango valor', value: UF_LABELS[v.valor_pesos] || v.valor_pesos });
+  document.getElementById('prop-details').innerHTML = details.map(d => '<div class="detail-row"><span class="detail-label">' + d.label + '</span><span class="detail-value">' + d.value + '</span></div>').join('');
+
+  // Carousel
+  var carousel = document.getElementById('carousel');
+  photos.forEach((url, i) => {
+    var img = document.createElement('img');
+    img.src = url; img.alt = 'Foto ' + (i+1);
+    if (i === 0) img.className = 'active';
+    carousel.appendChild(img);
+  });
+  // Nav buttons
+  if (photos.length > 1) {
+    carousel.innerHTML += '<button class="nav nav-prev" id="c-prev">&#8249;</button><button class="nav nav-next" id="c-next">&#8250;</button>';
+    document.getElementById('c-prev').onclick = () => goTo((currentIdx - 1 + photos.length) % photos.length);
+    document.getElementById('c-next').onclick = () => goTo((currentIdx + 1) % photos.length);
+  }
+  // Badge
+  carousel.innerHTML += '<div class="badge">' + photos.length + ' foto' + (photos.length > 1 ? 's' : '') + '</div>';
+
+  // Thumbnails
+  var thumbsEl = document.getElementById('thumbs');
+  if (photos.length > 1) {
+    photos.forEach((url, i) => {
+      var t = document.createElement('div');
+      t.className = 'thumb' + (i === 0 ? ' active' : '');
+      t.innerHTML = '<img src="' + url + '" alt="">';
+      t.onclick = () => goTo(i);
+      thumbsEl.appendChild(t);
+    });
+  }
+
+  // Swipe support
+  var touchStartX = 0;
+  carousel.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+  carousel.addEventListener('touchend', e => {
+    var diff = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(diff) > 50) {
+      if (diff < 0) goTo((currentIdx + 1) % photos.length);
+      else goTo((currentIdx - 1 + photos.length) % photos.length);
+    }
+  }, { passive: true });
+
+  // Download
   document.getElementById('btn-download').disabled = false;
-  document.getElementById('btn-download-text').textContent = 'Descargar todas (' + photos.length + ')';
+  document.getElementById('btn-dl-text').textContent = 'Descargar fotos (' + photos.length + ')';
+  document.getElementById('btn-download').onclick = async function() {
+    this.disabled = true;
+    document.getElementById('btn-dl-text').textContent = 'Descargando...';
+    const { default: JSZip } = await import('https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm');
+    var zip = new JSZip();
+    for (var i = 0; i < photos.length; i++) {
+      var r = await fetch(photos[i]);
+      var blob = await r.blob();
+      var ext = photos[i].split('.').pop() || 'jpg';
+      zip.file('foto_' + (i+1) + '.' + ext, blob);
+    }
+    var content = await zip.generateAsync({ type: 'blob' });
+    var fileName = tipo + '-' + (v.comuna || 'propiedad').replace(/\s+/g, '-') + '-fotos.zip';
+    var a = document.createElement('a'); a.href = URL.createObjectURL(content); a.download = fileName; a.click(); URL.revokeObjectURL(a.href);
+    this.disabled = false;
+    document.getElementById('btn-dl-text').textContent = 'Descargar fotos (' + photos.length + ')';
+  };
 
   document.getElementById('loading').style.display = 'none';
   document.getElementById('content').style.display = 'block';
+}
 
-  // Download ZIP
-  document.getElementById('btn-download').onclick = async function() {
-    const btn = this;
-    btn.disabled = true;
-    document.getElementById('btn-download-text').textContent = 'Descargando...';
-
-    // Dynamic import JSZip from CDN
-    const { default: JSZip } = await import('https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm');
-    const zip = new JSZip();
-    for (let i = 0; i < photos.length; i++) {
-      const r = await fetch(photos[i]);
-      const blob = await r.blob();
-      const ext = photos[i].split('.').pop() || 'jpg';
-      zip.file('foto_' + (i+1) + '.' + ext, blob);
-    }
-    const content = await zip.generateAsync({ type: 'blob' });
-    const comunaClean = (viv.comuna || 'propiedad').replace(/\s+/g, '-');
-    const fileName = tipo + '-' + comunaClean + '-fotos.zip';
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(content);
-    a.download = fileName;
-    a.click();
-    URL.revokeObjectURL(a.href);
-
-    btn.disabled = false;
-    document.getElementById('btn-download-text').textContent = 'Descargar todas (' + photos.length + ')';
-  };
+function goTo(idx) {
+  var imgs = document.querySelectorAll('#carousel img');
+  var thumbs = document.querySelectorAll('.thumb');
+  imgs[currentIdx].classList.remove('active');
+  if (thumbs[currentIdx]) thumbs[currentIdx].classList.remove('active');
+  currentIdx = idx;
+  imgs[currentIdx].classList.add('active');
+  if (thumbs[currentIdx]) { thumbs[currentIdx].classList.add('active'); thumbs[currentIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); }
 }
 
 function showError() {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('error').style.display = 'block';
 }
-
-// Lightbox
-function openLightbox(idx) {
-  currentIdx = idx;
-  document.getElementById('lb-img').src = photos[idx];
-  document.getElementById('lb-counter').textContent = (idx+1) + ' / ' + photos.length;
-  document.getElementById('lightbox').classList.add('open');
-}
-document.getElementById('lb-close').onclick = () => document.getElementById('lightbox').classList.remove('open');
-document.getElementById('lb-prev').onclick = () => { currentIdx = (currentIdx - 1 + photos.length) % photos.length; openLightbox(currentIdx); };
-document.getElementById('lb-next').onclick = () => { currentIdx = (currentIdx + 1) % photos.length; openLightbox(currentIdx); };
-document.getElementById('lightbox').onclick = (e) => { if (e.target === document.getElementById('lightbox')) document.getElementById('lightbox').classList.remove('open'); };
-document.addEventListener('keydown', (e) => {
-  if (!document.getElementById('lightbox').classList.contains('open')) return;
-  if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open');
-  if (e.key === 'ArrowLeft') document.getElementById('lb-prev').click();
-  if (e.key === 'ArrowRight') document.getElementById('lb-next').click();
-});
 
 init();
 </script>
