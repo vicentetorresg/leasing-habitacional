@@ -3,6 +3,10 @@
     {
       "path": "/api/vivienda-mailing",
       "schedule": "0 14 * * *"
+    },
+    {
+      "path": "/api/mailing-aprobados",
+      "schedule": "0 14 * * 1,5"
     }
   ],
   "cleanUrls": true,
@@ -16,6 +20,8 @@
     { "source": "/leasing-tiktok-ads", "destination": "/leasing-tiktok-ads.html" },
     { "source": "/viviendas-form", "destination": "/viviendas-form.html" },
     { "source": "/viviendas-form-dos", "destination": "/viviendas-form-dos.html" },
+    { "source": "/viviendas-form-55", "destination": "/viviendas-form-55.html" },
+    { "source": "/viviendas-form-dos-55", "destination": "/viviendas-form-dos-55.html" },
     { "source": "/subir-fotos", "destination": "/subir-fotos.html" },
     { "source": "/galeria", "destination": "/api/galeria" },
     { "source": "/marketplace", "destination": "/marketplace.html" },
