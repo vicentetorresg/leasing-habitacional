@@ -1042,11 +1042,11 @@ const ViviendaList = () => {
           ) : photoViewFiles.length > 0 ? (
             <div className="flex flex-col gap-3">
               {/* Main image with arrows */}
-              <div className="relative bg-black/5 rounded-lg overflow-hidden flex items-center justify-center w-full" style={{ minHeight: 320 }}>
+              <div className="relative bg-black/5 rounded-lg overflow-hidden flex items-center justify-center w-full" style={{ height: '50vh', maxHeight: 480 }}>
                 <img
                   src={photoViewFiles[carouselIndex]?.url}
                   alt={photoViewFiles[carouselIndex]?.name}
-                  className="max-h-[50vh] w-full object-contain"
+                  style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                 />
                 {photoViewFiles.length > 1 && (
                   <>
@@ -1102,7 +1102,7 @@ const ViviendaList = () => {
               navigator.clipboard.writeText(`https://www.llavepropia.cl/galeria?id=${photoViewViv?.id}`);
               toast.success('Link copiado');
             }}>
-              Link para Interesados
+              Link para Interesados ({photoViewViv?.id.substring(0, 6).toUpperCase()})
             </Button>
             <Button variant="outline" size="sm" onClick={() => {
               navigator.clipboard.writeText(`https://www.llavepropia.cl/subir-fotos?id=${photoViewViv?.id}`);
