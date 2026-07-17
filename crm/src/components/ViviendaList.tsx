@@ -1021,7 +1021,8 @@ const ViviendaList = () => {
       {/* Photo Viewer Dialog — Carousel */}
       <Dialog open={!!photoViewViv} onOpenChange={open => { if (!open) { setPhotoViewViv(null); setPhotoViewFiles([]); setCarouselIndex(0); } }}>
         <DialogContent
-          className="sm:max-w-2xl max-h-[90vh] overflow-y-auto"
+          className="sm:max-w-3xl p-0 gap-0 overflow-hidden"
+          style={{ maxHeight: '85vh', display: 'flex', flexDirection: 'column' }}
           onKeyDown={(e: React.KeyboardEvent) => {
             if (photoViewFiles.length === 0) return;
             if (e.key === 'ArrowLeft') { e.preventDefault(); setCarouselIndex(i => (i - 1 + photoViewFiles.length) % photoViewFiles.length); }
@@ -1029,20 +1030,25 @@ const ViviendaList = () => {
           }}
           tabIndex={0}
         >
-          <DialogHeader>
-            <DialogTitle>
-              Fotos — {photoViewViv?.nombre}
-              <span className="ml-2 text-sm font-normal text-muted-foreground">
+          {/* Header */}
+          <div className="flex items-center justify-between px-5 py-3 border-b">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-sm">{photoViewViv?.nombre}</span>
+              <span className="text-xs text-muted-foreground">
                 {photoViewViv?.tipo_vivienda === 'departamento' ? 'Depto' : 'Casa'} en {photoViewViv?.comuna || '—'}
               </span>
-            </DialogTitle>
-          </DialogHeader>
+              <span className="text-[10px] font-mono font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded">
+                {photoViewViv?.id.substring(0, 6).toUpperCase()}
+              </span>
+            </div>
+          </div>
+
           {photoViewLoading ? (
             <div className="py-8 text-center text-muted-foreground text-sm">Cargando fotos...</div>
           ) : photoViewFiles.length > 0 ? (
-            <div className="flex flex-col gap-3">
-              {/* Main image with arrows */}
-              <div className="relative bg-black/5 rounded-lg overflow-hidden flex items-center justify-center w-full" style={{ height: '50vh', maxHeight: 480 }}>
+            <>
+              {/* Main image */}
+              <div className="relative bg-black flex items-center justify-center flex-1 min-h-0">
                 <img
                   src={photoViewFiles[carouselIndex]?.url}
                   alt={photoViewFiles[carouselIndex]?.name}
@@ -1052,66 +1058,70 @@ const ViviendaList = () => {
                   <>
                     <button
                       onClick={() => setCarouselIndex(i => (i - 1 + photoViewFiles.length) % photoViewFiles.length)}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-9 h-9 flex items-center justify-center transition-colors"
-                      aria-label="Anterior"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors backdrop-blur-sm"
                     >
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" /></svg>
                     </button>
                     <button
                       onClick={() => setCarouselIndex(i => (i + 1) % photoViewFiles.length)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-9 h-9 flex items-center justify-center transition-colors"
-                      aria-label="Siguiente"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors backdrop-blur-sm"
                     >
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" /></svg>
                     </button>
                   </>
                 )}
-                <span className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded">
+                <span className="absolute bottom-2 right-3 bg-black/60 text-white text-[11px] px-2 py-0.5 rounded-full">
                   {carouselIndex + 1} / {photoViewFiles.length}
                 </span>
               </div>
-              {/* Thumbnails */}
-              {photoViewFiles.length > 1 && (
-                <div className="flex gap-2 overflow-x-auto pb-1">
-                  {photoViewFiles.map((f, idx) => (
-                    <button
-                      key={f.name}
-                      onClick={() => setCarouselIndex(idx)}
-                      className={`flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all ${idx === carouselIndex ? 'border-primary ring-1 ring-primary' : 'border-transparent opacity-60 hover:opacity-100'}`}
-                    >
-                      <img src={f.url} alt={f.name} className="w-full h-full object-cover" />
-                    </button>
-                  ))}
+
+              {/* Thumbnails + actions bar */}
+              <div className="flex items-center gap-3 px-4 py-2.5 border-t bg-white">
+                {photoViewFiles.length > 1 && (
+                  <div className="flex gap-1.5 overflow-x-auto flex-1 min-w-0">
+                    {photoViewFiles.map((f, idx) => (
+                      <button
+                        key={f.name}
+                        onClick={() => setCarouselIndex(idx)}
+                        className={`flex-shrink-0 w-11 h-11 rounded overflow-hidden border-2 transition-all ${idx === carouselIndex ? 'border-emerald-500 opacity-100' : 'border-transparent opacity-50 hover:opacity-80'}`}
+                      >
+                        <img src={f.url} alt={f.name} className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <div className="flex gap-1.5 flex-shrink-0 ml-auto">
+                  <button
+                    onClick={downloadAllPhotos}
+                    disabled={downloadingZip}
+                    className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                    title="Descargar ZIP"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                    ZIP
+                  </button>
+                  <button
+                    onClick={() => { navigator.clipboard.writeText(`https://www.llavepropia.cl/galeria?id=${photoViewViv?.id}`); toast.success('Link copiado'); }}
+                    className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-md border border-border hover:bg-muted/50 transition-colors"
+                    title="Copiar link galería"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.172 13.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.102 1.101" /></svg>
+                    Galería
+                  </button>
+                  <button
+                    onClick={() => { navigator.clipboard.writeText(`https://www.llavepropia.cl/subir-fotos?id=${photoViewViv?.id}`); toast.success('Link de subida copiado'); }}
+                    className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-md border border-border hover:bg-muted/50 transition-colors"
+                    title="Copiar link subir fotos"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                    Subir
+                  </button>
                 </div>
-              )}
-            </div>
+              </div>
+            </>
           ) : (
             <div className="py-8 text-center text-muted-foreground text-sm">Sin fotos subidas</div>
           )}
-          <DialogFooter className="flex-wrap gap-1.5">
-            {photoViewFiles.length > 0 && (
-              <Button variant="default" size="sm" onClick={downloadAllPhotos} disabled={downloadingZip} className="bg-emerald-600 hover:bg-emerald-700">
-                {downloadingZip ? (
-                  <><svg className="w-3.5 h-3.5 animate-spin mr-1" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Descargando...</>
-                ) : (
-                  <><svg className="w-3.5 h-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>Descargar ZIP</>
-                )}
-              </Button>
-            )}
-            <Button variant="outline" size="sm" onClick={() => {
-              navigator.clipboard.writeText(`https://www.llavepropia.cl/galeria?id=${photoViewViv?.id}`);
-              toast.success('Link copiado');
-            }}>
-              Link para Interesados ({photoViewViv?.id.substring(0, 6).toUpperCase()})
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => {
-              navigator.clipboard.writeText(`https://www.llavepropia.cl/subir-fotos?id=${photoViewViv?.id}`);
-              toast.success('Link de subida copiado');
-            }}>
-              Link subir fotos
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => { setPhotoViewViv(null); setPhotoViewFiles([]); setCarouselIndex(0); }}>Cerrar</Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
 

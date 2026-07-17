@@ -233,8 +233,8 @@ async function init() {
 
   // Keyboard arrows
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowLeft') goTo((currentIdx - 1 + photos.length) % photos.length);
-    if (e.key === 'ArrowRight') goTo((currentIdx + 1) % photos.length);
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goTo((currentIdx - 1 + photos.length) % photos.length); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); goTo((currentIdx + 1) % photos.length); }
   });
 
   // Swipe support
