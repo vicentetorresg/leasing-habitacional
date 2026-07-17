@@ -255,6 +255,7 @@ const ViviendaList = () => {
   const [photoViewFiles, setPhotoViewFiles] = useState<VivFile[]>([]);
   const [photoViewLoading, setPhotoViewLoading] = useState(false);
   const [downloadingZip, setDownloadingZip] = useState(false);
+  const [carouselIndex, setCarouselIndex] = useState(0);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [bulkSending, setBulkSending] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -277,15 +278,15 @@ const ViviendaList = () => {
 
   useEffect(() => { fetchViviendas(); }, [fetchViviendas]);
 
-  // Auto-open photo viewer if ?fotos=ID is in URL
+  // Auto-open photo viewer if ?fotos=ID is in URL or saved from pre-login redirect
   useEffect(() => {
     if (loading || viviendas.length === 0) return;
     const params = new URLSearchParams(window.location.search);
-    const fotosId = params.get('fotos');
+    const fotosId = params.get('fotos') || sessionStorage.getItem('pending_fotos');
     if (fotosId) {
+      sessionStorage.removeItem('pending_fotos');
       const viv = viviendas.find(v => v.id === fotosId);
       if (viv) openPhotoView(viv);
-      // Clean URL
       window.history.replaceState({}, '', window.location.pathname);
     }
   }, [loading, viviendas]);
@@ -419,6 +420,7 @@ const ViviendaList = () => {
     setPhotoViewViv(v);
     setPhotoViewLoading(true);
     setPhotoViewFiles([]);
+    setCarouselIndex(0);
     const { data } = await supabase.storage.from(BUCKET).list(v.id, { limit: 100 });
     if (data) {
       const imgs = data.filter(f => f.name !== '.emptyFolderPlaceholder' && /\.(jpg|jpeg|png|gif|webp|heic)$/i.test(f.name));
@@ -1009,9 +1011,17 @@ const ViviendaList = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Photo Viewer Dialog */}
-      <Dialog open={!!photoViewViv} onOpenChange={open => { if (!open) { setPhotoViewViv(null); setPhotoViewFiles([]); } }}>
-        <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
+      {/* Photo Viewer Dialog — Carousel */}
+      <Dialog open={!!photoViewViv} onOpenChange={open => { if (!open) { setPhotoViewViv(null); setPhotoViewFiles([]); setCarouselIndex(0); } }}>
+        <DialogContent
+          className="sm:max-w-2xl max-h-[90vh] overflow-y-auto"
+          onKeyDown={(e: React.KeyboardEvent) => {
+            if (photoViewFiles.length === 0) return;
+            if (e.key === 'ArrowLeft') { e.preventDefault(); setCarouselIndex(i => (i - 1 + photoViewFiles.length) % photoViewFiles.length); }
+            if (e.key === 'ArrowRight') { e.preventDefault(); setCarouselIndex(i => (i + 1) % photoViewFiles.length); }
+          }}
+          tabIndex={0}
+        >
           <DialogHeader>
             <DialogTitle>
               Fotos — {photoViewViv?.nombre}
@@ -1023,12 +1033,50 @@ const ViviendaList = () => {
           {photoViewLoading ? (
             <div className="py-8 text-center text-muted-foreground text-sm">Cargando fotos...</div>
           ) : photoViewFiles.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3">
-              {photoViewFiles.map(f => (
-                <a key={f.name} href={f.url} target="_blank" rel="noreferrer" className="block border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-                  <img src={f.url} alt={f.name} className="w-full h-36 object-cover" />
-                </a>
-              ))}
+            <div className="flex flex-col gap-3">
+              {/* Main image with arrows */}
+              <div className="relative bg-black/5 rounded-lg overflow-hidden flex items-center justify-center" style={{ minHeight: 320 }}>
+                <img
+                  src={photoViewFiles[carouselIndex]?.url}
+                  alt={photoViewFiles[carouselIndex]?.name}
+                  className="max-h-[50vh] max-w-full object-contain"
+                />
+                {photoViewFiles.length > 1 && (
+                  <>
+                    <button
+                      onClick={() => setCarouselIndex(i => (i - 1 + photoViewFiles.length) % photoViewFiles.length)}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-9 h-9 flex items-center justify-center transition-colors"
+                      aria-label="Anterior"
+                    >
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <button
+                      onClick={() => setCarouselIndex(i => (i + 1) % photoViewFiles.length)}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-9 h-9 flex items-center justify-center transition-colors"
+                      aria-label="Siguiente"
+                    >
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                  </>
+                )}
+                <span className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded">
+                  {carouselIndex + 1} / {photoViewFiles.length}
+                </span>
+              </div>
+              {/* Thumbnails */}
+              {photoViewFiles.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto pb-1">
+                  {photoViewFiles.map((f, idx) => (
+                    <button
+                      key={f.name}
+                      onClick={() => setCarouselIndex(idx)}
+                      className={`flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all ${idx === carouselIndex ? 'border-primary ring-1 ring-primary' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                    >
+                      <img src={f.url} alt={f.name} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           ) : (
             <div className="py-8 text-center text-muted-foreground text-sm">Sin fotos subidas</div>
@@ -1055,7 +1103,7 @@ const ViviendaList = () => {
             }}>
               Link subir fotos
             </Button>
-            <Button variant="outline" size="sm" onClick={() => { setPhotoViewViv(null); setPhotoViewFiles([]); }}>Cerrar</Button>
+            <Button variant="outline" size="sm" onClick={() => { setPhotoViewViv(null); setPhotoViewFiles([]); setCarouselIndex(0); }}>Cerrar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
