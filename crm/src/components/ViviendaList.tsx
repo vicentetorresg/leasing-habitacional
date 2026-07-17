@@ -1047,12 +1047,12 @@ const ViviendaList = () => {
             <div className="py-8 text-center text-muted-foreground text-sm">Cargando fotos...</div>
           ) : photoViewFiles.length > 0 ? (
             <>
-              {/* Main image */}
-              <div className="relative bg-black flex items-center justify-center flex-1 min-h-0">
+              {/* Main image — fixed height leaves room for thumbnails + actions */}
+              <div className="relative bg-black flex items-center justify-center" style={{ height: 'calc(85vh - 180px)' }}>
                 <img
                   src={photoViewFiles[carouselIndex]?.url}
                   alt={photoViewFiles[carouselIndex]?.name}
-                  style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                  style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }}
                 />
                 {photoViewFiles.length > 1 && (
                   <>
@@ -1075,48 +1075,47 @@ const ViviendaList = () => {
                 </span>
               </div>
 
-              {/* Thumbnails + actions bar */}
-              <div className="flex items-center gap-3 px-4 py-2.5 border-t bg-white">
-                {photoViewFiles.length > 1 && (
-                  <div className="flex gap-1.5 overflow-x-auto flex-1 min-w-0">
-                    {photoViewFiles.map((f, idx) => (
-                      <button
-                        key={f.name}
-                        onClick={() => setCarouselIndex(idx)}
-                        className={`flex-shrink-0 w-11 h-11 rounded overflow-hidden border-2 transition-all ${idx === carouselIndex ? 'border-emerald-500 opacity-100' : 'border-transparent opacity-50 hover:opacity-80'}`}
-                      >
-                        <img src={f.url} alt={f.name} className="w-full h-full object-cover" />
-                      </button>
-                    ))}
-                  </div>
-                )}
-                <div className="flex gap-1.5 flex-shrink-0 ml-auto">
-                  <button
-                    onClick={downloadAllPhotos}
-                    disabled={downloadingZip}
-                    className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition-colors disabled:opacity-50"
-                    title="Descargar ZIP"
-                  >
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                    ZIP
-                  </button>
-                  <button
-                    onClick={() => { navigator.clipboard.writeText(`https://www.llavepropia.cl/galeria?id=${photoViewViv?.id}`); toast.success('Link copiado'); }}
-                    className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-md border border-border hover:bg-muted/50 transition-colors"
-                    title="Copiar link galería"
-                  >
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.172 13.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.102 1.101" /></svg>
-                    Galería
-                  </button>
-                  <button
-                    onClick={() => { navigator.clipboard.writeText(`https://www.llavepropia.cl/subir-fotos?id=${photoViewViv?.id}`); toast.success('Link de subida copiado'); }}
-                    className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-md border border-border hover:bg-muted/50 transition-colors"
-                    title="Copiar link subir fotos"
-                  >
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-                    Subir
-                  </button>
+              {/* Thumbnails */}
+              {photoViewFiles.length > 1 && (
+                <div className="flex gap-1.5 overflow-x-auto px-4 py-2 border-t bg-white" style={{ scrollbarWidth: 'thin' }}>
+                  {photoViewFiles.map((f, idx) => (
+                    <button
+                      key={f.name}
+                      onClick={() => setCarouselIndex(idx)}
+                      className={`flex-shrink-0 w-11 h-11 rounded overflow-hidden border-2 transition-all ${idx === carouselIndex ? 'border-emerald-500 opacity-100' : 'border-transparent opacity-50 hover:opacity-80'}`}
+                    >
+                      <img src={f.url} alt={f.name} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
                 </div>
+              )}
+              {/* Actions bar */}
+              <div className="flex gap-1.5 px-4 py-2 border-t bg-white justify-end">
+                <button
+                  onClick={downloadAllPhotos}
+                  disabled={downloadingZip}
+                  className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                  title="Descargar ZIP"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                  ZIP
+                </button>
+                <button
+                  onClick={() => { navigator.clipboard.writeText(`https://www.llavepropia.cl/galeria?id=${photoViewViv?.id}`); toast.success('Link copiado'); }}
+                  className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-md border border-border hover:bg-muted/50 transition-colors"
+                  title="Copiar link galería"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.172 13.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.102 1.101" /></svg>
+                  Galería
+                </button>
+                <button
+                  onClick={() => { navigator.clipboard.writeText(`https://www.llavepropia.cl/subir-fotos?id=${photoViewViv?.id}`); toast.success('Link de subida copiado'); }}
+                  className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-md border border-border hover:bg-muted/50 transition-colors"
+                  title="Copiar link subir fotos"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                  Subir
+                </button>
               </div>
             </>
           ) : (
