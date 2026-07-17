@@ -714,13 +714,14 @@ const ViviendaList = () => {
                           {count}
                         </button>
                       ) : (
-                        <span
-                          className="inline-flex items-center gap-1 bg-muted/30 text-muted-foreground/40 border border-border/30 px-2 py-1 rounded-md text-[11px] font-medium"
-                          title="Sin fotos"
+                        <button
+                          onClick={() => { navigator.clipboard.writeText(`https://www.llavepropia.cl/subir-fotos?id=${v.id}`); toast.success('Link de subida copiado'); }}
+                          className="inline-flex items-center gap-1 bg-muted/30 text-muted-foreground/40 border border-border/30 px-2 py-1 rounded-md text-[11px] font-medium hover:bg-muted/50 hover:text-muted-foreground/60 transition-colors cursor-pointer"
+                          title="Copiar link para subir fotos"
                         >
                           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                           0
-                        </span>
+                        </button>
                       );
                     })()}
                   </td>
