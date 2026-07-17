@@ -35,6 +35,9 @@ function AppRoutes() {
   }
 
   if (!user) {
+    // Preserve ?fotos= deep-link param before redirecting to login
+    const fotosParam = new URLSearchParams(window.location.search).get('fotos');
+    if (fotosParam) sessionStorage.setItem('pending_fotos', fotosParam);
     return (
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -57,13 +60,16 @@ function AppRoutes() {
 
   // admin/demo → executive first; asesor → advisor; dialer → dialer; ejecutiva → executive
   const defaultRoute = role === 'asesor' ? '/advisor' : role === 'dialer' ? '/dialer' : '/executive';
+  // If there's a pending fotos deep-link, redirect to viviendas after login
+  const pendingFotos = sessionStorage.getItem('pending_fotos');
+  const loginRedirect = pendingFotos ? '/viviendas' : defaultRoute;
 
   return (
     <>
       <IncomingCallPopup userId={user.id} />
       <Routes>
-        <Route path="/" element={<Navigate to={defaultRoute} replace />} />
-        <Route path="/login" element={<Navigate to={defaultRoute} replace />} />
+        <Route path="/" element={<Navigate to={loginRedirect} replace />} />
+        <Route path="/login" element={<Navigate to={loginRedirect} replace />} />
         <Route path="/executive" element={role === 'asesor' ? <Navigate to="/advisor" replace /> : <Executive />} />
         <Route path="/admin" element={role === 'admin' ? <Admin /> : <Navigate to={defaultRoute} replace />} />
         <Route path="/backoffice" element={role === 'admin' ? <Backoffice /> : <Navigate to={defaultRoute} replace />} />

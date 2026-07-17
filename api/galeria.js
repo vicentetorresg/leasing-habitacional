@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   const vivId = req.query.id;
 
   // Read the static HTML
-  const htmlPath = join(process.cwd(), 'galeria.html');
+  const htmlPath = join(process.cwd(), 'galeria-template.html');
   let html = readFileSync(htmlPath, 'utf-8');
 
   if (!vivId) {
