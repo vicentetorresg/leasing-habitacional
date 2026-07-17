@@ -349,11 +349,13 @@ var utmMedium = urlParams.get('utm_medium') || '';
 var utmCampaign = urlParams.get('utm_campaign') || '';
 
 var precioRanges = [
-  {value:'0_15', label:'Menos de $15M'},
-  {value:'15_25', label:'$15M – $25M'},
-  {value:'25_35', label:'$25M – $35M'},
-  {value:'35_45', label:'$35M – $45M'},
-  {value:'45_55', label:'$45M – $55M'}
+  {value:'0_25', label:'Menos de $25M'},
+  {value:'25_30', label:'$25M – $30M'},
+  {value:'30_35', label:'$30M – $35M'},
+  {value:'35_40', label:'$35M – $40M'},
+  {value:'40_45', label:'$40M – $45M'},
+  {value:'45_50', label:'$45M – $50M'},
+  {value:'50_55', label:'$50M – $55M'}
 ];
 
 function buildPriceGrid(){
