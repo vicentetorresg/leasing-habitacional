@@ -460,6 +460,7 @@ const ViviendaList = () => {
 
   const downloadExcel = () => {
     const rows = filtered.map(v => ({
+      'ID': v.id.substring(0, 6).toUpperCase(),
       'Estado': STATUS_MAP[v.status]?.label || v.status,
       'Nombre': v.nombre,
       'Teléfono': v.telefono,
@@ -647,6 +648,7 @@ const ViviendaList = () => {
                   className="w-3.5 h-3.5 rounded border-gray-300 cursor-pointer accent-blue-600"
                 />
               </th>
+              <th style={{ background: '#ffffff' }} className="px-3 py-2">ID</th>
               <th style={{ background: '#ffffff' }} className="px-3 py-2">Estado</th>
               <th style={{ background: '#ffffff' }} className="px-3 py-2">Propietario</th>
               <th style={{ background: '#ffffff' }} className="px-3 py-2">Tipo</th>
@@ -675,6 +677,11 @@ const ViviendaList = () => {
                       onChange={() => toggleSelect(v.id)}
                       className="w-3.5 h-3.5 rounded border-gray-300 cursor-pointer accent-blue-600"
                     />
+                  </td>
+                  <td className="px-3 py-2">
+                    <span className="text-[11px] font-mono font-bold text-muted-foreground bg-muted/40 px-1.5 py-0.5 rounded select-all cursor-pointer" title={v.id} onClick={() => { navigator.clipboard.writeText(v.id.substring(0, 6).toUpperCase()); toast.success('ID copiado'); }}>
+                      {v.id.substring(0, 6).toUpperCase()}
+                    </span>
                   </td>
                   <td className="px-3 py-2">
                     <StatusDropdown value={v.status} onChange={s => handleStatusChange(v.id, s)} />
@@ -767,7 +774,7 @@ const ViviendaList = () => {
               );
             })}
             {filtered.length === 0 && (
-              <tr><td colSpan={15} className="px-3 py-8 text-center text-muted-foreground">Sin viviendas</td></tr>
+              <tr><td colSpan={16} className="px-3 py-8 text-center text-muted-foreground">Sin viviendas</td></tr>
             )}
           </tbody>
         </table>
