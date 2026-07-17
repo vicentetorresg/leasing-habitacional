@@ -78,12 +78,15 @@ export default async function handler(req, res) {
   let sent = 0;
   const results = [];
 
-  for (const lead of leads) {
-    // Test mode: only process fake lead
-    if (testEmail && lead.email !== testEmail) continue;
+  // Test mode: create a fake lead and process only that
+  if (testEmail) {
+    leads.length = 0;
+    leads.push({ id: 'test', name: 'Vicente (Test)', email: testEmail, uf_aprobado_austra: 2000, uf_aprobado_casa_pronta: 2000 });
+  }
 
+  for (const lead of leads) {
     // Skip if no email
-    if (!lead.email && !testEmail) { results.push({ id: lead.id, skipped: 'no email' }); continue; }
+    if (!lead.email) { results.push({ id: lead.id, skipped: 'no email' }); continue; }
 
     // Skip if recently mailed (unless force)
     if (!force && !testEmail && lead.last_match_mailing_at) {
