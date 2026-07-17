@@ -160,7 +160,7 @@ export default async function handler(req, res) {
       gridHtml += '<tr>' + cardItems[i] + (cardItems[i + 1] || '<td></td>') + '</tr>';
     }
 
-    const subject = `${firstName}, hay propiedades que te pueden interesar`;
+    const subject = `Llave Propia — ${firstName}, hay propiedades que te pueden interesar`;
 
     const introText = usedFallback
       ? `Aún no tenemos propiedades exactas en tu rango aprobado, pero estas son las <strong>opciones más accesibles</strong> disponibles ahora:`
@@ -208,6 +208,7 @@ export default async function handler(req, res) {
     const emailPayload = {
       from: 'Llave Propia <notificaciones@proppi.cl>',
       to: [toEmail],
+      cc: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', 'karina.torres@llavepropia.cl'],
       reply_to: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'],
       subject,
       html
