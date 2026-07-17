@@ -88,7 +88,10 @@ body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f4f2ee;color:#1B3
     <!-- Property card -->
     <div class="prop-card">
       <div class="prop-header">
-        <h1 id="prop-title"></h1>
+        <div style="display:flex;align-items:center;gap:10px">
+          <h1 id="prop-title" style="flex:1"></h1>
+          <span id="prop-id" style="font-size:12px;font-weight:700;color:#999;background:#f0ece4;padding:4px 10px;border-radius:6px;letter-spacing:.5px;white-space:nowrap"></span>
+        </div>
         <p id="prop-address"></p>
       </div>
       <div class="prop-specs" id="prop-specs"></div>
@@ -155,7 +158,9 @@ async function init() {
 
   // Title
   document.title = tipo + ' en ' + (v.comuna || '') + ' — Llave Propia';
+  var shortId = vivId.substring(0, 6).toUpperCase();
   document.getElementById('prop-title').textContent = tipo + ' en ' + (v.comuna || '');
+  document.getElementById('prop-id').textContent = 'ID: ' + shortId;
   var addr = v.direccion || '';
   if (v.tipo_vivienda === 'departamento' && v.detalle_depto) addr += (addr ? ' — ' : '') + 'Depto ' + v.detalle_depto;
   document.getElementById('prop-address').textContent = addr;
@@ -265,7 +270,6 @@ async function init() {
   };
 
   // Update WhatsApp button with property ID and URL
-  var shortId = vivId.substring(0, 6).toUpperCase();
   var galeriaUrl = 'https://www.llavepropia.cl/galeria?id=' + vivId;
   var waText = 'Hola, me interesa la propiedad ' + shortId + ' (' + tipo + ' en ' + (v.comuna || '') + '). ' + galeriaUrl;
   document.getElementById('btn-wa').href = 'https://wa.me/56957823672?text=' + encodeURIComponent(waText);
