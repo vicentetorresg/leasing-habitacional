@@ -1042,11 +1042,11 @@ const ViviendaList = () => {
           ) : photoViewFiles.length > 0 ? (
             <div className="flex flex-col gap-3">
               {/* Main image with arrows */}
-              <div className="relative bg-black/5 rounded-lg overflow-hidden flex items-center justify-center" style={{ minHeight: 320 }}>
+              <div className="relative bg-black/5 rounded-lg overflow-hidden flex items-center justify-center w-full" style={{ minHeight: 320 }}>
                 <img
                   src={photoViewFiles[carouselIndex]?.url}
                   alt={photoViewFiles[carouselIndex]?.name}
-                  className="max-h-[50vh] max-w-full object-contain"
+                  className="max-h-[50vh] w-full object-contain"
                 />
                 {photoViewFiles.length > 1 && (
                   <>

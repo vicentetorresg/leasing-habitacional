@@ -193,14 +193,26 @@ async function init() {
     if (i === 0) img.className = 'active';
     carousel.appendChild(img);
   });
+  // Badge
+  var badge = document.createElement('div');
+  badge.className = 'badge';
+  badge.textContent = photos.length + ' foto' + (photos.length > 1 ? 's' : '');
+  carousel.appendChild(badge);
+
   // Nav buttons
   if (photos.length > 1) {
-    carousel.innerHTML += '<button class="nav nav-prev" id="c-prev">&#8249;</button><button class="nav nav-next" id="c-next">&#8250;</button>';
-    document.getElementById('c-prev').onclick = () => goTo((currentIdx - 1 + photos.length) % photos.length);
-    document.getElementById('c-next').onclick = () => goTo((currentIdx + 1) % photos.length);
+    var prevBtn = document.createElement('button');
+    prevBtn.className = 'nav nav-prev';
+    prevBtn.innerHTML = '&#8249;';
+    prevBtn.onclick = () => goTo((currentIdx - 1 + photos.length) % photos.length);
+    carousel.appendChild(prevBtn);
+
+    var nextBtn = document.createElement('button');
+    nextBtn.className = 'nav nav-next';
+    nextBtn.innerHTML = '&#8250;';
+    nextBtn.onclick = () => goTo((currentIdx + 1) % photos.length);
+    carousel.appendChild(nextBtn);
   }
-  // Badge
-  carousel.innerHTML += '<div class="badge">' + photos.length + ' foto' + (photos.length > 1 ? 's' : '') + '</div>';
 
   // Thumbnails
   var thumbsEl = document.getElementById('thumbs');
@@ -213,6 +225,12 @@ async function init() {
       thumbsEl.appendChild(t);
     });
   }
+
+  // Keyboard arrows
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') goTo((currentIdx - 1 + photos.length) % photos.length);
+    if (e.key === 'ArrowRight') goTo((currentIdx + 1) % photos.length);
+  });
 
   // Swipe support
   var touchStartX = 0;
