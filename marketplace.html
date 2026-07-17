@@ -309,6 +309,8 @@ function renderGrid(list) {
 
     var card = document.createElement('div');
     card.className = 'card';
+    card.style.cursor = 'pointer';
+    card.onclick = function(e) { if (!e.target.closest('.card-actions')) window.open('/galeria?id=' + v.id, '_blank'); };
     card.innerHTML = '<div class="card-img"><span class="card-badge">' + tipoBadge + '</span>' + imgHtml + '</div>' +
       '<div class="card-body">' +
         '<div class="card-location"><span>' + (v.comuna || 'Chile') + '</span><span style="font-size:0.65rem;font-weight:800;color:#9A8878;background:#f0ece4;padding:2px 7px;border-radius:4px;letter-spacing:0.5px;margin-left:6px">ID: ' + shortId + '</span></div>' +
