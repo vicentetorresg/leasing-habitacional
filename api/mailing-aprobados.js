@@ -245,7 +245,7 @@ export default async function handler(req, res) {
 </body></html>`;
 
     const emailPayload = {
-      from: 'Llave Propia <notificaciones@llavepropia.cl>',
+      from: 'Llave Propia <notificaciones@proppi.cl>',
       to: [toEmail],
       reply_to: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'],
       subject,
