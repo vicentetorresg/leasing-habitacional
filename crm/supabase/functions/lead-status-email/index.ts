@@ -366,13 +366,13 @@ function emailClienteInteresadoManual(firstName: string) {
 <!-- Body -->
 <tr><td style="padding:36px 28px">
 
-  <div style="background:linear-gradient(135deg,#E5F7F4,#D5F5E3);border:1.5px solid rgba(45,184,158,0.3);border-radius:12px;padding:18px 20px;margin:0 0 24px;text-align:center">
-    <p style="font-size:20px;font-weight:900;color:#2B7A4E;margin:0 0 4px">✅ ¡Comenzamos el proceso!</p>
-    <p style="font-size:13px;color:#1B3A6B;margin:0;font-weight:600">El siguiente paso es reunir tu documentación</p>
+  <div style="background:linear-gradient(135deg,#E5F7F4,#D5F5E3);border:1.5px solid rgba(45,184,158,0.3);border-radius:12px;padding:20px 24px;margin:0 0 24px;text-align:center">
+    <p style="font-size:22px;font-weight:900;color:#2B7A4E;margin:0 0 6px">🏡 ¡Estás a un paso de tu vivienda propia!</p>
+    <p style="font-size:14px;color:#1B3A6B;margin:0;font-weight:600">Solo necesitamos tus documentos para avanzar</p>
   </div>
 
   <p style="font-size:16px;color:#1A150F;line-height:1.7;margin:0 0 20px">¡Hola <strong>${firstName}</strong>!</p>
-  <p style="font-size:16px;color:#1A150F;line-height:1.7;margin:0 0 20px">Nos alegra que estés interesado/a en <strong>Llave Propia</strong>. Para avanzar con tu evaluación, necesitamos que nos envíes los siguientes documentos.</p>
+  <p style="font-size:16px;color:#1A150F;line-height:1.7;margin:0 0 20px">Tu sueño de tener casa propia está más cerca de lo que piensas. Ya diste el primer paso y ahora solo falta reunir tu documentación para que podamos evaluar tu caso y avanzar con el proceso.</p>
 
   <div style="background:#fff;border:1.5px solid #EDE3D4;border-radius:12px;padding:20px 24px;margin:0 0 20px">
     <p style="font-size:13px;font-weight:800;color:#1B3A6B;margin:0 0 14px;text-transform:uppercase;letter-spacing:0.5px">📄 Documentos requeridos</p>
@@ -422,7 +422,7 @@ function emailClienteInteresadoManual(firstName: string) {
 </body></html>`;
 
   return {
-    subject: `${firstName}, comenzamos a solicitar tu documentación — Llave Propia`,
+    subject: `${firstName}, estás a un paso de tu vivienda propia — envíanos tus documentos`,
     html,
   };
 }
