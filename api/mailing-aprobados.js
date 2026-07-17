@@ -121,8 +121,8 @@ export default async function handler(req, res) {
     const firstName = (lead.name || '').trim().split(' ')[0] || 'Cliente';
     const toEmail = testEmail || lead.email;
 
-    // Build property cards HTML
-    const cardsHtml = matched.map(v => {
+    // Build property cards
+    const cardItems = matched.map(v => {
       const tipo = v.tipo_vivienda === 'departamento' ? 'Depto' : 'Casa';
       const photoUrl = photoCache[v.id] || null;
       const rangeLabel = RANGE_LABEL[v.valor_pesos] || v.valor_pesos || '—';
@@ -131,7 +131,9 @@ export default async function handler(req, res) {
       if (v.dormitorios) details.push(v.dormitorios + ' dorm');
       if (v.banos) details.push(v.banos + ' baño' + (v.banos !== '1' ? 's' : ''));
       const detailStr = details.join(' · ');
-      const galeriaUrl = v.photo_count > 0 ? 'https://www.llavepropia.cl/galeria?id=' + v.id : 'https://www.llavepropia.cl/marketplace';
+      const shortId = v.id.split('-')[0];
+      const waText = encodeURIComponent(`Hola! Me interesa la propiedad ${tipo} en ${v.comuna || '—'} (ID: ${shortId}). Vi el mail de Llave Propia.`);
+      const waUrl = `https://wa.me/56962078510?text=${waText}`;
 
       const imgBlock = photoUrl
         ? `<img src="${photoUrl}" alt="${tipo} en ${v.comuna || ''}" style="width:100%;height:140px;object-fit:cover;display:block">`
@@ -140,57 +142,16 @@ export default async function handler(req, res) {
            </div>`;
 
       return `<td style="width:50%;vertical-align:top;padding:6px">
-        <a href="${galeriaUrl}" style="text-decoration:none;color:inherit;display:block">
         <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06)">
           ${imgBlock}
-          <div style="padding:12px 14px">
+          <div style="padding:12px 14px 14px">
             <p style="margin:0 0 2px;font-size:13px;font-weight:800;color:#1B3A6B">${tipo} en ${v.comuna || '—'}</p>
             <p style="margin:0 0 4px;font-size:12px;color:#C9871A;font-weight:700">${rangeLabel}</p>
-            <p style="margin:0;font-size:11px;color:#9A8878">${detailStr || '—'}</p>
+            ${v.direccion ? `<p style="margin:0 0 4px;font-size:11px;color:#555">${v.direccion}</p>` : ''}
+            <p style="margin:0 0 10px;font-size:11px;color:#9A8878">${detailStr || '—'}</p>
+            <a href="${waUrl}" style="display:block;text-align:center;background:#25D366;color:#fff;padding:8px 0;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none">Me interesa</a>
           </div>
         </div>
-        </a>
-      </td>`;
-    }).join('');
-
-    // Arrange cards in rows of 2
-    const rows = [];
-    for (let i = 0; i < matched.length; i += 2) {
-      const cells = matched.length > i + 1
-        ? cardsHtml.split('</td>').slice(i, i + 2).join('</td>') + '</td>'
-        : cardsHtml.split('</td>')[i] + '</td>';
-      rows.push(cells);
-    }
-
-    // Actually build rows properly
-    const cardItems = matched.map((v, idx) => {
-      const tipo = v.tipo_vivienda === 'departamento' ? 'Depto' : 'Casa';
-      const photoUrl = photoCache[v.id] || null;
-      const rangeLabel = RANGE_LABEL[v.valor_pesos] || v.valor_pesos || '—';
-      const details = [];
-      if (v.superficie) details.push(v.superficie + ' m²');
-      if (v.dormitorios) details.push(v.dormitorios + ' dorm');
-      if (v.banos) details.push(v.banos + ' baño' + (v.banos !== '1' ? 's' : ''));
-      const detailStr = details.join(' · ');
-      const galeriaUrl = v.photo_count > 0 ? 'https://www.llavepropia.cl/galeria?id=' + v.id : 'https://www.llavepropia.cl/marketplace';
-
-      const imgBlock = photoUrl
-        ? `<img src="${photoUrl}" alt="${tipo} en ${v.comuna || ''}" style="width:100%;height:140px;object-fit:cover;display:block">`
-        : `<div style="width:100%;height:140px;background:linear-gradient(135deg,#e8dcc8,#d4c4a8);display:flex;align-items:center;justify-content:center">
-            <span style="font-size:36px">${v.tipo_vivienda === 'departamento' ? '🏢' : '🏠'}</span>
-           </div>`;
-
-      return `<td style="width:50%;vertical-align:top;padding:6px">
-        <a href="${galeriaUrl}" style="text-decoration:none;color:inherit;display:block">
-        <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06)">
-          ${imgBlock}
-          <div style="padding:12px 14px">
-            <p style="margin:0 0 2px;font-size:13px;font-weight:800;color:#1B3A6B">${tipo} en ${v.comuna || '—'}</p>
-            <p style="margin:0 0 4px;font-size:12px;color:#C9871A;font-weight:700">${rangeLabel}</p>
-            <p style="margin:0;font-size:11px;color:#9A8878">${detailStr || '—'}</p>
-          </div>
-        </div>
-        </a>
       </td>`;
     });
 
