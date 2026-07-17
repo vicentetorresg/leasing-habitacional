@@ -187,6 +187,7 @@ async function init() {
   });
   allViviendas = await res.json();
   if (!Array.isArray(allViviendas)) allViviendas = [];
+  allViviendas.sort(function(a, b) { return (b.photo_count || 0) - (a.photo_count || 0); });
 
   // Build comuna filter
   var comunas = {};
