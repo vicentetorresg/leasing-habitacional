@@ -79,12 +79,9 @@ export default async function handler(req, res) {
   const is55 = (fuente || '').includes('-55');
   let rangoLabel = '—';
   if (rango_uf) {
-    if (is55) {
-      const [lo, hi] = rango_uf.split('_');
-      rangoLabel = lo === '0' ? 'Menos de $' + hi + 'M' : '$' + lo + 'M – $' + hi + 'M';
-    } else {
-      rangoLabel = rango_uf.replace('_', ' - ') + ' UF';
-    }
+    const [lo, hi] = rango_uf.split('_');
+    const fmtN = n => Number(n).toLocaleString('es-CL');
+    rangoLabel = lo === '0' ? 'Menos de ' + fmtN(hi) + ' UF' : fmtN(lo) + ' – ' + fmtN(hi) + ' UF';
   }
 
 
