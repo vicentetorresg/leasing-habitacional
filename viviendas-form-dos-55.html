@@ -161,10 +161,10 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
         <span class="hero-logo-b">una marca de Llave Propia</span>
       </div>
     </div>
-    <span class="hero-headline">Casas y departamentos bajo 1.500 UF</span>
-    <h1>¿Tienes una casa para vender?<span class="hero-big">bajo 1.500 UF <span id="heroClp" style="font-size:0.55em;color:var(--navy);opacity:0.7"></span></span></h1>
-    <p class="hero-sub">Compradores reales, pre-aprobados con subsidio, buscan en <strong>Santiago y Regiones</strong>. Revisa si hay uno para la tuya.</p>
-    <p>Registra tu propiedad en <strong>60 segundos</strong> y te decimos si hay un comprador. Sin exclusividad, sin costos iniciales, <strong>comisión solo al vender</strong>.</p>
+    <span class="hero-headline">Compradores listos en Santiago y Regiones</span>
+    <h1>Buscamos casas y deptos<span class="hero-big">bajo 1.500 UF <span id="heroClp" style="font-size:0.55em;color:var(--navy);opacity:0.7"></span></span></h1>
+    <p class="hero-sub">Tenemos más de 100 compradores pre-aprobados con subsidio. Revisa si hay uno para tu propiedad.</p>
+    <p>Registra tu casa o departamento en <strong>60 segundos</strong> y te decimos si tenemos un comprador. Sin exclusividad, sin costos iniciales, <strong>comisión solo al vender</strong>.</p>
     <div class="hero-badges">
       <span class="hero-badge">&#10003; Compradores listos</span>
       <span class="hero-badge">&#10003; Sin costos para ti</span>
@@ -359,7 +359,7 @@ var precioRanges = [
 var ufValue = 0;
 
 function fmtCLP(n){
-  if(n>=1000000) return '$'+Math.round(n/1000000)+'M';
+  if(n>=1000000){ var m=n/1000000; return '$'+(m>=10?Math.round(m):Math.round(m*10)/10)+'M'; }
   return '$'+n.toLocaleString('es-CL',{maximumFractionDigits:0});
 }
 
