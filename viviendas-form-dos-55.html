@@ -399,7 +399,8 @@ fetch('https://mindicador.cl/api/uf').then(function(r){return r.json()}).then(fu
     ufValue=d.serie[0].valor;
     buildPriceGrid();
     var maxCLP=fmtCLP(Math.round(MAX_UF*ufValue));
-    var hm=document.getElementById('heroMax');if(hm) hm.textContent='1.500 UF (~'+maxCLP+')';
+    var maxFull='$'+(Math.floor(MAX_UF*ufValue/1000000)*1000000).toLocaleString('es-CL');
+    var hm=document.getElementById('heroMax');if(hm) hm.textContent='1.500 UF (~'+maxFull+')';
     var s1=document.getElementById('step1Sub');if(s1) s1.textContent='Queremos ver si tenemos un comprador para tu casa o departamento de hasta 1.500 UF (~'+maxCLP+')';
     var ss=document.getElementById('stepSub2');if(ss) ss.textContent='Solo trabajamos con viviendas de hasta 1.500 UF (~'+maxCLP+')';
   }
