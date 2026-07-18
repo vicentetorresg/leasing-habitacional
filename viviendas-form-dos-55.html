@@ -161,10 +161,10 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
         <span class="hero-logo-b">una marca de Llave Propia</span>
       </div>
     </div>
-    <span class="hero-headline">Compradores listos en Santiago y Regiones</span>
-    <h1>Buscamos casas y deptos<span class="hero-big">bajo 1.500 UF <span id="heroClp" style="font-size:0.55em;color:var(--navy);opacity:0.7"></span></span></h1>
-    <p class="hero-sub">Tenemos más de 100 compradores pre-aprobados con subsidio. Revisa si hay uno para tu propiedad.</p>
-    <p>Registra tu casa o departamento en <strong>60 segundos</strong> y te decimos si tenemos un comprador. Sin exclusividad, sin costos iniciales, <strong>comisión solo al vender</strong>.</p>
+    <span class="hero-headline">Santiago y Regiones · Más de 100 compradores</span>
+    <h1>¿Tienes una casa para vender?<span class="hero-big">Nosotros tenemos al comprador</span></h1>
+    <p class="hero-sub">Buscamos casas y deptos de hasta <strong><span id="heroMax">1.500 UF</span></strong> en todo Chile. Compradores pre-aprobados con subsidio, listos para comprar.</p>
+    <p>Registra tu propiedad en <strong>60 segundos</strong> y te decimos si hay un comprador para la tuya. Sin exclusividad, sin costos iniciales, <strong>comisión solo al vender</strong>.</p>
     <div class="hero-badges">
       <span class="hero-badge">&#10003; Compradores listos</span>
       <span class="hero-badge">&#10003; Sin costos para ti</span>
@@ -399,7 +399,7 @@ fetch('https://mindicador.cl/api/uf').then(function(r){return r.json()}).then(fu
     ufValue=d.serie[0].valor;
     buildPriceGrid();
     var maxCLP=fmtCLP(Math.round(MAX_UF*ufValue));
-    var hc=document.getElementById('heroClp');if(hc) hc.textContent='(~'+maxCLP+')';
+    var hm=document.getElementById('heroMax');if(hm) hm.textContent='1.500 UF (~'+maxCLP+')';
     var s1=document.getElementById('step1Sub');if(s1) s1.textContent='Queremos ver si tenemos un comprador para tu casa o departamento de hasta 1.500 UF (~'+maxCLP+')';
     var ss=document.getElementById('stepSub2');if(ss) ss.textContent='Solo trabajamos con viviendas de hasta 1.500 UF (~'+maxCLP+')';
   }

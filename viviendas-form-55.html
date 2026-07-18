@@ -161,9 +161,9 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
         <span class="hero-logo-b">una marca de Llave Propia</span>
       </div>
     </div>
-    <span class="hero-headline">Compradores listos en Santiago y Regiones</span>
-    <h1>Vende tu casa o depto<span class="hero-big">bajo 1.500 UF <span id="heroClp" style="font-size:0.55em;color:var(--navy);opacity:0.7"></span></span></h1>
-    <p class="hero-sub">Tenemos compradores pre-aprobados con subsidio buscando propiedades como la tuya.</p>
+    <span class="hero-headline">Santiago y Regiones · 1% comisión</span>
+    <h1>¿Quieres vender tu casa y vale menos de <span id="heroMax">1.500 UF</span>?<span class="hero-big" id="heroBig">Te la compramos</span></h1>
+    <p class="hero-sub">Tenemos compradores reales, pre-aprobados con subsidio, listos para comprar propiedades como la tuya.</p>
     <p>Registra tu propiedad en <strong>60 segundos</strong> y la conectamos con el comprador indicado. Sin exclusividad, sin costos iniciales, <strong>comisión solo al vender</strong>.</p>
     <div class="hero-badges">
       <span class="hero-badge">&#10003; 1% comisión</span>
@@ -400,7 +400,7 @@ fetch('https://mindicador.cl/api/uf').then(function(r){return r.json()}).then(fu
     ufValue=d.serie[0].valor;
     buildPriceGrid();
     var maxCLP=fmtCLP(Math.round(MAX_UF*ufValue));
-    var hc=document.getElementById('heroClp');if(hc) hc.textContent='(~'+maxCLP+')';
+    var hm=document.getElementById('heroMax');if(hm) hm.textContent=maxCLP;
     var ss=document.getElementById('stepSub2');if(ss) ss.textContent='Solo trabajamos con viviendas de hasta 1.500 UF (~'+maxCLP+')';
   }
 }).catch(function(){});
