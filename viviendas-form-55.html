@@ -400,7 +400,8 @@ fetch('https://mindicador.cl/api/uf').then(function(r){return r.json()}).then(fu
     ufValue=d.serie[0].valor;
     buildPriceGrid();
     var maxCLP=fmtCLP(Math.round(MAX_UF*ufValue));
-    var hm=document.getElementById('heroMax');if(hm) hm.textContent=maxCLP;
+    var maxFull='$'+(Math.floor(MAX_UF*ufValue/1000000)*1000000).toLocaleString('es-CL');
+    var hm=document.getElementById('heroMax');if(hm) hm.textContent=maxFull;
     var ss=document.getElementById('stepSub2');if(ss) ss.textContent='Solo trabajamos con viviendas de hasta 1.500 UF (~'+maxCLP+')';
   }
 }).catch(function(){});
