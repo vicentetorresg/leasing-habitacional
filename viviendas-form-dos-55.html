@@ -161,10 +161,10 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
         <span class="hero-logo-b">una marca de Llave Propia</span>
       </div>
     </div>
-    <span class="hero-headline">Tenemos compradores aprobados para tu casa</span>
-    <h1>Revisa si hay alguien interesado<span class="hero-big">en comprar tu casa</span></h1>
-    <p class="hero-sub">Más de 100 clientes aprobados buscan casa de hasta $55.000.000. Revisa si hay uno para la tuya.</p>
-    <p>Registra tu casa o departamento en <strong>60 segundos</strong> y te decimos si tenemos un comprador que calza. Clientes con subsidio DS120, pre-aprobados y listos para comprar.</p>
+    <span class="hero-headline">Casas y departamentos bajo 1.500 UF</span>
+    <h1>¿Tienes una casa para vender?<span class="hero-big">bajo 1.500 UF <span id="heroClp" style="font-size:0.55em;color:var(--navy);opacity:0.7"></span></span></h1>
+    <p class="hero-sub">Compradores reales, pre-aprobados con subsidio, buscan en <strong>Santiago y Regiones</strong>. Revisa si hay uno para la tuya.</p>
+    <p>Registra tu propiedad en <strong>60 segundos</strong> y te decimos si hay un comprador. Sin exclusividad, sin costos iniciales, <strong>comisión solo al vender</strong>.</p>
     <div class="hero-badges">
       <span class="hero-badge">&#10003; Compradores listos</span>
       <span class="hero-badge">&#10003; Sin costos para ti</span>
@@ -188,7 +188,7 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
   <!-- STEP 1 -->
   <div class="step active" id="step1">
     <h2 class="step-title">¿Tienes una casa para vender?</h2>
-    <p class="step-sub">Queremos ver si tenemos un comprador para tu casa o departamento de hasta $55 millones</p>
+    <p class="step-sub" id="step1Sub">Queremos ver si tenemos un comprador para tu casa o departamento de hasta 1.500 UF</p>
     <div class="choice-grid">
       <div class="choice-btn" onclick="answer1('si')">
         <span class="icon">&#127968;</span>
@@ -208,14 +208,14 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
   <!-- STEP 2: Rango de precio -->
   <div class="step" id="step2">
     <h2 class="step-title">¿Cuál es el valor estimado?</h2>
-    <p class="step-sub">Solo trabajamos con viviendas de hasta $55.000.000</p>
+    <p class="step-sub" id="stepSub2">Solo trabajamos con viviendas de hasta 1.500 UF</p>
 
     <div class="price-grid" id="priceGrid">
       <!-- Filled by JS -->
     </div>
     <div class="no-qualify" id="nq2">
       <h4>Tu propiedad no califica</h4>
-      <p>Solo trabajamos con viviendas de hasta $55.000.000. Nuestros compradores usan subsidio del Estado que aplica solo bajo este valor.</p>
+      <p>Solo trabajamos con viviendas de hasta 1.500 UF. Nuestros compradores usan subsidio del Estado que aplica solo bajo este valor.</p>
     </div>
 
     <button class="btn-back" onclick="goBack(1)">&larr; Volver</button>
@@ -337,7 +337,7 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
 </div>
 
 <script>
-var MAX_CLP = 55000000;
+var MAX_UF = 1500;
 var currentStep = 1;
 var selectedRango = '';
 var selectedTipo = '';
@@ -349,14 +349,19 @@ var utmMedium = urlParams.get('utm_medium') || '';
 var utmCampaign = urlParams.get('utm_campaign') || '';
 
 var precioRanges = [
-  {value:'0_25', label:'Menos de $25M'},
-  {value:'25_30', label:'$25M – $30M'},
-  {value:'30_35', label:'$30M – $35M'},
-  {value:'35_40', label:'$35M – $40M'},
-  {value:'40_45', label:'$40M – $45M'},
-  {value:'45_50', label:'$45M – $50M'},
-  {value:'50_55', label:'$50M – $55M'}
+  {value:'0_500', label:'Menos de 500 UF', lo:0, hi:500},
+  {value:'500_750', label:'500 – 750 UF', lo:500, hi:750},
+  {value:'750_1000', label:'750 – 1.000 UF', lo:750, hi:1000},
+  {value:'1000_1250', label:'1.000 – 1.250 UF', lo:1000, hi:1250},
+  {value:'1250_1500', label:'1.250 – 1.500 UF', lo:1250, hi:1500}
 ];
+
+var ufValue = 0;
+
+function fmtCLP(n){
+  if(n>=1000000) return '$'+Math.round(n/1000000)+'M';
+  return '$'+n.toLocaleString('es-CL',{maximumFractionDigits:0});
+}
 
 function buildPriceGrid(){
   var grid=document.getElementById('priceGrid');
@@ -365,13 +370,20 @@ function buildPriceGrid(){
     var div=document.createElement('div');
     div.className='price-pill';
     div.setAttribute('data-value',r.value);
-    div.innerHTML='<span class="pp-clp">'+r.label+'</span>';
+    var clpText='';
+    if(ufValue>0){
+      var loCLP=Math.round(r.lo*ufValue);
+      var hiCLP=Math.round(r.hi*ufValue);
+      clpText = r.lo===0 ? 'Menos de '+fmtCLP(hiCLP) : fmtCLP(loCLP)+' – '+fmtCLP(hiCLP);
+    }
+    div.innerHTML='<span class="pp-clp">'+r.label+'</span>'+(clpText?'<span class="pp-uf">'+clpText+'</span>':'');
     div.onclick=function(){selectPrice(r.value,div)};
     grid.appendChild(div);
   });
   var nq=document.createElement('div');
   nq.className='price-pill no-qualify-pill';
-  nq.innerHTML='<span class="pp-clp">Más de $55M</span><span class="pp-uf">No califica</span>';
+  var nqClp = ufValue>0 ? 'Más de '+fmtCLP(Math.round(MAX_UF*ufValue))+' · No califica' : 'No califica';
+  nq.innerHTML='<span class="pp-clp">Más de 1.500 UF</span><span class="pp-uf">'+nqClp+'</span>';
   nq.onclick=function(){
     document.querySelectorAll('.price-pill').forEach(function(p){p.classList.remove('selected')});
     nq.classList.add('selected');
@@ -381,6 +393,17 @@ function buildPriceGrid(){
   grid.appendChild(nq);
 }
 buildPriceGrid();
+
+fetch('https://mindicador.cl/api/uf').then(function(r){return r.json()}).then(function(d){
+  if(d&&d.serie&&d.serie.length>0){
+    ufValue=d.serie[0].valor;
+    buildPriceGrid();
+    var maxCLP=fmtCLP(Math.round(MAX_UF*ufValue));
+    var hc=document.getElementById('heroClp');if(hc) hc.textContent='(~'+maxCLP+')';
+    var s1=document.getElementById('step1Sub');if(s1) s1.textContent='Queremos ver si tenemos un comprador para tu casa o departamento de hasta 1.500 UF (~'+maxCLP+')';
+    var ss=document.getElementById('stepSub2');if(ss) ss.textContent='Solo trabajamos con viviendas de hasta 1.500 UF (~'+maxCLP+')';
+  }
+}).catch(function(){});
 
 function selectPrice(val,el){
   selectedRango=val;
