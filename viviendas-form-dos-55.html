@@ -299,18 +299,18 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
     <p class="step-sub">Para avisarte cuando tengamos un comprador</p>
 
     <div class="f-field">
-      <label>Nombre completo</label>
-      <input class="f-input" type="text" id="nombre" placeholder="Tu nombre" oninput="checkStep4()">
+      <label>Nombre completo <span style="color:#c0392b">*</span></label>
+      <input class="f-input" type="text" id="nombre" placeholder="Tu nombre" required oninput="checkStep4()" onchange="checkStep4()">
     </div>
 
     <div class="f-field">
-      <label>Teléfono</label>
-      <input class="f-input" type="tel" id="telefono" placeholder="+56 9 1234 5678" oninput="checkStep4()">
+      <label>Teléfono <span style="color:#c0392b">*</span></label>
+      <input class="f-input" type="tel" id="telefono" placeholder="+56 9 1234 5678" required oninput="checkStep4()" onchange="checkStep4()">
     </div>
 
     <div class="f-field">
-      <label>Email</label>
-      <input class="f-input" type="email" id="email" placeholder="tu@email.com" oninput="checkStep4()">
+      <label>Email <span style="color:#c0392b">*</span></label>
+      <input class="f-input" type="email" id="email" placeholder="tu@email.com" required oninput="checkStep4()" onchange="checkStep4()">
     </div>
 
     <p class="fields-hint" id="hint4">Completa todos los campos para continuar</p>
