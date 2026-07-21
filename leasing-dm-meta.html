@@ -1652,8 +1652,6 @@ footer{background:var(--navy);padding:56px 40px 28px}
 
   function markAllFormsSubmitted(nombre, contactoPref, horario, rentaVal) {
     var firstName = (nombre && nombre !== '1') ? nombre.split(' ')[0] : '';
-    var waMsg = encodeURIComponent('Hola! Acabo de completar el formulario en llavepropia.cl y quiero avanzar con mi evaluación.');
-    var waHref = 'https://wa.me/56962078510?text=' + waMsg;
     var isCondicionado = rentaComplementaObligatoria.indexOf(rentaVal) !== -1;
     var badgeText = isCondicionado ? '⚠️ PRE-APROBADO CONDICIONADO' : '✅ PRE-APROBADO';
     var badgeSubtext = isCondicionado
