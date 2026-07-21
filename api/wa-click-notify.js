@@ -9,16 +9,18 @@ export default async function handler(req, res) {
   const RESEND_KEY = process.env.RESEND_API_KEY;
 
   try {
-    await fetch('https://api.resend.com/emails', {
+    const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Llave Propia <notificaciones@llavepropia.cl>',
+        from: 'Llave Propia <notificaciones@proppi.cl>',
         to: ['vicente@llavepropia.cl'],
         subject: 'Click en WhatsApp docs - Landing Leasing',
         html: `<p>Alguien hizo click en el boton de WhatsApp para enviar documentos desde la landing de leasing.</p><p><strong>Formulario:</strong> ${form || 'desconocido'}</p><p><strong>Fecha:</strong> ${new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' })}</p>`
       })
     });
+    const data = await r.json();
+    if (!r.ok) return res.status(r.status).json(data);
     return res.status(200).json({ ok: true });
   } catch (e) {
     return res.status(500).json({ error: e.message });
