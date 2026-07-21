@@ -40,7 +40,7 @@ export default async function handler(req, res) {
     </p>
 
     <div style="background:#fff;border:1.5px solid #EDE3D4;border-radius:12px;padding:20px 24px;margin:0 0 20px">
-      <p style="font-size:13px;font-weight:800;color:#1B3A6B;margin:0 0 14px;text-transform:uppercase;letter-spacing:0.5px">Documentos que necesitamos</p>
+      <p style="font-size:13px;font-weight:800;color:#1B3A6B;margin:0 0 14px;text-transform:uppercase;letter-spacing:0.5px">Dependientes</p>
       <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr><td width="32" valign="middle" style="padding:0 0 10px 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">1</div></td><td valign="middle" style="padding:0 0 10px 8px;font-size:14px;color:#1A150F">Cedula de identidad por ambos lados</td></tr>
         <tr><td width="32" valign="middle" style="padding:0 0 10px 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">2</div></td><td valign="middle" style="padding:0 0 10px 8px;font-size:14px;color:#1A150F">6 ultimas liquidaciones de sueldo</td></tr>
@@ -48,6 +48,18 @@ export default async function handler(req, res) {
         <tr><td width="32" valign="middle" style="padding:0 0 10px 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">4</div></td><td valign="middle" style="padding:0 0 10px 8px;font-size:14px;color:#1A150F">Contrato de trabajo con antiguedad</td></tr>
         <tr><td width="32" valign="middle" style="padding:0 0 10px 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">5</div></td><td valign="middle" style="padding:0 0 10px 8px;font-size:14px;color:#1A150F">Deuda CMF (se obtiene gratuita)</td></tr>
         <tr><td width="32" valign="middle" style="padding:0 0 0 0"><div style="background:#2DB89E;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">6</div></td><td valign="middle" style="padding:0 0 0 8px;font-size:14px;color:#1A150F">Certificado de matrimonio o no matrimonio</td></tr>
+      </table>
+    </div>
+
+    <div style="background:#fff;border:1.5px solid #EDE3D4;border-radius:12px;padding:20px 24px;margin:0 0 20px">
+      <p style="font-size:13px;font-weight:800;color:#1B3A6B;margin:0 0 14px;text-transform:uppercase;letter-spacing:0.5px">Independientes</p>
+      <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr><td width="32" valign="middle" style="padding:0 0 10px 0"><div style="background:#1B3A6B;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">1</div></td><td valign="middle" style="padding:0 0 10px 8px;font-size:14px;color:#1A150F">Cedula de identidad por ambos lados</td></tr>
+        <tr><td width="32" valign="middle" style="padding:0 0 10px 0"><div style="background:#1B3A6B;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">2</div></td><td valign="middle" style="padding:0 0 10px 8px;font-size:14px;color:#1A150F">Informe de deudas CMF</td></tr>
+        <tr><td width="32" valign="middle" style="padding:0 0 10px 0"><div style="background:#1B3A6B;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">3</div></td><td valign="middle" style="padding:0 0 10px 8px;font-size:14px;color:#1A150F">Certificado de matrimonio o no matrimonio</td></tr>
+        <tr><td width="32" valign="middle" style="padding:0 0 10px 0"><div style="background:#1B3A6B;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">4</div></td><td valign="middle" style="padding:0 0 10px 8px;font-size:14px;color:#1A150F">Carpeta tributaria</td></tr>
+        <tr><td width="32" valign="middle" style="padding:0 0 10px 0"><div style="background:#1B3A6B;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">5</div></td><td valign="middle" style="padding:0 0 10px 8px;font-size:14px;color:#1A150F">Certificado ultimas 12 cotizaciones AFP</td></tr>
+        <tr><td width="32" valign="middle" style="padding:0 0 0 0"><div style="background:#1B3A6B;color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:800">6</div></td><td valign="middle" style="padding:0 0 0 8px;font-size:14px;color:#1A150F">Ultimas 12 boletas de honorarios</td></tr>
       </table>
     </div>
 

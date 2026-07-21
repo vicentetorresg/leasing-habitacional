@@ -70,7 +70,7 @@ export default async function handler(req, res) {
           </td></tr>
           <tr><td style="padding:20px">
             <table width="100%" cellpadding="0" cellspacing="0">
-              ${['Carpeta tributaria (razón social o persona con giro)','DICOM (Informe comercial)','Balance de la sociedad o declaración de renta'].map(doc => `
+              ${['Cédula de identidad por ambos lados','Informe de deudas CMF','Certificado de matrimonio o no matrimonio','Carpeta tributaria','Certificado últimas 12 cotizaciones AFP','Últimas 12 boletas de honorarios'].map(doc => `
               <tr><td style="padding:6px 0;border-bottom:1px solid #ece9e1">
                 <table cellpadding="0" cellspacing="0"><tr>
                   <td style="width:22px;vertical-align:top;padding-top:1px">
