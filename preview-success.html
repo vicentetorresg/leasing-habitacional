@@ -33,6 +33,14 @@
   .badge-text { font-size: 20px; font-weight: 900; margin: 0 0 4px; }
   .badge-sub { font-size: 13px; margin: 0; font-weight: 600; }
 
+  .wa-sticky-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;padding:0;background:#25D366;box-shadow:0 -6px 30px rgba(37,211,102,0.5)}
+  .wa-sticky-bar .wa-sticky-hint{display:block;text-align:center;font-size:11px;font-weight:700;color:rgba(255,255,255,0.85);padding:6px 0 0;letter-spacing:0.3px}
+  .wa-sticky-bar a{display:flex;align-items:center;justify-content:center;gap:12px;background:none;color:#fff;padding:14px 20px;font-weight:900;font-size:1.15rem;text-decoration:none;animation:bounce-sticky 1.5s ease-in-out 3}
+  @keyframes bounce-sticky{0%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}50%{transform:translateY(0)}70%{transform:translateY(-3px)}}
+  .wa-sticky-bar.visible{display:block}
+  .toggle-sticky{margin:20px auto;display:block;padding:10px 24px;border:2px solid #25D366;background:#fff;color:#25D366;font-weight:700;border-radius:8px;cursor:pointer;font-size:14px}
+  .toggle-sticky.active{background:#25D366;color:#fff}
+
   .nav-btns { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; }
   .nav-btns button { padding: 10px 20px; border: 2px solid var(--navy); background: #fff; color: var(--navy); font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 14px; }
   .nav-btns button.active { background: var(--navy); color: #fff; }
@@ -147,7 +155,21 @@
 
 </div>
 
+<button class="toggle-sticky" id="stickyToggle" onclick="toggleSticky()">Mostrar sticky bar mobile (WhatsApp fijo abajo)</button>
+
+<div id="wa-sticky" class="wa-sticky-bar">
+<span class="wa-sticky-hint">Envia tus documentos para formalizar</span>
+<a href="https://wa.me/56962078510?text=Hola%2C%20escribo%20para%20enviar%20mis%20documentos%20y%20formalizar%20evaluaci%C3%B3n%20para%20comprar%20una%20vivienda" class="wa-doc-btn" data-form="sticky" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#fff" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.555 4.126 1.525 5.862L.05 23.888a.5.5 0 00.612.612l5.985-1.467A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.82c-1.88 0-3.672-.5-5.232-1.434l-.375-.223-3.887.953.979-3.849-.245-.389A9.78 9.78 0 012.18 12c0-5.422 4.398-9.82 9.82-9.82 5.422 0 9.82 4.398 9.82 9.82 0 5.422-4.398 9.82-9.82 9.82z"/></svg> Enviar documentos AHORA</a>
+</div>
+
 <script>
+function toggleSticky() {
+  var bar = document.getElementById('wa-sticky');
+  var btn = document.getElementById('stickyToggle');
+  bar.classList.toggle('visible');
+  btn.classList.toggle('active');
+  btn.textContent = bar.classList.contains('visible') ? 'Ocultar sticky bar mobile' : 'Mostrar sticky bar mobile (WhatsApp fijo abajo)';
+}
 function show(n) {
   document.querySelectorAll('.screen').forEach(function(s) { s.style.display = 'none'; });
   document.getElementById('s'+n).style.display = 'block';
