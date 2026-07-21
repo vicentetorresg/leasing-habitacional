@@ -162,7 +162,7 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
       </div>
     </div>
     <span class="hero-headline">Santiago y Regiones · 1% comisión</span>
-    <h1>¿Quieres vender tu casa y vale menos de <span id="heroMax">1.500 UF</span>?<span class="hero-big" id="heroBig">Tenemos al comprador</span></h1>
+    <h1>¿Quieres vender tu casa y vale menos de <span id="heroMax">1.600 UF</span>?<span class="hero-big" id="heroBig">Tenemos al comprador</span></h1>
     <p class="hero-sub">Tenemos compradores reales, pre-aprobados con subsidio, listos para comprar propiedades como la tuya.</p>
     <p>Registra tu propiedad en <strong>60 segundos</strong> y la conectamos con el comprador indicado. Sin exclusividad, sin costos iniciales, <strong>comisión solo al vender</strong>.</p>
     <div class="hero-badges">
@@ -208,14 +208,14 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
   <!-- STEP 2: Rango de precio -->
   <div class="step" id="step2">
     <h2 class="step-title">¿Cuál es el valor estimado?</h2>
-    <p class="step-sub" id="stepSub2">Solo trabajamos con viviendas de hasta 1.500 UF</p>
+    <p class="step-sub" id="stepSub2">Solo trabajamos con viviendas de hasta 1.600 UF</p>
 
     <div class="price-grid" id="priceGrid">
       <!-- Filled by JS -->
     </div>
     <div class="no-qualify" id="nq2">
       <h4>Tu propiedad no califica</h4>
-      <p>Solo trabajamos con viviendas de hasta 1.500 UF. Nuestros compradores usan subsidio del Estado que aplica solo bajo este valor.</p>
+      <p>Solo trabajamos con viviendas de hasta 1.600 UF. Nuestros compradores usan subsidio del Estado que aplica solo bajo este valor.</p>
     </div>
 
     <button class="btn-back" onclick="goBack(1)">&larr; Volver</button>
@@ -337,7 +337,7 @@ body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige-1)
 </div>
 
 <script>
-var MAX_UF = 1500;
+var MAX_UF = 1600;
 var currentStep = 1;
 var selectedRango = '';
 var selectedTipo = '';
@@ -350,11 +350,11 @@ var utmMedium = urlParams.get('utm_medium') || '';
 var utmCampaign = urlParams.get('utm_campaign') || '';
 
 var precioRanges = [
-  {value:'0_500', label:'Menos de 500 UF', lo:0, hi:500},
-  {value:'500_750', label:'500 – 750 UF', lo:500, hi:750},
-  {value:'750_1000', label:'750 – 1.000 UF', lo:750, hi:1000},
-  {value:'1000_1250', label:'1.000 – 1.250 UF', lo:1000, hi:1250},
-  {value:'1250_1500', label:'1.250 – 1.500 UF', lo:1250, hi:1500}
+  {value:'0_800', label:'Menos de 800 UF', lo:0, hi:800},
+  {value:'800_1000', label:'800 – 1.000 UF', lo:800, hi:1000},
+  {value:'1000_1200', label:'1.000 – 1.200 UF', lo:1000, hi:1200},
+  {value:'1200_1400', label:'1.200 – 1.400 UF', lo:1200, hi:1400},
+  {value:'1400_1600', label:'1.400 – 1.600 UF', lo:1400, hi:1600}
 ];
 
 var ufValue = 0;
@@ -384,7 +384,7 @@ function buildPriceGrid(){
   var nq=document.createElement('div');
   nq.className='price-pill no-qualify-pill';
   var nqClp = ufValue>0 ? 'Más de '+fmtCLP(Math.round(MAX_UF*ufValue))+' · No califica' : 'No califica';
-  nq.innerHTML='<span class="pp-clp">Más de 1.500 UF</span><span class="pp-uf">'+nqClp+'</span>';
+  nq.innerHTML='<span class="pp-clp">Más de 1.600 UF</span><span class="pp-uf">'+nqClp+'</span>';
   nq.onclick=function(){
     document.querySelectorAll('.price-pill').forEach(function(p){p.classList.remove('selected')});
     nq.classList.add('selected');
@@ -402,7 +402,7 @@ fetch('https://mindicador.cl/api/uf').then(function(r){return r.json()}).then(fu
     var maxCLP=fmtCLP(Math.round(MAX_UF*ufValue));
     var maxFull='$'+(Math.floor(MAX_UF*ufValue/1000000)*1000000).toLocaleString('es-CL');
     var hm=document.getElementById('heroMax');if(hm) hm.textContent=maxFull;
-    var ss=document.getElementById('stepSub2');if(ss) ss.textContent='Solo trabajamos con viviendas de hasta 1.500 UF (~'+maxCLP+')';
+    var ss=document.getElementById('stepSub2');if(ss) ss.textContent='Solo trabajamos con viviendas de hasta 1.600 UF (~'+maxCLP+')';
   }
 }).catch(function(){});
 
