@@ -134,6 +134,7 @@ const LeadDownloadDialog = ({ leads }: LeadDownloadDialogProps) => {
           'Direccion Vivienda': l.direccion_vivienda || '',
           'UF Aprobado Austral': l.uf_aprobado_austra || '',
           'UF Aprobado Casa Pronta': l.uf_aprobado_casa_pronta || '',
+          'UF Aprobado Hogar Hoy': l.uf_aprobado_hogar_hoy || '',
           'UF Propiedad que Quiere': l.uf_propiedad_quiere || '',
           'Con Codeudor': l.con_codeudor ? 'Si' : 'No',
           Prioridad: l.priority,

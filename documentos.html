@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Subir Documentos - Llave Propia</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f4f2ee;color:#1A150F;min-height:100vh}
+.header{background:linear-gradient(135deg,#1B3A6B,#243870);padding:24px;text-align:center}
+.header img{height:40px}
+.container{max-width:560px;margin:0 auto;padding:20px 16px 40px}
+.card{background:#fff;border-radius:16px;padding:28px 24px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin-bottom:20px}
+h1{font-size:22px;color:#1B3A6B;margin-bottom:4px}
+.subtitle{font-size:14px;color:#888;margin-bottom:24px}
+.type-selector{display:flex;gap:12px;margin-bottom:24px}
+.type-btn{flex:1;padding:14px;border:2px solid #EDE3D4;border-radius:12px;background:#fff;cursor:pointer;text-align:center;font-size:14px;font-weight:700;color:#1B3A6B;transition:all 0.2s}
+.type-btn:hover{border-color:#2DB89E;background:#f0faf8}
+.type-btn.active{border-color:#2DB89E;background:#E5F7F4;color:#1B3A6B}
+.type-btn .icon{font-size:28px;display:block;margin-bottom:6px}
+.doc-list{display:none}
+.doc-list.visible{display:block}
+.doc-item{border:1.5px solid #EDE3D4;border-radius:12px;padding:16px;margin-bottom:12px;transition:all 0.2s}
+.doc-item.uploaded{border-color:#2DB89E;background:#f0faf8}
+.doc-item-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.doc-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.doc-num.dep{background:#2DB89E}
+.doc-num.ind{background:#1B3A6B}
+.doc-num.done{background:#2DB89E !important}
+.doc-label{font-size:14px;font-weight:600;color:#1A150F;flex:1}
+.doc-status{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px}
+.doc-status.pending{background:#FEF3E2;color:#e67e22}
+.doc-status.done{background:#D5F5E3;color:#2B7A4E}
+.file-input-wrap{position:relative}
+.file-input-wrap input[type=file]{display:none}
+.file-btn{display:inline-flex;align-items:center;gap:8px;background:#f8f7f4;border:1.5px dashed #ccc;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:13px;color:#666;transition:all 0.2s;width:100%;justify-content:center}
+.file-btn:hover{border-color:#2DB89E;color:#2DB89E;background:#f0faf8}
+.file-btn.uploading{border-color:#2DB89E;color:#2DB89E;pointer-events:none}
+.uploaded-file{display:flex;align-items:center;gap:8px;font-size:13px;color:#2B7A4E;font-weight:600;padding:6px 0}
+.progress-bar{height:4px;background:#EDE3D4;border-radius:2px;margin-top:8px;overflow:hidden;display:none}
+.progress-bar.active{display:block}
+.progress-fill{height:100%;background:#2DB89E;border-radius:2px;width:0%;transition:width 0.3s}
+.summary{background:#E5F7F4;border:1.5px solid rgba(45,184,158,0.3);border-radius:12px;padding:16px 20px;text-align:center;display:none}
+.summary.visible{display:block}
+.summary p{font-size:15px;color:#1B3A6B;font-weight:700}
+.loading{text-align:center;padding:60px 20px;color:#888;font-size:15px}
+.error-msg{text-align:center;padding:60px 20px;color:#e74c3c;font-size:15px}
+.note{background:#FEF3E2;border:1px solid rgba(230,126,34,0.2);border-radius:10px;padding:12px 16px;font-size:13px;color:#1B3A6B;line-height:1.6;margin-bottom:20px}
+.section-title{font-size:13px;font-weight:800;color:#1B3A6B;text-transform:uppercase;letter-spacing:0.5px;margin:24px 0 12px;padding:10px 16px;background:#f8f7f4;border-radius:8px;border-left:4px solid #2DB89E}
+.section-title.comp{border-left-color:#e67e22;margin-top:28px}
+</style>
+</head>
+<body>
+<div class="header">
+  <img src="/logo-lp.png" alt="Llave Propia">
+</div>
+
+<div class="container">
+  <div id="loading" class="loading">Cargando...</div>
+  <div id="error" class="error-msg" style="display:none"></div>
+  <div id="main" style="display:none">
+    <div class="card">
+      <h1 id="greeting">Hola!</h1>
+      <p class="subtitle">Sube tus documentos para avanzar con tu evaluacion</p>
+
+      <p style="font-size:14px;font-weight:600;color:#1B3A6B;margin-bottom:12px">Selecciona tu tipo de trabajo:</p>
+      <div class="type-selector">
+        <div class="type-btn" data-type="dependiente" onclick="selectType('dependiente')">
+          <span class="icon">&#128188;</span>
+          Dependiente
+        </div>
+        <div class="type-btn" data-type="independiente" onclick="selectType('independiente')">
+          <span class="icon">&#128200;</span>
+          Independiente
+        </div>
+      </div>
+
+      <div id="docs-dependiente" class="doc-list"></div>
+      <div id="docs-independiente" class="doc-list"></div>
+
+      <div class="note" id="complementa-note" style="display:none">
+        <strong>Si complementas renta con otra persona</strong>, necesitamos los mismos documentos de ella. Puedes subirlos usando este mismo portal.
+      </div>
+    </div>
+
+    <div class="summary" id="summary">
+      <p>Todos los documentos han sido subidos. Te contactaremos pronto!</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '';
+let TOKEN = '';
+let LEAD_ID = '';
+let uploadedTypes = new Set();
+
+const DOCS_DEP = [
+  { type: 'cedula', label: 'Cedula de identidad por ambos lados' },
+  { type: 'liquidaciones', label: '6 ultimas liquidaciones de sueldo' },
+  { type: 'cotizaciones_afp', label: 'Cotizaciones AFP ultimo ano' },
+  { type: 'contrato_trabajo', label: 'Contrato de trabajo con antiguedad' },
+  { type: 'deuda_cmf', label: 'Deuda CMF (se obtiene gratuita)' },
+  { type: 'certificado_matrimonio', label: 'Certificado de matrimonio o no matrimonio' },
+];
+
+const DOCS_DEP_COMP = [
+  { type: 'comp_cedula', label: 'Cedula de identidad por ambos lados' },
+  { type: 'comp_liquidaciones', label: '6 ultimas liquidaciones de sueldo' },
+  { type: 'comp_cotizaciones_afp', label: 'Cotizaciones AFP ultimo ano' },
+  { type: 'comp_contrato_trabajo', label: 'Contrato de trabajo con antiguedad' },
+  { type: 'comp_deuda_cmf', label: 'Deuda CMF (se obtiene gratuita)' },
+  { type: 'comp_certificado_matrimonio', label: 'Certificado de matrimonio o no matrimonio' },
+];
+
+const DOCS_IND = [
+  { type: 'cedula', label: 'Cedula de identidad por ambos lados' },
+  { type: 'deuda_cmf', label: 'Informe de deudas CMF' },
+  { type: 'certificado_matrimonio', label: 'Certificado de matrimonio o no matrimonio' },
+  { type: 'carpeta_tributaria', label: 'Carpeta tributaria' },
+  { type: 'cotizaciones_afp', label: 'Certificado ultimas 12 cotizaciones AFP' },
+  { type: 'boletas_honorarios', label: 'Ultimas 12 boletas de honorarios' },
+];
+
+function buildDocItems(docs, containerEl, cssClass) {
+  containerEl.innerHTML = '';
+  docs.forEach((doc, i) => {
+    const isUploaded = uploadedTypes.has(doc.type);
+    const item = document.createElement('div');
+    item.className = 'doc-item' + (isUploaded ? ' uploaded' : '');
+    item.id = 'doc-' + doc.type;
+    item.innerHTML = `
+      <div class="doc-item-header">
+        <div class="doc-num ${cssClass}${isUploaded ? ' done' : ''}">${isUploaded ? '&#10003;' : (i+1)}</div>
+        <span class="doc-label">${doc.label}</span>
+        <span class="doc-status ${isUploaded ? 'done' : 'pending'}">${isUploaded ? 'Subido' : 'Pendiente'}</span>
+      </div>
+      <div class="file-input-wrap" id="wrap-${doc.type}">
+        ${isUploaded
+          ? '<div class="uploaded-file">&#10003; Archivo subido correctamente</div>'
+          : `<label class="file-btn" id="btn-${doc.type}">
+              &#128206; Seleccionar archivo (PDF, imagen)
+              <input type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.heic" onchange="uploadFile('${doc.type}', this)" multiple>
+            </label>
+            <div class="progress-bar" id="prog-${doc.type}"><div class="progress-fill" id="fill-${doc.type}"></div></div>`
+        }
+      </div>
+    `;
+    containerEl.appendChild(item);
+  });
+}
+
+function selectType(type) {
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.type-btn[data-type="${type}"]`).classList.add('active');
+
+  document.getElementById('docs-dependiente').classList.remove('visible');
+  document.getElementById('docs-independiente').classList.remove('visible');
+  document.getElementById('docs-' + type).classList.add('visible');
+  document.getElementById('complementa-note').style.display = type === 'independiente' ? 'block' : 'none';
+
+  if (type === 'dependiente') {
+    const container = document.getElementById('docs-dependiente');
+    container.innerHTML = '';
+    // Section: Tus documentos
+    const h1 = document.createElement('div');
+    h1.className = 'section-title';
+    h1.textContent = 'Tus documentos';
+    container.appendChild(h1);
+    const wrap1 = document.createElement('div');
+    container.appendChild(wrap1);
+    buildDocItems(DOCS_DEP, wrap1, 'dep');
+    // Section: Complementa renta
+    const h2 = document.createElement('div');
+    h2.className = 'section-title comp';
+    h2.textContent = 'Persona que complementa renta (si aplica)';
+    container.appendChild(h2);
+    const wrap2 = document.createElement('div');
+    container.appendChild(wrap2);
+    buildDocItems(DOCS_DEP_COMP, wrap2, 'dep');
+  } else {
+    buildDocItems(DOCS_IND, document.getElementById('docs-independiente'), 'ind');
+  }
+}
+
+async function uploadFile(docType, input) {
+  const files = input.files;
+  if (!files.length) return;
+
+  const btn = document.getElementById('btn-' + docType);
+  const prog = document.getElementById('prog-' + docType);
+  const fill = document.getElementById('fill-' + docType);
+
+  for (let fi = 0; fi < files.length; fi++) {
+    const file = files[fi];
+    if (file.size > 10 * 1024 * 1024) {
+      alert('El archivo "' + file.name + '" es muy grande. Maximo 10 MB.');
+      continue;
+    }
+
+    btn.textContent = 'Subiendo ' + (fi+1) + '/' + files.length + '...';
+    btn.classList.add('uploading');
+    prog.classList.add('active');
+    fill.style.width = '20%';
+
+    try {
+      // 1. Get signed URL
+      const urlRes = await fetch(API + '/api/docs?action=signed-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: TOKEN, doc_type: docType, file_name: file.name })
+      });
+      const urlData = await urlRes.json();
+      if (!urlRes.ok) throw new Error(urlData.error || 'Error obteniendo URL');
+
+      fill.style.width = '40%';
+
+      // 2. Upload file to signed URL
+      const upRes = await fetch(urlData.upload_url, {
+        method: 'PUT',
+        headers: { 'Content-Type': file.type || 'application/octet-stream' },
+        body: file
+      });
+      if (!upRes.ok) throw new Error('Error subiendo archivo');
+
+      fill.style.width = '80%';
+
+      // 3. Confirm upload
+      await fetch(API + '/api/docs?action=confirm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token: TOKEN,
+          lead_id: LEAD_ID,
+          doc_type: docType,
+          file_name: file.name,
+          file_path: urlData.path,
+          file_size: file.size
+        })
+      });
+
+      fill.style.width = '100%';
+    } catch (err) {
+      alert('Error subiendo "' + file.name + '": ' + err.message);
+      btn.textContent = 'Seleccionar archivo (PDF, imagen)';
+      btn.classList.remove('uploading');
+      prog.classList.remove('active');
+      return;
+    }
+  }
+
+  // Mark as uploaded
+  uploadedTypes.add(docType);
+  const item = document.getElementById('doc-' + docType);
+  item.classList.add('uploaded');
+  const wrap = document.getElementById('wrap-' + docType);
+  wrap.innerHTML = '<div class="uploaded-file">&#10003; ' + files.length + ' archivo' + (files.length > 1 ? 's' : '') + ' subido' + (files.length > 1 ? 's' : '') + '</div>';
+  item.querySelector('.doc-status').className = 'doc-status done';
+  item.querySelector('.doc-status').textContent = 'Subido';
+  item.querySelector('.doc-num').classList.add('done');
+  item.querySelector('.doc-num').innerHTML = '&#10003;';
+
+  // Check if all docs are uploaded
+  checkAllDone();
+}
+
+function checkAllDone() {
+  const activeType = document.querySelector('.type-btn.active');
+  if (!activeType) return;
+  // For dependiente, only check main docs (comp docs are optional)
+  const docs = activeType.dataset.type === 'dependiente' ? DOCS_DEP : DOCS_IND;
+  const allDone = docs.every(d => uploadedTypes.has(d.type));
+  document.getElementById('summary').classList.toggle('visible', allDone);
+}
+
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  TOKEN = params.get('t');
+  if (!TOKEN) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('error').style.display = 'block';
+    document.getElementById('error').textContent = 'Link invalido. Contacta a Llave Propia.';
+    return;
+  }
+
+  try {
+    const res = await fetch(API + '/api/docs?action=portal&t=' + TOKEN);
+    if (!res.ok) throw new Error('Token invalido');
+    const data = await res.json();
+
+    LEAD_ID = data.lead_id;
+    const firstName = (data.name || '').trim().split(' ')[0] || 'Cliente';
+    document.getElementById('greeting').textContent = 'Hola ' + firstName + '!';
+
+    // Track already uploaded docs
+    (data.docs || []).forEach(d => uploadedTypes.add(d.doc_type));
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+  } catch (err) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('error').style.display = 'block';
+    document.getElementById('error').textContent = 'No pudimos verificar tu enlace. Contacta a Llave Propia por WhatsApp.';
+  }
+}
+
+init();
+</script>
+</body>
+</html>

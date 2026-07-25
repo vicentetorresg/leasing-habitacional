@@ -1,0 +1,90 @@
+Para: rodrigo.canas@llavepropia.cl, karina@llavepropia.cl
+CC: vicente@llavepropia.cl
+Asunto: Actualizaciones de hoy en Llave Propia — Nuevas funciones CRM y Galería
+
+
+Hola Rodrigo, hola Karina,
+
+Les escribo para contarles todas las mejoras que hice hoy en la plataforma. Quedaron varias cosas nuevas que les van a servir mucho en el día a día. Les explico cada una con detalle:
+
+
+1. ID UNICO POR CADA VIVIENDA
+---
+Cada propiedad ahora tiene un código corto de 6 caracteres (por ejemplo: A86E8A, 1D9CB4) que se muestra en una nueva columna "ID" en la tabla de Viviendas del CRM.
+
+Cómo usarlo:
+- Entren al CRM (https://www.llavepropia.cl/crm) y vayan a Viviendas.
+- Van a ver la columna "ID" al inicio de cada fila, con un código gris.
+- Si hacen click en el ID, se copia automáticamente al portapapeles.
+- Este ID es el mismo que aparece en la galería pública y en el WhatsApp. Sirve para identificar rápidamente una propiedad sin tener que buscar por dirección.
+
+
+2. VISOR DE FOTOS MEJORADO EN EL CRM
+---
+Cuando hacen click en las fotos de una vivienda, ahora se abre un visor tipo carrusel mucho más limpio:
+
+Cómo usarlo:
+- En la tabla de Viviendas, hagan click en el botón verde de fotos de cualquier propiedad.
+- Se abre el visor con fondo negro y la foto centrada.
+- Usen las flechas laterales para pasar de foto, o las teclas izquierda/derecha del teclado.
+- Abajo de la foto ven las miniaturas de todas las fotos. Pueden hacer click en cualquiera para saltar directo a esa foto.
+- En la esquina inferior derecha aparece "3 / 15" (por ejemplo) para saber en qué foto van.
+
+Los botones de acción están abajo de las miniaturas:
+- "ZIP" (verde): Descarga todas las fotos de esa vivienda en un archivo ZIP.
+- "Galería": Copia el link público de la propiedad para compartir con interesados.
+- "Subir": Copia el link para que el propietario suba más fotos.
+
+El ID de la propiedad también aparece en el header del visor, junto al nombre del propietario.
+
+
+3. LINK PARA COMPARTIR CON META TAGS (WHATSAPP, REDES SOCIALES)
+---
+Cuando comparten un link de galería por WhatsApp o redes sociales, ahora aparece una vista previa con:
+- Foto de la propiedad (la primera foto subida)
+- Título: "Departamento en Las Condes — Llave Propia" (o Casa, según corresponda)
+- Descripción con los datos: tipo, comuna, m2, dormitorios, baños, rango de valor UF
+
+Cómo usarlo:
+- En el visor de fotos del CRM, hagan click en "Galería" para copiar el link.
+- Peguen ese link en un chat de WhatsApp o en cualquier red social.
+- Automáticamente va a aparecer la vista previa con la foto y datos de la propiedad.
+- El link es algo como: https://www.llavepropia.cl/galeria?id=a86e8acb-7371-...
+
+
+4. BOTON DE WHATSAPP CON MENSAJE PREDEFINIDO
+---
+En la página pública de cada propiedad (la galería), el botón verde de WhatsApp ahora incluye un mensaje automático con:
+- El ID corto de la propiedad
+- El tipo y comuna
+- El link de la galería
+
+Ejemplo del mensaje que se envía:
+"Hola, me interesa la propiedad A86E8A (Casa en Melipilla). https://www.llavepropia.cl/galeria?id=..."
+
+Esto les permite saber exactamente qué propiedad le interesa a la persona que escribe.
+
+
+5. ID VISIBLE EN LA PAGINA PUBLICA
+---
+En la página de galería pública (la que ven los interesados), ahora aparece el ID de la propiedad en un badge gris al lado del título. Así cuando alguien les dice "me interesa la propiedad A86E8A", pueden buscarla rápido en el CRM.
+
+
+6. FAVICON DE LLAVE PROPIA
+---
+Las páginas de galería y de subir fotos ahora muestran el ícono de Llave Propia en la pestaña del navegador, en vez del ícono genérico.
+
+
+RESUMEN RAPIDO
+---
+- Columna ID en Viviendas: identificar propiedades al instante
+- Visor de fotos: carrusel con flechas, teclado, miniaturas, y botones compactos
+- Links compartidos: vista previa automática en WhatsApp con foto y datos
+- WhatsApp: mensaje incluye ID + tipo + comuna + link
+- ID visible en galería pública
+- Favicon actualizado
+
+Cualquier duda me avisan.
+
+Saludos,
+Vicente

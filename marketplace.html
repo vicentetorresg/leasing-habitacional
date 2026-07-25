@@ -331,10 +331,10 @@ async function requestPhotos(id) {
   if (btn) { btn.disabled = true; btn.innerHTML = 'Enviando...'; }
 
   try {
-    var res = await fetch('/api/request-photos', {
+    var res = await fetch('/api/photos?action=request', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ vivienda_id: id })
+      body: JSON.stringify({ action: 'request', vivienda_id: id })
     });
     var data = await res.json();
     requestedIds[id] = true;

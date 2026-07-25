@@ -53,8 +53,10 @@ export interface Lead {
   uf_aprobado_austra: number | null;
   uf_aprobado_casa_pronta: number | null;
   uf_propiedad_quiere: number | null;
+  uf_aprobado_hogar_hoy: number | null;
   con_codeudor: boolean | null;
   fecha_aprobacion: string | null;
+  doc_token: string | null;
 }
 
 // Statuses that mean the lead is still pending (ejecutiva view)

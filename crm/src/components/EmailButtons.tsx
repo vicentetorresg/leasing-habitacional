@@ -11,6 +11,7 @@ interface EmailButtonsProps {
 export default function EmailButtons({ leadId, leadEmail, compact = false }: EmailButtonsProps) {
   const [sendingNoContesto, setSendingNoContesto] = useState(false);
   const [sendingAgendada, setSendingAgendada] = useState(false);
+  const [sendingDocs, setSendingDocs] = useState(false);
 
   const normalizedEmail = leadEmail?.trim() ?? '';
   const hasEmail = normalizedEmail.length > 0;
@@ -44,11 +45,33 @@ export default function EmailButtons({ leadId, leadEmail, compact = false }: Ema
     }
   };
 
+  const requestDocs = async () => {
+    if (!hasEmail) { toast.info('Este lead no tiene email'); return; }
+    setSendingDocs(true);
+    try {
+      const res = await fetch('/api/docs?action=request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lead_id: leadId })
+      });
+      if (res.ok) toast.success('📬 Email de documentos enviado');
+      else { const d = await res.json(); toast.error(d.error || 'Error'); }
+    } catch { toast.error('Error de conexión'); }
+    setSendingDocs(false);
+  };
+
   return (
     <div className="space-y-2">
       <p className="text-[11px] text-muted-foreground">
         {hasEmail ? `Se enviará a ${normalizedEmail}` : 'Este lead no tiene email cargado'}
       </p>
+      <button
+        onClick={requestDocs}
+        disabled={!hasEmail || sendingDocs}
+        className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-emerald-500/40 bg-emerald-500/10 px-3 py-2.5 text-xs font-bold text-emerald-600 transition-all hover:border-emerald-500/60 hover:bg-emerald-500/20 disabled:opacity-50"
+      >
+        {sendingDocs ? '⏳ Enviando...' : '📄 Pedir Documentos'}
+      </button>
       <div className={`grid gap-2 ${compact ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'}`}>
         <button
           onClick={() => sendEmail('no_contesto_manual')}

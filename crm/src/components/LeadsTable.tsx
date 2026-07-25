@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import type { Lead } from '@/hooks/useLeads';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import {
   Table,
   TableBody,
@@ -247,7 +248,10 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
             Leads ({filtered.length}){totalPages > 1 ? ` · Pág ${safePage + 1}/${totalPages}` : ''}
           </h3>
-          <LeadDownloadDialog leads={filtered} />
+          <div className="flex items-center gap-2">
+            <SendDocsButton leads={filtered} />
+            <LeadDownloadDialog leads={filtered} />
+          </div>
         </div>
         <div className="flex flex-wrap gap-1">
           {STATUS_FILTER_OPTIONS.map(opt => (
@@ -501,5 +505,43 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
     </div>
   );
 };
+
+function SendDocsButton({ leads }: { leads: Lead[] }) {
+  const [sending, setSending] = useState(false);
+
+  const handleSend = async () => {
+    const docLeads = leads.filter(l => l.status === 'esperando_documentos' && l.email);
+    if (docLeads.length === 0) {
+      toast.error('No hay leads con email en "Esperando Documentos"');
+      return;
+    }
+    if (!confirm(`Enviar email de documentos a ${docLeads.length} lead${docLeads.length !== 1 ? 's' : ''}?`)) return;
+    setSending(true);
+    try {
+      const r = await fetch('/api/send-doc-reminder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leads: docLeads.map(l => ({ id: l.id, name: l.name, email: l.email, doc_token: l.doc_token })) }),
+      });
+      const data = await r.json();
+      if (r.ok) toast.success(`Enviado a ${data.sent} lead${data.sent !== 1 ? 's' : ''}${data.failed ? ` (${data.failed} fallaron)` : ''}`);
+      else toast.error(data.error || 'Error');
+    } catch { toast.error('Error de red'); }
+    setSending(false);
+  };
+
+  const count = leads.filter(l => l.status === 'esperando_documentos' && l.email).length;
+
+  return (
+    <button
+      onClick={handleSend}
+      disabled={sending || count === 0}
+      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold transition-colors disabled:opacity-50"
+      title={`Enviar email de documentos a ${count} leads en "Esperando Documentos"`}
+    >
+      {sending ? '⏳...' : `📄 Pedir Docs (${count})`}
+    </button>
+  );
+}
 
 export default LeadsTable;

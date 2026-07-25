@@ -264,10 +264,10 @@ async function handleFiles(fileList) {
     });
 
     // Send confirmation email via API
-    await fetch('/api/photo-confirm', {
+    await fetch('/api/photos?action=confirm', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ vivienda_id: vivId, photo_count: newCount })
+      body: JSON.stringify({ action: 'confirm', vivienda_id: vivId, photo_count: newCount })
     }).catch(() => null);
   }
 

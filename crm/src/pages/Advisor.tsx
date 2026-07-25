@@ -98,6 +98,7 @@ function downloadXlsx(leads: Lead[], filename: string) {
     'Dirección Vivienda': l.direccion_vivienda || '',
     'UF Aprobado Austral': l.uf_aprobado_austra || '',
     'UF Aprobado Casa Pronta': l.uf_aprobado_casa_pronta || '',
+    'UF Aprobado Hogar Hoy': l.uf_aprobado_hogar_hoy || '',
     'UF Propiedad que Quiere': l.uf_propiedad_quiere || '',
     'Con Codeudor': l.con_codeudor ? 'Sí' : 'No',
     'Fecha Aprobacion': l.fecha_aprobacion || '',
@@ -173,7 +174,7 @@ const Advisor = () => {
       const r = await fetch('/api/send-doc-reminder', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ leads: docLeads.map(l => ({ name: l.name, email: l.email })) }),
+        body: JSON.stringify({ leads: docLeads.map(l => ({ id: l.id, name: l.name, email: l.email, doc_token: l.doc_token })) }),
       });
       const data = await r.json();
       if (r.ok) {
@@ -358,6 +359,7 @@ const Advisor = () => {
   const updateLeadFields = async (leadId: string, fields: Partial<Lead>) => {
     await supabase.from('leads').update(fields as any).eq('id', leadId);
     toast.success('Datos actualizados');
+    setSelectedLead(prev => prev && prev.id === leadId ? { ...prev, ...fields } : prev);
     fetchLeads();
   };
 
@@ -970,6 +972,11 @@ const Advisor = () => {
                       💲 Valor: {lead.precio_propiedad_ok}
                     </p>
                   )}
+                  {lead.uf_aprobado_hogar_hoy != null && lead.uf_aprobado_hogar_hoy > 0 && (
+                    <p className="text-[10px] font-semibold text-emerald-600">
+                      🏠 UF Hogar Hoy: {lead.uf_aprobado_hogar_hoy.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </p>
+                  )}
                   {lead.complementa_renta && (
                     <p className="text-[10px] text-muted-foreground">
                       👥 Complementa renta: {lead.complementa_renta}
@@ -1474,6 +1481,7 @@ function LeadDetailContent({
   const [ufSinBp, setUfSinBp] = useState(lead.uf_sin_bp?.toString() ?? '');
   const [ufAprobadoAustra, setUfAprobadoAustra] = useState(fmtUf(lead.uf_aprobado_austra));
   const [ufAprobadoCasaPronta, setUfAprobadoCasaPronta] = useState(fmtUf(lead.uf_aprobado_casa_pronta));
+  const [ufAprobadoHogarHoy, setUfAprobadoHogarHoy] = useState(fmtUf(lead.uf_aprobado_hogar_hoy));
   const [ufPropiedadQuiere, setUfPropiedadQuiere] = useState(fmtUf(lead.uf_propiedad_quiere));
   const [conCodeudor, setConCodeudor] = useState(lead.con_codeudor ?? false);
   const [comunaPropiedad, setComunaPropiedad] = useState(lead.comuna_propiedad ?? '');
@@ -1537,13 +1545,14 @@ function LeadDetailContent({
       updateLeadFields(lead.id, {
         uf_aprobado_austra: parseUf(ufAprobadoAustra),
         uf_aprobado_casa_pronta: parseUf(ufAprobadoCasaPronta),
+        uf_aprobado_hogar_hoy: parseUf(ufAprobadoHogarHoy),
         uf_propiedad_quiere: parseUf(ufPropiedadQuiere),
         comuna_propiedad: comunaPropiedad || null,
         direccion_vivienda: direccionVivienda || null,
       } as any);
     }, 500);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
-  }, [ufAprobadoAustra, ufAprobadoCasaPronta, ufPropiedadQuiere, comunaPropiedad, direccionVivienda]);
+  }, [ufAprobadoAustra, ufAprobadoCasaPronta, ufAprobadoHogarHoy, ufPropiedadQuiere, comunaPropiedad, direccionVivienda]);
 
   const saveFields = () => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -1551,6 +1560,7 @@ function LeadDetailContent({
       uf_sin_bp: ufSinBp ? parseFloat(ufSinBp) : null,
       uf_aprobado_austra: parseUf(ufAprobadoAustra),
       uf_aprobado_casa_pronta: parseUf(ufAprobadoCasaPronta),
+      uf_aprobado_hogar_hoy: parseUf(ufAprobadoHogarHoy),
       uf_propiedad_quiere: parseUf(ufPropiedadQuiere),
       con_codeudor: conCodeudor,
       comuna_propiedad: comunaPropiedad || null,
@@ -1591,22 +1601,8 @@ function LeadDetailContent({
         <EmailButtonsComponent leadId={lead.id} leadEmail={lead.email} />
       )}
 
-      {/* Lead Info Grid - compact */}
-      <div className="grid grid-cols-3 gap-x-3 gap-y-1 p-3 bg-secondary/50 rounded-lg text-sm">
-        <DetailItem label="Teléfono" value={lead.phone} />
-        <DetailItem label="Email" value={lead.email || '—'} />
-        <DetailItem label="RUT" value={lead.rut || '—'} />
-        <DetailItem label="Sueldo" value={formatSueldoShort(lead)} />
-        <DetailItem label="DICOM" value={lead.en_dicom ? '⚠️ Sí' : '✅ No'} />
-        <DetailItem label="Propiedad vista" value={lead.tiene_propiedad_vista === 'si' ? '✅ Sí' : lead.tiene_propiedad_vista === 'no' ? '❌ No' : '—'} />
-        <DetailItem label="Comuna" value={lead.comuna_propiedad || '—'} />
-        <DetailItem label="Complementa renta" value={lead.complementa_renta || '—'} />
-        <DetailItem label="Renta complemento" value={lead.renta_complemento || '—'} />
-        <DetailItem label="Valor propiedad" value={lead.precio_propiedad_ok || '—'} />
-        <DetailItem label="Cuándo comprar" value={lead.cuando_comprar === 'lo_antes_posible' ? '🔥 Lo antes posible' : lead.cuando_comprar === 'dentro_3_meses' ? 'Dentro de 3 meses' : lead.cuando_comprar === 'mas_3_meses' ? 'En más de 3 meses' : '—'} />
-        <DetailItem label="Fuente" value={lead.source} />
-        <DetailItem label="Estado" value={ADVISOR_STATUSES.find(s => s.key === lead.status)?.label || lead.status} />
-      </div>
+      {/* Lead Info Grid - editable */}
+      <EditableLeadInfo lead={lead} updateLeadFields={updateLeadFields} />
 
       {/* No Califica Section */}
       <div className="p-4 rounded-lg border-2 transition-colors relative"
@@ -1715,6 +1711,19 @@ function LeadDetailContent({
             className={`w-full mt-1 px-2 py-1.5 rounded border border-border bg-background text-sm text-foreground ${!canEditAdvisorFields ? 'opacity-50 cursor-not-allowed' : ''}`} />
         </div>
         <div>
+          <label className="text-xs text-muted-foreground uppercase">UF Aprobado Hogar Hoy</label>
+          <input
+            type="text"
+            inputMode="decimal"
+            value={ufAprobadoHogarHoy}
+            onChange={e => setUfAprobadoHogarHoy(e.target.value.replace(/[^0-9,]/g, ''))}
+            onBlur={() => { const n = parseUf(ufAprobadoHogarHoy); setUfAprobadoHogarHoy(fmtUf(n)); }}
+            onFocus={() => setUfAprobadoHogarHoy(v => v.replace(/\./g, '').replace(',', '.'))}
+            disabled={!canEditAdvisorFields}
+            placeholder="0,00"
+            className={`w-full mt-1 px-2 py-1.5 rounded border border-border bg-background text-sm text-foreground ${!canEditAdvisorFields ? 'opacity-50 cursor-not-allowed' : ''}`} />
+        </div>
+        <div>
           <label className="text-xs text-muted-foreground uppercase">UF Propiedad que Quiere</label>
           <input
             type="text"
@@ -1802,6 +1811,9 @@ function LeadDetailContent({
           </button>
         </div>
       </div>
+
+      {/* Documents section */}
+      <LeadDocuments leadId={lead.id} docToken={lead.doc_token} leadEmail={lead.email} />
 
       {/* Reassign advisor (admin/ejecutiva only) */}
       {isAdminOrEjecutiva && advisors.length > 0 && (
@@ -1951,11 +1963,105 @@ function LeadDetailContent({
   );
 }
 
-function DetailItem({ label, value }: { label: string; value: string }) {
+function EditableLeadInfo({ lead, updateLeadFields }: { lead: Lead; updateLeadFields: (id: string, fields: Partial<Lead>) => void }) {
+  const [values, setValues] = useState({
+    name: lead.name || '',
+    phone: lead.phone || '',
+    email: lead.email || '',
+    rut: lead.rut || '',
+    sueldo_liquido_raw: lead.sueldo_liquido_raw || '',
+    en_dicom: lead.en_dicom,
+    tiene_propiedad_vista: lead.tiene_propiedad_vista || '',
+    complementa_renta: lead.complementa_renta || '',
+    renta_complemento: lead.renta_complemento || '',
+    precio_propiedad_ok: lead.precio_propiedad_ok || '',
+    cuando_comprar: lead.cuando_comprar || '',
+    arriendo: lead.arriendo || '',
+    contrato: lead.contrato || '',
+  });
+
+  const save = (field: string, val: any) => {
+    updateLeadFields(lead.id, { [field]: val || null } as any);
+  };
+
+  const inputCls = 'w-full px-1.5 py-1 rounded border border-border bg-background text-sm text-foreground';
+  const labelCls = 'text-[10px] text-muted-foreground uppercase tracking-wider';
+
   return (
-    <div className="min-w-0 overflow-hidden">
-      <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{label}</p>
-      <p className="text-sm font-bold text-foreground truncate" title={value}>{value}</p>
+    <div className="grid grid-cols-3 gap-x-3 gap-y-2 p-3 bg-secondary/50 rounded-lg text-sm">
+      <div className="col-span-3">
+        <p className={labelCls}>Nombre</p>
+        <input className={inputCls} value={values.name} onChange={e => setValues(v => ({ ...v, name: e.target.value }))} onBlur={() => save('name', values.name)} />
+      </div>
+      <div>
+        <p className={labelCls}>Teléfono</p>
+        <input className={inputCls} value={values.phone} onChange={e => setValues(v => ({ ...v, phone: e.target.value }))} onBlur={() => save('phone', values.phone)} />
+      </div>
+      <div>
+        <p className={labelCls}>Email</p>
+        <input className={inputCls} value={values.email} onChange={e => setValues(v => ({ ...v, email: e.target.value }))} onBlur={() => save('email', values.email)} />
+      </div>
+      <div>
+        <p className={labelCls}>RUT</p>
+        <input className={inputCls} value={values.rut} onChange={e => setValues(v => ({ ...v, rut: e.target.value }))} onBlur={() => save('rut', values.rut)} />
+      </div>
+      <div>
+        <p className={labelCls}>Sueldo</p>
+        <input className={inputCls} value={values.sueldo_liquido_raw} onChange={e => setValues(v => ({ ...v, sueldo_liquido_raw: e.target.value }))} onBlur={() => save('sueldo_liquido_raw', values.sueldo_liquido_raw)} />
+      </div>
+      <div>
+        <p className={labelCls}>Arriendo</p>
+        <input className={inputCls} value={values.arriendo} onChange={e => setValues(v => ({ ...v, arriendo: e.target.value }))} onBlur={() => save('arriendo', values.arriendo)} />
+      </div>
+      <div>
+        <p className={labelCls}>DICOM</p>
+        <select className={inputCls} value={values.en_dicom == null ? '' : values.en_dicom ? 'si' : 'no'} onChange={e => { const v = e.target.value === 'si' ? true : e.target.value === 'no' ? false : null; setValues(prev => ({ ...prev, en_dicom: v })); save('en_dicom', v); }}>
+          <option value="">—</option>
+          <option value="no">No</option>
+          <option value="si">Sí</option>
+        </select>
+      </div>
+      <div>
+        <p className={labelCls}>Contrato indefinido</p>
+        <select className={inputCls} value={values.contrato} onChange={e => { setValues(v => ({ ...v, contrato: e.target.value })); save('contrato', e.target.value); }}>
+          <option value="">—</option>
+          <option value="si">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div>
+        <p className={labelCls}>Propiedad vista</p>
+        <select className={inputCls} value={values.tiene_propiedad_vista} onChange={e => { setValues(v => ({ ...v, tiene_propiedad_vista: e.target.value })); save('tiene_propiedad_vista', e.target.value); }}>
+          <option value="">—</option>
+          <option value="si">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div>
+        <p className={labelCls}>Complementa renta</p>
+        <input className={inputCls} value={values.complementa_renta} onChange={e => setValues(v => ({ ...v, complementa_renta: e.target.value }))} onBlur={() => save('complementa_renta', values.complementa_renta)} />
+      </div>
+      <div>
+        <p className={labelCls}>Renta complemento</p>
+        <input className={inputCls} value={values.renta_complemento} onChange={e => setValues(v => ({ ...v, renta_complemento: e.target.value }))} onBlur={() => save('renta_complemento', values.renta_complemento)} />
+      </div>
+      <div>
+        <p className={labelCls}>Valor propiedad</p>
+        <input className={inputCls} value={values.precio_propiedad_ok} onChange={e => setValues(v => ({ ...v, precio_propiedad_ok: e.target.value }))} onBlur={() => save('precio_propiedad_ok', values.precio_propiedad_ok)} />
+      </div>
+      <div>
+        <p className={labelCls}>Cuándo comprar</p>
+        <select className={inputCls} value={values.cuando_comprar} onChange={e => { setValues(v => ({ ...v, cuando_comprar: e.target.value })); save('cuando_comprar', e.target.value); }}>
+          <option value="">—</option>
+          <option value="lo_antes_posible">Lo antes posible</option>
+          <option value="dentro_3_meses">Dentro de 3 meses</option>
+          <option value="mas_3_meses">En más de 3 meses</option>
+        </select>
+      </div>
+      <div>
+        <p className={labelCls}>Fuente</p>
+        <p className="text-sm font-semibold text-foreground truncate">{lead.source || '—'}</p>
+      </div>
     </div>
   );
 }

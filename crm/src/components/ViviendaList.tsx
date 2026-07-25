@@ -519,10 +519,10 @@ const ViviendaList = () => {
     let failed = 0;
     for (const v of targets) {
       try {
-        const res = await fetch('/api/request-photos', {
+        const res = await fetch('/api/photos?action=request', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ vivienda_id: v.id }),
+          body: JSON.stringify({ action: 'request', vivienda_id: v.id }),
         });
         const data = await res.json();
         if (data.sent) sent++;
