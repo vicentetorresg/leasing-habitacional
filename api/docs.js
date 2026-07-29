@@ -80,12 +80,14 @@ export default async function handler(req, res) {
     if (!docRes.ok) return res.status(500).json({ error: 'No se pudo guardar' });
 
     const docLabels = {
-      cedula: 'Cedula de identidad', liquidaciones: 'Liquidaciones de sueldo', cotizaciones_afp: 'Cotizaciones AFP',
+      cedula: 'Cédula de identidad', cedula_frontal: 'Cédula - Frontal', cedula_trasera: 'Cédula - Trasera',
+      liquidaciones: 'Liquidaciones de sueldo', cotizaciones_afp: 'Cotizaciones AFP',
       contrato_trabajo: 'Contrato de trabajo', deuda_cmf: 'Deuda CMF', certificado_matrimonio: 'Cert. matrimonio',
       carpeta_tributaria: 'Carpeta tributaria', boletas_honorarios: 'Boletas de honorarios',
-      comp_cedula: 'Complementa - Cedula', comp_liquidaciones: 'Complementa - Liquidaciones',
-      comp_cotizaciones_afp: 'Complementa - Cotizaciones AFP', comp_contrato_trabajo: 'Complementa - Contrato',
-      comp_deuda_cmf: 'Complementa - Deuda CMF', comp_certificado_matrimonio: 'Complementa - Cert. matrimonio',
+      comp_cedula: 'Comp. - Cédula', comp_cedula_frontal: 'Comp. - Cédula Frontal', comp_cedula_trasera: 'Comp. - Cédula Trasera',
+      comp_liquidaciones: 'Comp. - Liquidaciones',
+      comp_cotizaciones_afp: 'Comp. - Cotizaciones AFP', comp_contrato_trabajo: 'Comp. - Contrato',
+      comp_deuda_cmf: 'Comp. - Deuda CMF', comp_certificado_matrimonio: 'Comp. - Cert. matrimonio',
     };
     const docLabel = docLabels[doc_type] || doc_type;
 

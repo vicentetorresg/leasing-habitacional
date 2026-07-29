@@ -96,31 +96,36 @@ let TOKEN = '';
 let LEAD_ID = '';
 let uploadedTypes = new Set();
 
+const CEDULA_TYPES = ['cedula_frontal','cedula_trasera','comp_cedula_frontal','comp_cedula_trasera'];
+
 const DOCS_DEP = [
-  { type: 'cedula', label: 'Cedula de identidad por ambos lados' },
-  { type: 'liquidaciones', label: '6 ultimas liquidaciones de sueldo' },
-  { type: 'cotizaciones_afp', label: 'Cotizaciones AFP ultimo ano' },
-  { type: 'contrato_trabajo', label: 'Contrato de trabajo con antiguedad' },
+  { type: 'cedula_frontal', label: 'Cédula de identidad — lado frontal' },
+  { type: 'cedula_trasera', label: 'Cédula de identidad — lado trasero' },
+  { type: 'liquidaciones', label: '6 últimas liquidaciones de sueldo' },
+  { type: 'cotizaciones_afp', label: 'Cotizaciones AFP último año' },
+  { type: 'contrato_trabajo', label: 'Contrato de trabajo con antigüedad' },
   { type: 'deuda_cmf', label: 'Deuda CMF (se obtiene gratuita)' },
   { type: 'certificado_matrimonio', label: 'Certificado de matrimonio o no matrimonio' },
 ];
 
 const DOCS_DEP_COMP = [
-  { type: 'comp_cedula', label: 'Cedula de identidad por ambos lados' },
-  { type: 'comp_liquidaciones', label: '6 ultimas liquidaciones de sueldo' },
-  { type: 'comp_cotizaciones_afp', label: 'Cotizaciones AFP ultimo ano' },
-  { type: 'comp_contrato_trabajo', label: 'Contrato de trabajo con antiguedad' },
+  { type: 'comp_cedula_frontal', label: 'Cédula de identidad — lado frontal' },
+  { type: 'comp_cedula_trasera', label: 'Cédula de identidad — lado trasero' },
+  { type: 'comp_liquidaciones', label: '6 últimas liquidaciones de sueldo' },
+  { type: 'comp_cotizaciones_afp', label: 'Cotizaciones AFP último año' },
+  { type: 'comp_contrato_trabajo', label: 'Contrato de trabajo con antigüedad' },
   { type: 'comp_deuda_cmf', label: 'Deuda CMF (se obtiene gratuita)' },
   { type: 'comp_certificado_matrimonio', label: 'Certificado de matrimonio o no matrimonio' },
 ];
 
 const DOCS_IND = [
-  { type: 'cedula', label: 'Cedula de identidad por ambos lados' },
+  { type: 'cedula_frontal', label: 'Cédula de identidad — lado frontal' },
+  { type: 'cedula_trasera', label: 'Cédula de identidad — lado trasero' },
   { type: 'deuda_cmf', label: 'Informe de deudas CMF' },
   { type: 'certificado_matrimonio', label: 'Certificado de matrimonio o no matrimonio' },
   { type: 'carpeta_tributaria', label: 'Carpeta tributaria' },
-  { type: 'cotizaciones_afp', label: 'Certificado ultimas 12 cotizaciones AFP' },
-  { type: 'boletas_honorarios', label: 'Ultimas 12 boletas de honorarios' },
+  { type: 'cotizaciones_afp', label: 'Certificado últimas 12 cotizaciones AFP' },
+  { type: 'boletas_honorarios', label: 'Últimas 12 boletas de honorarios' },
 ];
 
 function buildDocItems(docs, containerEl, cssClass) {
@@ -140,8 +145,8 @@ function buildDocItems(docs, containerEl, cssClass) {
         ${isUploaded
           ? '<div class="uploaded-file">&#10003; Archivo subido correctamente</div>'
           : `<label class="file-btn" id="btn-${doc.type}">
-              &#128206; Seleccionar archivo (PDF, imagen)
-              <input type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.heic" onchange="uploadFile('${doc.type}', this)" multiple>
+              &#128206; ${CEDULA_TYPES.includes(doc.type) ? 'Seleccionar archivo (PDF o imagen)' : 'Seleccionar archivo (solo PDF)'}
+              <input type="file" accept="${CEDULA_TYPES.includes(doc.type) ? '.pdf,.png,.jpg,.jpeg' : '.pdf'}" onchange="uploadFile('${doc.type}', this)" multiple>
             </label>
             <div class="progress-bar" id="prog-${doc.type}"><div class="progress-fill" id="fill-${doc.type}"></div></div>`
         }

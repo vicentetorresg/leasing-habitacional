@@ -302,11 +302,12 @@ export default async function handler(req, res) {
 
     <p style="font-size:16px;color:#1A150F;line-height:1.7;margin:0 0 24px">${introText}</p>
 
-    <div style="background:linear-gradient(135deg,#1B3A6B,#2DB89E);border-radius:14px;padding:28px 24px;margin:0 0 28px;text-align:center">
-      <p style="font-size:20px;font-weight:800;color:#fff;margin:0 0 6px">Solo falta un paso</p>
-      <p style="font-size:14px;color:rgba(255,255,255,0.85);margin:0 0 20px;line-height:1.5">Sube tus documentos ahora para que podamos enviar tu caso a evaluacion con las entidades financieras.</p>
-      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#fff;color:#1B3A6B;font-size:20px;font-weight:900;padding:20px 56px;border-radius:14px;text-decoration:none;letter-spacing:0.3px;box-shadow:0 6px 20px rgba(0,0,0,0.2)">SUBIR DOCUMENTOS AHORA</a>
-    </div>
+    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 28px"><tr><td align="center" style="background:#2DB89E;border-radius:16px;padding:32px 28px">
+      <p style="font-size:24px;font-weight:900;color:#fff;margin:0 0 8px">Solo falta un paso</p>
+      <p style="font-size:15px;color:rgba(255,255,255,0.9);margin:0 0 24px;line-height:1.5">Sube tus documentos ahora para enviar tu caso a evaluacion.</p>
+      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#fff;color:#1B3A6B;font-size:18px;font-weight:900;padding:18px 40px;border-radius:12px;text-decoration:none;letter-spacing:0.3px;box-shadow:0 4px 16px rgba(0,0,0,0.15)">SUBE TUS DOCUMENTOS AQUÍ</a>
+      <p style="font-size:12px;color:rgba(255,255,255,0.7);margin:12px 0 0">Solo toma 5 minutos</p>
+    </td></tr></table>
 
     <div style="background:#FEF3E2;border:1.5px solid rgba(230,126,34,0.25);border-radius:10px;padding:14px 18px;margin:0 0 24px;text-align:center">
       <p style="font-size:14px;color:#1B3A6B;margin:0;line-height:1.6;font-weight:700">Mientras antes envies tu documentacion, antes podremos darte una respuesta.</p>
@@ -332,10 +333,10 @@ export default async function handler(req, res) {
       <p style="font-size:12px;color:#1B3A6B;margin:0;line-height:1.6"><strong>Si complementas renta con otra persona</strong>, necesitamos los mismos documentos de ella.</p>
     </div>
 
-    <div style="text-align:center;margin:0 0 28px">
-      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#2DB89E;color:#fff;font-size:18px;font-weight:800;padding:18px 50px;border-radius:12px;text-decoration:none;letter-spacing:0.3px;box-shadow:0 4px 14px rgba(45,184,158,0.3)">SUBIR DOCUMENTOS</a>
-      <p style="font-size:13px;color:#888;margin:10px 0 0">Tambien puedes enviarlos respondiendo este correo.</p>
+    <div style="text-align:center;margin:0 0 20px">
+      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#2DB89E;color:#fff;font-size:18px;font-weight:900;padding:18px 44px;border-radius:12px;text-decoration:none;letter-spacing:0.3px;box-shadow:0 4px 14px rgba(45,184,158,0.3)">SUBE TUS DOCUMENTOS AQUÍ</a>
     </div>
+    <p style="font-size:13px;color:#888;margin:0 0 20px;text-align:center">También puedes enviarlos respondiendo este correo.</p>
 
     <div style="text-align:center;margin:0 0 8px">
       <a href="https://wa.me/56962078510" target="_blank" style="display:inline-block;background:#25D366;color:#fff;font-size:15px;font-weight:800;padding:14px 36px;border-radius:12px;text-decoration:none">WhatsApp</a>

@@ -21,6 +21,8 @@ interface LeadDocumentsProps {
 
 const DOC_LABELS: Record<string, string> = {
   cedula: 'Cédula de identidad',
+  cedula_frontal: 'Cédula - Frontal',
+  cedula_trasera: 'Cédula - Trasera',
   liquidaciones: 'Liquidaciones de sueldo',
   cotizaciones_afp: 'Cotizaciones AFP',
   contrato_trabajo: 'Contrato de trabajo',
@@ -29,6 +31,8 @@ const DOC_LABELS: Record<string, string> = {
   carpeta_tributaria: 'Carpeta tributaria',
   boletas_honorarios: 'Boletas honorarios',
   comp_cedula: 'Comp. - Cédula',
+  comp_cedula_frontal: 'Comp. - Cédula Frontal',
+  comp_cedula_trasera: 'Comp. - Cédula Trasera',
   comp_liquidaciones: 'Comp. - Liquidaciones',
   comp_cotizaciones_afp: 'Comp. - Cotizaciones AFP',
   comp_contrato_trabajo: 'Comp. - Contrato',
