@@ -118,6 +118,18 @@ export default async function handler(req, res) {
   const { nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, precio_propiedad_ok, complementa_renta, renta_complemento, cuando_comprar, fuente, utm_source, utm_medium, utm_campaign } = req.body || {};
   if (!nombre || !telefono) return res.status(400).json({ error: 'Faltan campos' });
 
+  // Blocklist
+  const BLOCKED_EMAILS = ['acmari2030@gmail.com'];
+  const BLOCKED_PHONES = ['993866203'];
+  const BLOCKED_NAMES  = ['ambrosio escobar', 'ambosio escobar'];
+  const normPhone = (telefono || '').replace(/\D/g, '').slice(-9);
+  const normName  = (nombre || '').toLowerCase().trim();
+  if (BLOCKED_EMAILS.includes((email || '').toLowerCase().trim()) ||
+      BLOCKED_PHONES.some(bp => normPhone.endsWith(bp)) ||
+      BLOCKED_NAMES.includes(normName)) {
+    return res.status(200).json({ saved: true, emailed: true, wa: '56962078510' });
+  }
+
   const SUPA_URL = 'https://unptkiyggkuxtkzedluv.supabase.co/rest/v1/leasing_leads';
   const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const RESEND_KEY = process.env.RESEND_API_KEY;
@@ -147,7 +159,7 @@ export default async function handler(req, res) {
     saved = r.ok;
   }
 
-  // 1b. Dual-write to CRM Supabase (leads table)
+  // 1b. Dual-write to CRM Supabase (leads table) with round-robin assignment
   const docToken = crypto.randomUUID();
   const normalizePhone = (raw) => {
     if (!raw) return '';
@@ -157,6 +169,20 @@ export default async function handler(req, res) {
     else if (!p.startsWith('+') && p.length > 0) p = '+' + p;
     return p;
   };
+
+  // Round-robin: alternate based on last assigned lead
+  const KARINA_ID = '6608503b-3cc7-447a-9ffd-f8f94795cd50';
+  const COMERCIAL_ID = '9f156deb-c219-4b51-b454-5a4692629332';
+  let assignedTo = KARINA_ID;
+  try {
+    const crmBase = 'https://evuxdhvvarfxredghvpu.supabase.co/rest/v1';
+    const crmHeaders = { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY };
+    const lastRes = await fetch(`${crmBase}/leads?is_demo=eq.false&select=assigned_to&order=created_at.desc&limit=1`, { headers: crmHeaders });
+    const lastData = await lastRes.json();
+    const lastAssigned = lastData?.[0]?.assigned_to;
+    assignedTo = lastAssigned === KARINA_ID ? COMERCIAL_ID : KARINA_ID;
+  } catch {}
+
   const crmLead = {
     name: nombre,
     phone: normalizePhone(telefono),
@@ -164,6 +190,7 @@ export default async function handler(req, res) {
     source: fuente || 'web',
     status: 'nuevo',
     is_demo: false,
+    assigned_to: assignedTo,
     sueldo_liquido_raw: renta || null,
     en_dicom: dicom === 'si' ? true : dicom === 'no' ? false : null,
     arriendo: arriendo || null,
@@ -248,14 +275,15 @@ export default async function handler(req, res) {
 </table>
 </body></html>`;
 
-  // 2a. Notification email to team
+  // 2a. Notification email to team (only the assigned ejecutiva)
+  const ejecutivaEmail = assignedTo === COMERCIAL_ID ? 'comercial@llavepropia.cl' : 'karina.valenzuela@llavepropia.cl';
   const emailRes = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       from:    'Llave Propia <notificaciones@proppi.cl>',
       to:      ['rodrigo.canas@llavepropia.cl'],
-      bcc:     ['vicente@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'],
+      bcc:     ['vicente@llavepropia.cl', ejecutivaEmail],
       subject: `🏠 Nuevo lead: ${nombre} — ${producto}`,
       html
     })
@@ -282,14 +310,21 @@ export default async function handler(req, res) {
     const badgeColor = isCondicionado ? '#e67e22' : '#2B7A4E';
     const badgeBg = isCondicionado ? 'linear-gradient(135deg,#FEF3E2,#FFF8EE)' : 'linear-gradient(135deg,#D5F5E3,#E5F7F4)';
     const badgeBorder = isCondicionado ? 'rgba(230,126,34,0.3)' : 'rgba(45,184,158,0.3)';
-    const badgeSubtext = isCondicionado
-      ? 'Tu renta requiere complementar con otra persona. Sujeto a verificación de ambas rentas.'
-      : 'Según los datos que nos enviaste, pre calificas para comprar una vivienda.';
-    const introText = isCondicionado
-      ? `Hola <strong>${firstName}</strong>! Según la información que declaraste, podrías acceder al Leasing Habitacional DS120, <strong>condicionado a que complementes tu renta con otra persona</strong>.`
-      : `Hola <strong>${firstName}</strong>! Según la información que declaraste, cumples con los requisitos iniciales para acceder al Leasing Habitacional DS120.`;
-
     const uploadUrl = `https://www.llavepropia.cl/documentos.html?t=${docToken}`;
+
+    const headlineText = isCondicionado
+      ? `${firstName}, tienes una oportunidad para tu casa propia`
+      : `Felicidades ${firstName}, estas pre-aprobado!`;
+    const subtitleText = isCondicionado
+      ? 'Pre-aprobado condicionado para Leasing Habitacional'
+      : 'Pre-aprobado para Leasing Habitacional';
+    const introText = isCondicionado
+      ? `Segun la informacion que nos enviaste, <strong>podrias acceder al Leasing Habitacional con subsidio del Estado</strong>, condicionado a que complementes tu renta con otra persona. Para confirmar tu pre-aprobacion, necesitamos verificar tu documentacion.`
+      : `Segun la informacion que nos enviaste, <strong>calificas para comprar tu vivienda con subsidio del Estado</strong> a traves del Leasing Habitacional DS120. Para formalizar tu proceso de compra, necesitamos verificar tu documentacion.`;
+    const urgencyText = isCondicionado
+      ? 'Los cupos para complementar renta son limitados. Confirma tu pre-aprobacion lo antes posible.'
+      : 'Tu pre-aprobacion tiene vigencia limitada. Asegura tu cupo enviando tus documentos ahora.';
+
     const preApprovalHtml = `<div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;background:#FEFCF7;border-radius:16px;overflow:hidden;border:1px solid #EDE3D4">
   <div style="background:linear-gradient(135deg,#1B3A6B,#243870);padding:28px;text-align:center">
     <img src="https://www.llavepropia.cl/logo-lp.png" alt="Llave Propia" width="140" style="display:inline-block;height:auto;max-width:140px">
@@ -297,49 +332,48 @@ export default async function handler(req, res) {
   <div style="padding:32px 28px">
     <div style="background:${badgeBg};border:2px solid ${badgeBorder};border-radius:14px;padding:22px 24px;margin:0 0 24px;text-align:center">
       <p style="font-size:28px;font-weight:900;color:${badgeColor};margin:0 0 6px;letter-spacing:-0.5px">${badgeLabel}</p>
-      <p style="font-size:14px;color:#1B3A6B;margin:0;font-weight:600;line-height:1.5">${badgeSubtext}</p>
+      <p style="font-size:14px;color:#1B3A6B;margin:0;font-weight:600;line-height:1.5">${subtitleText}</p>
     </div>
 
     <p style="font-size:16px;color:#1A150F;line-height:1.7;margin:0 0 24px">${introText}</p>
 
-    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 28px"><tr><td align="center" style="background:#2DB89E;border-radius:16px;padding:32px 28px">
-      <p style="font-size:24px;font-weight:900;color:#fff;margin:0 0 8px">Solo falta un paso</p>
-      <p style="font-size:15px;color:rgba(255,255,255,0.9);margin:0 0 24px;line-height:1.5">Sube tus documentos ahora para enviar tu caso a evaluacion.</p>
-      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#fff;color:#1B3A6B;font-size:18px;font-weight:900;padding:18px 40px;border-radius:12px;text-decoration:none;letter-spacing:0.3px;box-shadow:0 4px 16px rgba(0,0,0,0.15)">SUBE TUS DOCUMENTOS AQUÍ</a>
+    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 24px"><tr><td align="center" style="background:#2DB89E;border-radius:16px;padding:32px 28px">
+      <p style="font-size:24px;font-weight:900;color:#fff;margin:0 0 8px">${isCondicionado ? 'Confirma tu oportunidad' : 'Solo falta un paso'}</p>
+      <p style="font-size:15px;color:rgba(255,255,255,0.9);margin:0 0 24px;line-height:1.5">Revisa tu pre-aprobacion y sube tus documentos para avanzar con la compra de tu vivienda.</p>
+      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#fff;color:#1B3A6B;font-size:18px;font-weight:900;padding:18px 40px;border-radius:12px;text-decoration:none;letter-spacing:0.3px;box-shadow:0 4px 16px rgba(0,0,0,0.15)">REVISA TU PRE-APROBACION</a>
       <p style="font-size:12px;color:rgba(255,255,255,0.7);margin:12px 0 0">Solo toma 5 minutos</p>
     </td></tr></table>
 
     <div style="background:#FEF3E2;border:1.5px solid rgba(230,126,34,0.25);border-radius:10px;padding:14px 18px;margin:0 0 24px;text-align:center">
-      <p style="font-size:14px;color:#1B3A6B;margin:0;line-height:1.6;font-weight:700">Mientras antes envies tu documentacion, antes podremos darte una respuesta.</p>
+      <p style="font-size:14px;color:#1B3A6B;margin:0;line-height:1.6;font-weight:700">${urgencyText}</p>
     </div>
 
-    <p style="font-size:15px;font-weight:700;color:#1B3A6B;margin:0 0 14px">Documentos que necesitamos:</p>
+    <p style="font-size:14px;font-weight:700;color:#1B3A6B;margin:0 0 12px">Documentos que necesitaremos verificar:</p>
 
-    <div style="background:#fff;border:1.5px solid #EDE3D4;border-radius:12px;padding:18px 20px;margin:0 0 14px">
-      <p style="font-size:12px;font-weight:800;color:#2DB89E;margin:0 0 10px;text-transform:uppercase;letter-spacing:1px">Dependientes</p>
+    <div style="background:#fff;border:1.5px solid #EDE3D4;border-radius:12px;padding:16px 18px;margin:0 0 12px">
+      <p style="font-size:11px;font-weight:800;color:#2DB89E;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px">Dependientes</p>
       <table cellpadding="0" cellspacing="0" border="0" width="100%" style="font-size:13px;color:#1A150F">
-        ${['Cedula de identidad por ambos lados','6 ultimas liquidaciones de sueldo','Cotizaciones AFP ultimo ano','Contrato de trabajo con antiguedad','Deuda CMF (se obtiene gratuita)','Certificado de matrimonio o no matrimonio'].map((d,i) => `<tr><td width="26" valign="middle" style="padding:4px 0"><div style="background:#2DB89E;color:#fff;width:20px;height:20px;border-radius:50%;text-align:center;line-height:20px;font-size:10px;font-weight:800">${i+1}</div></td><td style="padding:4px 0 4px 8px">${d}</td></tr>`).join('')}
+        ${['Cedula de identidad por ambos lados','6 ultimas liquidaciones de sueldo','Cotizaciones AFP ultimo ano','Contrato de trabajo con antiguedad','Deuda CMF (se obtiene gratuita)','Certificado de matrimonio o no matrimonio'].map((d,i) => `<tr><td width="24" valign="middle" style="padding:3px 0"><div style="background:#2DB89E;color:#fff;width:18px;height:18px;border-radius:50%;text-align:center;line-height:18px;font-size:9px;font-weight:800">${i+1}</div></td><td style="padding:3px 0 3px 6px">${d}</td></tr>`).join('')}
       </table>
     </div>
 
-    <div style="background:#fff;border:1.5px solid #EDE3D4;border-radius:12px;padding:18px 20px;margin:0 0 14px">
-      <p style="font-size:12px;font-weight:800;color:#1B3A6B;margin:0 0 10px;text-transform:uppercase;letter-spacing:1px">Independientes</p>
+    <div style="background:#fff;border:1.5px solid #EDE3D4;border-radius:12px;padding:16px 18px;margin:0 0 12px">
+      <p style="font-size:11px;font-weight:800;color:#1B3A6B;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px">Independientes</p>
       <table cellpadding="0" cellspacing="0" border="0" width="100%" style="font-size:13px;color:#1A150F">
-        ${['Cedula de identidad por ambos lados','Informe de deudas CMF','Certificado de matrimonio o no matrimonio','Carpeta tributaria','Certificado ultimas 12 cotizaciones AFP','Ultimas 12 boletas de honorarios'].map((d,i) => `<tr><td width="26" valign="middle" style="padding:4px 0"><div style="background:#1B3A6B;color:#fff;width:20px;height:20px;border-radius:50%;text-align:center;line-height:20px;font-size:10px;font-weight:800">${i+1}</div></td><td style="padding:4px 0 4px 8px">${d}</td></tr>`).join('')}
+        ${['Cedula de identidad por ambos lados','Informe de deudas CMF','Certificado de matrimonio o no matrimonio','Carpeta tributaria','Certificado ultimas 12 cotizaciones AFP','Ultimas 12 boletas de honorarios'].map((d,i) => `<tr><td width="24" valign="middle" style="padding:3px 0"><div style="background:#1B3A6B;color:#fff;width:20px;height:20px;border-radius:50%;text-align:center;line-height:20px;font-size:10px;font-weight:800">${i+1}</div></td><td style="padding:3px 0 3px 6px">${d}</td></tr>`).join('')}
       </table>
     </div>
 
-    <div style="background:#E5F7F4;border:1px solid rgba(45,184,158,0.3);border-radius:10px;padding:12px 16px;margin:0 0 24px">
-      <p style="font-size:12px;color:#1B3A6B;margin:0;line-height:1.6"><strong>Si complementas renta con otra persona</strong>, necesitamos los mismos documentos de ella.</p>
+    <div style="background:#E5F7F4;border:1px solid rgba(45,184,158,0.3);border-radius:10px;padding:10px 14px;margin:0 0 24px">
+      <p style="font-size:12px;color:#1B3A6B;margin:0;line-height:1.5"><strong>Si complementas renta</strong>, necesitamos los mismos documentos de esa persona.</p>
     </div>
 
     <div style="text-align:center;margin:0 0 20px">
-      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#2DB89E;color:#fff;font-size:18px;font-weight:900;padding:18px 44px;border-radius:12px;text-decoration:none;letter-spacing:0.3px;box-shadow:0 4px 14px rgba(45,184,158,0.3)">SUBE TUS DOCUMENTOS AQUÍ</a>
+      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#2DB89E;color:#fff;font-size:16px;font-weight:900;padding:16px 40px;border-radius:12px;text-decoration:none;box-shadow:0 4px 14px rgba(45,184,158,0.3)">VER MI PRE-APROBACION</a>
     </div>
-    <p style="font-size:13px;color:#888;margin:0 0 20px;text-align:center">También puedes enviarlos respondiendo este correo.</p>
-
+    <p style="font-size:13px;color:#888;margin:0 0 16px;text-align:center">Tambien puedes enviarlos respondiendo este correo o por WhatsApp:</p>
     <div style="text-align:center;margin:0 0 8px">
-      <a href="https://wa.me/56962078510" target="_blank" style="display:inline-block;background:#25D366;color:#fff;font-size:15px;font-weight:800;padding:14px 36px;border-radius:12px;text-decoration:none">WhatsApp</a>
+      <a href="https://wa.me/${assignedTo === COMERCIAL_ID ? '56957852275' : '56962078510'}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;font-size:14px;font-weight:800;padding:12px 32px;border-radius:12px;text-decoration:none">WhatsApp</a>
     </div>
   </div>
   <div style="background:#F7F0E6;padding:18px 28px;text-align:center;border-top:1px solid #EDE3D4">
@@ -354,13 +388,13 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         from: 'Llave Propia <notificaciones@proppi.cl>',
         to: [email],
-        cc: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'],
-        reply_to: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'],
-        subject: isCondicionado ? `${firstName}, estas pre-aprobado! Sube tus documentos y acercate a tu casa propia` : `${firstName}, estas pre-aprobado! Sube tus documentos y acercate a tu casa propia`,
+        reply_to: ['rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl'],
+        subject: isCondicionado ? `${firstName}, tenemos novedades sobre tu evaluacion` : `Tu resultado de pre-evaluacion esta listo, ${firstName}`,
         html: preApprovalHtml
       })
     }).catch(() => null);
   }
 
-  return res.status(200).json({ saved, emailed: emailRes.ok });
+  const WA_MAP = { [KARINA_ID]: '56962078510', [COMERCIAL_ID]: '56957852275' };
+  return res.status(200).json({ saved, emailed: emailRes.ok, wa: WA_MAP[assignedTo] || '56962078510' });
 }

@@ -77,11 +77,13 @@ export function useLeads(userId?: string, isAdmin?: boolean, userEmail?: string,
       .eq('is_demo', isDemo)
       .order('created_at', { ascending: false });
 
-    // All users see all leads (no assigned_to filter)
-    const EJECUTIVA_STATUSES = ['nuevo', 'contactado', 'recontactar', 'no_contesta', 'no_califica', 'calling', 'esperando_documentos'];
+    const EJECUTIVA_STATUSES = ['new', 'nuevo', 'contactado', 'recontactar', 'no_contesta', 'no_califica', 'calling', 'esperando_documentos', 'solicitando_documentos', 'enviado_a_evaluar', 'aprobado', 'aprobado_ok', 'buscando_vivienda', 'rechaza_oferta', 'set_hipotecario_firmado', 'escritura_firmada', 'cbr_listo', 'rechazado', 'archivado'];
 
-    if (isAdmin || userId) {
+    if (isAdmin) {
       query = query.in('status', EJECUTIVA_STATUSES);
+    } else if (userId) {
+      // Each ejecutiva only sees their own assigned leads
+      query = query.in('status', EJECUTIVA_STATUSES).eq('assigned_to', userId);
     }
 
     const { data } = await query;

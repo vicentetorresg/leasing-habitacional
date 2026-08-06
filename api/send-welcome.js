@@ -1,8 +1,27 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { nombre, email, producto } = req.body;
+  const { nombre, email, producto, assigned_to } = req.body;
   if (!nombre || !email || !producto) return res.status(400).json({ error: 'Faltan campos' });
+
+  const COMERCIAL_ID = '9f156deb-c219-4b51-b454-5a4692629332';
+  // Determine ejecutiva email: use passed assigned_to, or look up from CRM
+  let ejecutivaEmail = 'karina.valenzuela@llavepropia.cl';
+  if (assigned_to === COMERCIAL_ID) {
+    ejecutivaEmail = 'comercial@llavepropia.cl';
+  } else if (!assigned_to) {
+    try {
+      const CRM_URL = 'https://evuxdhvvarfxredghvpu.supabase.co';
+      const CRM_KEY = process.env.CRM_SERVICE_ROLE_KEY;
+      if (CRM_KEY) {
+        const lr = await fetch(`${CRM_URL}/rest/v1/leads?email=eq.${encodeURIComponent(email)}&select=assigned_to&order=created_at.desc&limit=1`, {
+          headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY }
+        });
+        const ld = await lr.json();
+        if (ld?.[0]?.assigned_to === COMERCIAL_ID) ejecutivaEmail = 'comercial@llavepropia.cl';
+      }
+    } catch {}
+  }
 
   const isLeasing = producto === 'leasing';
   const productoLabel = isLeasing ? 'Leasing Habitacional DS120' : 'Mutuo Hipotecario';
@@ -139,8 +158,8 @@ export default async function handler(req, res) {
     body: JSON.stringify({
       from:     'Llave Propia Vivienda <notificaciones@proppi.cl>',
       to:       [email],
-      cc:       ['rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'],
-      reply_to: ['rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl'],
+      cc:       ['rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl', ejecutivaEmail],
+      reply_to: ['rodrigo.canas@llavepropia.cl', ejecutivaEmail],
       subject: `Documentación para tu ${productoLabel} — Llave Propia`,
       html
     })

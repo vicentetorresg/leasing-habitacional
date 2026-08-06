@@ -158,6 +158,8 @@ const Advisor = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterMonth, setFilterMonth] = useState('all');
   const [filterAdvisor, setFilterAdvisor] = useState('all');
+  const [ejecutivasList, setEjecutivasList] = useState<{ user_id: string; full_name: string }[]>([]);
+  const [filterEjecutivas, setFilterEjecutivas] = useState<Set<string>>(new Set());
   const [projectsList, setProjectsList] = useState<string[]>([]);
   const [showAddLead, setShowAddLead] = useState(false);
   const [newLeadData, setNewLeadData] = useState({ name: '', phone: '', email: '', rut: '', sueldo_liquido_raw: '' });
@@ -232,6 +234,18 @@ const Advisor = () => {
           setAdvisors(list.map(a => ({ ...a, full_name: advisorDemoMap[a.user_id] || a.full_name })));
         } else {
           setAdvisors(list);
+        }
+      }
+
+      // Fetch ejecutivas for admin filter
+      if (role === 'admin') {
+        const { data: ejRoles } = await supabase.from('user_roles').select('user_id').eq('role', 'ejecutiva');
+        if (ejRoles && ejRoles.length > 0) {
+          const ejIds = ejRoles.map(r => r.user_id);
+          const { data: ejProfiles } = await supabase.from('profiles').select('user_id, full_name').in('user_id', ejIds);
+          if (ejProfiles) {
+            setEjecutivasList(ejProfiles as { user_id: string; full_name: string }[]);
+          }
         }
       }
     };
@@ -542,11 +556,14 @@ const Advisor = () => {
     await Promise.all(updates);
   };
 
-  // Filter leads: archived toggle, advisor filter, month filter, then search
+  // Filter leads: archived toggle, ejecutiva filter, advisor filter, month filter, then search
   const baseLeads = showArchived ? leads : leads.filter(l => l.status !== 'archivado');
-  const advisorFilteredLeads = filterAdvisor === 'all'
+  const ejecutivaFilteredLeads = filterEjecutivas.size === 0
     ? baseLeads
-    : baseLeads.filter(l => l.advisor_id === filterAdvisor);
+    : baseLeads.filter(l => l.assigned_to && filterEjecutivas.has(l.assigned_to));
+  const advisorFilteredLeads = filterAdvisor === 'all'
+    ? ejecutivaFilteredLeads
+    : ejecutivaFilteredLeads.filter(l => l.advisor_id === filterAdvisor);
   const monthFilteredLeads = filterMonth === 'all'
     ? advisorFilteredLeads
     : advisorFilteredLeads.filter(l => {
@@ -683,6 +700,9 @@ const Advisor = () => {
         filterAdvisor={filterAdvisor}
         setFilterAdvisor={setFilterAdvisor}
         onAddLead={() => setShowAddLead(true)}
+        ejecutivasList={ejecutivasList}
+        filterEjecutivas={filterEjecutivas}
+        setFilterEjecutivas={setFilterEjecutivas}
       />
         <div className="p-6 space-y-6">
           <h2 className="text-xl font-black text-foreground">📊 Resumen de Asesorías</h2>
@@ -840,6 +860,9 @@ const Advisor = () => {
         filterAdvisor={filterAdvisor}
         setFilterAdvisor={setFilterAdvisor}
         onAddLead={() => setShowAddLead(true)}
+        ejecutivasList={ejecutivasList}
+        filterEjecutivas={filterEjecutivas}
+        setFilterEjecutivas={setFilterEjecutivas}
       />
 
       {/* Kanban Board */}
@@ -1275,6 +1298,7 @@ const Advisor = () => {
 function TopBar({
   role, signOut, displayName, email, roleLabel, showArchived, setShowArchived, showStats, setShowStats, leadsCount, searchQuery, setSearchQuery, allLeads, filterMonth, setFilterMonth, availableMonths,
   isAdminOrEjecutiva, advisors, filterAdvisor, setFilterAdvisor, onAddLead,
+  ejecutivasList, filterEjecutivas, setFilterEjecutivas,
 }: {
   role: string | null; signOut: () => void;
   displayName: string; email: string; roleLabel: string;
@@ -1289,6 +1313,9 @@ function TopBar({
   advisors?: ProfileData[];
   filterAdvisor?: string; setFilterAdvisor?: (v: string) => void;
   onAddLead?: () => void;
+  ejecutivasList?: { user_id: string; full_name: string }[];
+  filterEjecutivas?: Set<string>;
+  setFilterEjecutivas?: (v: Set<string>) => void;
 }) {
   return (
     <div className="px-4 py-2 border-b border-border bg-card space-y-2">
@@ -1398,6 +1425,33 @@ function TopBar({
               ))}
             </select>
           )}
+          {role === 'admin' && ejecutivasList && ejecutivasList.length > 0 && setFilterEjecutivas && filterEjecutivas && (
+            <div className="flex items-center gap-1 ml-1">
+              <span className="text-[10px] text-muted-foreground font-bold mr-0.5">Ejecutiva:</span>
+              <button
+                onClick={() => setFilterEjecutivas(new Set())}
+                className={`px-2 py-0.5 rounded-full text-[10px] font-bold transition-colors ${filterEjecutivas.size === 0 ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
+              >
+                Todas
+              </button>
+              {ejecutivasList.map(ej => {
+                const active = filterEjecutivas.has(ej.user_id);
+                return (
+                  <button
+                    key={ej.user_id}
+                    onClick={() => {
+                      const next = new Set(filterEjecutivas);
+                      if (active) next.delete(ej.user_id); else next.add(ej.user_id);
+                      setFilterEjecutivas(next);
+                    }}
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-bold transition-colors ${active ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
+                  >
+                    {ej.full_name.split(' ')[0]}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -1475,7 +1529,7 @@ function LeadDetailContent({
   onDeleteNote: (noteId: string) => void;
   onEditNote: (noteId: string, newText: string) => Promise<void>;
 }) {
-  const canEditAdvisorFields = role === 'admin' || role === 'asesor';
+  const canEditAdvisorFields = role === 'admin' || role === 'asesor' || role === 'ejecutiva';
   const fmtUf = (v: number | null) => v != null ? v.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
   const parseUf = (s: string) => { const n = parseFloat(s.replace(/\./g, '').replace(',', '.')); return isNaN(n) ? null : n; };
   const [ufSinBp, setUfSinBp] = useState(lead.uf_sin_bp?.toString() ?? '');

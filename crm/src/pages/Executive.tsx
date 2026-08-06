@@ -5,7 +5,6 @@ import { useAuth } from '@/hooks/useAuth';
 import UserMenu from '@/components/UserMenu';
 import { useLeads, useRealtimeLeads, updateLeadStatus, createCallAttempt, assignLead, deleteLead, getPendingLeads, type Lead } from '@/hooks/useLeads';
 import { useSettings } from '@/hooks/useSettings';
-import { useDailyPerformanceTracker } from '@/hooks/useDailyPerformanceTracker';
 
 import { supabase } from '@/integrations/supabase/client';
 import LeadPriorityPanel from '@/components/LeadPriorityPanel';
@@ -50,8 +49,9 @@ const Executive = () => {
   const [newLeadName, setNewLeadName] = useState('');
   const [newLeadPhone, setNewLeadPhone] = useState('');
   const [isCallDialogOpen, setIsCallDialogOpen] = useState(false);
+  const [ejecutivasList, setEjecutivasList] = useState<{ user_id: string; full_name: string }[]>([]);
+  const [filterEjecutivas, setFilterEjecutivas] = useState<Set<string>>(new Set());
   const [todayCalledLeadIds, setTodayCalledLeadIds] = useState<Set<string>>(new Set());
-  const [perfRows, setPerfRows] = useState<{ date: string; full_name: string; calls_made: number; scheduled_made: number }[] | null>(null);
 
   const DEMO_ADVISOR_NAMES = ['Alejandro Reyes', 'Camila Fuentes', 'Sebastián Mora', 'Daniela Pinto'];
 
@@ -81,8 +81,19 @@ const Executive = () => {
       }
     };
     fetchAdvisors();
+    // Fetch ejecutivas for admin filter
+    if (role === 'admin') {
+      (async () => {
+        const { data: ejRoles } = await supabase.from('user_roles').select('user_id').eq('role', 'ejecutiva');
+        if (ejRoles && ejRoles.length > 0) {
+          const ejIds = ejRoles.map(r => r.user_id);
+          const { data: ejProfiles } = await supabase.from('profiles').select('user_id, full_name').in('user_id', ejIds);
+          if (ejProfiles && !cancelled) setEjecutivasList(ejProfiles as { user_id: string; full_name: string }[]);
+        }
+      })();
+    }
     return () => { cancelled = true; };
-  }, [isDemo]);
+  }, [isDemo, role]);
 
   // Manual & incoming calls disabled (Twilio desactivado)
   const manualCalls: { id: string; phone: string; created_at: string; status: string }[] = [];
@@ -103,40 +114,12 @@ const Executive = () => {
       });
   }, [user?.id, leads]);
 
-  // Fetch daily performance table (auto-refresh every 60s)
-  useEffect(() => {
-    const fetchPerf = async () => {
-      const { data, error } = await supabase
-        .from('daily_performance' as any)
-        .select('date, user_id, calls_made, scheduled_made')
-        .order('date', { ascending: false })
-        .limit(200);
-      if (error) { console.error('[perf]', error); setPerfRows([]); return; }
-      if (!data) { setPerfRows([]); return; }
-      const userIds = [...new Set((data as any[]).map((r: any) => r.user_id))];
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('user_id, full_name')
-        .in('user_id', userIds);
-      const nameMap: Record<string, string> = {};
-      (profiles ?? []).forEach((p: any) => { nameMap[p.user_id] = p.full_name; });
-      setPerfRows((data as any[])
-        .map((r: any) => ({
-          date: r.date,
-          full_name: nameMap[r.user_id] ?? r.user_id,
-          calls_made: r.calls_made,
-          scheduled_made: r.scheduled_made,
-        }))
-        .sort((a, b) => b.date.localeCompare(a.date) || a.full_name.localeCompare(b.full_name))
-      );
-    };
-    fetchPerf();
-    const interval = setInterval(fetchPerf, 60_000);
-    return () => clearInterval(interval);
-  }, []);
 
-  // Get ALL pending leads (carry over from previous days)
-  const pendingAll = getPendingLeads(leads, user?.id);
+  // Get ALL pending leads (carry over from previous days), filtered by ejecutiva if selected
+  const filteredLeads = filterEjecutivas.size > 0
+    ? leads.filter(l => l.assigned_to && filterEjecutivas.has(l.assigned_to))
+    : leads;
+  const pendingAll = getPendingLeads(filteredLeads, user?.id);
 
   // Leads available for priority (exclude recently actioned ones)
   const availableForPriority = pendingAll.filter(l => !skippedLeadIds.has(l.id));
@@ -150,8 +133,12 @@ const Executive = () => {
   // should remain visible as "Agendado"
   const HIDDEN_STATUSES = ['archived'];
 
-  // All leads relevant to executive (only exclude archived)
-  const executiveLeads = leads.filter(l => !HIDDEN_STATUSES.includes(l.status));
+  // All leads relevant to executive (only exclude archived, optionally filter by ejecutiva)
+  const executiveLeads = leads.filter(l => {
+    if (HIDDEN_STATUSES.includes(l.status)) return false;
+    if (filterEjecutivas.size > 0 && (!l.assigned_to || !filterEjecutivas.has(l.assigned_to))) return false;
+    return true;
+  });
 
   // Today's leads — only leads with a real call_attempt today
   const todayLeads = leads.filter(l =>
@@ -184,13 +171,6 @@ const Executive = () => {
   // NOTE: Removed UPDATE realtime subscription — caused double re-fetch on every action
   // (handleAction already calls refetch() explicitly after each update)
 
-  // Track daily performance
-  useDailyPerformanceTracker({
-    userId: user?.id,
-    todayLeads: todayLeadsForGoals,
-    goalCalls: settings.daily_goal_calls,
-    goalScheduled: settings.daily_goal_scheduled,
-  });
 
   const handleAction = async (leadId: string, action: string, advisorId?: string, notes?: string) => {
     if (!user) return;
@@ -203,6 +183,18 @@ const Executive = () => {
         last_attempt_at: null
       }).eq('id', leadId);
       toast.success('Lead vuelto a Nuevo');
+      refetch();
+      return;
+    }
+
+    // Archive — save previous status so we can restore later
+    if (action === 'archivado') {
+      const lead = leads.find(l => l.id === leadId);
+      await supabase.from('leads').update({
+        status: 'archivado',
+        previous_status: lead?.status || null
+      }).eq('id', leadId);
+      toast.success('Lead archivado');
       refetch();
       return;
     }
@@ -385,13 +377,15 @@ const Executive = () => {
             <button
               onClick={async () => {
                 const EXCLUDED = ['set_hipotecario_firmado', 'escritura_firmada', 'cbr_listo', 'rechazado', 'archived'];
-                const { data } = await supabase
+                let query = supabase
                   .from('leads')
                   .select('id, name, phone, status, cuando_comprar, source, created_at')
                   .eq('is_demo', false)
                   .not('cuando_comprar', 'is', null)
                   .neq('cuando_comprar', '')
                   .order('cuando_comprar', { ascending: true });
+                if (role !== 'admin' && user) query = query.eq('assigned_to', user.id);
+                const { data } = await query;
                 setDailyPlanLeads((data || []).filter((l: any) => !EXCLUDED.includes(l.status)));
                 setDailyPlanFilter('all');
                 setShowDailyPlan(true);
@@ -425,6 +419,35 @@ const Executive = () => {
           />
         </div>
       </div>
+
+      {/* Ejecutiva filter for admin */}
+      {role === 'admin' && ejecutivasList.length > 0 && (
+        <div className="flex items-center gap-1.5 px-6 py-1.5 border-b border-border bg-card/50">
+          <span className="text-[11px] text-muted-foreground font-bold mr-1">Ejecutiva:</span>
+          <button
+            onClick={() => setFilterEjecutivas(new Set())}
+            className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold transition-colors ${filterEjecutivas.size === 0 ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
+          >
+            Todas
+          </button>
+          {ejecutivasList.map(ej => {
+            const active = filterEjecutivas.has(ej.user_id);
+            return (
+              <button
+                key={ej.user_id}
+                onClick={() => {
+                  const next = new Set(filterEjecutivas);
+                  if (active) next.delete(ej.user_id); else next.add(ej.user_id);
+                  setFilterEjecutivas(next);
+                }}
+                className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold transition-colors ${active ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
+              >
+                {ej.full_name.split(' ')[0]}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Metrics */}
       <div data-tour="metrics-bar">
@@ -489,6 +512,7 @@ const Executive = () => {
               lead={priorityLead}
               isFlashing={!!flashingLead}
               onAction={(leadId, action, advisorId, notes) => handleAction(leadId, action, advisorId, notes)}
+              onArchive={async (leadId) => { await handleAction(leadId, 'archivado'); }}
               onDelete={role === 'admin' ? (leadId) => setDeleteConfirmId(leadId) : undefined}
               animationKey={`${priorityLead?.id}-${selectedPendingId}`}
               onCallClick={handleCallClick}
@@ -502,36 +526,6 @@ const Executive = () => {
         </div>
       </div>
 
-      {/* Performance Table */}
-      <div className="px-3 pb-6">
-        <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">📊 Rendimiento diario</div>
-        {perfRows === null ? (
-          <p className="text-xs text-muted-foreground">Cargando...</p>
-        ) : perfRows.length === 0 ? (
-          <p className="text-xs text-muted-foreground">Sin datos aún.</p>
-        ) : (
-          <table className="text-sm border-collapse select-all" style={{ fontFamily: 'monospace' }}>
-            <thead>
-              <tr className="border-b border-border text-left text-xs text-muted-foreground uppercase tracking-wider">
-                <th className="py-1.5 pr-8">Fecha</th>
-                <th className="py-1.5 pr-8">Usuario</th>
-                <th className="py-1.5 pr-8 text-right">Llamados</th>
-                <th className="py-1.5 text-right">Agendados</th>
-              </tr>
-            </thead>
-            <tbody>
-              {perfRows.map((r, i) => (
-                <tr key={i} className="border-b border-border/40 hover:bg-muted/30">
-                  <td className="py-1 pr-8 text-muted-foreground">{r.date}</td>
-                  <td className="py-1 pr-8 font-medium text-foreground">{r.full_name}</td>
-                  <td className="py-1 pr-8 text-right">{r.calls_made}</td>
-                  <td className="py-1 text-right">{r.scheduled_made}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
 
       {/* New Lead Dialog */}
       <Dialog open={showNewLeadForm} onOpenChange={setShowNewLeadForm}>

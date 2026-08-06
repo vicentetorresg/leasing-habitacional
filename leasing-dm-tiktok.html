@@ -24,6 +24,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script>window.__WA_NUM='56962078510';</script>
   <!-- Meta Pixel -->
 <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1672155134115626');fbq('track','PageView');</script>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1672155134115626&ev=PageView&noscript=1"/></noscript>
@@ -1528,7 +1529,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     }
   });
 
-  function saveLead(data) {
+  async function saveLead(data) {
     aTrack('form_submit', data.fuente, null, null);
     // Backup local
     const leads = JSON.parse(localStorage.getItem('habita_leads') || '[]');
@@ -1536,11 +1537,17 @@ footer{background:var(--navy);padding:56px 40px 28px}
     localStorage.setItem('habita_leads', JSON.stringify(leads));
 
     // Enviar a Supabase + notificación email via Vercel
-    fetch('/api/new-lead', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    }).catch(() => {});
+    var waNum = '56962078510';
+    try {
+      var resp = await fetch('/api/new-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      var json = await resp.json();
+      if (json.wa) waNum = json.wa;
+    } catch(e) {}
+    window.__WA_NUM = waNum;
 
     if (typeof fbq !== 'undefined') fbq('track', 'Lead');
     if (typeof ttq !== 'undefined') {
@@ -1555,10 +1562,11 @@ footer{background:var(--navy);padding:56px 40px 28px}
       ttq.track('SubmitForm');
       ttq.track('CompleteRegistration');
     }
+    return waNum;
   }
 
   // generic form handler (nombre, telefono, email, arriendo)
-  function doForm(prefix, src) {
+  async function doForm(prefix, src) {
     const n = document.getElementById(prefix+'-n').value.trim();
     const t = document.getElementById(prefix+'-t').value.trim();
     const e = document.getElementById(prefix+'-e').value.trim();
@@ -1599,12 +1607,12 @@ footer{background:var(--navy);padding:56px 40px 28px}
     var cuandoEl = document.querySelector('input[name="cuando-'+prefix+'"]:checked');
     if (!cuandoEl) { alert('Por favor indica cuándo piensas comprar.'); return; }
     if (prefix === 'hf') setHfStep(3);
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, renta_complemento:rentaCompVal||'', cuando_comprar:cuandoEl.value, fuente:src, utm_source:_utm.source||'', utm_medium:_utm.medium||'', utm_campaign:_utm.campaign||''});
+    await saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, renta_complemento:rentaCompVal||'', cuando_comprar:cuandoEl.value, fuente:src, utm_source:_utm.source||'', utm_medium:_utm.medium||'', utm_campaign:_utm.campaign||''});
     markAllFormsSubmitted(n, cuandoEl.value, '', r?r.value:'');
   }
 
   // full form (includes radio)
-  function doFormFull(prefix, src) {
+  async function doFormFull(prefix, src) {
     const n = document.getElementById(prefix+'-n').value.trim();
     const t = document.getElementById(prefix+'-t').value.trim();
     const e = document.getElementById(prefix+'-e').value.trim();
@@ -1644,7 +1652,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     const complementaRenta = compVal === 'si' ? ('Sí' + (compQuienVal ? ' — ' + compQuienVal : '')) : compVal === 'no' ? 'No' : '';
     var cuandoEl = document.querySelector('input[name="cuando-'+prefix+'"]:checked');
     if (!cuandoEl) { alert('Por favor indica cuándo piensas comprar.'); return; }
-    saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:cf.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, renta_complemento:rentaCompVal||'', cuando_comprar:cuandoEl.value, fuente:src||prefix, utm_source:_utm.source||'', utm_medium:_utm.medium||'', utm_campaign:_utm.campaign||''});
+    await saveLead({nombre:n, telefono:t, email:e, arriendo:a?a.value:'', renta:r?r.value:'', dicom:d.value, contrato:cf.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, renta_complemento:rentaCompVal||'', cuando_comprar:cuandoEl.value, fuente:src||prefix, utm_source:_utm.source||'', utm_medium:_utm.medium||'', utm_campaign:_utm.campaign||''});
     markAllFormsSubmitted(n, cuandoEl.value, '', r?r.value:'');
   }
 
@@ -1744,7 +1752,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
           '<div class="doc-item' + darkItem + '" style="color:' + docColor + '"><span class="doc-num">5</span> Cert. ultimas 12 cotizaciones AFP</div>' +
           '<div class="doc-item' + darkItem + '" style="color:' + docColor + '"><span class="doc-num">6</span> Ultimas 12 boletas de honorarios</div>' +
         '</div>' +
-        '<a href="https://wa.me/56962078510?text=Hola%2C%20escribo%20para%20enviar%20mis%20documentos%20y%20formalizar%20evaluaci%C3%B3n%20para%20comprar%20una%20vivienda" class="f-wa-btn wa-doc-btn" data-form="' + f.ok + '" target="_blank" rel="noopener">' + WA_SVG + ' Enviar mis documentos AHORA por WhatsApp</a>' +
+        '<a href="https://wa.me/' + (window.__WA_NUM||'56962078510') + '?text=Hola%2C%20escribo%20para%20enviar%20mis%20documentos%20y%20formalizar%20evaluaci%C3%B3n%20para%20comprar%20una%20vivienda" class="f-wa-btn wa-doc-btn" data-form="' + f.ok + '" target="_blank" rel="noopener">' + WA_SVG + ' Enviar mis documentos AHORA por WhatsApp</a>' +
         '<p style="font-size:11px;margin:4px 0 0;' + (dark ? 'color:rgba(255,255,255,0.4)' : 'color:#9a8878') + '">Si complementas renta, necesitamos los mismos documentos de la otra persona.</p>';
       ok.style.display = 'flex';
     });
@@ -1756,7 +1764,11 @@ footer{background:var(--navy);padding:56px 40px 28px}
       window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
     }, 120);
     var stickyBar = document.getElementById('wa-sticky');
-    if (stickyBar) stickyBar.style.display = 'block';
+    if (stickyBar) {
+      stickyBar.style.display = 'block';
+      var stickyLink = stickyBar.querySelector('a[href*="wa.me"]');
+      if (stickyLink && window.__WA_NUM) stickyLink.href = stickyLink.href.replace(/56962078510|56957852275/, window.__WA_NUM);
+    }
   }
 
   document.addEventListener('DOMContentLoaded', function() {

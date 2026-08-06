@@ -273,6 +273,7 @@ interface LeadPriorityPanelProps {
   isFlashing: boolean;
   onAction: (leadId: string, action: string, advisorId?: string, notes?: string) => void | Promise<void>;
   onDelete?: (leadId: string) => void;
+  onArchive?: (leadId: string) => void;
   onCallClick?: (leadId: string) => void;
   onLeadUpdated?: () => void;
   onCallDialogOpenChange?: (open: boolean) => void;
@@ -448,7 +449,7 @@ function InlineEditableText({ value, field, leadId, className, prefix, placehold
 
 const CAMILA_ID = "cc526f22-fe9e-4d84-abdf-4456780e030c";
 
-const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, animationKey, onCallClick, onLeadUpdated, onCallDialogOpenChange, executiveEditorMode }: LeadPriorityPanelProps & { animationKey?: string }) => {
+const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, onArchive, animationKey, onCallClick, onLeadUpdated, onCallDialogOpenChange, executiveEditorMode }: LeadPriorityPanelProps & { animationKey?: string }) => {
   const { user, role, fullName } = useAuth();
   const { isDemo } = useDemoMode();
   const [showDemoCall, setShowDemoCall] = useState(false);
@@ -727,6 +728,15 @@ const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, animationKey,
                 <p className="text-[9px] text-muted-foreground leading-none">Hace</p>
                 <p className="text-sm font-black font-mono text-warning leading-tight">{elapsed}</p>
               </div>
+              {onArchive && (
+                <button
+                  onClick={() => onArchive(lead.id)}
+                  className="px-1.5 py-1 rounded text-[10px] font-bold bg-muted hover:bg-muted/80 text-muted-foreground border border-border transition-colors"
+                  title="Archivar lead"
+                >
+                  📦
+                </button>
+              )}
               {onDelete && (
                 <button
                   onClick={() => onDelete(lead.id)}

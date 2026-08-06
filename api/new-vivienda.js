@@ -8,6 +8,18 @@ export default async function handler(req, res) {
   const { nombre, telefono, email, tipo_vivienda, rango_uf, direccion, detalle_depto, comuna, superficie, dormitorios, banos, fuente, utm_source, utm_medium, utm_campaign } = req.body || {};
   if (!nombre || !telefono) return res.status(400).json({ error: 'Faltan campos' });
 
+  // Blocklist
+  const BLOCKED_EMAILS = ['acmari2030@gmail.com'];
+  const BLOCKED_PHONES = ['993866203'];
+  const BLOCKED_NAMES  = ['ambrosio escobar', 'ambosio escobar'];
+  const normPhone = (telefono || '').replace(/\D/g, '').slice(-9);
+  const normName  = (nombre || '').toLowerCase().trim();
+  if (BLOCKED_EMAILS.includes((email || '').toLowerCase().trim()) ||
+      BLOCKED_PHONES.some(bp => normPhone.endsWith(bp)) ||
+      BLOCKED_NAMES.includes(normName)) {
+    return res.status(200).json({ saved: true, emailed: true });
+  }
+
   const SUPA_URL = 'https://unptkiyggkuxtkzedluv.supabase.co/rest/v1/viviendas_leads';
   const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const RESEND_KEY = process.env.RESEND_API_KEY;

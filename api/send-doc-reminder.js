@@ -8,8 +8,8 @@ export default async function handler(req, res) {
   const RESEND_KEY = process.env.RESEND_API_KEY;
   const CRM_URL = 'https://evuxdhvvarfxredghvpu.supabase.co';
   const CRM_KEY = process.env.CRM_SERVICE_ROLE_KEY;
-  const CC_EMAILS = ['rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl', 'vicente@llavepropia.cl'];
-  const REPLY_TO = ['rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl', 'vicente@llavepropia.cl'];
+  const COMERCIAL_ID = '9f156deb-c219-4b51-b454-5a4692629332';
+  const getEjecutivaEmail = (assignedTo) => assignedTo === COMERCIAL_ID ? 'comercial@llavepropia.cl' : 'karina.valenzuela@llavepropia.cl';
 
   let withEmail = [];
 
@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     const TARGET_STATUSES = ['nuevo','contactado','recontactar','no_contesta','esperando_documentos','solicitando_documentos'];
     const statusFilter = TARGET_STATUSES.map(s => `status.eq.${s}`).join(',');
     const leadsRes = await fetch(
-      `${CRM_URL}/rest/v1/leads?or=(${statusFilter})&is_demo=eq.false&select=id,name,email,doc_token&email=not.is.null&order=created_at.desc`,
+      `${CRM_URL}/rest/v1/leads?or=(${statusFilter})&is_demo=eq.false&select=id,name,email,doc_token,assigned_to&email=not.is.null&order=created_at.desc`,
       { headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY } }
     );
     const leadsData = await leadsRes.json();
@@ -38,6 +38,8 @@ export default async function handler(req, res) {
 
   for (const lead of withEmail) {
     const firstName = (lead.name || '').trim().split(' ')[0] || lead.name || 'Cliente';
+    const waNum = lead.assigned_to === COMERCIAL_ID ? '56957852275' : '56962078510';
+    const ejecutivaEmail = getEjecutivaEmail(lead.assigned_to);
 
     // Build upload button — ensure every lead has a doc_token
     let docToken = lead.doc_token;
@@ -67,26 +69,29 @@ export default async function handler(req, res) {
     <img src="https://www.llavepropia.cl/logo-lp.png" alt="Llave Propia" width="140" style="display:inline-block;height:auto;max-width:140px">
   </div>
   <div style="padding:32px 28px">
-    <p style="font-size:22px;font-weight:800;color:#1B3A6B;margin:0 0 16px">${firstName}, tu casa propia te esta esperando</p>
+    <div style="background:linear-gradient(135deg,#FEF3E2,#FFF8EE);border:2px solid rgba(230,126,34,0.3);border-radius:14px;padding:20px 24px;margin:0 0 24px;text-align:center">
+      <p style="font-size:22px;font-weight:900;color:#e67e22;margin:0 0 4px">Tu pre-aprobacion sigue vigente</p>
+      <p style="font-size:13px;color:#1B3A6B;margin:0;font-weight:600">Pero necesitamos confirmarla con tu documentacion</p>
+    </div>
 
-    <p style="font-size:15px;color:#1A150F;line-height:1.7;margin:0 0 8px">
-      Ya diste el primer paso y <strong>pre-calificaste</strong> para acceder a tu vivienda propia. Pero aun no hemos recibido tus documentos para enviar tu caso a evaluacion.
+    <p style="font-size:16px;color:#1A150F;line-height:1.7;margin:0 0 8px">
+      ${firstName}, hace unos dias te informamos que <strong>pre-calificaste para comprar tu vivienda con subsidio del Estado</strong> a traves del Leasing Habitacional.
     </p>
-    <p style="font-size:15px;color:#1A150F;line-height:1.7;margin:0 0 24px">
-      <strong>Sin tus documentos, no podemos avanzar.</strong> No dejes pasar esta oportunidad.
+    <p style="font-size:16px;color:#1A150F;line-height:1.7;margin:0 0 24px">
+      Aun no hemos recibido tus documentos. <strong>Sin ellos, tu pre-aprobacion no puede avanzar</strong> y podria vencer.
     </p>
 
-    ${uploadUrl ? `<div style="background:linear-gradient(135deg,#1B3A6B,#2DB89E);border-radius:14px;padding:28px 24px;margin:0 0 24px;text-align:center">
-      <p style="font-size:18px;font-weight:800;color:#fff;margin:0 0 6px">Solo toma 5 minutos</p>
-      <p style="font-size:13px;color:rgba(255,255,255,0.85);margin:0 0 18px">Sube tus documentos ahora y quedaras un paso mas cerca de las llaves de tu hogar.</p>
-      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#fff;color:#1B3A6B;font-size:18px;font-weight:900;padding:18px 50px;border-radius:14px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,0.2)">SUBIR DOCUMENTOS AHORA</a>
-    </div>` : ''}
+    ${uploadUrl ? `<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 24px"><tr><td align="center" style="background:#2DB89E;border-radius:16px;padding:32px 28px">
+      <p style="font-size:22px;font-weight:900;color:#fff;margin:0 0 8px">No pierdas tu cupo</p>
+      <p style="font-size:14px;color:rgba(255,255,255,0.9);margin:0 0 22px;line-height:1.5">Confirma tu pre-aprobacion subiendo tus documentos. Solo toma 5 minutos.</p>
+      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#fff;color:#1B3A6B;font-size:18px;font-weight:900;padding:18px 40px;border-radius:12px;text-decoration:none;letter-spacing:0.3px;box-shadow:0 4px 16px rgba(0,0,0,0.15)">CONFIRMAR MI PRE-APROBACION</a>
+    </td></tr></table>` : ''}
 
     <div style="background:#FEF3E2;border:1.5px solid rgba(230,126,34,0.25);border-radius:10px;padding:14px 18px;margin:0 0 24px;text-align:center">
       <p style="font-size:14px;color:#1B3A6B;margin:0;font-weight:700;line-height:1.5">Cada dia que pasa es un dia mas pagando arriendo en vez de invertir en lo tuyo.</p>
     </div>
 
-    <p style="font-size:14px;font-weight:700;color:#1B3A6B;margin:0 0 12px">Documentos que necesitamos:</p>
+    <p style="font-size:14px;font-weight:700;color:#1B3A6B;margin:0 0 12px">Documentos que necesitaremos verificar:</p>
     <div style="background:#fff;border:1.5px solid #EDE3D4;border-radius:12px;padding:16px 18px;margin:0 0 12px">
       <p style="font-size:11px;font-weight:800;color:#2DB89E;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px">Dependientes</p>
       <table cellpadding="0" cellspacing="0" border="0" width="100%" style="font-size:13px;color:#1A150F">
@@ -104,11 +109,11 @@ export default async function handler(req, res) {
     </div>
 
     ${uploadUrl ? `<div style="text-align:center;margin:0 0 20px">
-      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#2DB89E;color:#fff;font-size:16px;font-weight:800;padding:16px 44px;border-radius:12px;text-decoration:none;box-shadow:0 4px 14px rgba(45,184,158,0.3)">SUBIR DOCUMENTOS</a>
+      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#2DB89E;color:#fff;font-size:16px;font-weight:900;padding:16px 40px;border-radius:12px;text-decoration:none;box-shadow:0 4px 14px rgba(45,184,158,0.3)">VER MI PRE-APROBACION</a>
     </div>` : ''}
     <p style="font-size:13px;color:#888;margin:0 0 16px;text-align:center">Tambien puedes enviarlos respondiendo este correo o por WhatsApp:</p>
     <div style="text-align:center">
-      <a href="https://wa.me/56962078510" target="_blank" style="display:inline-block;background:#25D366;color:#fff;font-size:14px;font-weight:800;padding:12px 32px;border-radius:12px;text-decoration:none">WhatsApp</a>
+      <a href="https://wa.me/${waNum}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;font-size:14px;font-weight:800;padding:12px 32px;border-radius:12px;text-decoration:none">WhatsApp</a>
     </div>
   </div>
   <div style="background:#F7F0E6;padding:18px 28px;text-align:center;border-top:1px solid #EDE3D4">
@@ -123,9 +128,9 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           from: 'Llave Propia <notificaciones@proppi.cl>',
           to: [lead.email],
-          cc: CC_EMAILS,
-          reply_to: REPLY_TO,
-          subject: `${firstName}, no pierdas tu pre-aprobacion! Sube tus documentos y acercate a tu casa propia`,
+          cc: ['rodrigo.canas@llavepropia.cl', ejecutivaEmail, 'vicente@llavepropia.cl'],
+          reply_to: ['rodrigo.canas@llavepropia.cl', ejecutivaEmail],
+          subject: `${firstName}, tu pre-aprobacion esta por vencer`,
           html,
         }),
       });

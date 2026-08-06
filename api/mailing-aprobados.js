@@ -34,7 +34,7 @@ export default async function handler(req, res) {
 
   // 1. Fetch approved leads
   const leadsRes = await fetch(
-    `${CRM_URL}/rest/v1/leads?status=in.(buscando_vivienda,rechaza_oferta)&select=id,name,email,phone,uf_aprobado_austra,uf_aprobado_casa_pronta,last_match_mailing_at,created_at`,
+    `${CRM_URL}/rest/v1/leads?status=in.(buscando_vivienda,rechaza_oferta)&select=id,name,email,phone,uf_aprobado_austra,uf_aprobado_casa_pronta,last_match_mailing_at,created_at,assigned_to`,
     { headers: { apikey: CRM_KEY, Authorization: 'Bearer ' + CRM_KEY } }
   );
   const leads = await leadsRes.json();
@@ -120,6 +120,8 @@ export default async function handler(req, res) {
 
     const firstName = (lead.name || '').trim().split(' ')[0] || 'Cliente';
     const toEmail = testEmail || lead.email;
+    const COMERCIAL_ID = '9f156deb-c219-4b51-b454-5a4692629332';
+    const leadWaNum = lead.assigned_to === COMERCIAL_ID ? '56957852275' : '56962078510';
 
     // Build property cards
     const cardItems = matched.map(v => {
@@ -133,7 +135,7 @@ export default async function handler(req, res) {
       const detailStr = details.join(' · ');
       const shortId = v.id.split('-')[0];
       const waText = encodeURIComponent(`Hola! Me interesa la propiedad ${tipo} en ${v.comuna || '—'} (ID: ${shortId}). Vi el mail de Llave Propia.`);
-      const waUrl = `https://wa.me/56962078510?text=${waText}`;
+      const waUrl = `https://wa.me/${leadWaNum}?text=${waText}`;
 
       const imgBlock = photoUrl
         ? `<img src="${photoUrl}" alt="${tipo} en ${v.comuna || ''}" style="width:100%;height:140px;object-fit:cover;display:block">`
@@ -208,8 +210,8 @@ export default async function handler(req, res) {
     const emailPayload = {
       from: 'Llave Propia <notificaciones@proppi.cl>',
       to: [toEmail],
-      cc: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', 'karina@llavepropia.cl'],
-      reply_to: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'],
+      cc: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', lead.assigned_to === COMERCIAL_ID ? 'comercial@llavepropia.cl' : 'karina.valenzuela@llavepropia.cl'],
+      reply_to: ['rodrigo.canas@llavepropia.cl', lead.assigned_to === COMERCIAL_ID ? 'comercial@llavepropia.cl' : 'karina.valenzuela@llavepropia.cl'],
       subject,
       html
     };

@@ -25,6 +25,8 @@
     { "source": "/subir-fotos", "destination": "/subir-fotos.html" },
     { "source": "/galeria", "destination": "/api/galeria" },
     { "source": "/marketplace", "destination": "/marketplace.html" },
+    { "source": "/firma-electronica", "destination": "/firma-dist/index" },
+    { "source": "/firma-electronica/:path*", "destination": "/firma-dist/index" },
     { "source": "/crm", "destination": "/crm-dist/index" },
     { "source": "/crm/:path*", "destination": "/crm-dist/index" }
   ],
@@ -43,6 +45,12 @@
     },
     {
       "source": "/crm-dist/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/firma-dist/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]

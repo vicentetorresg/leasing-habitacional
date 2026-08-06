@@ -122,6 +122,20 @@ nav.sc{background:rgba(254,252,247,0.97);backdrop-filter:blur(16px);padding:12px
 .paso-n{width:48px;height:48px;border-radius:50%;background:var(--teal);color:var(--navy);font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
 .paso h3{font-size:1rem;font-weight:800;color:#fff;margin-bottom:8px}
 .paso p{font-size:0.85rem;color:rgba(255,255,255,0.45);line-height:1.65}
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.test-card{background:#fff;border:1.5px solid var(--beige-2);border-radius:var(--r);padding:28px 24px;position:relative;transition:var(--t)}
+.test-card:hover{border-color:var(--teal);box-shadow:0 12px 40px var(--shadow);transform:translateY(-3px)}
+.test-stars{color:#F5A623;font-size:0.9rem;letter-spacing:2px;margin-bottom:12px}
+.test-text{font-size:0.92rem;color:var(--text-m);line-height:1.75;margin-bottom:16px;font-style:italic}
+.test-author{display:flex;align-items:center;gap:10px}
+.test-avatar{width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem}
+.test-name{font-weight:800;color:var(--navy);font-size:0.85rem}
+.test-loc{font-size:0.72rem;color:var(--text-s);font-weight:600}
+.test-badge{display:inline-flex;align-items:center;gap:5px;background:var(--teal-pale);border:1px solid rgba(45,184,158,0.25);color:var(--teal);padding:3px 10px;border-radius:50px;font-size:0.65rem;font-weight:800;letter-spacing:0.5px;margin-top:8px}
+.test-row2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px;max-width:740px;margin-left:auto;margin-right:auto}
+.addr-bar{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--beige-1);border-top:1px solid var(--beige-2);padding:16px 20px;font-size:0.85rem;color:var(--text-m);font-weight:600}
+.addr-bar svg{flex-shrink:0;stroke:var(--teal);fill:none;stroke-width:2.5;width:16px;height:16px}
+@media(max-width:900px){.test-grid{grid-template-columns:1fr}.test-row2{grid-template-columns:1fr}}
 .wa-big{display:inline-flex;align-items:center;justify-content:center;gap:14px;background:#25D366;color:#fff;padding:20px 40px;border-radius:50px;font-weight:900;font-size:1.1rem;transition:var(--t);margin-top:32px;box-shadow:0 12px 32px rgba(37,211,102,0.35)}
 .wa-big:hover{background:#1fba58;transform:translateY(-3px);box-shadow:0 16px 40px rgba(37,211,102,0.45)}
 footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32px}
@@ -312,7 +326,67 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
   </div>
 </section>
 
-<div class="wave" style="background:#fff"><svg viewBox="0 0 1440 48" preserveAspectRatio="none" style="height:40px" fill="var(--navy)"><path d="M0,0 C360,48 1080,48 1440,0 L1440,48 L0,48 Z"/></svg></div>
+<div class="wave" style="background:#fff"><svg viewBox="0 0 1440 48" preserveAspectRatio="none" style="height:40px" fill="var(--beige)"><path d="M0,0 C360,48 1080,48 1440,0 L1440,48 L0,48 Z"/></svg></div>
+<section class="sec" id="testimonios" style="background:var(--beige);padding-top:60px">
+  <div class="sw">
+    <div style="text-align:center;max-width:560px;margin:0 auto">
+      <span class="eyebrow">Testimonios</span>
+      <h2 class="sec-title">Lo que dicen nuestros clientes</h2>
+      <p style="font-size:1rem;color:var(--text-m);line-height:1.75">Familias reales que confiaron en Llave Propia para dar el paso más importante de sus vidas.</p>
+    </div>
+    <div class="test-grid">
+      <div class="test-card">
+        <div class="test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="test-text">"Pensé que comprar mi primera casa era imposible, pero el equipo de Llave Propia me guió en cada paso. Fueron súper cercanos y siempre disponibles para resolver mis dudas. Hoy tengo las llaves de mi departamento gracias al subsidio."</p>
+        <div class="test-author">
+          <div class="test-avatar">C</div>
+          <div><div class="test-name">Carolina</div><div class="test-loc">Santiago</div></div>
+        </div>
+        <div class="test-badge"><svg viewBox="0 0 24 24" width="10" height="10" style="stroke:var(--teal);fill:none;stroke-width:3"><polyline points="20 6 9 17 4 12"/></svg> Leasing Habitacional</div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="test-text">"Como extranjero, tenía muchas dudas sobre cómo acceder a una vivienda en Chile. Llave Propia me explicó todo con paciencia y me consiguieron el financiamiento con subsidio. Los recomiendo al 100%."</p>
+        <div class="test-author">
+          <div class="test-avatar" style="background:var(--teal)">J</div>
+          <div><div class="test-name">Jean Pierre</div><div class="test-loc">Las Condes</div></div>
+        </div>
+        <div class="test-badge"><svg viewBox="0 0 24 24" width="10" height="10" style="stroke:var(--teal);fill:none;stroke-width:3"><polyline points="20 6 9 17 4 12"/></svg> Leasing Habitacional</div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="test-text">"Trabajo de forma independiente y pensé que no iba a calificar. Llave Propia encontró la manera de ayudarme y en menos de 3 meses ya estaba firmando. Son muy profesionales y confiables."</p>
+        <div class="test-author">
+          <div class="test-avatar" style="background:var(--gold)">M</div>
+          <div><div class="test-name">Marcela</div><div class="test-loc">Puente Alto</div></div>
+        </div>
+        <div class="test-badge"><svg viewBox="0 0 24 24" width="10" height="10" style="stroke:var(--teal);fill:none;stroke-width:3"><polyline points="20 6 9 17 4 12"/></svg> Leasing Habitacional</div>
+      </div>
+    </div>
+    <div class="test-row2">
+      <div class="test-card">
+        <div class="test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="test-text">"Nos atendieron como si fuéramos familia. Nos ayudaron con toda la documentación y nos mantuvieron informados en cada etapa. Gracias a ellos, mi hija tiene un hogar propio. Totalmente recomendados."</p>
+        <div class="test-author">
+          <div class="test-avatar" style="background:#2a5e94">R</div>
+          <div><div class="test-name">Roberto</div><div class="test-loc">Maipú</div></div>
+        </div>
+        <div class="test-badge"><svg viewBox="0 0 24 24" width="10" height="10" style="stroke:var(--teal);fill:none;stroke-width:3"><polyline points="20 6 9 17 4 12"/></svg> Leasing Habitacional</div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="test-text">"Lo mejor de Llave Propia es que son transparentes y honestos. No te prometen cosas que no pueden cumplir. Me consiguieron el mejor financiamiento y siempre estuvieron ahí. Se nota que les importa."</p>
+        <div class="test-author">
+          <div class="test-avatar" style="background:var(--green)">P</div>
+          <div><div class="test-name">Pamela</div><div class="test-loc">La Florida</div></div>
+        </div>
+        <div class="test-badge"><svg viewBox="0 0 24 24" width="10" height="10" style="stroke:var(--teal);fill:none;stroke-width:3"><polyline points="20 6 9 17 4 12"/></svg> Leasing Habitacional</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:var(--beige)"><svg viewBox="0 0 1440 48" preserveAspectRatio="none" style="height:40px" fill="var(--navy)"><path d="M0,0 C360,48 1080,48 1440,0 L1440,48 L0,48 Z"/></svg></div>
 <section style="background:var(--navy);padding:80px 40px" id="proceso">
   <div style="max-width:900px;margin:0 auto;text-align:center">
     <span class="eyebrow" style="color:var(--teal-m)">Proceso</span>
@@ -336,6 +410,10 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:60px 40px 32
         <span class="lw lw-w"><span class="lw-a">Llave</span><span class="lw-b">Propia</span></span>
       </a>
       <p class="f-desc">Especialistas en Leasing Habitacional DS120 y Mutuo Hipotecario. Tu primera vivienda con o sin subsidio estatal.</p>
+      <div style="display:flex;align-items:flex-start;gap:8px;margin-top:14px;color:rgba(255,255,255,0.5);font-size:0.82rem;line-height:1.5">
+        <svg viewBox="0 0 24 24" width="14" height="14" style="stroke:var(--teal-m);fill:none;stroke-width:2.5;flex-shrink:0;margin-top:2px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Apoquindo 6410, Of. 1404, Las Condes, Santiago
+      </div>
     </div>
     <div>
       <div class="f-col-t">Programas</div>

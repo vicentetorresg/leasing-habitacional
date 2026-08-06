@@ -6,9 +6,14 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const FROM      = 'Llave Propia <notificaciones@proppi.cl>';
-const CC_ADMINS = ['vicente.torres@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'];
+const FROM      = 'Llave Propia <notificaciones@llavepropia.cl>';
+const CC_BASE   = ['vicente.torres@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'];
 const REPLY_TO  = 'vicente.torres@llavepropia.cl';
+const COMERCIAL_ID = '9f156deb-c219-4b51-b454-5a4692629332';
+const KARINA_EMAIL = 'karina.valenzuela@llavepropia.cl';
+const COMERCIAL_EMAIL = 'comercial@llavepropia.cl';
+const KARINA_WA = '56962078510';
+const COMERCIAL_WA = '56957852275';
 
 const ASESOR_PIPELINE = ['asesoria_agendada', 'recontactar', 'plan_presentado'];
 const EMAIL_STATUSES  = ['new', 'asesoria_agendada', 'recontactar', 'plan_presentado', 'no_contesto_manual', 'asesoria_agendada_manual', 'cliente_interesado_manual'];
@@ -317,7 +322,7 @@ function emailPlanPresentado(firstName: string, proyecto?: string | null, asesor
 
 // ─── MANUAL EMAIL TEMPLATES ───────────────────────────────────────────────────
 
-function emailNoContestoManual(firstName: string) {
+function emailNoContestoManual(firstName: string, waNum = KARINA_WA, firmante = 'Karina V.') {
   const body = `
     ${p(`Hola <strong>${firstName}</strong>,`)}
     ${p('Intentamos contactarte por teléfono pero no pudimos comunicarnos. Nos gustaría ayudarte a comprar tu casa propia y encontrar el mejor financiamiento disponible para ti.')}
@@ -328,7 +333,7 @@ function emailNoContestoManual(firstName: string) {
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 8px;">
       <tr>
         <td align="center">
-          <a href="https://wa.me/56962078510?text=Hola%2C%20me%20contactaron%20de%20Llave%20Propia%20y%20quiero%20más%20información" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:12px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35);">Escríbenos por WhatsApp</a>
+          <a href="https://wa.me/${waNum}?text=Hola%2C%20me%20contactaron%20de%20Llave%20Propia%20y%20quiero%20más%20información" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:12px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35);">Escríbenos por WhatsApp</a>
         </td>
       </tr>
     </table>
@@ -336,7 +341,7 @@ function emailNoContestoManual(firstName: string) {
     ${divider()}
     <p style="margin:0;font-size:14px;color:#475569;line-height:1.6;">
       Saludos,<br/>
-      <strong style="color:#0F172A;">Karina V.</strong><br/>
+      <strong style="color:#0F172A;">${firmante}</strong><br/>
       <span style="color:#64748B;">Llave Propia · Leasing Habitacional</span>
     </p>
   `;
@@ -352,7 +357,7 @@ function emailNoContestoManual(firstName: string) {
   };
 }
 
-function emailClienteInteresadoManual(firstName: string) {
+function emailClienteInteresadoManual(firstName: string, waNum = KARINA_WA, firmante = 'Karina V.') {
   const html = `<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;padding:0;background:#FEFCF7;font-family:Arial,Helvetica,sans-serif">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#FEFCF7;padding:40px 20px"><tr><td align="center">
@@ -400,13 +405,13 @@ function emailClienteInteresadoManual(firstName: string) {
   <p style="font-size:14px;color:#5A4A38;line-height:1.7;margin:0 0 24px">Puedes enviar los documentos <strong>respondiendo este correo</strong> o por WhatsApp:</p>
 
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px"><tr><td align="center">
-    <a href="https://wa.me/56962078510?text=Hola%2C%20me%20contactaron%20de%20Llave%20Propia%20y%20quiero%20enviar%20mis%20documentos" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:50px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35)">💬 Enviar documentos por WhatsApp</a>
+    <a href="https://wa.me/${waNum}?text=Hola%2C%20me%20contactaron%20de%20Llave%20Propia%20y%20quiero%20enviar%20mis%20documentos" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:50px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35)">💬 Enviar documentos por WhatsApp</a>
   </td></tr></table>
 
   <div style="border-top:1px solid #EDE3D4;padding-top:20px">
     <p style="margin:0;font-size:14px;color:#5A4A38;line-height:1.6">
       Saludos,<br/>
-      <strong style="color:#1B3A6B">Karina V.</strong><br/>
+      <strong style="color:#1B3A6B">${firmante}</strong><br/>
       <span style="color:#9A8878">Llave Propia · Leasing Habitacional</span>
     </p>
   </div>
@@ -427,7 +432,7 @@ function emailClienteInteresadoManual(firstName: string) {
   };
 }
 
-function emailAsesoriaAgendadaManual(firstName: string) {
+function emailAsesoriaAgendadaManual(firstName: string, firmante = 'Karina V.') {
   const body = `
     ${p(`¡Hola <strong>${firstName}</strong>!`)}
     ${p('Te confirmamos que tu asesoría con Llave Propia ya fue agendada. A tu correo te llegó el link de <strong>Google Meet</strong> para conectarte a la reunión.')}
@@ -444,7 +449,7 @@ function emailAsesoriaAgendadaManual(firstName: string) {
     ${divider()}
     <p style="margin:0;font-size:14px;color:#475569;line-height:1.6;">
       ¡Gracias!<br/>
-      <strong style="color:#0F172A;">Susan Petersen</strong><br/>
+      <strong style="color:#0F172A;">${firmante}</strong><br/>
       <span style="color:#64748B;">Llave Propia · Leasing Habitacional</span>
     </p>
   `;
@@ -467,15 +472,17 @@ function generateEmail(
   firstName: string,
   proyecto?: string | null,
   asesorName?: string | null,
+  waNum?: string,
+  firmante?: string,
 ): { subject: string; html: string } | null {
   switch (status) {
     case 'new':                       return emailBienvenida(firstName);
     case 'asesoria_agendada':         return emailAsesoriaAgendada(firstName, asesorName);
     case 'recontactar':               return emailRecontactar(firstName, asesorName);
     case 'plan_presentado':           return emailPlanPresentado(firstName, proyecto, asesorName);
-    case 'no_contesto_manual':          return emailNoContestoManual(firstName);
-    case 'cliente_interesado_manual':   return emailClienteInteresadoManual(firstName);
-    case 'asesoria_agendada_manual':    return emailAsesoriaAgendadaManual(firstName);
+    case 'no_contesto_manual':          return emailNoContestoManual(firstName, waNum, firmante);
+    case 'cliente_interesado_manual':   return emailClienteInteresadoManual(firstName, waNum, firmante);
+    case 'asesoria_agendada_manual':    return emailAsesoriaAgendadaManual(firstName, firmante);
     default:                          return null;
   }
 }
@@ -533,36 +540,30 @@ serve(async (req) => {
       asesorEmail = authData?.user?.email ?? null;
     }
 
-    // Ejecutiva info
-    let ejecutivaEmail: string | null = null;
-    if (lead.assigned_to) {
-      const { data: authData } = await supabase.auth.admin.getUserById(lead.assigned_to);
-      ejecutivaEmail = authData?.user?.email ?? null;
-    }
+    // Ejecutiva info — determine email, WA, and display name based on assigned_to
+    const isComercial = lead.assigned_to === COMERCIAL_ID;
+    const ejecutivaEmail = isComercial ? COMERCIAL_EMAIL : KARINA_EMAIL;
+    const ejecutivaWa = isComercial ? COMERCIAL_WA : KARINA_WA;
+    const ejecutivaFirmante = isComercial ? 'Equipo Comercial Llave Propia' : 'Karina V.';
 
-    // CC según pipeline
+    // CC: always base admins + the assigned ejecutiva only
     const MANUAL_TEMPLATES = ['no_contesto_manual', 'asesoria_agendada_manual', 'cliente_interesado_manual'];
-    const CC_KARINA = 'karina.valenzuela@llavepropia.cl';
-    // Solo agregar a Susan en CC si ella es la ejecutiva asignada al lead
-    const ejecutivaIsKarina = ejecutivaEmail === CC_KARINA;
     let cc: string[];
     if (MANUAL_TEMPLATES.includes(new_status)) {
-      cc = ejecutivaIsKarina ? [...CC_ADMINS, CC_KARINA] : CC_ADMINS;
+      cc = [...CC_BASE, ejecutivaEmail];
     } else {
       const ccContact = ASESOR_PIPELINE.includes(new_status) ? asesorEmail : ejecutivaEmail;
-      cc = [...CC_ADMINS, ccContact].filter(Boolean) as string[];
+      cc = [...CC_BASE, ccContact].filter(Boolean) as string[];
     }
 
     const firstName    = lead.name.split(' ')[0];
-    const emailContent = generateEmail(new_status, firstName, lead.proyecto, asesorName);
+    const emailContent = generateEmail(new_status, firstName, lead.proyecto, asesorName, ejecutivaWa, ejecutivaFirmante);
 
     if (!emailContent) {
       return new Response(JSON.stringify({ skipped: true, reason: 'No template for status' }), { status: 200, headers: corsHeaders });
     }
 
-    const replyTo = (MANUAL_TEMPLATES.includes(new_status) && ejecutivaIsKarina)
-      ? [REPLY_TO, CC_KARINA]
-      : [REPLY_TO];
+    const replyTo = [REPLY_TO, ejecutivaEmail];
 
     const emailPayload = {
       from:      FROM,

@@ -9,8 +9,12 @@ const corsHeaders = {
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')!;
-const FROM = 'Llave Propia <notificaciones@proppi.cl>';
-const REPLY_TO = ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', 'karina.valenzuela@llavepropia.cl'];
+const FROM = 'Llave Propia <notificaciones@llavepropia.cl>';
+const COMERCIAL_ID = '9f156deb-c219-4b51-b454-5a4692629332';
+const KARINA_EMAIL = 'karina.valenzuela@llavepropia.cl';
+const COMERCIAL_EMAIL = 'comercial@llavepropia.cl';
+const KARINA_WA = '56962078510';
+const COMERCIAL_WA = '56957852275';
 
 // ── HTML helpers ──
 function headerBlock() {
@@ -19,11 +23,11 @@ function headerBlock() {
 function footerBlock() {
   return '<tr><td style="background:#1B3A6B;padding:20px 28px;text-align:center"><p style="color:#9A8878;font-size:12px;margin:0;line-height:1.6">Llave Propia \u00b7 <a href="https://llavepropia.cl" style="color:#3ACFB8;text-decoration:none">www.llavepropia.cl</a></p></td></tr>';
 }
-function firma() {
-  return '<div style="border-top:1px solid #EDE3D4;padding-top:20px"><p style="margin:0;font-size:14px;color:#5A4A38;line-height:1.6">Saludos,<br/><strong style="color:#1B3A6B">Karina V.</strong><br/><span style="color:#9A8878">Llave Propia \u00b7 Leasing Habitacional</span></p></div>';
+function firma(firmante = 'Karina V.') {
+  return `<div style="border-top:1px solid #EDE3D4;padding-top:20px"><p style="margin:0;font-size:14px;color:#5A4A38;line-height:1.6">Saludos,<br/><strong style="color:#1B3A6B">${firmante}</strong><br/><span style="color:#9A8878">Llave Propia \u00b7 Leasing Habitacional</span></p></div>`;
 }
-function waBtn(text: string, msg: string) {
-  return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px"><tr><td align="center"><a href="https://wa.me/56962078510?text=${msg}" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:50px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35)">${text}</a></td></tr></table>`;
+function waBtn(text: string, msg: string, waNum = KARINA_WA) {
+  return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px"><tr><td align="center"><a href="https://wa.me/${waNum}?text=${msg}" style="display:inline-block;background:#25D366;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:50px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(37,211,102,0.35)">${text}</a></td></tr></table>`;
 }
 function badge(emoji: string, title: string, subtitle: string, color = '#2B7A4E', bg = 'linear-gradient(135deg,#E5F7F4,#D5F5E3)', border = 'rgba(45,184,158,0.3)') {
   return `<div style="background:${bg};border:1.5px solid ${border};border-radius:12px;padding:18px 20px;margin:0 0 24px;text-align:center"><p style="font-size:20px;font-weight:900;color:${color};margin:0 0 4px">${emoji} ${title}</p><p style="font-size:13px;color:#1B3A6B;margin:0;font-weight:600">${subtitle}</p></div>`;
@@ -58,7 +62,7 @@ interface EmailTemplate {
   html: string;
 }
 
-function getTemplate(sequenceKey: string, step: number, firstName: string): EmailTemplate | null {
+function getTemplate(sequenceKey: string, step: number, firstName: string, waNum = KARINA_WA, firmanteName = 'Karina V.'): EmailTemplate | null {
   const templates: Record<string, Record<number, () => EmailTemplate>> = {
     no_contesta: {
       1: () => ({
@@ -69,8 +73,8 @@ function getTemplate(sequenceKey: string, step: number, firstName: string): Emai
           p('Te llamamos para conversar sobre tu evaluaci\u00f3n de <strong>Leasing Habitacional DS120</strong>, pero no pudimos contactarte.') +
           p('Queremos ayudarte a dar el paso hacia tu casa propia. Recuerda que con este programa puedes comprar <strong>sin pie y sin ahorro previo</strong>.') +
           infoBox('\ud83d\udca1 <strong>Si prefieres, puedes escribirnos directo por WhatsApp</strong> y te respondemos en minutos. Tambi\u00e9n puedes responder este correo.') +
-          waBtn('\ud83d\udcac Escr\u00edbenos por WhatsApp', 'Hola%2C%20intentaron%20llamarme%20de%20Llave%20Propia') +
-          firma()
+          waBtn('\ud83d\udcac Escr\u00edbenos por WhatsApp', 'Hola%2C%20intentaron%20llamarme%20de%20Llave%20Propia', waNum) +
+          firma(firmanteName)
         ),
       }),
       2: () => ({
@@ -87,8 +91,8 @@ function getTemplate(sequenceKey: string, step: number, firstName: string): Emai
             '<strong>Asesor\u00eda 100% gratuita</strong> \u2014 te acompa\u00f1amos en todo el proceso',
           ]) +
           p('Solo necesitamos unos minutos para evaluar tu caso. <strong>\u00bfTe gustar\u00eda agendar una llamada?</strong>') +
-          waBtn('\ud83d\udcac Agendar por WhatsApp', 'Hola%2C%20quiero%20agendar%20una%20llamada%20para%20evaluar%20mi%20caso') +
-          firma()
+          waBtn('\ud83d\udcac Agendar por WhatsApp', 'Hola%2C%20quiero%20agendar%20una%20llamada%20para%20evaluar%20mi%20caso', waNum) +
+          firma(firmanteName)
         ),
       }),
       3: () => ({
@@ -100,8 +104,8 @@ function getTemplate(sequenceKey: string, step: number, firstName: string): Emai
           p('Este es nuestro <strong>\u00faltimo intento de contacto</strong>. Si sigues interesado/a en comprar tu primera vivienda con el Subsidio DS120, resp\u00f3ndenos y retomamos tu proceso de inmediato.') +
           infoBox('\ud83d\udd11 <strong>Recuerda:</strong> los cupos del programa son limitados y tu evaluaci\u00f3n preliminar ya est\u00e1 lista. Solo necesitamos conversar contigo para avanzar.') +
           p('Si no est\u00e1s interesado/a, no te enviaremos m\u00e1s correos. \u00a1Sin compromiso!') +
-          waBtn('\ud83d\udcac S\u00ed, quiero retomar mi proceso', 'Hola%2C%20quiero%20retomar%20mi%20proceso%20de%20Leasing%20Habitacional') +
-          firma()
+          waBtn('\ud83d\udcac S\u00ed, quiero retomar mi proceso', 'Hola%2C%20quiero%20retomar%20mi%20proceso%20de%20Leasing%20Habitacional', waNum) +
+          firma(firmanteName)
         ),
       }),
     },
@@ -116,8 +120,8 @@ function getTemplate(sequenceKey: string, step: number, firstName: string): Emai
           docList() +
           infoBox('\ud83d\udca1 <strong>Si complementas renta con otra persona</strong>, necesitamos los mismos documentos de ella.') +
           p('Puedes enviarlos <strong>respondiendo este correo</strong> o por WhatsApp:') +
-          waBtn('\ud83d\udcac Enviar documentos por WhatsApp', 'Hola%2C%20quiero%20enviar%20mis%20documentos%20para%20el%20leasing') +
-          firma()
+          waBtn('\ud83d\udcac Enviar documentos por WhatsApp', 'Hola%2C%20quiero%20enviar%20mis%20documentos%20para%20el%20leasing', waNum) +
+          firma(firmanteName)
         ),
       }),
       2: () => ({
@@ -129,8 +133,8 @@ function getTemplate(sequenceKey: string, step: number, firstName: string): Emai
           p('Es m\u00e1s f\u00e1cil de lo que parece. La mayor\u00eda de nuestros clientes los re\u00fanen en <strong>menos de un d\u00eda</strong>.') +
           infoBox('\ud83d\udccb <strong>Tip:</strong> Si no tienes alg\u00fan documento, escr\u00edbenos y te explicamos c\u00f3mo obtenerlo. Por ejemplo, la Deuda CMF se descarga gratis desde el sitio de la CMF.') +
           p('No dejes pasar esta oportunidad. <strong>Env\u00edanos los documentos y avanzamos juntos:</strong>') +
-          waBtn('\ud83d\udcac Enviar documentos ahora', 'Hola%2C%20quiero%20enviar%20mis%20documentos%20para%20avanzar') +
-          firma()
+          waBtn('\ud83d\udcac Enviar documentos ahora', 'Hola%2C%20quiero%20enviar%20mis%20documentos%20para%20avanzar', waNum) +
+          firma(firmanteName)
         ),
       }),
       3: () => ({
@@ -147,8 +151,8 @@ function getTemplate(sequenceKey: string, step: number, firstName: string): Emai
             'Te acompa\u00f1amos en cada paso',
           ]) +
           p('Este es nuestro \u00faltimo recordatorio sobre los documentos. <strong>\u00bfNecesitas ayuda? Escr\u00edbenos:</strong>') +
-          waBtn('\ud83d\udcac Necesito ayuda con los documentos', 'Hola%2C%20necesito%20ayuda%20para%20reunir%20mis%20documentos') +
-          firma()
+          waBtn('\ud83d\udcac Necesito ayuda con los documentos', 'Hola%2C%20necesito%20ayuda%20para%20reunir%20mis%20documentos', waNum) +
+          firma(firmanteName)
         ),
       }),
     },
@@ -171,8 +175,8 @@ function getTemplate(sequenceKey: string, step: number, firstName: string): Emai
           '<p style="font-size:14px;color:#1A150F;margin:0;line-height:1.6">Una vez que tenemos tus documentos, la evaluaci\u00f3n toma entre 5 a 10 d\u00edas h\u00e1biles.</p>' +
           '</div>' +
           p('Si tienes otra pregunta, <strong>no dudes en escribirnos</strong>:') +
-          waBtn('\ud83d\udcac Tengo una pregunta', 'Hola%2C%20tengo%20una%20duda%20sobre%20el%20Leasing%20Habitacional') +
-          firma()
+          waBtn('\ud83d\udcac Tengo una pregunta', 'Hola%2C%20tengo%20una%20duda%20sobre%20el%20Leasing%20Habitacional', waNum) +
+          firma(firmanteName)
         ),
       }),
       2: () => ({
@@ -190,8 +194,8 @@ function getTemplate(sequenceKey: string, step: number, firstName: string): Emai
           '</div>' +
           p('Si cumples estos requisitos, <strong>est\u00e1s a pocos pasos de tener tu casa propia</strong>. No dejes pasar esta oportunidad.') +
           p('<strong>\u00bfListo/a para avanzar?</strong> Escr\u00edbenos y retomamos tu proceso:') +
-          waBtn('\ud83d\udcac Quiero avanzar con mi proceso', 'Hola%2C%20quiero%20avanzar%20con%20mi%20proceso%20de%20Leasing%20Habitacional') +
-          firma()
+          waBtn('\ud83d\udcac Quiero avanzar con mi proceso', 'Hola%2C%20quiero%20avanzar%20con%20mi%20proceso%20de%20Leasing%20Habitacional', waNum) +
+          firma(firmanteName)
         ),
       }),
     },
@@ -234,7 +238,7 @@ serve(async (req) => {
 
     const { data: leads, error: leadsErr } = await supabase
       .from('leads')
-      .select('id, name, email, status, status_changed_at')
+      .select('id, name, email, status, status_changed_at, assigned_to')
       .eq('status', seq.status)
       .eq('is_demo', false)
       .not('email', 'is', null)
@@ -273,7 +277,12 @@ serve(async (req) => {
         const logKey = `${lead.id}:${seq.key}:${stepNum}`;
         if (sentSet.has(logKey)) continue;
 
-        const template = getTemplate(seq.key, stepNum, firstName);
+        const isComercial = lead.assigned_to === COMERCIAL_ID;
+        const leadWaNum = isComercial ? COMERCIAL_WA : KARINA_WA;
+        const leadFirmante = isComercial ? 'Equipo Comercial Llave Propia' : 'Karina V.';
+        const leadEjecutivaEmail = isComercial ? COMERCIAL_EMAIL : KARINA_EMAIL;
+
+        const template = getTemplate(seq.key, stepNum, firstName, leadWaNum, leadFirmante);
         if (!template) continue;
 
         const res = await fetch('https://api.resend.com/emails', {
@@ -282,7 +291,8 @@ serve(async (req) => {
           body: JSON.stringify({
             from: FROM,
             to: [lead.email],
-            reply_to: REPLY_TO,
+            cc: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', leadEjecutivaEmail],
+            reply_to: ['rodrigo.canas@llavepropia.cl', leadEjecutivaEmail],
             subject: template.subject,
             html: template.html,
           }),

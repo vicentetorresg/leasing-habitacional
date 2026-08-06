@@ -29,9 +29,12 @@ const STATUS_FILTER_OPTIONS = [
   { value: 'solicitando_documentos', label: '📋 Solicitando Documentos' },
   { value: 'enviado_a_evaluar', label: '📤 Enviado a Evaluar' },
   { value: 'aprobado', label: '✅ Aprobado' },
+  { value: 'aprobado_ok', label: '🎯 Aprobado OK Todo' },
   { value: 'buscando_vivienda', label: '🏠 Buscando Vivienda' },
+  { value: 'rechaza_oferta', label: '🚫 Rechaza Oferta' },
   { value: 'cbr_listo', label: '🎉 CBR Listo' },
   { value: 'rechazado', label: '❌ Rechazado' },
+  { value: 'archivado', label: '📦 Archivado' },
 ];
 
 function formatSource(source: string): string {
@@ -92,6 +95,8 @@ const statusConfig: Record<string, { label: string; style: string }> = {
   buscando_vivienda: { label: '🏠 Buscando', style: 'bg-blue-500/15 text-blue-600' },
   set_hipotecario_firmado: { label: '✍️ Set Firmado', style: 'bg-violet-500/15 text-violet-600' },
   escritura_firmada: { label: '📜 Escritura', style: 'bg-indigo-500/15 text-indigo-600' },
+  aprobado_ok: { label: '🎯 Aprobado OK', style: 'bg-teal-500/15 text-teal-600' },
+  rechaza_oferta: { label: '🚫 Rechaza Oferta', style: 'bg-orange-500/15 text-orange-600' },
   cbr_listo: { label: '🎉 CBR Listo', style: 'bg-emerald-500/15 text-emerald-600' },
   rechazado: { label: '❌ Rechazado', style: 'bg-destructive/15 text-destructive' },
   archivado: { label: '📦 Archivado', style: 'bg-muted text-muted-foreground' },
