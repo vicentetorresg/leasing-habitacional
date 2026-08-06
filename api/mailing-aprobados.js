@@ -208,7 +208,7 @@ export default async function handler(req, res) {
 </body></html>`;
 
     const emailPayload = {
-      from: 'Llave Propia <notificaciones@proppi.cl>',
+      from: 'Llave Propia <notificaciones@llavepropia.cl>',
       to: [toEmail],
       cc: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl', lead.assigned_to === COMERCIAL_ID ? 'comercial@llavepropia.cl' : 'karina.valenzuela@llavepropia.cl'],
       reply_to: ['rodrigo.canas@llavepropia.cl', lead.assigned_to === COMERCIAL_ID ? 'comercial@llavepropia.cl' : 'karina.valenzuela@llavepropia.cl'],

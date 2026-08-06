@@ -114,7 +114,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Llave Propia <notificaciones@proppi.cl>',
+        from: 'Llave Propia <notificaciones@llavepropia.cl>',
         to: [ejecutivaEmail],
         cc: ['rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl'],
         subject: `Documento subido: ${lead.name} - ${docLabel}`,
@@ -171,7 +171,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Llave Propia <notificaciones@proppi.cl>',
+        from: 'Llave Propia <notificaciones@llavepropia.cl>',
         to: [lead.email],
         cc: [ejecutivaEmailReq, 'rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl'],
         reply_to: ['rodrigo.canas@llavepropia.cl', ejecutivaEmailReq],

@@ -52,7 +52,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Llave Propia CRM <notificaciones@proppi.cl>',
+        from: 'Llave Propia CRM <notificaciones@llavepropia.cl>',
         to: finalRecipients,
         subject: isDemo ? `[DEMO] ${subject}` : subject,
         html,

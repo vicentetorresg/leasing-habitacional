@@ -119,7 +119,7 @@ function baseTemplate({
                   <td>
                     <div style="font-size:12px;color:#64748B;line-height:1.6;">
                       Este mensaje fue enviado a ${firstName} desde <strong style="color:#0369A1;">Llave Propia CRM</strong>.<br/>
-                      <a href="https://llavepropia.cl" style="color:#0EA5E9;text-decoration:none;">llavepropia.cl</a> &nbsp;·&nbsp; notificaciones@proppi.cl
+                      <a href="https://llavepropia.cl" style="color:#0EA5E9;text-decoration:none;">llavepropia.cl</a> &nbsp;·&nbsp; notificaciones@llavepropia.cl
                     </div>
                   </td>
                   <td align="right" style="vertical-align:bottom;">
