@@ -6,7 +6,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const FROM      = 'Llave Propia <notificaciones@llavepropia.cl>';
+const FROM      = 'Llave Propia <notificaciones@proppi.cl>';
 const CC_BASE   = ['vicente.torres@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'];
 const REPLY_TO  = 'vicente.torres@llavepropia.cl';
 const COMERCIAL_ID = '9f156deb-c219-4b51-b454-5a4692629332';
@@ -119,7 +119,7 @@ function baseTemplate({
                   <td>
                     <div style="font-size:12px;color:#64748B;line-height:1.6;">
                       Este mensaje fue enviado a ${firstName} desde <strong style="color:#0369A1;">Llave Propia CRM</strong>.<br/>
-                      <a href="https://llavepropia.cl" style="color:#0EA5E9;text-decoration:none;">llavepropia.cl</a> &nbsp;·&nbsp; notificaciones@llavepropia.cl
+                      <a href="https://llavepropia.cl" style="color:#0EA5E9;text-decoration:none;">llavepropia.cl</a> &nbsp;·&nbsp; notificaciones@proppi.cl
                     </div>
                   </td>
                   <td align="right" style="vertical-align:bottom;">

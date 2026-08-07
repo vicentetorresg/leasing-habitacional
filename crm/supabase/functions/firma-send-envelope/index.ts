@@ -36,7 +36,7 @@ serve(async (req) => {
     for (const signer of envelope.firma_signers) {
       const signingUrl = `${appUrl}/firma/firmar/${signer.token}`;
       await resend.emails.send({
-        from: "Llave Propia <notificaciones@llavepropia.cl>",
+        from: "Llave Propia <notificaciones@proppi.cl>",
         to: [signer.email],
         subject: `${envelope.sender_name} solicita tu firma: "${envelope.title}"`,
         html: buildSignerEmail(signer.name, envelope.title, envelope.sender_name, signingUrl, envelope.firma_signers),

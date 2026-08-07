@@ -39,7 +39,7 @@ serve(async (req) => {
     for (const signer of pendingSigners) {
       const signingUrl = `${appUrl}/firma/firmar/${signer.token}`;
       await resend.emails.send({
-        from: "Llave Propia <notificaciones@llavepropia.cl>",
+        from: "Llave Propia <notificaciones@proppi.cl>",
         to: [signer.email],
         subject: `Recordatorio: Tienes un documento pendiente de firma`,
         html: buildReminderEmail(signer.name, envelope.title, envelope.sender_name, signingUrl),

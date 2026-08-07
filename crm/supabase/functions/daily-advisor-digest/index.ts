@@ -160,7 +160,7 @@ serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'Llave Propia CRM <notificaciones@llavepropia.cl>',
+          from: 'Llave Propia CRM <notificaciones@proppi.cl>',
           to: [userEmail],
           cc: CC_EMAILS,
           subject: `${subjectEmoji} ${leads.length} cliente${leads.length !== 1 ? 's' : ''} estancado${leads.length !== 1 ? 's' : ''} – Acción requerida`,

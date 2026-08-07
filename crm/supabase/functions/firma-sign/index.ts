@@ -242,7 +242,7 @@ serve(async (req) => {
 
     for (const email of uniqueRecipients) {
       await resend.emails.send({
-        from: "Llave Propia <notificaciones@llavepropia.cl>",
+        from: "Llave Propia <notificaciones@proppi.cl>",
         to: [email],
         subject: `"${envelope.title}" fue firmado por todos`,
         html: buildCompletionEmail(envelope.title, updatedSigners, finalPdfUrl),

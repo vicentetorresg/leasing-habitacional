@@ -13,7 +13,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Llave Propia <notificaciones@llavepropia.cl>',
+        from: 'Llave Propia <notificaciones@proppi.cl>',
         to: ['vicente@llavepropia.cl'],
         subject: 'Click en WhatsApp docs - Landing Leasing',
         html: `<p>Alguien hizo click en el boton de WhatsApp para enviar documentos desde la landing de leasing.</p><p><strong>Formulario:</strong> ${form || 'desconocido'}</p><p><strong>Fecha:</strong> ${new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' })}</p>`

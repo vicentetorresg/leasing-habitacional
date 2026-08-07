@@ -67,7 +67,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Llave Oferta <notificaciones@llavepropia.cl>',
+        from: 'Llave Oferta <notificaciones@proppi.cl>',
         to: [viv.email],
         reply_to: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'],
         subject: 'Recibimos tus fotos — Llave Oferta',
@@ -79,7 +79,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Llave Oferta <notificaciones@llavepropia.cl>',
+        from: 'Llave Oferta <notificaciones@proppi.cl>',
         to: ['rodrigo.canas@llavepropia.cl'],
         bcc: ['vicente@llavepropia.cl'],
         subject: `Fotos subidas: ${viv.nombre} — ${tipoLabel} en ${viv.comuna || '?'} (${photo_count} fotos)`,
@@ -152,7 +152,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Llave Oferta <notificaciones@llavepropia.cl>',
+        from: 'Llave Oferta <notificaciones@proppi.cl>',
         to: [viv.email],
         cc: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'],
         reply_to: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'],

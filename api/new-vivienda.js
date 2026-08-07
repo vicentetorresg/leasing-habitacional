@@ -148,7 +148,7 @@ export default async function handler(req, res) {
     method: 'POST',
     headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: 'Llave Oferta <notificaciones@llavepropia.cl>',
+      from: 'Llave Oferta <notificaciones@proppi.cl>',
       to: ['rodrigo.canas@llavepropia.cl'],
       bcc: ['vicente@llavepropia.cl'],
       subject: `🏠 Nueva vivienda: ${nombre} — ${tipo_vivienda || 'Propiedad'} en ${comuna || '?'}`,
@@ -227,7 +227,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Llave Oferta <notificaciones@llavepropia.cl>',
+        from: 'Llave Oferta <notificaciones@proppi.cl>',
         to: [email],
         reply_to: ['rodrigo.canas@llavepropia.cl'],
         subject: 'Recibimos tu vivienda — Llave Oferta',

@@ -108,7 +108,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Llave Oferta <notificaciones@llavepropia.cl>',
+        from: 'Llave Oferta <notificaciones@proppi.cl>',
         to: [viv.email],
         ...(bccEmail ? { bcc: [bccEmail] } : {}),
         reply_to: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'],

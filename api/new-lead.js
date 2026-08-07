@@ -281,7 +281,7 @@ export default async function handler(req, res) {
     method: 'POST',
     headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from:    'Llave Propia <notificaciones@llavepropia.cl>',
+      from:    'Llave Propia <notificaciones@proppi.cl>',
       to:      ['rodrigo.canas@llavepropia.cl'],
       bcc:     ['vicente@llavepropia.cl', ejecutivaEmail],
       subject: `🏠 Nuevo lead: ${nombre} — ${producto}`,
@@ -386,7 +386,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Llave Propia <notificaciones@llavepropia.cl>',
+        from: 'Llave Propia <notificaciones@proppi.cl>',
         to: [email],
         reply_to: ['rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl'],
         subject: isCondicionado ? `${firstName}, tenemos novedades sobre tu evaluacion` : `Tu resultado de pre-evaluacion esta listo, ${firstName}`,
