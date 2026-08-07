@@ -225,11 +225,20 @@ serve(async (req) => {
   let totalSent = 0;
   const errors: string[] = [];
 
-  // Pre-fetch all sent logs to avoid N+1 queries
-  const { data: allLogs } = await supabase
-    .from('email_sequence_log')
-    .select('lead_id, sequence_key, step');
-  const sentSet = new Set((allLogs || []).map(l => `${l.lead_id}:${l.sequence_key}:${l.step}`));
+  // Pre-fetch all sent logs to avoid N+1 queries (paginated to handle >1000 rows)
+  let allLogs: any[] = [];
+  let offset = 0;
+  while (true) {
+    const { data: batch } = await supabase
+      .from('email_sequence_log')
+      .select('lead_id, sequence_key, step')
+      .range(offset, offset + 999);
+    if (!batch || batch.length === 0) break;
+    allLogs = allLogs.concat(batch);
+    if (batch.length < 1000) break;
+    offset += 1000;
+  }
+  const sentSet = new Set(allLogs.map(l => `${l.lead_id}:${l.sequence_key}:${l.step}`));
 
   console.log(`[email-sequences] Starting. Logs in DB: ${(allLogs || []).length}`);
 

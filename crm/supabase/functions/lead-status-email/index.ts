@@ -16,7 +16,7 @@ const KARINA_WA = '56962078510';
 const COMERCIAL_WA = '56957852275';
 
 const ASESOR_PIPELINE = ['asesoria_agendada', 'recontactar', 'plan_presentado'];
-const EMAIL_STATUSES  = ['new', 'asesoria_agendada', 'recontactar', 'plan_presentado', 'no_contesto_manual', 'asesoria_agendada_manual', 'cliente_interesado_manual'];
+const EMAIL_STATUSES  = ['asesoria_agendada', 'recontactar', 'plan_presentado', 'no_contesto_manual', 'asesoria_agendada_manual', 'cliente_interesado_manual'];
 
 async function sendEmailViaResend(payload: {
   from: string;
