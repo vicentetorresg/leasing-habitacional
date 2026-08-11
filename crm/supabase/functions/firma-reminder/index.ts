@@ -37,7 +37,7 @@ serve(async (req) => {
     }
 
     for (const signer of pendingSigners) {
-      const signingUrl = `${appUrl}/firma/firmar/${signer.token}`;
+      const signingUrl = `${appUrl}/firmar/${signer.token}`;
       await resend.emails.send({
         from: "Llave Propia <notificaciones@proppi.cl>",
         to: [signer.email],

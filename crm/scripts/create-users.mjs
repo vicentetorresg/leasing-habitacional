@@ -17,7 +17,6 @@ function randomPassword(len = 12) {
 const users = [
   { email: 'vicente.torres@llavepropia.cl', full_name: 'Vicente Torres', role: 'admin' },
   { email: 'rodrigo.canas@llavepropia.cl',  full_name: 'Rodrigo Cañas',  role: 'admin' },
-  { email: 'katherine@llavepropia.cl',      full_name: 'Katherine',       role: 'ejecutiva' },
 ];
 
 async function createUser(email, full_name, role, password) {
