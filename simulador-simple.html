@@ -170,11 +170,10 @@ let ufVal = 40000;
 const num = n => Math.round(n).toLocaleString('es-CL');
 const dec = (n, d) => n.toLocaleString('es-CL', {minimumFractionDigits:d, maximumFractionDigits:d});
 
-// Fetch UF
+// Fetch UF del dia
 (async function(){
   try {
-    const h = new Date(), dd = String(h.getDate()).padStart(2,'0'), mm = String(h.getMonth()+1).padStart(2,'0');
-    const r = await fetch('https://mindicador.cl/api/uf/' + dd + '-' + mm + '-' + h.getFullYear());
+    const r = await fetch('https://mindicador.cl/api/uf');
     const d = await r.json();
     if (d && d.serie && d.serie[0]) ufVal = d.serie[0].valor;
   } catch(e) {}
