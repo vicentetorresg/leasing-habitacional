@@ -25,6 +25,7 @@
     { "source": "/subir-fotos", "destination": "/subir-fotos.html" },
     { "source": "/galeria", "destination": "/api/galeria" },
     { "source": "/marketplace", "destination": "/marketplace.html" },
+    { "source": "/simulador-simple", "destination": "/simulador-simple.html" },
     { "source": "/firma-electronica", "destination": "/firma-dist/index" },
     { "source": "/firma-electronica/:path*", "destination": "/firma-dist/index" },
     { "source": "/crm", "destination": "/crm-dist/index" },
