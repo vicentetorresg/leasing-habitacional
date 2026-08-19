@@ -176,7 +176,7 @@ const Advisor = () => {
       const r = await fetch('/api/send-doc-reminder', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ leads: docLeads.map(l => ({ id: l.id, name: l.name, email: l.email, doc_token: l.doc_token })) }),
+        body: JSON.stringify({ leads: docLeads.map(l => ({ id: l.id, name: l.name, email: l.email, doc_token: l.doc_token, assigned_to: l.assigned_to })) }),
       });
       const data = await r.json();
       if (r.ok) {
