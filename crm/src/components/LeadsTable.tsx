@@ -419,69 +419,69 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
                         : 'hover:bg-muted/50'
                   }`}
                 >
-                  <TableCell className="px-2 text-center text-xs text-muted-foreground font-mono">
+                  <TableCell className="px-2 py-0.5 text-center text-xs text-muted-foreground font-mono">
                     {globalIdx + 1}
                   </TableCell>
-                  <TableCell className="px-2">
+                  <TableCell className="px-2 py-0.5">
                     <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold whitespace-nowrap ${s.style}`}>
                       {s.label}
                     </span>
                   </TableCell>
-                  <TableCell className="px-2 font-bold text-foreground text-sm max-w-[160px] truncate">
+                  <TableCell className="px-2 py-0.5 font-bold text-foreground text-sm max-w-[160px] truncate">
                     {lead.name}
                   </TableCell>
-                  <TableCell className="px-2 font-mono text-accent text-xs whitespace-nowrap">
+                  <TableCell className="px-2 py-0.5 font-mono text-accent text-xs whitespace-nowrap">
                     {lead.phone}
                   </TableCell>
-                  <TableCell className="px-2 text-xs text-muted-foreground whitespace-nowrap">
+                  <TableCell className="px-2 py-0.5 text-xs text-muted-foreground whitespace-nowrap">
                     {lead.rut || '—'}
                   </TableCell>
-                  <TableCell className="px-2 text-xs text-foreground whitespace-nowrap max-w-[120px] truncate" title={formatSueldo(lead)}>
+                  <TableCell className="px-2 py-0.5 text-xs text-foreground whitespace-nowrap max-w-[120px] truncate" title={formatSueldo(lead)}>
                     {formatSueldo(lead)}
                   </TableCell>
-                  <TableCell className="px-2 text-xs text-muted-foreground whitespace-nowrap">
+                  <TableCell className="px-2 py-0.5 text-xs text-muted-foreground whitespace-nowrap">
                     {(lead as any).arriendo || '—'}
                   </TableCell>
-                  <TableCell className="px-2 text-center text-xs">
+                  <TableCell className="px-2 py-0.5 text-center text-xs">
                     {(lead as any).contrato === 'si' ? <span className="text-success font-bold">✅</span> : (lead as any).contrato === 'no' ? <span className="text-destructive font-bold">❌</span> : <span className="text-muted-foreground">—</span>}
                   </TableCell>
-                  <TableCell className="px-2 text-center text-xs">
+                  <TableCell className="px-2 py-0.5 text-center text-xs">
                     {(lead as any).vivienda === 'si' ? <span className="text-warning font-bold">⚠️</span> : (lead as any).vivienda === 'no' ? <span className="text-success font-bold">✅</span> : <span className="text-muted-foreground">—</span>}
                   </TableCell>
-                  <TableCell className="px-2 text-[10px] text-muted-foreground max-w-[100px] truncate" title={(lead as any).precio_propiedad_ok || ''}>
+                  <TableCell className="px-2 py-0.5 text-[10px] text-muted-foreground max-w-[100px] truncate" title={(lead as any).precio_propiedad_ok || ''}>
                     {(lead as any).precio_propiedad_ok || '—'}
                   </TableCell>
-                  <TableCell className="px-2 text-[10px] text-muted-foreground max-w-[80px] truncate" title={(lead as any).comuna_propiedad || ''}>
+                  <TableCell className="px-2 py-0.5 text-[10px] text-muted-foreground max-w-[80px] truncate" title={(lead as any).comuna_propiedad || ''}>
                     {(lead as any).comuna_propiedad || '—'}
                   </TableCell>
-                  <TableCell className="px-2 text-[10px] text-muted-foreground max-w-[80px] truncate" title={(lead as any).complementa_renta || ''}>
+                  <TableCell className="px-2 py-0.5 text-[10px] text-muted-foreground max-w-[80px] truncate" title={(lead as any).complementa_renta || ''}>
                     {(lead as any).complementa_renta || '—'}
                   </TableCell>
-                  <TableCell className="px-2 text-[10px] text-muted-foreground max-w-[80px] truncate" title={(lead as any).renta_complemento || ''}>
+                  <TableCell className="px-2 py-0.5 text-[10px] text-muted-foreground max-w-[80px] truncate" title={(lead as any).renta_complemento || ''}>
                     {(lead as any).renta_complemento || '—'}
                   </TableCell>
-                  <TableCell className="px-2 text-[10px] text-muted-foreground whitespace-nowrap">
+                  <TableCell className="px-2 py-0.5 text-[10px] text-muted-foreground whitespace-nowrap">
                     {(lead as any).cuando_comprar === 'lo_antes_posible' ? '🔥 Pronto' : (lead as any).cuando_comprar === 'dentro_3_meses' ? '3 meses' : (lead as any).cuando_comprar === 'mas_3_meses' ? '+3 meses' : '—'}
                   </TableCell>
-                  <TableCell className="px-2">
+                  <TableCell className="px-2 py-0.5">
                     {(() => { const p = PRIORITY_CONFIG[lead.priority] || { label: lead.priority, style: 'bg-muted text-muted-foreground' }; return (
                       <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap ${p.style}`}>{p.label}</span>
                     ); })()}
                   </TableCell>
-                  <TableCell className="px-2">
+                  <TableCell className="px-2 py-0.5">
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-bold whitespace-nowrap">
                       {formatSource(lead.source)}
                     </span>
                   </TableCell>
-                  <TableCell className="px-2">
+                  <TableCell className="px-2 py-0.5">
                     {(() => { const ap = formatAdPlatform(lead); return (
                       <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap ${ap.style}`}>{ap.label}</span>
                     ); })()}
                   </TableCell>
-                  <TableCell className="px-2 text-xs text-center">
+                  <TableCell className="px-2 py-0.5 text-xs text-center">
                     {lead.en_dicom ? <span className="text-destructive font-bold">⚠️</span> : <span className="text-success">✅</span>}
                   </TableCell>
-                  <TableCell className="px-2 text-center">
+                  <TableCell className="px-2 py-0.5 text-center">
                     {attempts === 0 && lead.status === 'new' ? (
                       <span className="text-[10px] px-1.5 py-0.5 rounded bg-warning/15 text-warning font-bold">Sin llamar</span>
                     ) : attempts === 0 && lead.last_attempt_at ? (
@@ -492,12 +492,12 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
                       <span className="text-xs font-mono text-muted-foreground">{attempts}x</span>
                     )}
                   </TableCell>
-                  <TableCell className="px-2 text-xs text-muted-foreground whitespace-nowrap">
+                  <TableCell className="px-2 py-0.5 text-xs text-muted-foreground whitespace-nowrap">
                     {lead.status_changed_at
                       ? `${new Date(lead.status_changed_at).toLocaleDateString('es-CL', { day: '2-digit', month: 'short' })} ${new Date(lead.status_changed_at).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })}`
                       : '—'}
                   </TableCell>
-                  <TableCell className="px-2 text-xs text-muted-foreground whitespace-nowrap">
+                  <TableCell className="px-2 py-0.5 text-xs text-muted-foreground whitespace-nowrap">
                     {new Date(lead.created_at).toLocaleDateString('es-CL', { day: '2-digit', month: 'short' })}{' '}
                     {new Date(lead.created_at).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })}
                   </TableCell>
