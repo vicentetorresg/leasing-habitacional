@@ -86,10 +86,18 @@ export function useLeads(userId?: string, isAdmin?: boolean, userEmail?: string,
       query = query.in('status', EJECUTIVA_STATUSES).eq('assigned_to', userId);
     }
 
-    const { data } = await query;
-    if (data) {
-      setLeads(data as Lead[]);
+    // Fetch all rows (Supabase default limit is 1000)
+    let allData: any[] = [];
+    const PAGE = 1000;
+    let from = 0;
+    while (true) {
+      const { data } = await query.range(from, from + PAGE - 1);
+      if (!data || data.length === 0) break;
+      allData = allData.concat(data);
+      if (data.length < PAGE) break;
+      from += PAGE;
     }
+    setLeads(allData as Lead[]);
     setLoading(false);
   }, [isDemo, isAdmin, userId, isRecicladora]);
 
