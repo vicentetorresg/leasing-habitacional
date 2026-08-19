@@ -88,7 +88,7 @@ function downloadXlsx(leads: Lead[], filename: string) {
     'Sueldo Líquido': l.sueldo_liquido || '',
     'DICOM': l.en_dicom ? 'Sí' : 'No',
     'Propiedad Vista': l.tiene_propiedad_vista === 'si' ? 'Sí' : l.tiene_propiedad_vista === 'no' ? 'No' : '',
-    'Comuna Propiedad': l.comuna_propiedad || '',
+    'Dirección y comuna': l.comuna_propiedad || '',
     'Complementa Renta': l.complementa_renta || '',
     'Renta Complemento': l.renta_complemento || '',
     'Valor Propiedad': l.precio_propiedad_ok || '',
@@ -1808,7 +1808,7 @@ function LeadDetailContent({
           </div>
         </div>
         <div>
-          <label className="text-xs text-muted-foreground uppercase">Comuna Propiedad</label>
+          <label className="text-xs text-muted-foreground uppercase">Dirección y comuna</label>
           <input type="text" value={comunaPropiedad} onChange={e => setComunaPropiedad(e.target.value)}
             disabled={!canEditAdvisorFields}
             placeholder="Ej: Santiago, Puente Alto"

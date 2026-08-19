@@ -370,7 +370,7 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
               <TableHead className="px-2 text-center">Contrato</TableHead>
               <TableHead className="px-2 text-center">Vivienda</TableHead>
               <TableHead className="px-2">Valor Prop.</TableHead>
-              <TableHead className="px-2">Comuna</TableHead>
+              <TableHead className="px-2">Dirección</TableHead>
               <TableHead className="px-2">Complementa</TableHead>
               <TableHead className="px-2">Renta Comp.</TableHead>
               <TableHead className="px-2">Cuándo</TableHead>

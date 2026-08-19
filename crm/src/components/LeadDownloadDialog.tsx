@@ -125,7 +125,7 @@ const LeadDownloadDialog = ({ leads }: LeadDownloadDialogProps) => {
           'Renta Liquida': l.sueldo_liquido_raw || (l.sueldo_liquido ? `$${l.sueldo_liquido.toLocaleString('es-CL')}` : ''),
           DICOM: l.en_dicom ? 'Si' : 'No',
           'Propiedad Vista': l.tiene_propiedad_vista === 'si' ? 'Si' : l.tiene_propiedad_vista === 'no' ? 'No' : '',
-          'Comuna Propiedad': l.comuna_propiedad || '',
+          'Dirección y comuna': l.comuna_propiedad || '',
           'Complementa Renta': l.complementa_renta || '',
           'Renta Complemento': l.renta_complemento || '',
           'Valor Propiedad OK': l.precio_propiedad_ok || '',
