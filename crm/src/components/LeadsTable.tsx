@@ -364,21 +364,11 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
                 Nombre {sortIcon('name')}
               </TableHead>
               <TableHead className="px-2">Teléfono</TableHead>
-              <TableHead className="px-2">RUT</TableHead>
               <TableHead className="px-2">Renta</TableHead>
-              <TableHead className="px-2">Arriendo</TableHead>
-              <TableHead className="px-2 text-center">Contrato</TableHead>
-              <TableHead className="px-2 text-center">Vivienda</TableHead>
               <TableHead className="px-2">Valor Prop.</TableHead>
               <TableHead className="px-2">Dirección</TableHead>
-              <TableHead className="px-2">Complementa</TableHead>
               <TableHead className="px-2">Renta Comp.</TableHead>
               <TableHead className="px-2">Cuándo</TableHead>
-              <TableHead className="px-2">Prioridad</TableHead>
-              <TableHead className="px-2">Fuente</TableHead>
-              <TableHead className="px-2">Plataforma</TableHead>
-              <TableHead className="px-2">DICOM</TableHead>
-              <TableHead className="px-2">Intentos</TableHead>
               <TableHead
                 className="cursor-pointer select-none px-2"
                 onClick={() => toggleSort('status_changed_at')}
@@ -433,20 +423,8 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
                   <TableCell className="px-2 py-0.5 font-mono text-accent text-xs whitespace-nowrap">
                     {lead.phone}
                   </TableCell>
-                  <TableCell className="px-2 py-0.5 text-xs text-muted-foreground whitespace-nowrap">
-                    {lead.rut || '—'}
-                  </TableCell>
                   <TableCell className="px-2 py-0.5 text-xs text-foreground whitespace-nowrap max-w-[120px] truncate" title={formatSueldo(lead)}>
                     {formatSueldo(lead)}
-                  </TableCell>
-                  <TableCell className="px-2 py-0.5 text-xs text-muted-foreground whitespace-nowrap">
-                    {(lead as any).arriendo || '—'}
-                  </TableCell>
-                  <TableCell className="px-2 py-0.5 text-center text-xs">
-                    {(lead as any).contrato === 'si' ? <span className="text-success font-bold">✅</span> : (lead as any).contrato === 'no' ? <span className="text-destructive font-bold">❌</span> : <span className="text-muted-foreground">—</span>}
-                  </TableCell>
-                  <TableCell className="px-2 py-0.5 text-center text-xs">
-                    {(lead as any).vivienda === 'si' ? <span className="text-warning font-bold">⚠️</span> : (lead as any).vivienda === 'no' ? <span className="text-success font-bold">✅</span> : <span className="text-muted-foreground">—</span>}
                   </TableCell>
                   <TableCell className="px-2 py-0.5 text-[10px] text-muted-foreground max-w-[100px] truncate" title={(lead as any).precio_propiedad_ok || ''}>
                     {(lead as any).precio_propiedad_ok || '—'}
@@ -454,43 +432,11 @@ const LeadsTable = ({ leads, selectedLeadId, onSelect }: LeadsTableProps) => {
                   <TableCell className="px-2 py-0.5 text-[10px] text-muted-foreground max-w-[80px] truncate" title={(lead as any).comuna_propiedad || ''}>
                     {(lead as any).comuna_propiedad || '—'}
                   </TableCell>
-                  <TableCell className="px-2 py-0.5 text-[10px] text-muted-foreground max-w-[80px] truncate" title={(lead as any).complementa_renta || ''}>
-                    {(lead as any).complementa_renta || '—'}
-                  </TableCell>
                   <TableCell className="px-2 py-0.5 text-[10px] text-muted-foreground max-w-[80px] truncate" title={(lead as any).renta_complemento || ''}>
                     {(lead as any).renta_complemento || '—'}
                   </TableCell>
                   <TableCell className="px-2 py-0.5 text-[10px] text-muted-foreground whitespace-nowrap">
                     {(lead as any).cuando_comprar === 'lo_antes_posible' ? '🔥 Pronto' : (lead as any).cuando_comprar === 'dentro_3_meses' ? '3 meses' : (lead as any).cuando_comprar === 'mas_3_meses' ? '+3 meses' : '—'}
-                  </TableCell>
-                  <TableCell className="px-2 py-0.5">
-                    {(() => { const p = PRIORITY_CONFIG[lead.priority] || { label: lead.priority, style: 'bg-muted text-muted-foreground' }; return (
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap ${p.style}`}>{p.label}</span>
-                    ); })()}
-                  </TableCell>
-                  <TableCell className="px-2 py-0.5">
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-bold whitespace-nowrap">
-                      {formatSource(lead.source)}
-                    </span>
-                  </TableCell>
-                  <TableCell className="px-2 py-0.5">
-                    {(() => { const ap = formatAdPlatform(lead); return (
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap ${ap.style}`}>{ap.label}</span>
-                    ); })()}
-                  </TableCell>
-                  <TableCell className="px-2 py-0.5 text-xs text-center">
-                    {lead.en_dicom ? <span className="text-destructive font-bold">⚠️</span> : <span className="text-success">✅</span>}
-                  </TableCell>
-                  <TableCell className="px-2 py-0.5 text-center">
-                    {attempts === 0 && lead.status === 'new' ? (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-warning/15 text-warning font-bold">Sin llamar</span>
-                    ) : attempts === 0 && lead.last_attempt_at ? (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-mono" title={new Date(lead.last_attempt_at).toLocaleString('es-CL')}>
-                        📞 {new Date(lead.last_attempt_at).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                    ) : (
-                      <span className="text-xs font-mono text-muted-foreground">{attempts}x</span>
-                    )}
                   </TableCell>
                   <TableCell className="px-2 py-0.5 text-xs text-muted-foreground whitespace-nowrap">
                     {lead.status_changed_at
