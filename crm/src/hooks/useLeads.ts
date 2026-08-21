@@ -103,6 +103,8 @@ export function useLeads(userId?: string, isAdmin?: boolean, userEmail?: string,
 
   useEffect(() => {
     fetchLeads();
+    const interval = setInterval(fetchLeads, 3 * 60 * 1000);
+    return () => clearInterval(interval);
   }, [fetchLeads]);
 
   return { leads, loading, refetch: fetchLeads };
