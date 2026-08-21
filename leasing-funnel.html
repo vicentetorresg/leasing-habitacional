@@ -706,7 +706,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
     if (!pv || pv.value !== 'si') { alert('Debes tener una propiedad vista para continuar.'); return; }
     var comunaProp = document.getElementById(prefix+'-comuna-val');
     var comunaPropVal = comunaProp ? comunaProp.value.trim() : '';
-    if (!comunaPropVal) { alert('Por favor indica en que comuna queda la propiedad.'); return; }
+    if (!comunaPropVal) { alert('Por favor indica la dirección y comuna de la propiedad.'); return; } if (comunaPropVal.split(/\s+/).length < 2) { alert('Por favor escribe la dirección exacta de la propiedad y la comuna. Ej: Av. Los Pajaritos, Maipú'); return; }
     var precioSel = document.getElementById(prefix+'-precio-range');
     var precioVal = precioSel ? precioSel.value : '';
     if (!precioVal) { alert('Selecciona el rango de precio de la propiedad.'); return; }

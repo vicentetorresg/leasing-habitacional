@@ -1587,7 +1587,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (!pv || pv.value !== 'si') { alert('Debes tener una propiedad vista para continuar.'); return; }
     const comunaProp = document.getElementById(prefix+'-comuna-val');
     const comunaPropVal = comunaProp ? comunaProp.value.trim() : '';
-    if (!comunaPropVal) { alert('Por favor indica la dirección y comuna de la propiedad.'); return; }
+    if (!comunaPropVal) { alert('Por favor indica la dirección y comuna de la propiedad.'); return; } if (comunaPropVal.split(/\s+/).length < 2) { alert('Por favor escribe la dirección exacta de la propiedad y la comuna. Ej: Av. Los Pajaritos, Maipú'); return; }
     const precioSel = document.getElementById(prefix+'-precio-range');
     const precioVal = precioSel ? precioSel.value : '';
     if (!precioVal) { alert('Selecciona el rango de precio de la propiedad.'); return; }
@@ -1633,7 +1633,7 @@ footer{background:var(--navy);padding:56px 40px 28px}
     if (!pv || pv.value !== 'si') { alert('Debes tener una propiedad vista para continuar.'); return; }
     const comunaProp = document.getElementById(prefix+'-comuna-val');
     const comunaPropVal = comunaProp ? comunaProp.value.trim() : '';
-    if (!comunaPropVal) { alert('Por favor indica la dirección y comuna de la propiedad.'); return; }
+    if (!comunaPropVal) { alert('Por favor indica la dirección y comuna de la propiedad.'); return; } if (comunaPropVal.split(/\s+/).length < 2) { alert('Por favor escribe la dirección exacta de la propiedad y la comuna. Ej: Av. Los Pajaritos, Maipú'); return; }
     const precioSel = document.getElementById(prefix+'-precio-range');
     const precioVal = precioSel ? precioSel.value : '';
     if (!precioVal) { alert('Selecciona el rango de precio de la propiedad.'); return; }
