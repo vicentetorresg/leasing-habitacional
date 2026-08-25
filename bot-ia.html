@@ -601,26 +601,32 @@ async function loadPrompt() {
 }
 
 async function savePrompt() {
-  const value = document.getElementById('prompt-editor').value;
-  const statusEl = document.getElementById('prompt-status');
-  statusEl.textContent = 'Guardando...';
+  const btn = document.querySelector('.prompt-actions .save');
+  const origText = btn.textContent;
+  btn.textContent = 'Guardando...';
+  btn.disabled = true;
   try {
+    const value = document.getElementById('prompt-editor').value;
     const r = await fetch(`${SB_URL}/rest/v1/bot_config?key=eq.system_prompt`, {
       method: 'PATCH',
       headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
       body: JSON.stringify({ value, updated_at: new Date().toISOString() })
     });
     if (r.ok) {
-      statusEl.style.color = '#25D366';
-      statusEl.textContent = 'Guardado correctamente';
+      btn.textContent = 'Guardado ✓';
+      btn.style.background = '#25D366';
     } else {
-      throw new Error('Error ' + r.status);
+      const t = await r.text();
+      btn.textContent = 'Error';
+      btn.style.background = '#dc3545';
+      alert('Error al guardar: ' + r.status + ' ' + t);
     }
   } catch(e) {
-    statusEl.style.color = '#dc3545';
-    statusEl.textContent = 'Error al guardar: ' + e.message;
+    btn.textContent = 'Error';
+    btn.style.background = '#dc3545';
+    alert('Error al guardar: ' + e.message);
   }
-  setTimeout(() => { statusEl.textContent = ''; statusEl.style.color = ''; }, 4000);
+  setTimeout(() => { btn.textContent = origText; btn.style.background = ''; btn.disabled = false; }, 3000);
 }
 
 // ===== FLOWS =====
