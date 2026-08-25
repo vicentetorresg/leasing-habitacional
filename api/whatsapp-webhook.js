@@ -566,92 +566,6 @@ export default async function handler(req, res) {
     return res.status(403).send('Forbidden');
   }
 
-  // --- Phase 2: Async processing (called by Phase 1) ---
-  if (req.method === 'POST' && req.query.process) {
-    const { phone, type, text, media_id, media_name, media_mime } = req.body;
-    try {
-      let userText = text;
-      let mediaUrl = null;
-
-      // Download and process media
-      if (media_id) {
-        const buffer = await downloadMediaBuffer(media_id);
-        if (buffer) {
-          if (type === 'audio') {
-            const transcript = await transcribeAudio(buffer, media_name, media_mime);
-            if (transcript) userText = `[AUDIO transcrito]: ${transcript}`;
-            // Update the saved message with transcription
-            await sbPatch(`whatsapp_messages?phone=eq.${phone}&content=eq.[AUDIO]&bot_phone=eq.${PHONE_ID}&order=created_at.desc&limit=1`, { content: userText });
-          } else {
-            mediaUrl = await uploadToStorage(buffer, phone, media_name, media_mime);
-            if (mediaUrl) {
-              await sbPatch(`whatsapp_messages?phone=eq.${phone}&content=eq.${encodeURIComponent(text)}&bot_phone=eq.${PHONE_ID}&order=created_at.desc&limit=1`, { media_url: mediaUrl });
-            }
-          }
-        }
-      }
-
-      // Check bot enabled & not_interested
-      const botEnabled = await isBotEnabled(phone);
-      if (!botEnabled) return res.status(200).send('OK');
-      const profile = await getLeadProfile(phone);
-      if (profile?.not_interested) return res.status(200).send('OK');
-
-      // Attachment handling (not audio)
-      const isAttachment = ATTACHMENT_TYPES.includes(type);
-      if (isAttachment) {
-        const leadProfile = profile || await ensureLeadProfile(phone);
-        await sendAttachmentNotificationEmail(phone, leadProfile, type);
-        const reply = 'OK, recibí ese documento. Favor enviar los pendientes';
-        await saveMessage(phone, 'assistant', reply);
-        await upsertConversation(phone, reply, 'assistant');
-        await sendWhatsAppMessage(phone, reply);
-        return res.status(200).send('OK');
-      }
-
-      // Escalation check
-      const lowerText = userText.toLowerCase();
-      const shouldEscalate = ESCALATION_KEYWORDS.some(kw => lowerText.includes(kw));
-      if (shouldEscalate) {
-        const escalationMsg = 'Entendido, un ejecutivo de Llave Propia te contactará a la brevedad. También puedes escribir directamente al +56 9 5782 3672.';
-        await saveMessage(phone, 'assistant', escalationMsg);
-        await upsertConversation(phone, escalationMsg, 'assistant');
-        await sendWhatsAppMessage(phone, escalationMsg);
-        await sbPost('whatsapp_conversations', {
-          phone, bot_phone: PHONE_ID, bot_enabled: false, escalated_at: new Date().toISOString(), updated_at: new Date().toISOString(),
-        }, { Prefer: 'resolution=merge-duplicates' });
-        const leadProfile = profile || await ensureLeadProfile(phone);
-        try {
-          await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: { Authorization: `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              from: 'Llave Propia <notificaciones@proppi.cl>',
-              to: ['vicente@llavepropia.cl', 'rodrigo@llavepropia.cl'],
-              subject: `Cliente pide hablar con ejecutivo - ${leadProfile.name || phone}`,
-              html: `<p>El cliente <strong>${leadProfile.name || 'Sin nombre'}</strong> pidió hablar con un ejecutivo humano por WhatsApp.</p><p>Teléfono: +${phone}</p><p>Mensaje: "${userText}"</p><p>El bot fue desactivado automáticamente.</p>`,
-            }),
-          });
-        } catch (e) { console.error('Escalation email error:', e); }
-        return res.status(200).send('OK');
-      }
-
-      // Claude response
-      const history = await getHistory(phone);
-      const reply = await callClaude(history, phone);
-      await saveMessage(phone, 'assistant', reply);
-      await upsertConversation(phone, reply, 'assistant');
-      await sendWhatsAppMessage(phone, reply);
-    } catch (err) {
-      console.error('Process error:', err);
-      try {
-        await sendWhatsAppMessage(phone, 'Disculpa, tuve un problema. Un ejecutivo te contactará pronto al +56 9 5782 3672.');
-      } catch (e2) {}
-    }
-    return res.status(200).send('OK');
-  }
-
-  // --- Phase 1: Webhook reception (fast — save + trigger processing) ---
   if (req.method === 'POST') {
     if (req.headers['x-admin-key']) return handleAdmin(req, res);
 
@@ -671,12 +585,14 @@ export default async function handler(req, res) {
 
     const from = message.from;
     const messageId = message.id;
+    const isAttachment = ATTACHMENT_TYPES.includes(message.type);
 
     try {
       await markAsRead(messageId);
 
-      // Extract text representation
+      // Extract message content + download media
       let userText = '';
+      let mediaUrl = null;
       let mediaId = null;
       let filename = null;
       let mimeType = null;
@@ -707,30 +623,88 @@ export default async function handler(req, res) {
         userText = '[MENSAJE NO SOPORTADO]';
       }
 
-      // Save message immediately
-      await saveMessage(from, 'user', userText);
+      // Download media and process
+      if (mediaId) {
+        const buffer = await downloadMediaBuffer(mediaId);
+        if (buffer) {
+          if (message.type === 'audio') {
+            // Audio: transcribe with Whisper (with 4s timeout to leave room for Claude)
+            const transcript = await Promise.race([
+              transcribeAudio(buffer, filename, mimeType),
+              new Promise(r => setTimeout(() => r(null), 4000)),
+            ]);
+            if (transcript) userText = `[AUDIO transcrito]: ${transcript}`;
+          } else {
+            // Non-audio: upload to storage
+            mediaUrl = await uploadToStorage(buffer, from, filename, mimeType);
+          }
+        }
+      }
+
+      // Save user message
+      await saveMessage(from, 'user', userText, mediaUrl);
       await upsertConversation(from, userText, 'user');
 
-      // Trigger async processing (separate invocation with its own 10s timeout)
-      const processUrl = `https://www.llavepropia.cl/api/whatsapp-webhook?process=1`;
-      fetch(processUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          phone: from,
-          type: message.type,
-          text: userText,
-          media_id: mediaId,
-          media_name: filename,
-          media_mime: mimeType,
-        }),
-      }).catch(e => console.error('Process trigger error:', e));
+      // Check if bot is enabled
+      const botEnabled = await isBotEnabled(from);
+      if (!botEnabled) return res.status(200).send('OK');
 
+      // Check lead not_interested status
+      const profile = await getLeadProfile(from);
+      if (profile?.not_interested) return res.status(200).send('OK');
+
+      // --- ATTACHMENT HANDLING: email notification + generic response ---
+      if (isAttachment) {
+        const leadProfile = profile || await ensureLeadProfile(from);
+        await sendAttachmentNotificationEmail(from, leadProfile, message.type);
+        const reply = 'OK, recibí ese documento. Favor enviar los pendientes';
+        await saveMessage(from, 'assistant', reply);
+        await upsertConversation(from, reply, 'assistant');
+        await sendWhatsAppMessage(from, reply);
+        return res.status(200).send('OK');
+      }
+
+      // --- TEXT & AUDIO: escalation check, then Claude ---
+      const lowerText = userText.toLowerCase();
+      const shouldEscalate = ESCALATION_KEYWORDS.some(kw => lowerText.includes(kw));
+
+      if (shouldEscalate) {
+        const escalationMsg = 'Entendido, un ejecutivo de Llave Propia te contactará a la brevedad. También puedes escribir directamente al +56 9 5782 3672.';
+        await saveMessage(from, 'assistant', escalationMsg);
+        await upsertConversation(from, escalationMsg, 'assistant');
+        await sendWhatsAppMessage(from, escalationMsg);
+        await sbPost('whatsapp_conversations', {
+          phone: from, bot_phone: PHONE_ID, bot_enabled: false, escalated_at: new Date().toISOString(), updated_at: new Date().toISOString(),
+        }, { Prefer: 'resolution=merge-duplicates' });
+        const leadProfile = profile || await ensureLeadProfile(from);
+        try {
+          await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              from: 'Llave Propia <notificaciones@proppi.cl>',
+              to: ['vicente@llavepropia.cl', 'rodrigo@llavepropia.cl'],
+              subject: `Cliente pide hablar con ejecutivo - ${leadProfile.name || from}`,
+              html: `<p>El cliente <strong>${leadProfile.name || 'Sin nombre'}</strong> pidió hablar con un ejecutivo humano por WhatsApp.</p><p>Teléfono: +${from}</p><p>Mensaje: "${userText}"</p><p>El bot fue desactivado automáticamente.</p>`,
+            }),
+          });
+        } catch (e) { console.error('Escalation email error:', e); }
+        return res.status(200).send('OK');
+      }
+
+      // Call Claude
+      const history = await getHistory(from);
+      const reply = await callClaude(history, from);
+      await saveMessage(from, 'assistant', reply);
+      await upsertConversation(from, reply, 'assistant');
+      await sendWhatsAppMessage(from, reply);
     } catch (err) {
-      console.error('Webhook error:', err);
+      console.error('Error processing message:', err);
+      try {
+        await sendWhatsAppMessage(from, 'Disculpa, tuve un problema. Un ejecutivo te contactará pronto al +56 9 5782 3672.');
+      } catch (e2) {}
     }
 
-    // Respond immediately to Meta (don't wait for processing)
     return res.status(200).send('OK');
   }
 }
