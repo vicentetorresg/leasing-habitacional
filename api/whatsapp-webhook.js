@@ -312,7 +312,7 @@ Favor revisar directamente la documentación recibida.`;
       method: 'POST',
       headers: { Authorization: `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Llave Propia <notificaciones@llavepropia.cl>',
+        from: 'Llave Propia <notificaciones@proppi.cl>',
         to: ['vicente@llavepropia.cl', 'rodrigo@llavepropia.cl'],
         subject: `Nuevo documento recibido - ${name}`,
         text: body,
@@ -680,7 +680,7 @@ export default async function handler(req, res) {
             method: 'POST',
             headers: { Authorization: `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              from: 'Llave Propia <notificaciones@llavepropia.cl>',
+              from: 'Llave Propia <notificaciones@proppi.cl>',
               to: ['vicente@llavepropia.cl', 'rodrigo@llavepropia.cl'],
               subject: `Cliente pide hablar con ejecutivo - ${leadProfile.name || from}`,
               html: `<p>El cliente <strong>${leadProfile.name || 'Sin nombre'}</strong> pidió hablar con un ejecutivo humano por WhatsApp.</p>
