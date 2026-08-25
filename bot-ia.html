@@ -341,7 +341,7 @@ async function loadPhones() {
     const rows = await sb('bot_config?key=eq.phones&select=value');
     if (rows.length) phones = JSON.parse(rows[0].value);
   } catch(e) {}
-  if (!phones.length) phones = [{ id: '1233346946534882', label: 'Prueba', number: '+1 555-664-4470' }];
+  if (!phones.length) phones = [{ id: '1233346946534882', label: 'Prueba (+1 555-664-4470)', number: '+1 555-664-4470' }];
   const sel = document.getElementById('phone-select');
   sel.innerHTML = phones.map((p, i) => `<option value="${p.id}">${p.label}</option>`).join('');
 }
@@ -352,7 +352,8 @@ function getPhoneId() { return document.getElementById('phone-select').value; }
 // ===== CONVERSATIONS =====
 async function loadConversations() {
   try {
-    const rows = await sb('whatsapp_conversations?order=last_message_at.desc.nullsfirst&limit=100');
+    const pid = getPhoneId();
+    const rows = await sb(`whatsapp_conversations?bot_phone=eq.${pid}&order=last_message_at.desc.nullsfirst&limit=100`);
     conversations = rows || [];
   } catch(e) {
     // Fallback: get from messages
@@ -405,11 +406,11 @@ function selectConversation(phone) {
   loadMessages(phone);
   loadConversationMeta(phone);
   // Mark read
-  adminApi({ action: 'mark_read', phone });
+  adminApi({ action: 'mark_read', phone, phone_id: getPhoneId() });
 }
 
 async function loadConversationMeta(phone) {
-  const rows = await sb(`whatsapp_conversations?phone=eq.${phone}`);
+  const rows = await sb(`whatsapp_conversations?phone=eq.${phone}&bot_phone=eq.${getPhoneId()}`);
   const conv = rows?.[0];
   document.getElementById('chat-phone').textContent = formatPhone(phone);
   document.getElementById('chat-name').textContent = conv?.name || '';
@@ -421,7 +422,8 @@ async function loadConversationMeta(phone) {
 let lastMsgCount = 0;
 
 async function loadMessages(phone, silent = false) {
-  const msgs = await sb(`whatsapp_messages?phone=eq.${phone}&order=created_at.asc&limit=200`);
+  const pid = getPhoneId();
+  const msgs = await sb(`whatsapp_messages?phone=eq.${phone}&bot_phone=eq.${pid}&order=created_at.asc&limit=200`);
   if (!msgs || msgs.length === lastMsgCount && silent) return;
   lastMsgCount = msgs.length;
 
@@ -512,7 +514,7 @@ async function sendTemplate(name, lang) {
 async function toggleBot() {
   if (!activePhone) return;
   const enabled = document.getElementById('bot-toggle-cb').checked;
-  await adminApi({ action: 'toggle_bot', phone: activePhone, enabled });
+  await adminApi({ action: 'toggle_bot', phone: activePhone, enabled, phone_id: getPhoneId() });
 }
 
 // ===== EMOJIS =====

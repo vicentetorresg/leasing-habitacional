@@ -126,18 +126,19 @@ async function sbPatch(path, data) {
 }
 
 async function getHistory(phone) {
-  const rows = await sbGet(`whatsapp_messages?phone=eq.${phone}&order=created_at.desc&limit=${MAX_HISTORY}`);
+  const rows = await sbGet(`whatsapp_messages?phone=eq.${phone}&bot_phone=eq.${PHONE_ID}&order=created_at.desc&limit=${MAX_HISTORY}`);
   return (rows || []).reverse().map(row => ({ role: row.role, content: row.content }));
 }
 
 async function saveMessage(phone, role, content) {
-  await sbPost('whatsapp_messages', { phone, role, content });
+  await sbPost('whatsapp_messages', { phone, role, content, bot_phone: PHONE_ID });
 }
 
 async function upsertConversation(phone, lastMessage, role) {
   const now = new Date().toISOString();
   const data = {
     phone,
+    bot_phone: PHONE_ID,
     last_message: (lastMessage || '').substring(0, 200),
     last_message_at: now,
     updated_at: now,
@@ -152,7 +153,7 @@ async function upsertConversation(phone, lastMessage, role) {
 }
 
 async function isBotEnabled(phone) {
-  const rows = await sbGet(`whatsapp_conversations?phone=eq.${phone}&select=bot_enabled`);
+  const rows = await sbGet(`whatsapp_conversations?phone=eq.${phone}&bot_phone=eq.${PHONE_ID}&select=bot_enabled`);
   if (!rows || rows.length === 0) return true;
   return rows[0].bot_enabled !== false;
 }
@@ -234,7 +235,7 @@ async function executeTool(toolName, input, phone) {
       updated_at: now,
     });
     await sbPost('whatsapp_conversations', {
-      phone, bot_enabled: false, updated_at: now,
+      phone, bot_phone: PHONE_ID, bot_enabled: false, updated_at: now,
     }, { Prefer: 'resolution=merge-duplicates' });
     return { success: true };
   }
@@ -379,7 +380,7 @@ async function runFollowups() {
   const twentyFourHoursAgo = new Date(now - 24 * 60 * 60 * 1000).toISOString();
 
   const conversations = await sbGet(
-    `whatsapp_conversations?bot_enabled=eq.true&last_user_message_at=lt.${fourHoursAgo}&last_user_message_at=gt.${twentyFourHoursAgo}&followup_count=lt.${MAX_FOLLOWUPS}&select=phone,followup_count,last_followup_at,last_user_message_at`
+    `whatsapp_conversations?bot_enabled=eq.true&bot_phone=eq.${PHONE_ID}&last_user_message_at=lt.${fourHoursAgo}&last_user_message_at=gt.${twentyFourHoursAgo}&followup_count=lt.${MAX_FOLLOWUPS}&select=phone,followup_count,last_followup_at,last_user_message_at`
   );
 
   if (!conversations || !Array.isArray(conversations) || conversations.length === 0) {
@@ -410,7 +411,7 @@ async function runFollowups() {
       await saveMessage(conv.phone, 'assistant', followupMsg);
 
       // Update conversation tracking
-      await sbPatch(`whatsapp_conversations?phone=eq.${conv.phone}`, {
+      await sbPatch(`whatsapp_conversations?phone=eq.${conv.phone}&bot_phone=eq.${PHONE_ID}`, {
         last_followup_at: now.toISOString(),
         followup_count: (conv.followup_count || 0) + 1,
         last_message: followupMsg.substring(0, 200),
@@ -452,16 +453,18 @@ async function handleAdmin(req, res) {
   }
 
   if (action === 'toggle_bot') {
-    const { phone, enabled } = req.body;
+    const { phone, enabled, phone_id } = req.body;
+    const pid = phone_id || PHONE_ID;
     await sbPost('whatsapp_conversations', {
-      phone, bot_enabled: enabled, updated_at: new Date().toISOString(),
+      phone, bot_phone: pid, bot_enabled: enabled, updated_at: new Date().toISOString(),
     }, { Prefer: 'resolution=merge-duplicates' });
     return res.status(200).json({ ok: true });
   }
 
   if (action === 'mark_read') {
     const { phone } = req.body;
-    await sbPatch(`whatsapp_conversations?phone=eq.${phone}`, { unread_count: 0 });
+    const pid = req.body.phone_id || PHONE_ID;
+    await sbPatch(`whatsapp_conversations?phone=eq.${phone}&bot_phone=eq.${pid}`, { unread_count: 0 });
     return res.status(200).json({ ok: true });
   }
 
