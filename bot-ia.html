@@ -569,7 +569,7 @@ async function startNewChat() {
   await sb('whatsapp_conversations', {
     method: 'POST',
     headers: { Prefer: 'resolution=merge-duplicates' },
-    body: JSON.stringify({ phone, last_message: msg || 'Nuevo chat', last_message_at: new Date().toISOString(), updated_at: new Date().toISOString(), bot_enabled: true })
+    body: JSON.stringify({ phone, bot_phone: getPhoneId(), last_message: msg || 'Nuevo chat', last_message_at: new Date().toISOString(), updated_at: new Date().toISOString(), bot_enabled: true })
   });
 
   document.getElementById('new-chat-phone').value = '';
