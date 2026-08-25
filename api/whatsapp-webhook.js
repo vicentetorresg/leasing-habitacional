@@ -670,6 +670,26 @@ export default async function handler(req, res) {
         await saveMessage(from, 'assistant', escalationMsg);
         await upsertConversation(from, escalationMsg, 'assistant');
         await sendWhatsAppMessage(from, escalationMsg);
+        // Disable bot and notify team
+        await sbPost('whatsapp_conversations', {
+          phone: from, bot_phone: PHONE_ID, bot_enabled: false, escalated_at: new Date().toISOString(), updated_at: new Date().toISOString(),
+        }, { Prefer: 'resolution=merge-duplicates' });
+        const leadProfile = profile || await ensureLeadProfile(from);
+        try {
+          await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              from: 'Llave Propia <notificaciones@llavepropia.cl>',
+              to: ['vicente@llavepropia.cl', 'rodrigo@llavepropia.cl'],
+              subject: `Cliente pide hablar con ejecutivo - ${leadProfile.name || from}`,
+              html: `<p>El cliente <strong>${leadProfile.name || 'Sin nombre'}</strong> pidió hablar con un ejecutivo humano por WhatsApp.</p>
+<p>Teléfono: +${from}</p>
+<p>Mensaje: "${userText}"</p>
+<p>El bot fue desactivado automáticamente para esta conversación.</p>`,
+            }),
+          });
+        } catch (e) { console.error('Escalation email error:', e); }
         return res.status(200).send('OK');
       }
 
