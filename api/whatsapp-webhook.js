@@ -401,6 +401,7 @@ IMPORTANTE SOBRE ARCHIVOS: Cuando el mensaje del cliente contiene [IMAGEN], [DOC
 
     if (!data.content) {
       console.error('Claude error:', JSON.stringify(data));
+      console.error('Messages sent:', JSON.stringify(currentMessages).substring(0, 500));
       return 'Disculpa, no pude procesar tu mensaje. Escríbenos al +56 9 5782 3672.';
     }
 
