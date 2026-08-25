@@ -633,11 +633,15 @@ export default async function handler(req, res) {
         const buffer = await downloadMediaBuffer(mediaId);
         if (buffer) {
           if (message.type === 'audio') {
-            // Audio: transcribe with Whisper (with 4s timeout to leave room for Claude)
-            const transcript = await Promise.race([
-              transcribeAudio(buffer, filename, mimeType),
-              new Promise(r => setTimeout(() => r(null), 6000)),
+            // Audio: upload + transcribe in parallel (6s timeout for Whisper)
+            const [url, transcript] = await Promise.all([
+              uploadToStorage(buffer, from, filename, mimeType),
+              Promise.race([
+                transcribeAudio(buffer, filename, mimeType),
+                new Promise(r => setTimeout(() => r(null), 6000)),
+              ]),
             ]);
+            mediaUrl = url;
             if (transcript) userText = `[AUDIO transcrito]: ${transcript}`;
           } else {
             // Non-audio: upload to storage
