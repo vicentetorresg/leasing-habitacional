@@ -102,39 +102,66 @@ async function sendWhatsAppTemplate(to, templateName, lang, phoneId) {
 
 // --- Media Download & Upload ---
 
-async function downloadAndStoreMedia(mediaId, phone, filename, mimeType) {
+async function downloadMediaBuffer(mediaId) {
   try {
-    // Step 1: Get media URL from WhatsApp
     const metaR = await fetch(`https://graph.facebook.com/v25.0/${mediaId}`, {
       headers: { Authorization: `Bearer ${WA_TOKEN}` },
     });
     const meta = await metaR.json();
     if (!meta.url) return null;
-
-    // Step 2: Download the file
     const fileR = await fetch(meta.url, {
       headers: { Authorization: `Bearer ${WA_TOKEN}` },
     });
     if (!fileR.ok) return null;
-    const buffer = Buffer.from(await fileR.arrayBuffer());
+    return Buffer.from(await fileR.arrayBuffer());
+  } catch (e) {
+    console.error('Media download error:', e);
+    return null;
+  }
+}
 
-    // Step 3: Upload to Supabase Storage
+async function uploadToStorage(buffer, phone, filename, mimeType) {
+  try {
     const ext = filename ? filename.split('.').pop() : (mimeType || 'bin').split('/').pop();
     const storageName = `${phone}/${Date.now()}_${filename || `file.${ext}`}`;
     const uploadR = await fetch(`${SUPABASE_URL}/storage/v1/object/wa-attachments/${storageName}`, {
       method: 'POST',
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': mimeType || 'application/octet-stream',
-      },
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': mimeType || 'application/octet-stream' },
       body: buffer,
     });
     if (!uploadR.ok) return null;
-
     return `${SUPABASE_URL}/storage/v1/object/public/wa-attachments/${storageName}`;
   } catch (e) {
-    console.error('Media download/upload error:', e);
+    console.error('Media upload error:', e);
+    return null;
+  }
+}
+
+async function transcribeAudio(buffer, filename, mimeType) {
+  try {
+    if (!process.env.OPENAI_API_KEY) return null;
+    const boundary = '----FormBoundary' + Date.now();
+    const bodyParts = [
+      `--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="${filename}"\r\nContent-Type: ${mimeType}\r\n\r\n`,
+      buffer,
+      `\r\n--${boundary}\r\nContent-Disposition: form-data; name="model"\r\n\r\nwhisper-1\r\n`,
+      `--${boundary}\r\nContent-Disposition: form-data; name="language"\r\n\r\nes\r\n`,
+      `--${boundary}--\r\n`,
+    ];
+    const formBody = Buffer.concat(bodyParts.map(p => typeof p === 'string' ? Buffer.from(p) : p));
+    const r = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, 'Content-Type': `multipart/form-data; boundary=${boundary}` },
+      body: formBody,
+    });
+    if (r.ok) {
+      const data = await r.json();
+      return data.text || null;
+    }
+    console.error('Whisper error:', r.status, await r.text());
+    return null;
+  } catch (e) {
+    console.error('Whisper transcription error:', e);
     return null;
   }
 }
@@ -595,41 +622,21 @@ export default async function handler(req, res) {
         userText = '[MENSAJE NO SOPORTADO]';
       }
 
-      // Download and store media if present
+      // Download media, upload to storage, and transcribe audio — all in parallel where possible
       if (mediaId) {
-        mediaUrl = await downloadAndStoreMedia(mediaId, from, filename, mimeType);
-      }
-
-      // For audio: attempt transcription with OpenAI Whisper
-      if (message.type === 'audio' && mediaUrl) {
-        try {
-          const audioR = await fetch(mediaUrl);
-          const audioBuffer = Buffer.from(await audioR.arrayBuffer());
-          const boundary = '----FormBoundary' + Date.now();
-          const bodyParts = [
-            `--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="${filename}"\r\nContent-Type: ${mimeType}\r\n\r\n`,
-            audioBuffer,
-            `\r\n--${boundary}\r\nContent-Disposition: form-data; name="model"\r\n\r\nwhisper-1\r\n`,
-            `--${boundary}\r\nContent-Disposition: form-data; name="language"\r\n\r\nes\r\n`,
-            `--${boundary}--\r\n`,
-          ];
-          const formBody = Buffer.concat(bodyParts.map(p => typeof p === 'string' ? Buffer.from(p) : p));
-          const whisperR = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-              'Content-Type': `multipart/form-data; boundary=${boundary}`,
-            },
-            body: formBody,
-          });
-          if (whisperR.ok) {
-            const whisperData = await whisperR.json();
-            if (whisperData.text) {
-              userText = `[AUDIO transcrito]: ${whisperData.text}`;
-            }
+        const buffer = await downloadMediaBuffer(mediaId);
+        if (buffer) {
+          if (message.type === 'audio') {
+            // Upload + transcribe in parallel
+            const [url, transcript] = await Promise.all([
+              uploadToStorage(buffer, from, filename, mimeType),
+              transcribeAudio(buffer, filename, mimeType),
+            ]);
+            mediaUrl = url;
+            if (transcript) userText = `[AUDIO transcrito]: ${transcript}`;
+          } else {
+            mediaUrl = await uploadToStorage(buffer, from, filename, mimeType);
           }
-        } catch (e) {
-          console.error('Whisper transcription error:', e);
         }
       }
 
