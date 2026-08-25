@@ -622,17 +622,13 @@ export default async function handler(req, res) {
         userText = '[MENSAJE NO SOPORTADO]';
       }
 
-      // Download media, upload to storage, and transcribe audio — all in parallel where possible
+      // Download media and process
       if (mediaId) {
         const buffer = await downloadMediaBuffer(mediaId);
         if (buffer) {
           if (message.type === 'audio') {
-            // Upload + transcribe in parallel
-            const [url, transcript] = await Promise.all([
-              uploadToStorage(buffer, from, filename, mimeType),
-              transcribeAudio(buffer, filename, mimeType),
-            ]);
-            mediaUrl = url;
+            // Audio: only transcribe (skip storage upload to save time for Claude call)
+            const transcript = await transcribeAudio(buffer, filename, mimeType);
             if (transcript) userText = `[AUDIO transcrito]: ${transcript}`;
           } else {
             mediaUrl = await uploadToStorage(buffer, from, filename, mimeType);
