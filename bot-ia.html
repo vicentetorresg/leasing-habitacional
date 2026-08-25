@@ -439,8 +439,22 @@ async function loadMessages(phone, silent = false) {
       lastDate = dateStr;
     }
     const timeStr = d.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+    let mediaHtml = '';
+    if (m.media_url) {
+      const url = m.media_url;
+      if (url.match(/\.(jpg|jpeg|png|gif|webp)/i) || m.content.includes('[IMAGEN')) {
+        mediaHtml = `<a href="${url}" target="_blank"><img src="${url}" style="max-width:240px;border-radius:8px;margin-bottom:4px;display:block"></a>`;
+      } else if (url.match(/\.(ogg|mp3|wav|m4a|opus)/i) || m.content.includes('[AUDIO')) {
+        mediaHtml = `<audio controls src="${url}" style="max-width:260px;margin-bottom:4px"></audio>`;
+      } else if (url.match(/\.(mp4|mov|avi)/i) || m.content.includes('[VIDEO')) {
+        mediaHtml = `<video controls src="${url}" style="max-width:260px;border-radius:8px;margin-bottom:4px"></video>`;
+      } else {
+        const fname = url.split('/').pop();
+        mediaHtml = `<a href="${url}" target="_blank" style="display:inline-flex;align-items:center;gap:4px;background:#f0f0f0;padding:6px 10px;border-radius:6px;color:#333;text-decoration:none;font-size:12px;margin-bottom:4px">📎 ${fname}</a>`;
+      }
+    }
     html += `<div class="msg ${m.role}">
-      ${escHtml(m.content)}
+      ${mediaHtml}${escHtml(m.content)}
       <div class="time">${timeStr}</div>
     </div>`;
   });

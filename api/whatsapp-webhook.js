@@ -100,6 +100,45 @@ async function sendWhatsAppTemplate(to, templateName, lang, phoneId) {
   return r.json();
 }
 
+// --- Media Download & Upload ---
+
+async function downloadAndStoreMedia(mediaId, phone, filename, mimeType) {
+  try {
+    // Step 1: Get media URL from WhatsApp
+    const metaR = await fetch(`https://graph.facebook.com/v25.0/${mediaId}`, {
+      headers: { Authorization: `Bearer ${WA_TOKEN}` },
+    });
+    const meta = await metaR.json();
+    if (!meta.url) return null;
+
+    // Step 2: Download the file
+    const fileR = await fetch(meta.url, {
+      headers: { Authorization: `Bearer ${WA_TOKEN}` },
+    });
+    if (!fileR.ok) return null;
+    const buffer = Buffer.from(await fileR.arrayBuffer());
+
+    // Step 3: Upload to Supabase Storage
+    const ext = filename ? filename.split('.').pop() : (mimeType || 'bin').split('/').pop();
+    const storageName = `${phone}/${Date.now()}_${filename || `file.${ext}`}`;
+    const uploadR = await fetch(`${SUPABASE_URL}/storage/v1/object/wa-attachments/${storageName}`, {
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': mimeType || 'application/octet-stream',
+      },
+      body: buffer,
+    });
+    if (!uploadR.ok) return null;
+
+    return `${SUPABASE_URL}/storage/v1/object/public/wa-attachments/${storageName}`;
+  } catch (e) {
+    console.error('Media download/upload error:', e);
+    return null;
+  }
+}
+
 // --- Supabase ---
 
 const sbHeaders = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' };
@@ -130,8 +169,10 @@ async function getHistory(phone) {
   return (rows || []).reverse().map(row => ({ role: row.role, content: row.content }));
 }
 
-async function saveMessage(phone, role, content) {
-  await sbPost('whatsapp_messages', { phone, role, content, bot_phone: PHONE_ID });
+async function saveMessage(phone, role, content, mediaUrl) {
+  const data = { phone, role, content, bot_phone: PHONE_ID };
+  if (mediaUrl) data.media_url = mediaUrl;
+  await sbPost('whatsapp_messages', data);
 }
 
 async function upsertConversation(phone, lastMessage, role) {
@@ -521,25 +562,79 @@ export default async function handler(req, res) {
     try {
       await markAsRead(messageId);
 
-      // Extract message content
+      // Extract message content + download media
       let userText = '';
+      let mediaUrl = null;
+      let mediaId = null;
+      let filename = null;
+      let mimeType = null;
+
       if (message.type === 'text') {
         userText = message.text.body;
       } else if (message.type === 'audio') {
+        mediaId = message.audio?.id;
+        mimeType = message.audio?.mime_type || 'audio/ogg';
+        filename = `audio_${Date.now()}.ogg`;
         userText = '[AUDIO]';
       } else if (message.type === 'image') {
+        mediaId = message.image?.id;
+        mimeType = message.image?.mime_type || 'image/jpeg';
+        filename = `imagen_${Date.now()}.jpg`;
         userText = '[IMAGEN enviada por el cliente]';
       } else if (message.type === 'document') {
-        const docName = message.document?.filename || '';
-        userText = docName ? `[DOCUMENTO enviado: ${docName}]` : '[DOCUMENTO enviado por el cliente]';
+        mediaId = message.document?.id;
+        mimeType = message.document?.mime_type || 'application/octet-stream';
+        filename = message.document?.filename || `documento_${Date.now()}`;
+        userText = filename ? `[DOCUMENTO enviado: ${filename}]` : '[DOCUMENTO enviado por el cliente]';
       } else if (message.type === 'video') {
+        mediaId = message.video?.id;
+        mimeType = message.video?.mime_type || 'video/mp4';
+        filename = `video_${Date.now()}.mp4`;
         userText = '[VIDEO enviado por el cliente]';
       } else {
         userText = '[MENSAJE NO SOPORTADO]';
       }
 
+      // Download and store media if present
+      if (mediaId) {
+        mediaUrl = await downloadAndStoreMedia(mediaId, from, filename, mimeType);
+      }
+
+      // For audio: attempt transcription with OpenAI Whisper
+      if (message.type === 'audio' && mediaUrl) {
+        try {
+          const audioR = await fetch(mediaUrl);
+          const audioBuffer = Buffer.from(await audioR.arrayBuffer());
+          const boundary = '----FormBoundary' + Date.now();
+          const bodyParts = [
+            `--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="${filename}"\r\nContent-Type: ${mimeType}\r\n\r\n`,
+            audioBuffer,
+            `\r\n--${boundary}\r\nContent-Disposition: form-data; name="model"\r\n\r\nwhisper-1\r\n`,
+            `--${boundary}\r\nContent-Disposition: form-data; name="language"\r\n\r\nes\r\n`,
+            `--${boundary}--\r\n`,
+          ];
+          const formBody = Buffer.concat(bodyParts.map(p => typeof p === 'string' ? Buffer.from(p) : p));
+          const whisperR = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+              'Content-Type': `multipart/form-data; boundary=${boundary}`,
+            },
+            body: formBody,
+          });
+          if (whisperR.ok) {
+            const whisperData = await whisperR.json();
+            if (whisperData.text) {
+              userText = `[AUDIO transcrito]: ${whisperData.text}`;
+            }
+          }
+        } catch (e) {
+          console.error('Whisper transcription error:', e);
+        }
+      }
+
       // Save user message
-      await saveMessage(from, 'user', userText);
+      await saveMessage(from, 'user', userText, mediaUrl);
       await upsertConversation(from, userText, 'user');
 
       // Check if bot is enabled
@@ -556,12 +651,14 @@ export default async function handler(req, res) {
         const leadProfile = profile || await ensureLeadProfile(from);
         await sendAttachmentNotificationEmail(from, leadProfile, message.type);
 
-        // Generic response — no analysis
-        const reply = 'OK, recibí ese documento. Favor enviar los pendientes';
-        await saveMessage(from, 'assistant', reply);
-        await upsertConversation(from, reply, 'assistant');
-        await sendWhatsAppMessage(from, reply);
-        return res.status(200).send('OK');
+        // Generic response — no analysis (except audio which goes to Claude with transcription)
+        if (message.type !== 'audio') {
+          const reply = 'OK, recibí ese documento. Favor enviar los pendientes';
+          await saveMessage(from, 'assistant', reply);
+          await upsertConversation(from, reply, 'assistant');
+          await sendWhatsAppMessage(from, reply);
+          return res.status(200).send('OK');
+        }
       }
 
       // --- TEXT HANDLING: escalation check, then Claude ---
