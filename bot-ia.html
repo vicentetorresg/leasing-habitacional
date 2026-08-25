@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bot IA — Llave Propia</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231B2B5E'/><circle cx='35' cy='42' r='7' fill='%2325D366'/><circle cx='65' cy='42' r='7' fill='%2325D366'/><path d='M30 62 Q50 78 70 62' stroke='%2325D366' stroke-width='5' fill='none' stroke-linecap='round'/><rect x='20' y='8' width='12' height='6' rx='3' fill='%2325D366'/><rect x='68' y='8' width='12' height='6' rx='3' fill='%2325D366'/></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#1B2B5E;--primary-light:#2a3f7e;--accent:#25D366;--bg:#f0f2f5;--chat-bg:#e5ddd5;--sidebar:#fff;--msg-out:#d9fdd3;--msg-in:#fff;--text:#111;--text-light:#667781;--border:#e0e0e0;--danger:#dc3545}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}
+
+/* Login */
+#login{display:flex;align-items:center;justify-content:center;height:100vh;background:linear-gradient(135deg,var(--primary),var(--primary-light))}
+.login-box{background:#fff;border-radius:12px;padding:40px;width:360px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.login-box h1{color:var(--primary);font-size:22px;margin-bottom:4px}
+.login-box p{color:var(--text-light);font-size:13px;margin-bottom:24px}
+.login-box input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;margin-bottom:12px;outline:none}
+.login-box input:focus{border-color:var(--primary)}
+.login-box button{width:100%;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:600}
+.login-box button:hover{background:var(--primary-light)}
+.login-error{color:var(--danger);font-size:12px;margin-bottom:8px;display:none}
+
+/* Dashboard */
+#dashboard{display:none;height:100vh;flex-direction:column}
+
+/* Top bar */
+.topbar{background:var(--primary);color:#fff;padding:0 20px;height:52px;display:flex;align-items:center;gap:16px;flex-shrink:0}
+.topbar h2{font-size:16px;font-weight:600;white-space:nowrap}
+.topbar .tabs{display:flex;gap:2px;margin-left:24px}
+.topbar .tabs button{background:transparent;color:rgba(255,255,255,.7);border:none;padding:8px 16px;cursor:pointer;font-size:13px;font-weight:500;border-radius:6px 6px 0 0;transition:.2s}
+.topbar .tabs button.active{background:rgba(255,255,255,.15);color:#fff}
+.topbar .tabs button:hover{color:#fff}
+.topbar .right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.phone-select{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:6px 10px;border-radius:6px;font-size:12px;cursor:pointer}
+.phone-select option{color:#333;background:#fff}
+.topbar .logout{background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer}
+
+/* Tab content */
+.tab-content{flex:1;overflow:hidden;display:none;min-height:0}
+.tab-content.active{display:flex}
+
+/* ===== CONVERSATIONS TAB ===== */
+#tab-chats{display:flex;height:100%;min-height:0}
+.conv-list{width:340px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;min-height:0}
+.conv-search{padding:8px;border-bottom:1px solid var(--border)}
+.conv-search input{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:20px;font-size:13px;outline:none}
+.conv-items{flex:1;overflow-y:auto}
+.conv-item{display:flex;align-items:center;padding:12px 16px;cursor:pointer;border-bottom:1px solid #f5f5f5;gap:12px;transition:background .15s}
+.conv-item:hover{background:#f5f6f6}
+.conv-item.active{background:#f0f2f5}
+.conv-avatar{width:42px;height:42px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;flex-shrink:0}
+.conv-info{flex:1;min-width:0}
+.conv-info .name{font-size:14px;font-weight:500;display:flex;justify-content:space-between}
+.conv-info .name .time{font-size:11px;color:var(--text-light);font-weight:400}
+.conv-info .preview{font-size:12px;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.conv-unread{background:var(--accent);color:#fff;font-size:11px;font-weight:600;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.conv-empty{text-align:center;padding:40px 20px;color:var(--text-light);font-size:14px}
+
+/* Chat area */
+.chat-area{flex:1;display:flex;flex-direction:column;background:var(--chat-bg);position:relative;min-height:0;overflow:hidden}
+.chat-header{background:var(--sidebar);padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0}
+.chat-header .info{flex:1}
+.chat-header .info h3{font-size:15px;font-weight:500}
+.chat-header .info span{font-size:12px;color:var(--text-light)}
+.bot-toggle{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-light)}
+.bot-toggle label{position:relative;width:40px;height:22px;display:block;cursor:pointer}
+.bot-toggle input{opacity:0;width:0;height:0}
+.bot-toggle .slider{position:absolute;inset:0;background:#ccc;border-radius:22px;transition:.3s}
+.bot-toggle .slider::before{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:2px;left:2px;transition:.3s}
+.bot-toggle input:checked+.slider{background:var(--accent)}
+.bot-toggle input:checked+.slider::before{left:20px}
+
+.chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:4px;min-height:0}
+.msg{max-width:65%;padding:8px 12px;border-radius:8px;font-size:14px;line-height:1.4;position:relative;word-wrap:break-word}
+.msg.user{background:var(--msg-in);align-self:flex-start;border-top-left-radius:0}
+.msg.assistant{background:var(--msg-out);align-self:flex-end;border-top-right-radius:0}
+.msg .time{font-size:10px;color:var(--text-light);margin-top:4px;text-align:right}
+.msg-date{text-align:center;font-size:11px;color:var(--text-light);background:rgba(255,255,255,.7);padding:4px 12px;border-radius:8px;align-self:center;margin:8px 0}
+
+.chat-input-area{background:var(--sidebar);padding:10px 16px;display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);flex-shrink:0}
+.chat-input-area .emoji-btn,.chat-input-area .template-btn{background:none;border:none;font-size:22px;cursor:pointer;padding:4px;color:var(--text-light)}
+.chat-input-area input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:20px;font-size:14px;outline:none}
+.chat-input-area .send-btn{background:var(--primary);color:#fff;border:none;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
+.chat-input-area .send-btn:hover{background:var(--primary-light)}
+
+.chat-placeholder{flex:1;display:flex;align-items:center;justify-content:center;background:var(--bg);flex-direction:column;gap:8px;color:var(--text-light)}
+.chat-placeholder svg{width:64px;height:64px;opacity:.3}
+
+/* Emoji picker */
+.emoji-picker{position:absolute;bottom:60px;left:16px;background:#fff;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.15);padding:12px;display:none;z-index:100;width:320px}
+.emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;max-height:200px;overflow-y:auto}
+.emoji-grid button{background:none;border:none;font-size:22px;cursor:pointer;padding:4px;border-radius:6px}
+.emoji-grid button:hover{background:#f0f0f0}
+
+/* Template picker */
+.template-picker{position:absolute;bottom:60px;right:60px;background:#fff;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.15);padding:12px;display:none;z-index:100;width:280px}
+.template-picker h4{font-size:13px;margin-bottom:8px;color:var(--text-light)}
+.template-item{padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;border:1px solid var(--border);margin-bottom:4px}
+.template-item:hover{background:#f0f2f5}
+.template-item .tname{font-weight:600}
+.template-item .tbody{color:var(--text-light);font-size:12px;margin-top:2px}
+
+/* New chat button */
+.new-chat-btn{margin:8px;padding:8px;background:var(--primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:6px}
+.new-chat-btn:hover{background:var(--primary-light)}
+
+/* New chat modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:none;align-items:center;justify-content:center}
+.modal{background:#fff;border-radius:12px;padding:24px;width:400px;max-width:90%}
+.modal h3{margin-bottom:16px;font-size:16px}
+.modal input,.modal textarea,.modal select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;margin-bottom:12px;outline:none;font-family:inherit}
+.modal textarea{resize:vertical;min-height:80px}
+.modal .actions{display:flex;gap:8px;justify-content:flex-end}
+.modal .actions button{padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;font-weight:500}
+.modal .btn-cancel{background:#f0f0f0;border:none;color:var(--text)}
+.modal .btn-primary{background:var(--primary);border:none;color:#fff}
+
+/* ===== PROMPT TAB ===== */
+#tab-prompt{flex-direction:column;padding:24px;gap:16px;overflow-y:auto;background:#fff;max-width:900px;margin:0 auto;width:100%}
+#tab-prompt h3{font-size:18px;color:var(--primary)}
+#tab-prompt p{font-size:13px;color:var(--text-light)}
+#tab-prompt textarea{width:100%;min-height:400px;padding:16px;border:1px solid var(--border);border-radius:8px;font-size:14px;line-height:1.6;font-family:inherit;resize:vertical;outline:none}
+#tab-prompt textarea:focus{border-color:var(--primary)}
+.prompt-actions{display:flex;gap:8px;align-items:center}
+.prompt-actions button{padding:10px 20px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:500}
+.prompt-actions .save{background:var(--primary);color:#fff;border:none}
+.prompt-actions .save:hover{background:var(--primary-light)}
+.prompt-actions .status{font-size:12px;color:var(--accent)}
+
+/* ===== FLOWS TAB ===== */
+#tab-flows{flex-direction:column;padding:24px;gap:16px;overflow-y:auto;background:#fff;max-width:900px;margin:0 auto;width:100%}
+#tab-flows h3{font-size:18px;color:var(--primary)}
+.flow-card{border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:8px}
+.flow-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.flow-card-header h4{font-size:15px}
+.flow-card-header .badge{font-size:11px;padding:2px 8px;border-radius:12px;font-weight:600}
+.flow-card-header .badge.active{background:#d4edda;color:#155724}
+.flow-card-header .badge.inactive{background:#f8d7da;color:#721c24}
+.flow-steps{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.flow-step{font-size:13px;color:var(--text-light);display:flex;align-items:center;gap:8px}
+.flow-step .step-num{background:var(--primary);color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.flow-actions{display:flex;gap:8px;margin-top:8px}
+.flow-actions button{padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid var(--border);background:#fff}
+.flow-actions button:hover{background:#f5f5f5}
+.flow-actions .btn-danger{color:var(--danger);border-color:var(--danger)}
+.add-flow-btn{padding:10px 16px;background:var(--primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;align-self:flex-start}
+
+/* Flow editor */
+.flow-editor{border:1px solid var(--border);border-radius:8px;padding:16px;margin-top:8px;background:#fafafa}
+.flow-editor h4{margin-bottom:12px;font-size:14px}
+.step-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.step-row select,.step-row input{padding:8px;border:1px solid var(--border);border-radius:6px;font-size:13px}
+.step-row select{flex:1}
+.step-row input[type="number"]{width:70px}
+.step-row .remove-step{background:none;border:none;color:var(--danger);cursor:pointer;font-size:16px}
+.add-step-btn{font-size:12px;color:var(--primary);cursor:pointer;background:none;border:none;font-weight:500;margin-bottom:12px}
+
+/* Responsive */
+@media(max-width:768px){
+  .conv-list{width:100%}
+  .chat-area{display:none}
+  .chat-area.mobile-active{display:flex;position:absolute;inset:0;z-index:50}
+  .msg{max-width:80%}
+  #tab-prompt,#tab-flows{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-box">
+    <h1>Bot IA — Llave Propia</h1>
+    <p>Panel de administracion del chatbot WhatsApp</p>
+    <div class="login-error" id="login-error">Usuario o clave incorrectos</div>
+    <input type="text" id="login-user" placeholder="Usuario" autocomplete="username">
+    <input type="password" id="login-pass" placeholder="Clave" autocomplete="current-password">
+    <button onclick="doLogin()">Ingresar</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="topbar">
+    <h2>Llave Propia</h2>
+    <div class="tabs">
+      <button class="active" onclick="switchTab('chats',this)">Conversaciones</button>
+      <button onclick="switchTab('prompt',this)">Prompt</button>
+      <button onclick="switchTab('flows',this)">Flujos</button>
+    </div>
+    <div class="right">
+      <select class="phone-select" id="phone-select" onchange="switchPhone()"></select>
+      <button class="logout" onclick="doLogout()">Salir</button>
+    </div>
+  </div>
+
+  <!-- CONVERSATIONS -->
+  <div id="tab-chats" class="tab-content active">
+    <div class="conv-list">
+      <button class="new-chat-btn" onclick="showNewChat()">+ Nuevo chat</button>
+      <div class="conv-search"><input type="text" placeholder="Buscar conversacion..." oninput="filterConversations(this.value)"></div>
+      <div class="conv-items" id="conv-items"></div>
+    </div>
+    <div class="chat-area" id="chat-area">
+      <div class="chat-placeholder" id="chat-placeholder">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+        <p>Selecciona una conversacion</p>
+      </div>
+      <div id="chat-active" style="display:none;flex-direction:column;flex:1;min-height:0;overflow:hidden">
+        <div class="chat-header" id="chat-header">
+          <div class="conv-avatar" id="chat-avatar">?</div>
+          <div class="info">
+            <h3 id="chat-phone">—</h3>
+            <span id="chat-name"></span>
+          </div>
+          <div class="bot-toggle">
+            <span>Bot IA</span>
+            <label><input type="checkbox" id="bot-toggle-cb" checked onchange="toggleBot()"><span class="slider"></span></label>
+          </div>
+        </div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="emoji-picker" id="emoji-picker"></div>
+        <div class="template-picker" id="template-picker">
+          <h4>Enviar plantilla</h4>
+          <div id="template-list"></div>
+        </div>
+        <div class="chat-input-area">
+          <button class="emoji-btn" onclick="toggleEmojis()" title="Emojis">&#x1F600;</button>
+          <input type="text" id="msg-input" placeholder="Escribe un mensaje..." onkeydown="if(event.key==='Enter')sendMsg()">
+          <button class="template-btn" onclick="toggleTemplates()" title="Plantillas">&#x1F4CB;</button>
+          <button class="send-btn" onclick="sendMsg()">&#x27A4;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROMPT -->
+  <div id="tab-prompt" class="tab-content">
+    <h3>System Prompt</h3>
+    <p>Este es el prompt que recibe Claude al responder cada mensaje. Los cambios se aplican inmediatamente.</p>
+    <textarea id="prompt-editor" placeholder="Cargando..."></textarea>
+    <div class="prompt-actions">
+      <button class="save" onclick="savePrompt()">Guardar prompt</button>
+      <span class="status" id="prompt-status"></span>
+    </div>
+  </div>
+
+  <!-- FLOWS -->
+  <div id="tab-flows" class="tab-content">
+    <h3>Flujos automaticos</h3>
+    <p>Secuencias de plantillas que se envian automaticamente si el usuario no responde.</p>
+    <div id="flows-list"></div>
+    <button class="add-flow-btn" onclick="showFlowEditor()">+ Crear flujo</button>
+    <div id="flow-editor-container"></div>
+  </div>
+</div>
+
+<!-- NEW CHAT MODAL -->
+<div class="modal-overlay" id="new-chat-modal">
+  <div class="modal">
+    <h3>Nuevo chat</h3>
+    <input type="text" id="new-chat-phone" placeholder="Numero de telefono (ej: 56912345678)">
+    <textarea id="new-chat-msg" placeholder="Mensaje (opcional)"></textarea>
+    <div class="actions">
+      <button class="btn-cancel" onclick="closeModal('new-chat-modal')">Cancelar</button>
+      <button class="btn-primary" onclick="startNewChat()">Iniciar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== CONFIG =====
+const SB_URL = 'https://unptkiyggkuxtkzedluv.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVucHRraXlnZ2t1eHRremVkbHV2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTMxMTU1OCwiZXhwIjoyMDk0ODg3NTU4fQ.vx78MEuZFpc57IC9I36rmLHUvi8XbWAs3nk-HiQca4E';
+const WEBHOOK_URL = '/api/whatsapp-webhook';
+const ADMIN_KEY = 'Bot2026#';
+
+const EMOJIS = ['😀','😂','🤣','😊','😍','🥰','😘','🤗','🤔','😮','😢','😭','🙏','👍','👎','👌','✌️','💪','🎉','❤️','🔥','⭐','✅','❌','📞','📋','🏠','🏡','💰','📄','🔑','📱','💬','👋','🙌','😎','🤝','💡','⚡','🚀'];
+
+let conversations = [];
+let activePhone = null;
+let pollInterval = null;
+let phones = [];
+
+// ===== AUTH =====
+function doLogin() {
+  const u = document.getElementById('login-user').value;
+  const p = document.getElementById('login-pass').value;
+  if (u === 'llavepropia' && p === 'Bot2026#') {
+    sessionStorage.setItem('botAuth', '1');
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'flex';
+    init();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem('botAuth');
+  location.reload();
+}
+
+document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+// ===== INIT =====
+async function init() {
+  await loadPhones();
+  buildEmojiPicker();
+  loadConversations();
+  loadPrompt();
+  loadFlows();
+  loadTemplates();
+  // Poll for new messages every 4 seconds
+  pollInterval = setInterval(() => {
+    loadConversations();
+    if (activePhone) loadMessages(activePhone, true);
+  }, 4000);
+}
+
+// ===== SUPABASE HELPERS =====
+function sb(path, opts = {}) {
+  return fetch(`${SB_URL}/rest/v1/${path}`, {
+    ...opts,
+    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', ...opts.headers }
+  }).then(r => r.json());
+}
+
+function adminApi(body) {
+  return fetch(WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Admin-Key': ADMIN_KEY },
+    body: JSON.stringify(body)
+  }).then(r => r.json());
+}
+
+// ===== PHONES =====
+async function loadPhones() {
+  try {
+    const rows = await sb('bot_config?key=eq.phones&select=value');
+    if (rows.length) phones = JSON.parse(rows[0].value);
+  } catch(e) {}
+  if (!phones.length) phones = [{ id: '1233346946534882', label: 'Prueba', number: '+1 555-664-4470' }];
+  const sel = document.getElementById('phone-select');
+  sel.innerHTML = phones.map((p, i) => `<option value="${p.id}">${p.label}</option>`).join('');
+}
+
+function switchPhone() { loadConversations(); }
+function getPhoneId() { return document.getElementById('phone-select').value; }
+
+// ===== CONVERSATIONS =====
+async function loadConversations() {
+  try {
+    const rows = await sb('whatsapp_conversations?order=last_message_at.desc.nullsfirst&limit=100');
+    conversations = rows || [];
+  } catch(e) {
+    // Fallback: get from messages
+    try {
+      const msgs = await sb('whatsapp_messages?select=phone,content,created_at,role&order=created_at.desc&limit=500');
+      const map = {};
+      (msgs || []).forEach(m => {
+        if (!map[m.phone]) map[m.phone] = { phone: m.phone, last_message: m.content, last_message_at: m.created_at, bot_enabled: true, unread_count: 0 };
+      });
+      conversations = Object.values(map);
+    } catch(e2) { conversations = []; }
+  }
+  renderConversations();
+}
+
+function renderConversations(filter = '') {
+  const el = document.getElementById('conv-items');
+  const filtered = filter ? conversations.filter(c => c.phone.includes(filter) || (c.name || '').toLowerCase().includes(filter.toLowerCase())) : conversations;
+
+  if (!filtered.length) {
+    el.innerHTML = '<div class="conv-empty">No hay conversaciones</div>';
+    return;
+  }
+
+  el.innerHTML = filtered.map(c => {
+    const initials = (c.name || c.phone).substring(0, 2).toUpperCase();
+    const time = c.last_message_at ? formatTime(c.last_message_at) : '';
+    const preview = c.last_message || 'Sin mensajes';
+    const isActive = c.phone === activePhone;
+    const unread = c.unread_count > 0 ? `<div class="conv-unread">${c.unread_count}</div>` : '';
+    return `<div class="conv-item${isActive ? ' active' : ''}" onclick="selectConversation('${c.phone}')">
+      <div class="conv-avatar">${initials}</div>
+      <div class="conv-info">
+        <div class="name"><span>${c.name || formatPhone(c.phone)}</span><span class="time">${time}</span></div>
+        <div class="preview">${escHtml(preview)}</div>
+      </div>
+      ${unread}
+    </div>`;
+  }).join('');
+}
+
+function filterConversations(q) { renderConversations(q); }
+
+function selectConversation(phone) {
+  activePhone = phone;
+  document.getElementById('chat-placeholder').style.display = 'none';
+  document.getElementById('chat-active').style.display = 'flex';
+  document.getElementById('chat-area').classList.add('mobile-active');
+  renderConversations();
+  loadMessages(phone);
+  loadConversationMeta(phone);
+  // Mark read
+  adminApi({ action: 'mark_read', phone });
+}
+
+async function loadConversationMeta(phone) {
+  const rows = await sb(`whatsapp_conversations?phone=eq.${phone}`);
+  const conv = rows?.[0];
+  document.getElementById('chat-phone').textContent = formatPhone(phone);
+  document.getElementById('chat-name').textContent = conv?.name || '';
+  document.getElementById('chat-avatar').textContent = (conv?.name || phone).substring(0, 2).toUpperCase();
+  document.getElementById('bot-toggle-cb').checked = conv?.bot_enabled !== false;
+}
+
+// ===== MESSAGES =====
+let lastMsgCount = 0;
+
+async function loadMessages(phone, silent = false) {
+  const msgs = await sb(`whatsapp_messages?phone=eq.${phone}&order=created_at.asc&limit=200`);
+  if (!msgs || msgs.length === lastMsgCount && silent) return;
+  lastMsgCount = msgs.length;
+
+  const el = document.getElementById('chat-messages');
+  let lastDate = '';
+  let html = '';
+
+  (msgs || []).forEach(m => {
+    const d = new Date(m.created_at);
+    const dateStr = d.toLocaleDateString('es-CL');
+    if (dateStr !== lastDate) {
+      html += `<div class="msg-date">${dateStr}</div>`;
+      lastDate = dateStr;
+    }
+    const timeStr = d.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+    html += `<div class="msg ${m.role}">
+      ${escHtml(m.content)}
+      <div class="time">${timeStr}</div>
+    </div>`;
+  });
+
+  el.innerHTML = html;
+  if (!silent) el.scrollTop = el.scrollHeight;
+  else {
+    // Auto-scroll only if already near bottom
+    if (el.scrollHeight - el.scrollTop - el.clientHeight < 100) el.scrollTop = el.scrollHeight;
+  }
+}
+
+// ===== SEND MESSAGE =====
+async function sendMsg() {
+  const input = document.getElementById('msg-input');
+  const text = input.value.trim();
+  if (!text || !activePhone) return;
+  input.value = '';
+
+  // Optimistic UI
+  const el = document.getElementById('chat-messages');
+  const now = new Date();
+  el.innerHTML += `<div class="msg assistant">${escHtml(text)}<div class="time">${now.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })}</div></div>`;
+  el.scrollTop = el.scrollHeight;
+
+  try {
+    await adminApi({ action: 'send_message', to: activePhone, text, phone_id: getPhoneId() });
+  } catch(e) {
+    alert('Error enviando mensaje: ' + e.message);
+  }
+}
+
+// ===== TEMPLATES =====
+let templates = [];
+
+async function loadTemplates() {
+  try {
+    const rows = await sb('wa_templates?order=name.asc');
+    templates = rows || [];
+  } catch(e) { templates = []; }
+  renderTemplates();
+}
+
+function renderTemplates() {
+  const el = document.getElementById('template-list');
+  if (!templates.length) {
+    el.innerHTML = '<p style="font-size:12px;color:#999">No hay plantillas configuradas</p>';
+    return;
+  }
+  el.innerHTML = templates.map(t => `<div class="template-item" onclick="sendTemplate('${t.name}','${t.language || 'es'}')">
+    <div class="tname">${t.name}</div>
+    <div class="tbody">${t.body_text || ''}</div>
+  </div>`).join('');
+}
+
+async function sendTemplate(name, lang) {
+  if (!activePhone) return;
+  document.getElementById('template-picker').style.display = 'none';
+  try {
+    await adminApi({ action: 'send_template', to: activePhone, template_name: name, language: lang, phone_id: getPhoneId() });
+    const el = document.getElementById('chat-messages');
+    const now = new Date();
+    el.innerHTML += `<div class="msg assistant">[PLANTILLA: ${name}]<div class="time">${now.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })}</div></div>`;
+    el.scrollTop = el.scrollHeight;
+  } catch(e) {
+    alert('Error enviando plantilla');
+  }
+}
+
+// ===== BOT TOGGLE =====
+async function toggleBot() {
+  if (!activePhone) return;
+  const enabled = document.getElementById('bot-toggle-cb').checked;
+  await adminApi({ action: 'toggle_bot', phone: activePhone, enabled });
+}
+
+// ===== EMOJIS =====
+function buildEmojiPicker() {
+  const el = document.getElementById('emoji-picker');
+  el.innerHTML = '<div class="emoji-grid">' + EMOJIS.map(e => `<button onclick="insertEmoji('${e}')">${e}</button>`).join('') + '</div>';
+}
+
+function toggleEmojis() {
+  const el = document.getElementById('emoji-picker');
+  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+  document.getElementById('template-picker').style.display = 'none';
+}
+
+function insertEmoji(emoji) {
+  const input = document.getElementById('msg-input');
+  input.value += emoji;
+  input.focus();
+}
+
+function toggleTemplates() {
+  const el = document.getElementById('template-picker');
+  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+  document.getElementById('emoji-picker').style.display = 'none';
+}
+
+// Close pickers on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('.emoji-btn') && !e.target.closest('.emoji-picker')) {
+    document.getElementById('emoji-picker').style.display = 'none';
+  }
+  if (!e.target.closest('.template-btn') && !e.target.closest('.template-picker')) {
+    document.getElementById('template-picker').style.display = 'none';
+  }
+});
+
+// ===== NEW CHAT =====
+function showNewChat() { document.getElementById('new-chat-modal').style.display = 'flex'; }
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+async function startNewChat() {
+  const phone = document.getElementById('new-chat-phone').value.replace(/\D/g, '');
+  const msg = document.getElementById('new-chat-msg').value.trim();
+  if (!phone) return alert('Ingresa un numero');
+  closeModal('new-chat-modal');
+
+  if (msg) {
+    await adminApi({ action: 'send_message', to: phone, text: msg, phone_id: getPhoneId() });
+  }
+
+  // Create conversation entry
+  await sb('whatsapp_conversations', {
+    method: 'POST',
+    headers: { Prefer: 'resolution=merge-duplicates' },
+    body: JSON.stringify({ phone, last_message: msg || 'Nuevo chat', last_message_at: new Date().toISOString(), updated_at: new Date().toISOString(), bot_enabled: true })
+  });
+
+  document.getElementById('new-chat-phone').value = '';
+  document.getElementById('new-chat-msg').value = '';
+  await loadConversations();
+  selectConversation(phone);
+}
+
+// ===== PROMPT =====
+async function loadPrompt() {
+  try {
+    const rows = await sb('bot_config?key=eq.system_prompt&select=value');
+    if (rows.length) document.getElementById('prompt-editor').value = rows[0].value;
+  } catch(e) {}
+}
+
+async function savePrompt() {
+  const value = document.getElementById('prompt-editor').value;
+  await sb('bot_config?key=eq.system_prompt', {
+    method: 'PATCH',
+    body: JSON.stringify({ value, updated_at: new Date().toISOString() })
+  });
+  document.getElementById('prompt-status').textContent = 'Guardado ✓';
+  setTimeout(() => document.getElementById('prompt-status').textContent = '', 3000);
+}
+
+// ===== FLOWS =====
+let flows = [];
+let editingFlow = null;
+
+async function loadFlows() {
+  try {
+    flows = await sb('bot_flows?order=created_at.asc') || [];
+  } catch(e) { flows = []; }
+  renderFlows();
+}
+
+function renderFlows() {
+  const el = document.getElementById('flows-list');
+  if (!flows.length) {
+    el.innerHTML = '<p style="color:#999;font-size:13px;margin:8px 0">No hay flujos creados.</p>';
+    return;
+  }
+  el.innerHTML = flows.map(f => {
+    const steps = f.steps || [];
+    return `<div class="flow-card">
+      <div class="flow-card-header">
+        <h4>${escHtml(f.name)}</h4>
+        <span class="badge ${f.active ? 'active' : 'inactive'}">${f.active ? 'Activo' : 'Inactivo'}</span>
+      </div>
+      <div class="flow-steps">
+        ${steps.map((s, i) => `<div class="flow-step">
+          <span class="step-num">${i + 1}</span>
+          <span>Plantilla <strong>${s.template}</strong> — esperar ${s.delay_days} dia${s.delay_days !== 1 ? 's' : ''}</span>
+        </div>`).join('')}
+      </div>
+      <div class="flow-actions">
+        <button onclick="toggleFlow(${f.id}, ${!f.active})">${f.active ? 'Desactivar' : 'Activar'}</button>
+        <button onclick="editFlow(${f.id})">Editar</button>
+        <button class="btn-danger" onclick="deleteFlow(${f.id})">Eliminar</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showFlowEditor(flow = null) {
+  editingFlow = flow;
+  const steps = flow?.steps || [{ template: '', delay_days: 1 }];
+  const el = document.getElementById('flow-editor-container');
+  const templateOpts = templates.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
+
+  el.innerHTML = `<div class="flow-editor">
+    <h4>${flow ? 'Editar flujo' : 'Nuevo flujo'}</h4>
+    <input type="text" id="flow-name" placeholder="Nombre del flujo" value="${flow?.name || ''}" style="width:100%;padding:8px;border:1px solid #e0e0e0;border-radius:6px;margin-bottom:12px;font-size:13px">
+    <div id="flow-steps">
+      ${steps.map((s, i) => stepRowHtml(i, s, templateOpts)).join('')}
+    </div>
+    <button class="add-step-btn" onclick="addFlowStep()">+ Agregar paso</button>
+    <div class="actions" style="display:flex;gap:8px">
+      <button class="btn-cancel" onclick="document.getElementById('flow-editor-container').innerHTML=''">Cancelar</button>
+      <button class="btn-primary" onclick="saveFlow()">Guardar</button>
+    </div>
+  </div>`;
+}
+
+function stepRowHtml(i, step, templateOpts) {
+  return `<div class="step-row" data-idx="${i}">
+    <span style="font-size:12px;color:#999">Paso ${i + 1}:</span>
+    <select class="step-template">${templateOpts ? templateOpts.replace(`value="${step.template}"`, `value="${step.template}" selected`) : `<option value="${step.template}">${step.template || 'Sin plantillas'}</option>`}</select>
+    <span style="font-size:12px">esperar</span>
+    <input type="number" class="step-delay" value="${step.delay_days || 1}" min="1" max="30">
+    <span style="font-size:12px">dias</span>
+    <button class="remove-step" onclick="this.closest('.step-row').remove()">×</button>
+  </div>`;
+}
+
+function addFlowStep() {
+  const container = document.getElementById('flow-steps');
+  const idx = container.children.length;
+  const templateOpts = templates.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
+  container.insertAdjacentHTML('beforeend', stepRowHtml(idx, { template: '', delay_days: 1 }, templateOpts));
+}
+
+async function saveFlow() {
+  const name = document.getElementById('flow-name').value.trim();
+  if (!name) return alert('Ingresa un nombre');
+
+  const stepRows = document.querySelectorAll('#flow-steps .step-row');
+  const steps = Array.from(stepRows).map(row => ({
+    template: row.querySelector('.step-template').value,
+    delay_days: parseInt(row.querySelector('.step-delay').value) || 1
+  }));
+
+  const data = { name, steps: JSON.stringify(steps), updated_at: new Date().toISOString() };
+
+  if (editingFlow) {
+    await sb(`bot_flows?id=eq.${editingFlow.id}`, { method: 'PATCH', body: JSON.stringify(data) });
+  } else {
+    data.active = false;
+    data.created_at = new Date().toISOString();
+    await sb('bot_flows', { method: 'POST', body: JSON.stringify(data) });
+  }
+
+  document.getElementById('flow-editor-container').innerHTML = '';
+  await loadFlows();
+}
+
+function editFlow(id) {
+  const flow = flows.find(f => f.id === id);
+  if (flow) showFlowEditor(flow);
+}
+
+async function toggleFlow(id, active) {
+  await sb(`bot_flows?id=eq.${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ active, updated_at: new Date().toISOString() })
+  });
+  await loadFlows();
+}
+
+async function deleteFlow(id) {
+  if (!confirm('Eliminar este flujo?')) return;
+  await sb(`bot_flows?id=eq.${id}`, { method: 'DELETE' });
+  await loadFlows();
+}
+
+// ===== TABS =====
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.topbar .tabs button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ===== UTILS =====
+function formatPhone(p) {
+  if (p.startsWith('56') && p.length >= 10) return '+' + p.substring(0, 2) + ' ' + p.substring(2, 3) + ' ' + p.substring(3, 7) + ' ' + p.substring(7);
+  return '+' + p;
+}
+
+function formatTime(ts) {
+  const d = new Date(ts);
+  const now = new Date();
+  if (d.toDateString() === now.toDateString()) return d.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+  const yesterday = new Date(now); yesterday.setDate(yesterday.getDate() - 1);
+  if (d.toDateString() === yesterday.toDateString()) return 'Ayer';
+  return d.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit' });
+}
+
+function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+// Auto-login check
+if (sessionStorage.getItem('botAuth')) {
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'flex';
+  init();
+}
+</script>
+</body>
+</html>

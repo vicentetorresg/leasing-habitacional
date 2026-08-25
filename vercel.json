@@ -28,6 +28,7 @@
     { "source": "/simulador-simple", "destination": "/simulador-simple.html" },
     { "source": "/firma-electronica", "destination": "/firma-dist/index" },
     { "source": "/firma-electronica/:path*", "destination": "/firma-dist/index" },
+    { "source": "/bot-ia", "destination": "/bot-ia.html" },
     { "source": "/crm", "destination": "/crm-dist/index" },
     { "source": "/crm/:path*", "destination": "/crm-dist/index" }
   ],
