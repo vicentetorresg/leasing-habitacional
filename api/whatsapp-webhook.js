@@ -139,29 +139,34 @@ async function uploadToStorage(buffer, phone, filename, mimeType) {
 
 async function transcribeAudio(buffer, filename, mimeType) {
   try {
-    if (!process.env.OPENAI_API_KEY) return null;
+    if (!process.env.OPENAI_API_KEY) { console.log('No OPENAI_API_KEY'); return null; }
+    // Whisper needs a recognized extension — use .ogg for WhatsApp audio
+    const safeName = 'audio.ogg';
+    const safeMime = 'audio/ogg';
     const boundary = '----FormBoundary' + Date.now();
     const bodyParts = [
-      `--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="${filename}"\r\nContent-Type: ${mimeType}\r\n\r\n`,
+      `--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="${safeName}"\r\nContent-Type: ${safeMime}\r\n\r\n`,
       buffer,
       `\r\n--${boundary}\r\nContent-Disposition: form-data; name="model"\r\n\r\nwhisper-1\r\n`,
       `--${boundary}\r\nContent-Disposition: form-data; name="language"\r\n\r\nes\r\n`,
       `--${boundary}--\r\n`,
     ];
     const formBody = Buffer.concat(bodyParts.map(p => typeof p === 'string' ? Buffer.from(p) : p));
+    console.log(`Whisper: sending ${buffer.length} bytes`);
     const r = await fetch('https://api.openai.com/v1/audio/transcriptions', {
       method: 'POST',
       headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, 'Content-Type': `multipart/form-data; boundary=${boundary}` },
       body: formBody,
     });
+    const responseText = await r.text();
+    console.log(`Whisper response: ${r.status} ${responseText.substring(0, 200)}`);
     if (r.ok) {
-      const data = await r.json();
+      const data = JSON.parse(responseText);
       return data.text || null;
     }
-    console.error('Whisper error:', r.status, await r.text());
     return null;
   } catch (e) {
-    console.error('Whisper transcription error:', e);
+    console.error('Whisper transcription error:', e.message);
     return null;
   }
 }
@@ -631,7 +636,7 @@ export default async function handler(req, res) {
             // Audio: transcribe with Whisper (with 4s timeout to leave room for Claude)
             const transcript = await Promise.race([
               transcribeAudio(buffer, filename, mimeType),
-              new Promise(r => setTimeout(() => r(null), 4000)),
+              new Promise(r => setTimeout(() => r(null), 6000)),
             ]);
             if (transcript) userText = `[AUDIO transcrito]: ${transcript}`;
           } else {
