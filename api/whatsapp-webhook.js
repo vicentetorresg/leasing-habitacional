@@ -1,9 +1,15 @@
-const WA_TOKEN = process.env.WHATSAPP_TOKEN;
+import { execSync } from 'child_process';
+import ffmpegPath from 'ffmpeg-static';
+import { writeFileSync, readFileSync, unlinkSync } from 'fs';
+import { tmpdir } from 'os';
+import { join } from 'path';
+
+const WA_TOKEN = (process.env.WHATSAPP_TOKEN || '').trim();
 const PHONE_ID = (process.env.WHATSAPP_PHONE_ID || '').trim();
-const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const RESEND_KEY = process.env.RESEND_API_KEY;
+const ANTHROPIC_KEY = (process.env.ANTHROPIC_API_KEY || '').trim();
+const SUPABASE_URL = (process.env.SUPABASE_URL || '').trim();
+const SUPABASE_KEY = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
+const RESEND_KEY = (process.env.RESEND_API_KEY || '').trim();
 
 const ADMIN_KEY = 'Bot2026#';
 const MAX_HISTORY = 20;
@@ -37,10 +43,8 @@ const TOOLS = [
         complements_income: { type: 'boolean', description: 'Whether they complement income with another person' },
         complement_name: { type: 'string', description: 'Name of the person who complements income' },
         complement_employment_type: { type: 'string', enum: ['dependent', 'independent'] },
-        has_property: { type: 'boolean', description: 'Whether they currently own a property' },
+        has_property_in_mind: { type: 'boolean', description: 'Whether they already have a property in mind they want to buy (vivienda vista)' },
         comuna: { type: 'string', description: 'Commune where they want to buy' },
-        renta: { type: 'number', description: 'Monthly income in CLP' },
-        complement_renta: { type: 'number', description: 'Complement person monthly income in CLP' },
       },
       required: [],
     },
@@ -55,8 +59,8 @@ const TOOLS = [
     },
   },
   {
-    name: 'no_califica',
-    description: 'Mark the lead as not interested. Call ONLY when the client clearly states they do not want to continue or asks to be removed.',
+    name: 'no_interesado',
+    description: 'Mark the lead as not interested. Call ONLY when the client EXPLICITLY says they do not want to continue. Examples: "no me interesa", "no quiero continuar", "sáquenme de la base". Do NOT call if the client just has doubts, asks questions, or says they will send documents later.',
     input_schema: {
       type: 'object',
       properties: {
@@ -102,22 +106,36 @@ async function sendWhatsAppTemplate(to, templateName, lang, phoneId) {
 
 // --- Media Download & Upload ---
 
-async function downloadMediaBuffer(mediaId) {
-  try {
-    const metaR = await fetch(`https://graph.facebook.com/v25.0/${mediaId}`, {
-      headers: { Authorization: `Bearer ${WA_TOKEN}` },
-    });
-    const meta = await metaR.json();
-    if (!meta.url) return null;
-    const fileR = await fetch(meta.url, {
-      headers: { Authorization: `Bearer ${WA_TOKEN}` },
-    });
-    if (!fileR.ok) return null;
-    return Buffer.from(await fileR.arrayBuffer());
-  } catch (e) {
-    console.error('Media download error:', e);
-    return null;
+async function downloadMediaBuffer(mediaId, retries = 2) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      if (attempt > 0) {
+        console.log(`Media download retry ${attempt}/${retries} for ${mediaId}`);
+        await new Promise(r => setTimeout(r, 1000 * attempt));
+      }
+      const metaR = await fetch(`https://graph.facebook.com/v25.0/${mediaId}`, {
+        headers: { Authorization: `Bearer ${WA_TOKEN}` },
+      });
+      const meta = await metaR.json();
+      if (!meta.url) {
+        console.error(`Media meta missing url for ${mediaId}:`, JSON.stringify(meta).substring(0, 200));
+        continue;
+      }
+      const fileR = await fetch(meta.url, {
+        headers: { Authorization: `Bearer ${WA_TOKEN}` },
+      });
+      if (!fileR.ok) {
+        console.error(`Media file download failed: ${fileR.status} for ${mediaId}`);
+        continue;
+      }
+      const buf = Buffer.from(await fileR.arrayBuffer());
+      console.log(`Media downloaded: ${buf.length} bytes for ${mediaId}`);
+      return buf;
+    } catch (e) {
+      console.error(`Media download error (attempt ${attempt}):`, e.message);
+    }
   }
+  return null;
 }
 
 async function uploadToStorage(buffer, phone, filename, mimeType) {
@@ -139,7 +157,8 @@ async function uploadToStorage(buffer, phone, filename, mimeType) {
 
 async function transcribeAudio(buffer, filename, mimeType) {
   try {
-    if (!process.env.OPENAI_API_KEY) { console.log('No OPENAI_API_KEY'); return null; }
+    const openaiKey = (process.env.OPENAI_API_KEY || '').trim();
+    if (!openaiKey) { console.log('No OPENAI_API_KEY'); return null; }
     // Whisper needs a recognized extension — use .ogg for WhatsApp audio
     const safeName = 'audio.ogg';
     const safeMime = 'audio/ogg';
@@ -155,7 +174,7 @@ async function transcribeAudio(buffer, filename, mimeType) {
     console.log(`Whisper: sending ${buffer.length} bytes`);
     const r = await fetch('https://api.openai.com/v1/audio/transcriptions', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, 'Content-Type': `multipart/form-data; boundary=${boundary}` },
+      headers: { Authorization: `Bearer ${openaiKey}`, 'Content-Type': `multipart/form-data; boundary=${boundary}` },
       body: formBody,
     });
     const responseText = await r.text();
@@ -281,10 +300,8 @@ async function executeTool(toolName, input, phone) {
     if (input.complements_income !== undefined) updates.complements_income = String(input.complements_income);
     if (input.complement_name) updates.complement_name = input.complement_name;
     if (input.complement_employment_type) updates.complement_employment_type = input.complement_employment_type;
-    if (input.has_property !== undefined) updates.has_property = String(input.has_property);
+    if (input.has_property_in_mind !== undefined) updates.has_property_in_mind = String(input.has_property_in_mind);
     if (input.comuna) updates.comuna = input.comuna;
-    if (input.renta) updates.renta = input.renta;
-    if (input.complement_renta) updates.complement_renta = input.complement_renta;
 
     await sbPatch(`lead_profiles?phone=eq.${phone}`, updates);
     return { success: true };
@@ -298,7 +315,7 @@ async function executeTool(toolName, input, phone) {
     return { success: true, message: 'Status updated to documents_sent_by_client' };
   }
 
-  if (toolName === 'no_califica') {
+  if (toolName === 'no_interesado') {
     const now = new Date().toISOString();
     await sbPatch(`lead_profiles?phone=eq.${phone}`, {
       not_interested: true,
@@ -524,6 +541,90 @@ async function handleAdmin(req, res) {
     await saveMessage(to, 'assistant', `[PLANTILLA: ${template_name}]`);
     await upsertConversation(to, `[PLANTILLA: ${template_name}]`, 'assistant');
     return res.status(200).json({ ok: true, result });
+  }
+
+  if (action === 'send_audio') {
+    const { to, audio_base64, mime_type, phone_id } = req.body;
+    const pid = phone_id || PHONE_ID;
+    try {
+      const audioBuffer = Buffer.from(audio_base64, 'base64');
+      const ts = Date.now();
+      const ext = (mime_type || '').includes('mp4') ? 'mp4' : (mime_type || '').includes('ogg') ? 'ogg' : 'webm';
+      // Convert to OGG with ffmpeg (WhatsApp only reliably plays OGG/opus)
+      const tmpIn = join(tmpdir(), `in_${ts}.${ext}`);
+      const tmpOut = join(tmpdir(), `out_${ts}.ogg`);
+      writeFileSync(tmpIn, audioBuffer);
+      try {
+        execSync(`${ffmpegPath} -i ${tmpIn} -c:a libopus -b:a 64k -ar 48000 -ac 1 -map_metadata -1 -fflags +bitexact ${tmpOut} -y`, { timeout: 15000 });
+      } catch (e) {
+        console.error('ffmpeg conversion error:', e.message);
+        unlinkSync(tmpIn);
+        return res.status(500).json({ error: 'Audio conversion failed' });
+      }
+      const oggBuffer = readFileSync(tmpOut);
+      unlinkSync(tmpIn);
+      unlinkSync(tmpOut);
+      // Upload OGG to Supabase
+      const storageName = `${to}/${ts}_audio_sent.ogg`;
+      await fetch(`${SUPABASE_URL}/storage/v1/object/wa-attachments/${storageName}`, {
+        method: 'POST',
+        headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'audio/ogg' },
+        body: oggBuffer,
+      });
+      const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/wa-attachments/${storageName}`;
+      // Send via WhatsApp
+      const sendR = await fetch(`https://graph.facebook.com/v25.0/${pid}/messages`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${WA_TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messaging_product: 'whatsapp', to, type: 'audio', audio: { link: publicUrl } }),
+      });
+      const sendData = await sendR.json();
+      console.log('WA send audio (ogg):', JSON.stringify(sendData));
+      await saveMessage(to, 'assistant', '[AUDIO enviado]', publicUrl);
+      await upsertConversation(to, '[AUDIO enviado]', 'assistant');
+      return res.status(200).json({ ok: true, result: sendData });
+    } catch (e) {
+      console.error('Send audio error:', e);
+      return res.status(500).json({ error: e.message });
+    }
+  }
+
+  if (action === 'send_media') {
+    const { to, media_base64, media_type, filename, phone_id } = req.body;
+    const pid = phone_id || PHONE_ID;
+    try {
+      const buffer = Buffer.from(media_base64, 'base64');
+      const ts = Date.now();
+      const safeName = filename || `file_${ts}`;
+      const storageName = `${to}/${ts}_${safeName}`;
+      // Upload to Supabase
+      await fetch(`${SUPABASE_URL}/storage/v1/object/wa-attachments/${storageName}`, {
+        method: 'POST',
+        headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': media_type || 'application/octet-stream' },
+        body: buffer,
+      });
+      const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/wa-attachments/${storageName}`;
+      // Determine WhatsApp message type
+      const isImage = (media_type || '').startsWith('image/');
+      const isVideo = (media_type || '').startsWith('video/');
+      const waType = isImage ? 'image' : isVideo ? 'video' : 'document';
+      const mediaPayload = { link: publicUrl };
+      if (waType === 'document') mediaPayload.filename = safeName;
+      const sendR = await fetch(`https://graph.facebook.com/v25.0/${pid}/messages`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${WA_TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messaging_product: 'whatsapp', to, type: waType, [waType]: mediaPayload }),
+      });
+      const sendData = await sendR.json();
+      console.log('WA send media:', waType, JSON.stringify(sendData));
+      const label = isImage ? '[IMAGEN enviada]' : isVideo ? '[VIDEO enviado]' : `[DOCUMENTO enviado: ${safeName}]`;
+      await saveMessage(to, 'assistant', label, publicUrl);
+      await upsertConversation(to, label, 'assistant');
+      return res.status(200).json({ ok: true, result: sendData });
+    } catch (e) {
+      console.error('Send media error:', e);
+      return res.status(500).json({ error: e.message });
+    }
   }
 
   if (action === 'toggle_bot') {
