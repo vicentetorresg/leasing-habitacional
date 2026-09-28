@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '4421758224805820');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=4421758224805820&ev=PageView&noscript=1"
+  /></noscript>
+  <style>#scroll-cover{position:fixed;inset:0;background:#FEFCF7;z-index:99999;transition:opacity .3s}#scroll-cover.hide{opacity:0;pointer-events:none}</style>
+  <script>
+  if('scrollRestoration' in history) history.scrollRestoration='manual';
+  if(window.location.hash) history.replaceState(null,null,window.location.pathname+window.location.search);
+  window.scrollTo(0,0);
+  document.documentElement.scrollTop=0;
+  var isMobile=window.innerWidth<768;
+  function forceTop(){window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}
+  if(!isMobile){document.addEventListener('DOMContentLoaded',function(){var c=document.getElementById('scroll-cover');if(c)c.remove();});}
+  document.addEventListener('DOMContentLoaded',function(){
+    var cover=document.getElementById('scroll-cover');
+    forceTop();
+    if(!isMobile){return;}
+    var end=Date.now()+2000;
+    function pin(){
+      forceTop();
+      if(Date.now()<end){requestAnimationFrame(pin);}
+      else if(cover){cover.classList.add('hide');setTimeout(function(){cover.remove()},400);}
+    }
+    requestAnimationFrame(pin);
+  });
+  window.addEventListener('load',function(){forceTop();if(isMobile){var e=Date.now()+1000;(function p(){forceTop();if(Date.now()<e)requestAnimationFrame(p)})();}});
+  window.addEventListener('pageshow',function(){forceTop();});
+  </script>
+  <title>Crédito Hipotecario — Cotiza en Múltiples Bancos | Llave Propia</title>
+  <meta name="description" content="Cotizamos tu crédito hipotecario en distintos bancos y te conseguimos la mejor tasa. Cobramos solo contra aprobación bancaria. Respuesta en 24 hrs.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta property="og:title" content="Crédito Hipotecario — Cotiza en Múltiples Bancos | Llave Propia">
+  <meta property="og:description" content="Cotizamos tu crédito hipotecario en distintos bancos y te conseguimos la mejor tasa. Cobramos solo contra aprobación bancaria.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.llavepropia.cl/hipotecario">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+:root{
+  --navy:#1B3A6B;--navy-d:#122850;--navy-m:#243870;
+  --teal:#2DB89E;--teal-m:#3ACFB8;--teal-pale:#E5F7F4;
+  --gold:#C9871A;
+  --beige:#FEFCF7;--beige-1:#F7F0E6;--beige-2:#EDE3D4;--beige-3:#DFD0BB;
+  --text:#1A150F;--text-m:#5A4A38;--text-s:#9A8878;
+  --green:#2B7A4E;--red:#DC2626;
+  --shadow:rgba(27,58,107,0.10);
+  --r:16px;--rs:10px;--rl:24px;
+  --t:all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{overflow-x:hidden}
+body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--beige);line-height:1.65;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+
+#prog{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--teal),var(--navy));z-index:9999;transition:width .1s linear}
+
+nav{position:fixed;top:3px;left:0;right:0;z-index:1000;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;transition:var(--t)}
+nav.sc{background:rgba(254,252,247,0.97);backdrop-filter:blur(16px);padding:12px 40px;box-shadow:0 2px 20px rgba(27,58,107,0.08);border-bottom:1px solid var(--beige-2)}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.lw{display:flex;flex-direction:column;line-height:1.1}
+.lw-a{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--navy);line-height:1}
+.lw-b{font-size:0.6rem;font-weight:800;color:var(--teal);letter-spacing:2px;text-transform:uppercase}
+.nav-r{display:flex;gap:24px;align-items:center}
+.nav-r a{color:var(--text-m);font-size:0.87rem;font-weight:600;transition:var(--t)}
+.nav-r a:hover{color:var(--navy)}
+.hide-mob{display:none}
+@media(min-width:768px){.hide-mob{display:block}}
+.nav-btn{background:var(--navy);color:#fff!important;padding:10px 22px;border-radius:50px;font-weight:700!important;font-size:0.85rem!important}
+.nav-btn:hover{background:var(--navy-d)!important}
+
+#hero{min-height:100vh;background:linear-gradient(150deg,var(--beige) 0%,var(--beige-1) 55%,var(--beige-2) 100%);position:relative;display:flex;align-items:center}
+.hero-dots{position:absolute;inset:0;background-image:radial-gradient(circle,var(--beige-3) 1px,transparent 1px);background-size:36px 36px;opacity:0.4;overflow:hidden;pointer-events:none}
+.dc{position:absolute;border-radius:50%;pointer-events:none}
+.dc1{width:500px;height:500px;border:1.5px solid var(--beige-3);top:-100px;right:-60px;animation:spin 40s linear infinite}
+.dc2{width:280px;height:280px;border:1px solid var(--beige-2);top:-40px;right:0;animation:spin 28s linear infinite reverse}
+.dc3{width:160px;height:160px;background:var(--teal-pale);opacity:0.4;bottom:100px;left:8%;animation:floaty 7s ease-in-out infinite}
+.hero-inner{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:130px 40px 70px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:var(--teal-pale);border:1px solid rgba(45,184,158,0.3);color:var(--teal);padding:5px 14px;border-radius:50px;font-size:0.72rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:18px}
+.hero-badge .dot{width:6px;height:6px;background:var(--teal);border-radius:50%;animation:pulse 2s ease-out infinite}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,4.5vw,3.8rem);font-weight:700;line-height:1.1;color:var(--navy);margin-bottom:18px}
+.hero-h1 em{font-style:italic;color:var(--teal)}
+.hero-sub{font-size:1rem;color:var(--text-m);line-height:1.75;max-width:440px;margin-bottom:28px}
+.hero-sub strong{color:var(--navy)}
+.hero-trust{display:flex;flex-wrap:wrap;gap:14px}
+.ht-item{display:flex;align-items:center;gap:6px;color:var(--text-s);font-size:0.8rem;font-weight:600}
+.ht-item svg{stroke:var(--green);fill:none;stroke-width:2.5;width:12px;height:12px}
+
+/* form card */
+.hero-fc{background:#fff;border:1px solid var(--beige-2);border-radius:var(--rl);padding:28px 24px;box-shadow:0 20px 60px -15px var(--shadow);position:relative;overflow:visible}
+.hero-fc-tag{display:inline-block;background:linear-gradient(135deg,var(--navy),var(--navy-d));color:#fff;padding:6px 14px;border-radius:50px;font-size:0.72rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.hero-fc h3{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:700;color:var(--navy);margin-bottom:4px;line-height:1.2}
+.hero-fc .sub{font-size:0.78rem;color:var(--text-s);margin-bottom:14px}
+
+.f-stack{display:flex;flex-direction:column;gap:10px}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f-field{display:flex;flex-direction:column;gap:3px}
+.f-field-lbl{font-size:13px;font-weight:700;color:var(--text);letter-spacing:0.2px;padding-left:2px}
+.f-input{width:100%;background:#fff;border:1.5px solid var(--beige-2);border-radius:var(--rs);padding:0 16px;height:48px;color:var(--text);font-size:16px;font-family:'Nunito',sans-serif;transition:var(--t);-webkit-appearance:none;display:block;box-shadow:none}
+.f-input::placeholder{color:var(--text-s)}
+.f-input:focus{outline:none;border-color:var(--navy);background:#fff;box-shadow:0 0 0 3px rgba(27,58,107,0.1)}
+
+.cs{position:relative;width:100%}
+.cs-trigger{width:100%;background:#fff;border:1.5px solid var(--beige-2);border-radius:var(--rs);padding:0 40px 0 16px;height:48px;color:var(--text);font-size:16px;font-family:'Nunito',sans-serif;cursor:pointer;display:flex;align-items:center;transition:var(--t);position:relative;text-align:left}
+.cs-trigger::after{content:'';position:absolute;right:16px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--text-s);transition:transform 0.2s}
+.cs.open .cs-trigger::after{transform:translateY(-50%) rotate(180deg)}
+.cs-trigger.placeholder{color:var(--text-s)}
+.cs-trigger:hover{border-color:var(--navy)}
+.cs.open .cs-trigger{border-color:var(--navy);background:#fff;box-shadow:0 0 0 3px rgba(27,58,107,0.1);border-bottom-left-radius:0;border-bottom-right-radius:0}
+.cs-opts{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid var(--navy);border-top:none;border-radius:0 0 var(--rs) var(--rs);max-height:220px;overflow-y:auto;z-index:50;box-shadow:0 12px 32px rgba(27,58,107,0.12)}
+.cs.open-up .cs-trigger{border-bottom-left-radius:var(--rs);border-bottom-right-radius:var(--rs);border-top-left-radius:0;border-top-right-radius:0}
+.cs.open-up .cs-opts{top:auto;bottom:100%;border-top:1.5px solid var(--navy);border-bottom:none;border-radius:var(--rs) var(--rs) 0 0;box-shadow:0 -8px 24px rgba(27,58,107,0.12)}
+.cs.open .cs-opts{display:block}
+.cs-opt{padding:12px 16px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;transition:background 0.15s,color 0.15s;border-bottom:1px solid var(--beige-1)}
+.cs-opt:last-child{border-bottom:none}
+.cs-opt:hover{background:var(--teal-pale);color:var(--navy)}
+.cs-opt.selected{background:var(--teal-pale);color:var(--teal);font-weight:800}
+.cs-opt.blocked{color:var(--red);font-weight:700}
+.cs-opt.blocked:hover{background:#fef2f2}
+
+/* dark custom select */
+.cs-d .cs-trigger{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15);color:#fff}
+.cs-d .cs-trigger.placeholder{color:rgba(255,255,255,0.4)}
+.cs-d .cs-trigger::after{border-top-color:rgba(255,255,255,0.4)}
+.cs-d .cs-trigger:hover{border-color:var(--navy)}
+.cs-d.open .cs-trigger{background:rgba(255,255,255,0.12);border-color:var(--navy)}
+.cs-d .cs-opts{background:#1e293b;border-color:var(--navy)}
+.cs-d .cs-opt{color:rgba(255,255,255,0.8);border-bottom-color:rgba(255,255,255,0.08)}
+.cs-d .cs-opt:hover{background:rgba(27,58,107,0.3);color:#fff}
+.cs-d .cs-opt.selected{background:rgba(45,184,158,0.2);color:var(--teal)}
+.cs-d .cs-opt.blocked{color:#f87171}
+.cs-d .cs-opt.blocked:hover{background:rgba(220,38,38,0.15)}
+
+.f-btn{width:100%;height:54px;border:none;border-radius:var(--rs);font-size:0.95rem;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;transition:var(--t);display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:0.3px;background:var(--navy);color:#fff;margin-top:8px}
+.f-btn:hover{background:var(--navy-d);box-shadow:0 10px 28px rgba(27,58,107,0.3);transform:translateY(-2px)}
+.f-btn:disabled{opacity:0.38;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+.f-privacy{text-align:center;color:var(--text-s);font-size:0.7rem;margin-top:8px}
+.f-err{display:none;margin-top:3px;padding:6px 10px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;font-size:0.78rem;font-weight:700;color:var(--red)}
+
+.f-success{display:none;flex-direction:column;align-items:center;text-align:center;padding:28px 16px}
+.f-success-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--navy),var(--navy-d));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fff;margin:0 auto 14px;box-shadow:0 8px 24px rgba(27,58,107,0.35);animation:successPop .5s cubic-bezier(0.34,1.56,0.64,1) forwards}
+@keyframes successPop{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
+.f-success h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px}
+.f-success p{font-size:0.85rem;margin-bottom:0;line-height:1.6;color:var(--text-m)}
+.f-success-steps{display:flex;flex-direction:column;gap:10px;margin-top:16px;width:100%;text-align:left}
+.f-success-step{display:flex;align-items:center;gap:10px;background:var(--teal-pale);border:1px solid rgba(45,184,158,0.15);border-radius:10px;padding:12px 14px;animation:fadeUp .5s forwards;opacity:0}
+.f-success-step:nth-child(1){animation-delay:.15s}
+.f-success-step:nth-child(2){animation-delay:.3s}
+.f-success-step:nth-child(3){animation-delay:.45s}
+.f-success-step-icon{width:34px;height:34px;min-width:34px;background:linear-gradient(135deg,var(--navy),var(--navy-d));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff}
+.f-success-step-text{font-size:0.78rem;font-weight:600;color:var(--text);line-height:1.35}
+.f-success-step-text span{display:block;font-weight:400;font-size:0.72rem;color:var(--text-s);margin-top:1px}
+
+.fc2 .f-success-step{background:rgba(45,184,158,0.1);border-color:rgba(45,184,158,0.2)}
+.fc2 .f-success-step-text{color:#fff}
+.fc2 .f-success-step-text span{color:rgba(255,255,255,0.45)}
+
+.fc-trust{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.fc-trust-item{display:flex;align-items:center;gap:5px;color:var(--text-s);font-size:0.7rem;font-weight:700}
+.fc-trust-item svg{stroke:var(--green);fill:none;stroke-width:2.5;width:11px;height:11px}
+
+.phone-wrap{position:relative;display:flex;align-items:center}
+.phone-prefix{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:16px;font-weight:700;color:var(--text);pointer-events:none;z-index:1}
+.phone-input{padding-left:52px!important}
+.phone-wrap-d .phone-prefix{color:#64748b}
+
+.scroll-hint{display:none;flex-direction:column;align-items:center;gap:6px;margin-top:28px;cursor:pointer}
+.scroll-hint span{font-size:0.82rem;font-weight:700;color:var(--navy);letter-spacing:0.3px}
+.scroll-hint svg{color:var(--navy);animation:bounce 1.8s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+@media(max-width:900px){.scroll-hint{display:flex}}
+
+.mq{background:var(--navy);padding:14px 0;overflow:hidden}
+.mq-track{display:flex;white-space:nowrap;animation:mq 26s linear infinite}
+.mq-item{display:inline-flex;align-items:center;gap:18px;padding:0 28px;font-size:0.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4)}
+.mq-item .md{color:var(--teal-m);font-size:0.55rem}
+
+.sec{padding:100px 40px}
+.sw{max-width:1100px;margin:0 auto}
+.eyebrow{display:inline-block;color:var(--teal);font-size:0.7rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:12px}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,3.5vw,3rem);font-weight:700;color:var(--navy);margin-bottom:14px;line-height:1.15}
+
+.ben-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.ben-card{background:#fff;border:1.5px solid var(--beige-2);border-radius:var(--r);padding:32px 24px;transition:var(--t)}
+.ben-card:hover{border-color:var(--teal);box-shadow:0 20px 60px var(--shadow);transform:translateY(-4px)}
+.ben-icon{width:48px;height:48px;background:var(--teal-pale);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:16px}
+.ben-card h3{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:8px}
+.ben-card p{font-size:0.88rem;color:var(--text-m);line-height:1.65}
+
+.wave{display:block;width:100%;line-height:0}
+.wave svg{display:block;width:100%}
+.timeline{position:relative;max-width:680px;margin:48px auto 0}
+.timeline::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:2px;background:rgba(45,184,158,0.2)}
+.tl-step{position:relative;padding-left:72px;padding-bottom:36px}
+.tl-step:last-child{padding-bottom:0}
+.tl-num{position:absolute;left:8px;top:0;width:42px;height:42px;border-radius:50%;background:var(--navy);color:#fff;font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(27,58,107,0.4);z-index:1}
+.tl-step h3{font-size:1rem;font-weight:800;color:#fff;margin-bottom:4px;line-height:1.3}
+.tl-step p{font-size:0.88rem;color:rgba(255,255,255,0.55);line-height:1.65}
+.tl-step .tl-highlight{color:var(--teal);font-weight:700}
+
+.dark-form{background:var(--navy-d);padding:80px 40px}
+.dark-form .fc2{max-width:520px;margin:0 auto}
+.fc2 h3{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#fff;margin-bottom:6px;text-align:center}
+.fc2 .sub{color:rgba(255,255,255,0.5);font-size:0.88rem;text-align:center;margin-bottom:20px}
+.fc2 .f-field-lbl{color:rgba(255,255,255,0.8)}
+.fc2 .f-input{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15);color:#fff;box-shadow:none}
+.fc2 .f-input::placeholder{color:rgba(255,255,255,0.4)}
+.fc2 .f-input:focus{background:rgba(255,255,255,0.12);border-color:var(--teal)}
+.fc2 .f-btn{background:var(--teal);color:#fff}
+.fc2 .f-btn:hover{background:var(--teal-m);box-shadow:0 10px 28px rgba(45,184,158,0.4)}
+.fc2 .f-privacy{color:rgba(255,255,255,0.35)}
+.fc2 .f-err{background:rgba(220,38,38,0.15);border-color:rgba(220,38,38,0.3);color:#f87171}
+.fc2 .f-success h3{color:#fff}
+.fc2 .f-success p{color:rgba(255,255,255,0.6)}
+.fc2 .f-success-icon{background:var(--teal)}
+
+footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24px}
+.f-bot{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;font-size:0.78rem;gap:12px}
+
+@keyframes fadeUp{to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+@keyframes mq{to{transform:translateX(-50%)}}
+@keyframes heartbeat{0%,100%{transform:scale(1)}14%{transform:scale(1.03)}28%{transform:scale(1)}42%{transform:scale(1.03)}56%,100%{transform:scale(1)}}
+.hero-ab:hover{transform:scale(1.04)!important;box-shadow:0 12px 40px rgba(27,58,107,0.45)!important;animation:none!important}
+
+@media(max-width:900px){
+  nav{padding:16px 20px}nav.sc{padding:10px 20px}
+  .hero-inner{grid-template-columns:1fr;padding:110px 20px 40px;gap:28px}
+  .hero-text{order:1}
+  .hero-fc{order:2;margin-bottom:20px}
+  .dc{display:none}
+  .hero-dots{display:none}
+  .sec{padding:60px 20px}
+  .ben-grid{grid-template-columns:1fr}
+  .dark-form{padding:40px 20px}
+  .f-bot{flex-direction:column;text-align:center}
+  .cs-opts{max-height:180px}
+  #hero{min-height:auto;padding-bottom:20px}
+  .f-row{grid-template-columns:1fr}
+}
+@media(max-width:500px){
+  .hero-inner{padding:100px 16px 30px}
+  .hero-fc{padding:22px 18px}
+  .cs-opts{max-height:160px}
+}
+  </style>
+</head>
+<body>
+<div id="scroll-cover"></div>
+
+<div id="prog"></div>
+
+<nav id="nav">
+  <a href="/" class="nav-logo">
+    <img src="/logo-lp.png" alt="Llave Propia" style="height:36px">
+  </a>
+  <div class="nav-r">
+    <a href="javascript:void(0)" onclick="document.getElementById('beneficios').scrollIntoView({behavior:'smooth'})" class="hide-mob">Beneficios</a>
+    <a href="javascript:void(0)" onclick="window.scrollTo({top:document.getElementById('formulario').offsetTop-70,behavior:'smooth'})" class="nav-btn">Cotizar ahora</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="padding:0">
+  <div id="hero">
+    <div class="dc dc1"></div><div class="dc dc2"></div><div class="dc dc3"></div>
+    <div class="hero-dots"></div>
+    <div class="hero-inner">
+
+      <div class="hero-text">
+        <div class="hero-badge"><span class="dot"></span>Cotizamos en distintos bancos</div>
+        <h1 class="hero-h1">Tu crédito hipotecario<br><em>con la mejor tasa.</em></h1>
+        <p class="hero-sub" style="font-size:1.08rem;max-width:460px">Cotizamos en <strong>distintos bancos</strong> y negociamos la mejor tasa para ti. <strong style="color:var(--teal)">Solo cobramos contra aprobación bancaria.</strong></p>
+        <div class="hero-trust">
+          <div class="ht-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Todos los bancos</div>
+          <div class="ht-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Mejor tasa</div>
+          <div class="ht-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Solo contra aprobación</div>
+        </div>
+        <a href="javascript:void(0)" onclick="window.scrollTo({top:document.getElementById('hfc').offsetTop-70,behavior:'smooth'})" class="hero-ab" style="background:linear-gradient(135deg,var(--navy),var(--navy-d));border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 32px rgba(27,58,107,0.35);cursor:pointer;transition:all .3s ease;animation:heartbeat 2s ease-in-out infinite;text-decoration:none;margin-top:18px;">
+          <div style="width:52px;height:52px;min-width:52px;background:rgba(255,255,255,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem">&#128176;</div>
+          <div>
+            <p style="font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:2px;line-height:1.2">COBRAMOS SOLO CONTRA APROBACION BANCARIA</p>
+            <p style="font-size:0.85rem;color:rgba(255,255,255,0.85);line-height:1.4">Si el banco no aprueba tu crédito, <strong style="color:#fff;text-decoration:underline">no pagas nada</strong>.</p>
+            <span style="display:inline-block;margin-top:8px;background:var(--teal);color:#fff;padding:6px 18px;border-radius:50px;font-size:0.78rem;font-weight:800;letter-spacing:0.5px">Cotizar ahora &#8593;</span>
+          </div>
+        </a>
+        <div class="scroll-hint" onclick="window.scrollTo({top:document.getElementById('hfc').offsetTop-70,behavior:'smooth'})">
+          <span>Cotiza ahora</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+
+      <!-- FORM 1: Hero (light) -->
+      <div class="hero-fc" id="hfc">
+        <div class="hero-fc-tag">&#128176; COBRAMOS SOLO CONTRA APROBACION</div>
+        <h3>Cotiza tu crédito hipotecario</h3>
+        <p class="sub">Cotizamos en distintos bancos. Solo pagas si te aprueban.</p>
+        <div id="f1-content">
+          <div class="f-stack">
+            <div class="f-row">
+              <div class="f-field">
+                <label class="f-field-lbl">Nombre <span style="color:#ef4444">*</span></label>
+                <input class="f-input" type="text" id="f1-nombre" placeholder="Ej: Ana" autocomplete="given-name">
+              </div>
+              <div class="f-field">
+                <label class="f-field-lbl">Apellido <span style="color:#ef4444">*</span></label>
+                <input class="f-input" type="text" id="f1-apellido" placeholder="Ej: Garcia" autocomplete="family-name">
+              </div>
+            </div>
+            <div class="f-field">
+              <label class="f-field-lbl">Email <span style="color:#ef4444">*</span></label>
+              <input class="f-input" type="email" id="f1-email" placeholder="tucorreo@email.com" autocomplete="email">
+            </div>
+            <div class="f-field">
+              <label class="f-field-lbl">WhatsApp <span style="color:#ef4444">*</span></label>
+              <div class="phone-wrap">
+                <span class="phone-prefix">+56</span>
+                <input class="f-input phone-input" type="tel" id="f1-tel" placeholder="9 1234 5678" autocomplete="tel" maxlength="15">
+              </div>
+            </div>
+            <div class="f-field">
+              <label class="f-field-lbl">Renta líquida mensual <span style="color:#ef4444">*</span></label>
+              <div class="cs" data-target="f1-renta">
+                <div class="cs-trigger placeholder">Selecciona un rango</div>
+                <div class="cs-opts">
+                  <div class="cs-opt blocked" data-value="bajo-1500000">Menos de $1.500.000</div>
+                  <div class="cs-opt" data-value="1500000-1800000">$1.500.000 - $1.800.000</div>
+                  <div class="cs-opt" data-value="1800000-2100000">$1.800.000 - $2.100.000</div>
+                  <div class="cs-opt" data-value="2100000-2400000">$2.100.000 - $2.400.000</div>
+                  <div class="cs-opt" data-value="2400000-2700000">$2.400.000 - $2.700.000</div>
+                  <div class="cs-opt" data-value="2700000-3000000">$2.700.000 - $3.000.000</div>
+                  <div class="cs-opt" data-value="3000000-3500000">$3.000.000 - $3.500.000</div>
+                  <div class="cs-opt" data-value="3500000-4000000">$3.500.000 - $4.000.000</div>
+                  <div class="cs-opt" data-value="mas-4000000">Más de $4.000.000</div>
+                </div>
+                <input type="hidden" id="f1-renta" value="">
+              </div>
+              <div class="f-err" id="f1-renta-err">Para este servicio necesitas una renta líquida de al menos $1.500.000 mensuales.</div>
+            </div>
+            <div class="f-field">
+              <label class="f-field-lbl">Valor propiedad (UF) <span style="color:#ef4444">*</span></label>
+              <div class="cs" data-target="f1-monto">
+                <div class="cs-trigger placeholder">Selecciona un rango</div>
+                <div class="cs-opts">
+                  <div class="cs-opt blocked" data-value="bajo-2000">Menos de 2.000 UF</div>
+                  <div class="cs-opt" data-value="2000-2500">2.000 - 2.500 UF</div>
+                  <div class="cs-opt" data-value="2500-3000">2.500 - 3.000 UF</div>
+                  <div class="cs-opt" data-value="3000-3500">3.000 - 3.500 UF</div>
+                  <div class="cs-opt" data-value="3500-4000">3.500 - 4.000 UF</div>
+                  <div class="cs-opt" data-value="4000-5000">4.000 - 5.000 UF</div>
+                  <div class="cs-opt" data-value="mas-5000">Más de 5.000 UF</div>
+                </div>
+                <input type="hidden" id="f1-monto" value="">
+              </div>
+              <div class="f-err" id="f1-monto-err">No podemos atender propiedades bajo 2.000 UF. Para ese rango te recomendamos evaluar un Leasing Habitacional.</div>
+            </div>
+            <div class="f-field">
+              <label class="f-field-lbl">¿Estás en DICOM? <span style="color:#ef4444">*</span></label>
+              <div class="cs" data-target="f1-dicom">
+                <div class="cs-trigger placeholder">Selecciona</div>
+                <div class="cs-opts">
+                  <div class="cs-opt" data-value="no">No</div>
+                  <div class="cs-opt blocked" data-value="si">Si</div>
+                </div>
+                <input type="hidden" id="f1-dicom" value="">
+              </div>
+              <div class="f-err" id="f1-dicom-err">Lamentablemente, los bancos no otorgan creditos hipotecarios a personas con deudas impagas en DICOM.</div>
+            </div>
+            <button class="f-btn" id="f1-btn" onclick="doSubmit('f1')">Cotizar mi crédito &#8594;</button>
+          </div>
+          <p class="f-privacy">Tus datos están seguros. No compartimos tu información.</p>
+          <div class="fc-trust">
+            <div class="fc-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Solo contra aprobación</div>
+            <div class="fc-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Sin compromiso</div>
+            <div class="fc-trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Respuesta rápida</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq"><div class="mq-track"><span class="mq-item">SOLO COBRAMOS CONTRA APROBACION BANCARIA <span class="md">&#183;</span></span><span class="mq-item">COTIZAMOS EN DISTINTOS BANCOS <span class="md">&#183;</span></span><span class="mq-item">MEJOR TASA <span class="md">&#183;</span></span><span class="mq-item">SIN APROBACION, NO PAGAS NADA <span class="md">&#183;</span></span><span class="mq-item">LLAVE PROPIA <span class="md">&#183;</span></span><span class="mq-item">SOLO COBRAMOS CONTRA APROBACION BANCARIA <span class="md">&#183;</span></span><span class="mq-item">COTIZAMOS EN DISTINTOS BANCOS <span class="md">&#183;</span></span><span class="mq-item">MEJOR TASA <span class="md">&#183;</span></span><span class="mq-item">SIN APROBACION, NO PAGAS NADA <span class="md">&#183;</span></span><span class="mq-item">LLAVE PROPIA <span class="md">&#183;</span></span></div></div>
+
+<!-- BENEFICIOS -->
+<section class="sec" id="beneficios" style="background:#fff">
+  <div class="sw">
+    <div style="text-align:center;max-width:560px;margin:0 auto">
+      <span class="eyebrow">Por que Llave Propia</span>
+      <h2 class="sec-title">Te ayudamos a conseguir<br>las mejores condiciones</h2>
+      <p style="font-size:1rem;color:var(--text-m);line-height:1.75">No te quedes con la primera oferta. Cotizamos en múltiples bancos para encontrar la tasa y condiciones ideales para ti.</p>
+    </div>
+    <div class="ben-grid">
+      <div class="ben-card"><div class="ben-icon" style="background:linear-gradient(135deg,var(--teal-pale),#ccefea)"><span style="font-size:1.4rem">&#127974;</span></div><h3>Cotizamos en distintos bancos</h3><p>Enviamos tu perfil a múltiples instituciones financieras para encontrar la mejor oferta disponible.</p></div>
+      <div class="ben-card"><div class="ben-icon" style="background:linear-gradient(135deg,var(--teal-pale),#ccefea)"><span style="font-size:1.4rem">&#128200;</span></div><h3>Negociamos la mejor tasa</h3><p>Negociamos directamente con los bancos para conseguirte tasas y condiciones preferenciales.</p></div>
+      <div class="ben-card"><div class="ben-icon" style="background:linear-gradient(135deg,var(--teal-pale),#ccefea)"><span style="font-size:1.4rem">&#129309;</span></div><h3>Asesoría personalizada</h3><p>Un asesor dedicado te acompaña desde la pre-evaluación hasta la firma de escritura.</p></div>
+      <div class="ben-card"><div class="ben-icon" style="background:linear-gradient(135deg,#edf1f8,#dce3f0)"><span style="font-size:1.4rem">&#9889;</span></div><h3>Proceso ágil</h3><p>Nos encargamos del papeleo y la coordinacion con los bancos. Tu solo eliges la mejor opcion.</p></div>
+      <div class="ben-card"><div class="ben-icon" style="background:linear-gradient(135deg,#edf1f8,#dce3f0)"><span style="font-size:1.4rem">&#128176;</span></div><h3>Cobramos contra aprobación</h3><p>Solo cobramos nuestros honorarios cuando el banco aprueba tu crédito. Sin aprobación, no pagas nada.</p></div>
+      <div class="ben-card"><div class="ben-icon" style="background:linear-gradient(135deg,#edf1f8,#dce3f0)"><span style="font-size:1.4rem">&#128203;</span></div><h3>Comparación transparente</h3><p>Te entregamos un cuadro comparativo con tasas, dividendos y condiciones de cada banco para que decidas informado.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- BANNER -->
+<section style="background:linear-gradient(135deg,var(--navy) 0%,var(--navy-d) 100%);padding:72px 40px;text-align:center;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:28px 28px;pointer-events:none"></div>
+  <div style="max-width:750px;margin:0 auto;position:relative;z-index:1">
+    <div style="display:inline-block;background:rgba(45,184,158,0.2);border-radius:50px;padding:6px 20px;font-size:0.72rem;font-weight:800;color:var(--teal-m);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px">Nuestro compromiso</div>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.5vw,3.2rem);font-weight:700;color:#fff;margin-bottom:14px;line-height:1.1">Solo cobramos contra<br>aprobación bancaria</p>
+    <p style="font-size:1.15rem;color:rgba(255,255,255,0.85);line-height:1.65;max-width:560px;margin:0 auto 28px">Cotizamos tu crédito en <strong style="color:#fff">distintos bancos</strong> y negociamos la mejor tasa para ti. Si no te aprueban, <strong style="color:#fff;text-decoration:underline">no pagas nada</strong>.</p>
+    <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(45,184,158,0.15);border:1.5px solid rgba(45,184,158,0.3);border-radius:12px;padding:16px 28px">
+      <span style="font-size:1.8rem">&#10004;</span>
+      <span style="font-size:1.1rem;font-weight:800;color:#fff">Sin aprobación = no pagas nada</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<div class="wave" style="background:var(--navy)"><svg viewBox="0 0 1440 48" preserveAspectRatio="none" style="height:40px" fill="#1e293b"><path d="M0,0 C360,48 1080,48 1440,0 L1440,48 L0,48 Z"/></svg></div>
+<section style="background:#1e293b;padding:80px 40px" id="proceso">
+  <div style="max-width:1000px;margin:0 auto;text-align:center">
+    <span class="eyebrow" style="color:var(--teal)">Proceso</span>
+    <h2 class="sec-title" style="color:#fff">Así funciona</h2>
+    <p style="color:rgba(255,255,255,0.45);font-size:1rem;max-width:480px;margin:0 auto">Desde tu primera consulta hasta tener el credito aprobado, te acompañamos en cada paso.</p>
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-num">1</div>
+        <h3>Déjanos tus datos</h3>
+        <p>Completa el formulario con tu información básica y el monto de la propiedad.</p>
+      </div>
+      <div class="tl-step">
+        <div class="tl-num">2</div>
+        <h3>Cotizamos en distintos bancos</h3>
+        <p>Enviamos tu perfil a distintos bancos y negociamos las <span class="tl-highlight">mejores tasas disponibles</span>.</p>
+      </div>
+      <div class="tl-step">
+        <div class="tl-num">3</div>
+        <h3>Comparamos opciones</h3>
+        <p>Te presentamos un <span class="tl-highlight">cuadro comparativo</span> con las mejores ofertas de credito.</p>
+      </div>
+      <div class="tl-step">
+        <div class="tl-num">4</div>
+        <h3>Eliges y firmamos</h3>
+        <p>Seleccionas la opción que mas te conviene y te acompañamos hasta la <span class="tl-highlight">firma</span>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM 2: Dark (bottom) -->
+<section style="padding:56px 40px 80px;background:var(--beige-1)" id="formulario">
+  <div style="text-align:center;max-width:560px;margin:0 auto 40px">
+    <span class="eyebrow">Cotiza tu crédito</span>
+    <h2 class="sec-title">¿Listo para encontrar tu crédito ideal?</h2>
+    <p style="font-size:1rem;color:var(--text-m);line-height:1.75">Cotizamos en <strong>distintos bancos</strong>. Solo cobramos por la gestión <strong>contra aprobación bancaria</strong>.</p>
+  </div>
+  <div class="dark-form" style="background:var(--navy-d);border-radius:var(--rl);padding:48px 40px">
+    <div class="fc2">
+      <h3>Completa tus datos</h3>
+      <p class="sub">Cotizamos en distintos bancos. Solo cobramos contra aprobación.</p>
+      <div style="background:rgba(45,184,158,0.12);border:1px solid rgba(45,184,158,0.25);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
+        <span style="font-size:1.2rem">&#128176;</span>
+        <span style="font-size:0.82rem;font-weight:700;color:rgba(255,255,255,0.9);line-height:1.3">Cobramos solo contra aprobación bancaria. Sin aprobación, <strong style="color:var(--teal)">no pagas nada</strong></span>
+      </div>
+      <div id="f2-content">
+        <div class="f-stack">
+          <div class="f-row">
+            <div class="f-field">
+              <label class="f-field-lbl">Nombre <span style="color:#ef4444">*</span></label>
+              <input class="f-input" type="text" id="f2-nombre" placeholder="Ej: Ana" autocomplete="given-name">
+            </div>
+            <div class="f-field">
+              <label class="f-field-lbl">Apellido <span style="color:#ef4444">*</span></label>
+              <input class="f-input" type="text" id="f2-apellido" placeholder="Ej: Garcia" autocomplete="family-name">
+            </div>
+          </div>
+          <div class="f-field">
+            <label class="f-field-lbl">Email <span style="color:#ef4444">*</span></label>
+            <input class="f-input" type="email" id="f2-email" placeholder="tucorreo@email.com" autocomplete="email">
+          </div>
+          <div class="f-field">
+            <label class="f-field-lbl">WhatsApp <span style="color:#ef4444">*</span></label>
+            <div class="phone-wrap phone-wrap-d">
+              <span class="phone-prefix">+56</span>
+              <input class="f-input phone-input" type="tel" id="f2-tel" placeholder="9 1234 5678" autocomplete="tel" maxlength="15">
+            </div>
+          </div>
+          <div class="f-field">
+            <label class="f-field-lbl">Renta líquida mensual <span style="color:#ef4444">*</span></label>
+            <div class="cs cs-d" data-target="f2-renta">
+              <div class="cs-trigger placeholder">Selecciona un rango</div>
+              <div class="cs-opts">
+                <div class="cs-opt blocked" data-value="bajo-1500000">Menos de $1.500.000</div>
+                <div class="cs-opt" data-value="1500000-1800000">$1.500.000 - $1.800.000</div>
+                <div class="cs-opt" data-value="1800000-2100000">$1.800.000 - $2.100.000</div>
+                <div class="cs-opt" data-value="2100000-2400000">$2.100.000 - $2.400.000</div>
+                <div class="cs-opt" data-value="2400000-2700000">$2.400.000 - $2.700.000</div>
+                <div class="cs-opt" data-value="2700000-3000000">$2.700.000 - $3.000.000</div>
+                <div class="cs-opt" data-value="3000000-3500000">$3.000.000 - $3.500.000</div>
+                <div class="cs-opt" data-value="3500000-4000000">$3.500.000 - $4.000.000</div>
+                <div class="cs-opt" data-value="mas-4000000">Más de $4.000.000</div>
+              </div>
+              <input type="hidden" id="f2-renta" value="">
+            </div>
+            <div class="f-err" id="f2-renta-err">Para este servicio necesitas una renta líquida de al menos $1.500.000 mensuales.</div>
+          </div>
+          <div class="f-field">
+            <label class="f-field-lbl">Valor propiedad (UF) <span style="color:#ef4444">*</span></label>
+            <div class="cs cs-d" data-target="f2-monto">
+              <div class="cs-trigger placeholder">Selecciona un rango</div>
+              <div class="cs-opts">
+                <div class="cs-opt blocked" data-value="bajo-2000">Menos de 2.000 UF</div>
+                <div class="cs-opt" data-value="2000-2500">2.000 - 2.500 UF</div>
+                <div class="cs-opt" data-value="2500-3000">2.500 - 3.000 UF</div>
+                <div class="cs-opt" data-value="3000-3500">3.000 - 3.500 UF</div>
+                <div class="cs-opt" data-value="3500-4000">3.500 - 4.000 UF</div>
+                <div class="cs-opt" data-value="4000-5000">4.000 - 5.000 UF</div>
+                <div class="cs-opt" data-value="mas-5000">Más de 5.000 UF</div>
+              </div>
+              <input type="hidden" id="f2-monto" value="">
+            </div>
+            <div class="f-err" id="f2-monto-err">No podemos atender propiedades bajo 2.000 UF. Para ese rango te recomendamos evaluar un Leasing Habitacional.</div>
+          </div>
+          <div class="f-field">
+            <label class="f-field-lbl">¿Estás en DICOM? <span style="color:#ef4444">*</span></label>
+            <div class="cs cs-d" data-target="f2-dicom">
+              <div class="cs-trigger placeholder">Selecciona</div>
+              <div class="cs-opts">
+                <div class="cs-opt" data-value="no">No</div>
+                <div class="cs-opt blocked" data-value="si">Si</div>
+              </div>
+              <input type="hidden" id="f2-dicom" value="">
+            </div>
+            <div class="f-err" id="f2-dicom-err">Lamentablemente, los bancos no otorgan creditos hipotecarios a personas con deudas impagas en DICOM.</div>
+          </div>
+          <button class="f-btn" id="f2-btn" onclick="doSubmit('f2')">Cotizar mi crédito hipotecario &#8594;</button>
+        </div>
+        <p class="f-privacy">Tus datos están seguros. No compartimos tu información.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Thank you screen -->
+<div id="global-ok" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,var(--beige) 0%,var(--beige-1) 50%,var(--beige-2) 100%);z-index:9999;justify-content:center;align-items:center;flex-direction:column;text-align:center;padding:40px 24px;overflow:hidden">
+  <div style="max-width:440px;width:100%">
+    <div style="margin:0 auto 28px;text-align:center">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--navy)">Llave Propia</span>
+    </div>
+    <div style="background:#fff;border-radius:20px;padding:36px 28px;box-shadow:0 4px 24px rgba(27,58,107,0.12);border:1px solid var(--beige-2)">
+      <div style="width:56px;height:56px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;margin:0 auto 16px">&#10003;</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;margin-bottom:6px;color:var(--navy)">¡Recibimos tu solicitud!</h2>
+      <p style="font-size:0.92rem;color:var(--text-s);line-height:1.5;margin-bottom:20px">Te contactaremos pronto. Mientras tanto, escríbenos directo:</p>
+      <a href="https://wa.me/56976302641?text=Hola%2C%20acabo%20de%20completar%20el%20formulario%20de%20cr%C3%A9dito%20hipotecario" style="display:flex;align-items:center;justify-content:center;gap:12px;background:#25D366;color:#fff;font-weight:900;font-size:1.15rem;padding:20px 28px;border-radius:14px;text-decoration:none;text-align:center;box-shadow:0 6px 24px rgba(37,211,102,0.35);margin-bottom:6px">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.555 4.122 1.527 5.855L.06 23.497l5.83-1.527A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.82c-1.905 0-3.694-.527-5.22-1.442l-.374-.222-3.879 1.017 1.035-3.781-.244-.388A9.778 9.778 0 012.18 12c0-5.422 4.398-9.82 9.82-9.82 5.422 0 9.82 4.398 9.82 9.82 0 5.422-4.398 9.82-9.82 9.82z"/></svg>
+        Contactar por WhatsApp
+      </a>
+      <p style="text-align:center;font-size:0.78rem;color:var(--text-s);margin-bottom:24px">+56 9 7630 2641</p>
+      <div style="text-align:left;border-top:1px solid var(--beige-2);padding-top:18px">
+        <p style="font-weight:700;color:var(--navy);font-size:0.85rem;margin-bottom:14px">Documentos que necesitarás:</p>
+        <div style="background:var(--teal-pale);border:1px solid rgba(45,184,158,0.2);border-radius:12px;padding:16px 18px;margin-bottom:12px">
+          <p style="font-size:0.72rem;font-weight:800;color:var(--teal);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">Trabajador dependiente</p>
+          <ul style="list-style:none;padding:0;margin:0;font-size:0.82rem;color:var(--text-m);line-height:1.8">
+            <li style="padding-left:16px;position:relative"><span style="position:absolute;left:0;color:var(--teal)">&#10003;</span> 6 últimas liquidaciones de sueldo</li>
+            <li style="padding-left:16px;position:relative"><span style="position:absolute;left:0;color:var(--teal)">&#10003;</span> Cotizaciones AFP (último año)</li>
+            <li style="padding-left:16px;position:relative"><span style="position:absolute;left:0;color:var(--teal)">&#10003;</span> Certificado de deudas CMF</li>
+            <li style="padding-left:16px;position:relative"><span style="position:absolute;left:0;color:var(--teal)">&#10003;</span> Cédula de identidad ambos lados</li>
+          </ul>
+        </div>
+        <div style="background:#edf1f8;border:1px solid rgba(27,58,107,0.12);border-radius:12px;padding:16px 18px;margin-bottom:18px">
+          <p style="font-size:0.72rem;font-weight:800;color:var(--navy);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">Trabajador independiente</p>
+          <ul style="list-style:none;padding:0;margin:0;font-size:0.82rem;color:var(--text-m);line-height:1.8">
+            <li style="padding-left:16px;position:relative"><span style="position:absolute;left:0;color:var(--navy)">&#10003;</span> Carpeta tributaria</li>
+            <li style="padding-left:16px;position:relative"><span style="position:absolute;left:0;color:var(--navy)">&#10003;</span> Últimas 12 boletas de honorarios</li>
+            <li style="padding-left:16px;position:relative"><span style="position:absolute;left:0;color:var(--navy)">&#10003;</span> Certificado últimas 12 cotizaciones AFP</li>
+            <li style="padding-left:16px;position:relative"><span style="position:absolute;left:0;color:var(--navy)">&#10003;</span> Informe de deudas CMF</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="/hipotecario" style="display:inline-block;margin-top:20px;font-size:0.82rem;color:var(--text-s);text-decoration:underline">Conocer más del servicio</a>
+  </div>
+</div>
+
+<!-- STICKY BAR MOBILE -->
+<div id="sticky-cta" style="display:none;position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,var(--navy),var(--navy-d));padding:12px 20px;z-index:999;box-shadow:0 -4px 20px rgba(0,0,0,0.25);text-align:center">
+  <a href="javascript:void(0)" onclick="document.getElementById('formulario').scrollIntoView({behavior:'smooth'})" style="display:flex;align-items:center;justify-content:center;gap:8px;color:#fff;text-decoration:none">
+    <span style="font-size:0.85rem;font-weight:800">&#128176; SOLO CONTRA APROBACION</span>
+    <span style="background:rgba(255,255,255,0.2);padding:6px 14px;border-radius:50px;font-size:0.78rem;font-weight:700">Cotizar &#8594;</span>
+  </a>
+</div>
+
+<footer>
+  <div class="f-bot">
+    <p>&copy; 2026 Llave Propia. Todos los derechos reservados.</p>
+    <p>Asesoría en crédito hipotecario &middot; Chile</p>
+  </div>
+</footer>
+
+<script>
+/* scroll progress & nav & sticky */
+window.addEventListener('scroll', function() {
+  var s = document.documentElement.scrollTop;
+  var h = document.documentElement.scrollHeight - window.innerHeight;
+  if (h > 0) document.getElementById('prog').style.width = (s/h*100) + '%';
+  document.getElementById('nav').classList.toggle('sc', window.scrollY > 40);
+  var sticky = document.getElementById('sticky-cta');
+  if (window.innerWidth < 768 && sticky) {
+    sticky.style.display = (s > 400) ? 'block' : 'none';
+  }
+});
+
+/* custom select logic */
+document.addEventListener('click', function(e) {
+  var trigger = e.target.closest('.cs-trigger');
+  var opt = e.target.closest('.cs-opt');
+
+  if (trigger) {
+    var cs = trigger.closest('.cs');
+    document.querySelectorAll('.cs.open').forEach(function(el) {
+      if (el !== cs) { el.classList.remove('open'); el.classList.remove('open-up'); }
+    });
+    if (cs.classList.contains('open')) {
+      cs.classList.remove('open'); cs.classList.remove('open-up');
+    } else {
+      var rect = trigger.getBoundingClientRect();
+      cs.classList.add('open');
+      if (window.innerHeight - rect.bottom < 200) cs.classList.add('open-up');
+      else cs.classList.remove('open-up');
+      setTimeout(function() {
+        var opts = cs.querySelector('.cs-opts');
+        if (opts) opts.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+    return;
+  }
+
+  if (opt) {
+    var cs = opt.closest('.cs');
+    var targetId = cs.getAttribute('data-target');
+    var hidden = document.getElementById(targetId);
+    hidden.value = opt.getAttribute('data-value');
+    cs.querySelector('.cs-trigger').textContent = opt.textContent;
+    cs.querySelector('.cs-trigger').classList.remove('placeholder');
+    cs.querySelectorAll('.cs-opt').forEach(function(o) { o.classList.remove('selected'); });
+    opt.classList.add('selected');
+    cs.classList.remove('open'); cs.classList.remove('open-up');
+    var prefix = targetId.split('-')[0];
+    if (targetId.indexOf('renta') !== -1) checkRenta(prefix);
+    if (targetId.indexOf('monto') !== -1) checkMonto(prefix);
+    if (targetId.indexOf('dicom') !== -1) checkDicom(prefix);
+    updateButton(prefix);
+    return;
+  }
+
+  document.querySelectorAll('.cs.open').forEach(function(el) { el.classList.remove('open'); el.classList.remove('open-up'); });
+});
+
+function checkRenta(p) { document.getElementById(p + '-renta-err').style.display = (document.getElementById(p + '-renta').value === 'bajo-1500000') ? 'block' : 'none'; }
+function checkMonto(p) { document.getElementById(p + '-monto-err').style.display = (document.getElementById(p + '-monto').value === 'bajo-2000') ? 'block' : 'none'; }
+function checkDicom(p) { document.getElementById(p + '-dicom-err').style.display = (document.getElementById(p + '-dicom').value === 'si') ? 'block' : 'none'; }
+function updateButton(p) {
+  var btn = document.getElementById(p + '-btn');
+  btn.disabled = (document.getElementById(p + '-renta').value === 'bajo-1500000' || document.getElementById(p + '-monto').value === 'bajo-2000' || document.getElementById(p + '-dicom').value === 'si');
+}
+
+function getSelectedText(id) {
+  var cs = document.querySelector('.cs[data-target="' + id + '"]');
+  if (!cs) return '';
+  var sel = cs.querySelector('.cs-opt.selected');
+  return sel ? sel.textContent : '';
+}
+
+/* phone formatting */
+document.querySelectorAll('.phone-input').forEach(function(input) {
+  input.addEventListener('input', function() {
+    var raw = this.value.replace(/\D/g, '');
+    if (raw.startsWith('56') && raw.length > 9) raw = raw.slice(2);
+    if (raw.length > 9) raw = raw.substring(0, 9);
+    if (raw.length >= 2) {
+      this.value = raw.substring(0, 1) + ' ' + raw.substring(1, 5) + (raw.length > 5 ? ' ' + raw.substring(5) : '');
+    } else {
+      this.value = raw;
+    }
+  });
+});
+
+/* submit */
+function doSubmit(prefix) {
+  var nombre = document.getElementById(prefix + '-nombre').value.trim();
+  var apellido = document.getElementById(prefix + '-apellido').value.trim();
+  var email = document.getElementById(prefix + '-email').value.trim();
+  var rawTel = document.getElementById(prefix + '-tel').value.replace(/\D/g, '').replace(/^0+/, '');
+  if (rawTel.startsWith('569') && rawTel.length >= 11) rawTel = rawTel.slice(2);
+  else if (rawTel.startsWith('56') && rawTel.length >= 11) rawTel = rawTel.slice(2);
+  var teléfono = '+56' + rawTel;
+  var renta = document.getElementById(prefix + '-renta').value;
+  var monto = document.getElementById(prefix + '-monto').value;
+  var dicom = document.getElementById(prefix + '-dicom').value;
+
+  if (!nombre || !apellido || !email || rawTel.length < 9 || !renta || !monto || !dicom) {
+    alert('Por favor completa todos los campos. El WhatsApp debe tener 9 dígitos.');
+    return;
+  }
+  if (renta === 'bajo-1500000' || monto === 'bajo-2000' || dicom === 'si') {
+    alert('No podemos atender tu solicitud. Revisa los campos marcados.');
+    return;
+  }
+
+  var btn = document.getElementById(prefix + '-btn');
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+
+  var nombreCompleto = nombre + ' ' + apellido;
+  var rentaText = getSelectedText(prefix + '-renta');
+  var montoText = getSelectedText(prefix + '-monto');
+
+  // Save to Supabase via /api/new-lead
+  fetch('/api/new-lead', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      nombre: nombreCompleto,
+      email: email,
+      telefono: teléfono,
+      renta: rentaText,
+      renta_liquida: rentaText,
+      monto_propiedad: montoText,
+      dicom: dicom,
+      fuente: 'Credito Hipotecario'
+    })
+  }).catch(function() {});
+
+  // Fire Meta Pixel Lead event
+  if (typeof fbq !== 'undefined') fbq('track', 'Lead');
+
+  // Show thank you screen
+  document.getElementById('global-ok').style.display = 'flex';
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
