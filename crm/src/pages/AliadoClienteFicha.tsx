@@ -143,7 +143,7 @@ const AliadoClienteFicha = () => {
           user_id: user!.id,
         });
         setCliente(prev => prev ? { ...prev, estado: 'ingresado' } : null);
-        toast.success('Documentacion completa');
+        toast.success('Documentación completa');
 
         // Send email: docs now complete
         const fechaIngreso = new Date(cliente.fecha_ingreso).toLocaleString('es-CL', { timeZone: 'America/Santiago' });
@@ -153,10 +153,10 @@ const AliadoClienteFicha = () => {
           body: JSON.stringify({
             to: [aliado.email_contacto],
             cc: ['rodrigo.canas@llavepropia.cl', 'vicente.torres@proppi.cl'],
-            subject: `[Alianza ${aliado.nombre_comercial}] Documentacion completa - ${cliente.nombre} - ${cliente.rut}`,
+            subject: `[Alianza ${aliado.nombre_comercial}] Documentación completa - ${cliente.nombre} - ${cliente.rut}`,
             html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
-              <h2 style="color:#059669;">Documentacion completada</h2>
-              <p>El cliente <strong>${cliente.nombre}</strong> (${cliente.rut}) ahora tiene toda su documentacion completa y esta listo para revision.</p>
+              <h2 style="color:#059669;">Documentación completada</h2>
+              <p>El cliente <strong>${cliente.nombre}</strong> (${cliente.rut}) ahora tiene toda su documentación completa y está listo para revisión.</p>
               <table style="width:100%;border-collapse:collapse;margin:16px 0;">
                 <tr><td style="padding:4px 8px;color:#6b7280;">Aliado:</td><td style="padding:4px 8px;font-weight:bold;">${aliado.nombre_comercial}</td></tr>
                 <tr><td style="padding:4px 8px;color:#6b7280;">Cliente:</td><td style="padding:4px 8px;font-weight:bold;">${cliente.nombre}</td></tr>
@@ -169,7 +169,7 @@ const AliadoClienteFicha = () => {
               </table>
               <p style="margin-top:16px;">Puede revisar los documentos en el <a href="https://www.llavepropia.cl/crm" style="color:#2DB89E;font-weight:bold;">CRM de Llave Propia</a>.</p>
               <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;">
-              <p style="color:#9ca3af;font-size:12px;">Correo automatico del portal de aliados de Llave Propia.</p>
+              <p style="color:#9ca3af;font-size:12px;">Correo automático del portal de aliados — Llave Propia.</p>
             </div>`,
           }),
         }).catch(console.error);
@@ -362,22 +362,35 @@ const AliadoClienteFicha = () => {
           <div className="bg-white rounded-lg border p-4 sm:p-6">
             <h2 className="font-bold text-gray-900 mb-4">Historial de estados</h2>
             <div className="space-y-3">
-              {historial.map(h => (
-                <div key={h.id} className="flex items-start gap-3 text-sm">
-                  <Clock className="h-4 w-4 text-gray-400 mt-0.5 shrink-0" />
-                  <div>
-                    <p className="text-gray-700">
-                      {h.estado_anterior ? (
-                        <>{ESTADO_LABELS[h.estado_anterior] ?? h.estado_anterior} &rarr; </>
-                      ) : null}
-                      <span className="font-semibold">{ESTADO_LABELS[h.estado_nuevo] ?? h.estado_nuevo}</span>
-                    </p>
-                    <p className="text-xs text-gray-400">
-                      {new Date(h.created_at).toLocaleString('es-CL', { timeZone: 'America/Santiago' })}
-                    </p>
+              {historial.map(h => {
+                const isDocsComplete = h.estado_anterior === 'ingreso_incompleto' && h.estado_nuevo === 'ingresado';
+                return (
+                  <div key={h.id} className="flex items-start gap-3 text-sm">
+                    {isDocsComplete ? (
+                      <Check className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
+                    ) : (
+                      <Clock className="h-4 w-4 text-gray-400 mt-0.5 shrink-0" />
+                    )}
+                    <div>
+                      <p className="text-gray-700">
+                        {isDocsComplete ? (
+                          <span className="font-semibold text-green-700">Documentación completa — cliente ingresado</span>
+                        ) : (
+                          <>
+                            {h.estado_anterior ? (
+                              <>{ESTADO_LABELS[h.estado_anterior] ?? h.estado_anterior} &rarr; </>
+                            ) : null}
+                            <span className="font-semibold">{ESTADO_LABELS[h.estado_nuevo] ?? h.estado_nuevo}</span>
+                          </>
+                        )}
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        {new Date(h.created_at).toLocaleString('es-CL', { timeZone: 'America/Santiago' })}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
