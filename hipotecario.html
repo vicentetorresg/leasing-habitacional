@@ -241,8 +241,12 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24
 @keyframes mq{to{transform:translateX(-50%)}}
 @keyframes heartbeat{0%,100%{transform:scale(1)}14%{transform:scale(1.03)}28%{transform:scale(1)}42%{transform:scale(1.03)}56%,100%{transform:scale(1)}}
 .hero-ab:hover{transform:scale(1.04)!important;box-shadow:0 12px 40px rgba(27,58,107,0.45)!important;animation:none!important}
+.hero-ab-desk{display:flex}
+.hero-ab-mob{display:none}
+@media(max-width:900px){.hero-ab-desk{display:none!important}.hero-ab-mob{display:flex;order:3}}
 
 @media(max-width:900px){
+  :root{--text-m:#3D2E1F;--text-s:#6B5A48}
   nav{padding:16px 20px}nav.sc{padding:10px 20px}
   .hero-inner{grid-template-columns:1fr;padding:110px 20px 40px;gap:28px}
   .hero-text{order:1}
@@ -256,6 +260,27 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24
   .cs-opts{max-height:180px}
   #hero{min-height:auto;padding-bottom:20px}
   .f-row{grid-template-columns:1fr}
+  .hero-h1{font-size:2.2rem}
+  .hero-sub{font-size:1.1rem!important;line-height:1.7}
+  .ht-item{font-size:0.88rem}
+  .hero-badge{font-size:0.78rem}
+  .hero-fc-tag{font-size:0.78rem}
+  .hero-fc h3{font-size:1.45rem}
+  .hero-fc .sub{font-size:0.85rem;color:var(--text-m)}
+  .f-field-lbl{font-size:14px}
+  .f-btn{height:56px;font-size:1rem;font-weight:800}
+  .f-privacy{font-size:0.76rem}
+  .fc-trust-item{font-size:0.76rem;color:var(--text-m)}
+  .ben-card h3{font-size:1.08rem}
+  .ben-card p{font-size:0.92rem}
+  .sec-title{font-size:2rem}
+  .eyebrow{font-size:0.76rem}
+  .mq-item{font-size:0.78rem}
+  .tl-step h3{font-size:1.08rem}
+  .tl-step p{font-size:0.92rem;color:rgba(255,255,255,0.65)}
+  .fc2 h3{font-size:1.9rem}
+  .fc2 .sub{font-size:0.92rem;color:rgba(255,255,255,0.6)}
+  .scroll-hint span{font-size:0.9rem}
 }
 @media(max-width:500px){
   .hero-inner{padding:100px 16px 30px}
@@ -295,7 +320,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24
           <div class="ht-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Mejor tasa</div>
           <div class="ht-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Solo contra aprobación</div>
         </div>
-        <a href="javascript:void(0)" onclick="window.scrollTo({top:document.getElementById('hfc').offsetTop-70,behavior:'smooth'})" class="hero-ab" style="background:linear-gradient(135deg,var(--navy),var(--navy-d));border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 32px rgba(27,58,107,0.35);cursor:pointer;transition:all .3s ease;animation:heartbeat 2s ease-in-out infinite;text-decoration:none;margin-top:18px;">
+        <a href="javascript:void(0)" onclick="window.scrollTo({top:document.getElementById('hfc').offsetTop-70,behavior:'smooth'})" class="hero-ab hero-ab-desk" style="background:linear-gradient(135deg,var(--navy),var(--navy-d));border-radius:14px;padding:20px 22px;align-items:center;gap:14px;box-shadow:0 8px 32px rgba(27,58,107,0.35);cursor:pointer;transition:all .3s ease;animation:heartbeat 2s ease-in-out infinite;text-decoration:none;margin-top:18px;">
           <div style="width:52px;height:52px;min-width:52px;background:rgba(255,255,255,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem">&#128176;</div>
           <div>
             <p style="font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:2px;line-height:1.2">COBRAMOS SOLO CONTRA APROBACION BANCARIA</p>
@@ -395,6 +420,15 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24
           </div>
         </div>
       </div>
+
+      <a href="javascript:void(0)" onclick="window.scrollTo({top:document.getElementById('hfc').offsetTop-70,behavior:'smooth'})" class="hero-ab hero-ab-mob" style="background:linear-gradient(135deg,var(--navy),var(--navy-d));border-radius:14px;padding:20px 22px;align-items:center;gap:14px;box-shadow:0 8px 32px rgba(27,58,107,0.35);cursor:pointer;transition:all .3s ease;animation:heartbeat 2s ease-in-out infinite;text-decoration:none;">
+        <div style="width:52px;height:52px;min-width:52px;background:rgba(255,255,255,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem">&#128176;</div>
+        <div>
+          <p style="font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:2px;line-height:1.2">COBRAMOS SOLO CONTRA APROBACION BANCARIA</p>
+          <p style="font-size:0.85rem;color:rgba(255,255,255,0.85);line-height:1.4">Si el banco no aprueba tu crédito, <strong style="color:#fff;text-decoration:underline">no pagas nada</strong>.</p>
+          <span style="display:inline-block;margin-top:8px;background:var(--teal);color:#fff;padding:6px 18px;border-radius:50px;font-size:0.78rem;font-weight:800;letter-spacing:0.5px">Cotizar ahora &#8593;</span>
+        </div>
+      </a>
 
     </div>
   </div>
