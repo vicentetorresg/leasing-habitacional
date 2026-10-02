@@ -5,22 +5,11 @@ const SESSION_SECRET = process.env.SESSION_SECRET || 'lp-crm-session-2026';
 function createSessionToken(userId, email, role, fullName) {
   const payload = {
     userId, email, role, fullName,
-    exp: Date.now() + 24 * 60 * 60 * 1000, // 1 day
+    exp: Date.now() + 48 * 60 * 60 * 1000,
   };
   const data = Buffer.from(JSON.stringify(payload)).toString('base64url');
   const sig = crypto.createHmac('sha256', SESSION_SECRET).update(data).digest('base64url');
   return `${data}.${sig}`;
-}
-
-export function verifySessionToken(token) {
-  try {
-    const [data, sig] = token.split('.');
-    const expectedSig = crypto.createHmac('sha256', SESSION_SECRET).update(data).digest('base64url');
-    if (sig !== expectedSig) return null;
-    const payload = JSON.parse(Buffer.from(data, 'base64url').toString());
-    if (payload.exp < Date.now()) return null;
-    return payload;
-  } catch { return null; }
 }
 
 export default async function handler(req, res) {
@@ -30,16 +19,17 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { email, code } = req.body || {};
-  if (!email || !code) return res.status(400).json({ error: 'Email y codigo requeridos' });
+  const { code, userId } = req.body || {};
+  if (!code) return res.status(400).json({ error: 'Codigo requerido' });
 
   const CRM_URL = 'https://evuxdhvvarfxredghvpu.supabase.co';
   const CRM_KEY = process.env.CRM_SERVICE_ROLE_KEY;
   const headers = { apikey: CRM_KEY, Authorization: `Bearer ${CRM_KEY}`, 'Content-Type': 'application/json' };
 
-  // Find valid OTP
+  // Find valid OTP — match by code and optionally by userId context
+  const emailFilter = userId || 'crm-login';
   const otpR = await fetch(
-    `${CRM_URL}/rest/v1/otp_codes?email=eq.${encodeURIComponent(email)}&code=eq.${code}&used=eq.false&expires_at=gte.${new Date().toISOString()}&order=created_at.desc&limit=1`,
+    `${CRM_URL}/rest/v1/otp_codes?code=eq.${code}&used=eq.false&email=eq.${emailFilter}&expires_at=gte.${new Date().toISOString()}&order=created_at.desc&limit=1`,
     { headers }
   );
   const otps = await otpR.json();
@@ -53,26 +43,45 @@ export default async function handler(req, res) {
     body: JSON.stringify({ used: true }),
   });
 
-  // Get user info
-  const authR = await fetch(`${CRM_URL}/auth/v1/admin/users?per_page=100`, {
-    headers: { apikey: CRM_KEY, Authorization: `Bearer ${CRM_KEY}` },
-  });
-  const authData = await authR.json();
-  const authUser = (authData.users || []).find(u => u.email?.toLowerCase() === email.toLowerCase());
-  if (!authUser) return res.status(401).json({ error: 'Usuario no encontrado' });
+  // Determine which user to authenticate
+  const targetUserId = userId || 'c581981b-30a1-41a6-9eba-1e7b57b2afad'; // default: aliado intermedina
 
   // Get role
-  const roleR = await fetch(`${CRM_URL}/rest/v1/user_roles?user_id=eq.${authUser.id}&select=role`, { headers });
+  const roleR = await fetch(`${CRM_URL}/rest/v1/user_roles?user_id=eq.${targetUserId}&select=role`, { headers });
   const roles = await roleR.json();
-  const role = (roles || []).find(r => r.role === 'admin')?.role || roles?.[0]?.role || 'ejecutiva';
+  const userRoles = (roles || []).map(r => r.role);
+  const role = userRoles.includes('admin') ? 'admin' : userRoles[0] || 'aliado';
 
   // Get profile
-  const profR = await fetch(`${CRM_URL}/rest/v1/profiles?user_id=eq.${authUser.id}&select=full_name`, { headers });
+  const profR = await fetch(`${CRM_URL}/rest/v1/profiles?user_id=eq.${targetUserId}&select=full_name`, { headers });
   const profs = await profR.json();
-  const fullName = profs?.[0]?.full_name || '';
+  const fullName = profs?.[0]?.full_name || 'Usuario';
 
-  // Create session token
-  const token = createSessionToken(authUser.id, email, role, fullName);
+  // Get email from auth
+  const authR = await fetch(`${CRM_URL}/auth/v1/admin/users/${targetUserId}`, {
+    headers: { apikey: CRM_KEY, Authorization: `Bearer ${CRM_KEY}` },
+  });
+  const authUser = await authR.json();
+  const email = authUser?.email || '';
 
-  return res.status(200).json({ token, user: { id: authUser.id, email, role, fullName } });
+  const token = createSessionToken(targetUserId, email, role, fullName);
+
+  // Notify admins on every login
+  const RESEND_KEY = process.env.RESEND_API_KEY;
+  const now = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
+  await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: 'Llave Propia <notificaciones@proppi.cl>',
+      to: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'],
+      subject: `CRM: ${fullName} acaba de ingresar`,
+      html: `<p><strong>${fullName}</strong> (${email}) acaba de iniciar sesion en el CRM de Llave Propia.</p><p>Hora: ${now}</p>`,
+    }),
+  }).catch(() => {});
+
+  return res.status(200).json({
+    token,
+    user: { id: targetUserId, email, role, fullName },
+  });
 }
