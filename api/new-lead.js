@@ -1,11 +1,11 @@
 function buildWelcomeHtml(nombre, isLeasing) {
-  const productoLabel = isLeasing ? 'Leasing Habitacional DS120' : 'Mutuo Hipotecario';
+  const productoLabel = isLeasing ? 'Leasing Habitacional DS120' : 'Credito Hipotecario';
   const headerBg    = isLeasing ? 'linear-gradient(135deg,#1B2B5E 0%,#2BA89C 100%)' : 'linear-gradient(135deg,#1B2B5E 0%,#162244 100%)';
   const accentColor = isLeasing ? '#2BA89C' : '#C9871A';
   const badge       = isLeasing ? 'Programa DS120 · MINVU' : 'Crédito Hipotecario · UF';
   const intro       = isLeasing
     ? 'Estás más cerca de lo que crees de tener tu primera casa o departamento. Con el subsidio DS120 el Estado pone el pie por ti — solo necesitamos verificar que calificas. Para avanzar con tu pre-evaluación, envíanos la siguiente documentación:'
-    : 'Estás comenzando el proceso para tu Mutuo Hipotecario. Para avanzar con tu pre-evaluación necesitamos la siguiente documentación:';
+    : 'Estás comenzando el proceso para tu Credito Hipotecario. Para avanzar con tu pre-evaluación necesitamos la siguiente documentación:';
   return `<!DOCTYPE html>
 <html lang="es">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Documentación requerida — ${productoLabel}</title></head>
@@ -115,7 +115,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, precio_propiedad_ok, complementa_renta, renta_complemento, cuando_comprar, fuente, utm_source, utm_medium, utm_campaign } = req.body || {};
+  const { nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, precio_propiedad_ok, complementa_renta, renta_complemento, cuando_comprar, fuente, utm_source, utm_medium, utm_campaign, renta_liquida, monto_propiedad } = req.body || {};
   if (!nombre || !telefono) return res.status(400).json({ error: 'Faltan campos' });
 
   // Blocklist
@@ -148,7 +148,7 @@ export default async function handler(req, res) {
   // Try with contrato + vivienda columns
   const r1 = await fetch(SUPA_URL, {
     method: 'POST', headers: supaHeaders,
-    body: JSON.stringify({ nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, precio_propiedad_ok, complementa_renta, renta_complemento, cuando_comprar, fuente, utm_source, utm_medium, utm_campaign })
+    body: JSON.stringify({ nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, precio_propiedad_ok, complementa_renta, renta_complemento, cuando_comprar, fuente, utm_source, utm_medium, utm_campaign, renta_liquida, monto_propiedad })
   });
   if (r1.ok) { saved = true; }
   if (!saved) {
@@ -159,7 +159,12 @@ export default async function handler(req, res) {
     saved = r.ok;
   }
 
+  // Detect hipotecario leads early
+  const fLowerEarly = (fuente || '').toLowerCase();
+  const isHipotecarioLead = fLowerEarly.includes('hipotecario') || fLowerEarly.includes('mutuo') || fLowerEarly.includes('credito');
+
   // 1b. Dual-write to CRM Supabase (leads table) with round-robin assignment
+  // Skip CRM insert for hipotecario leads — they only go to crm-hipotecarios
   const docToken = crypto.randomUUID();
   const normalizePhone = (raw) => {
     if (!raw) return '';
@@ -173,6 +178,7 @@ export default async function handler(req, res) {
   // Round-robin: alternate based on last assigned lead
   const KARINA_ID = '6608503b-3cc7-447a-9ffd-f8f94795cd50';
   const COMERCIAL_ID = '9f156deb-c219-4b51-b454-5a4692629332';
+  const EJECUTIVA_NAMES = { [KARINA_ID]: 'Karina Valenzuela', [COMERCIAL_ID]: 'Comercial' };
   let assignedTo = KARINA_ID;
   try {
     const crmBase = 'https://evuxdhvvarfxredghvpu.supabase.co/rest/v1';
@@ -183,35 +189,37 @@ export default async function handler(req, res) {
     assignedTo = lastAssigned === KARINA_ID ? COMERCIAL_ID : KARINA_ID;
   } catch {}
 
-  const crmLead = {
-    name: nombre,
-    phone: normalizePhone(telefono),
-    email: email || null,
-    source: fuente || 'web',
-    status: 'nuevo',
-    is_demo: false,
-    assigned_to: assignedTo,
-    sueldo_liquido_raw: renta || null,
-    en_dicom: dicom === 'si' ? true : dicom === 'no' ? false : null,
-    arriendo: arriendo || null,
-    contrato: contrato || null,
-    vivienda: vivienda || null,
-    tiene_propiedad_vista: tiene_propiedad_vista || null,
-    comuna_propiedad: comuna_propiedad || null,
-    precio_propiedad_ok: precio_propiedad_ok || null,
-    complementa_renta: complementa_renta || null,
-    renta_complemento: renta_complemento || null,
-    cuando_comprar: cuando_comprar || null,
-    utm_source: utm_source || null,
-    utm_medium: utm_medium || null,
-    utm_campaign: utm_campaign || null,
-    doc_token: docToken,
-  };
-  await fetch(CRM_URL, {
-    method: 'POST',
-    headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-    body: JSON.stringify(crmLead),
-  }).catch(() => null); // fire-and-forget, don't block response
+  if (!isHipotecarioLead) {
+    const crmLead = {
+      name: nombre,
+      phone: normalizePhone(telefono),
+      email: email || null,
+      source: fuente || 'web',
+      status: 'nuevo',
+      is_demo: false,
+      assigned_to: assignedTo,
+      sueldo_liquido_raw: renta || null,
+      en_dicom: dicom === 'si' ? true : dicom === 'no' ? false : null,
+      arriendo: arriendo || null,
+      contrato: contrato || null,
+      vivienda: vivienda || null,
+      tiene_propiedad_vista: tiene_propiedad_vista || null,
+      comuna_propiedad: comuna_propiedad || null,
+      precio_propiedad_ok: precio_propiedad_ok || null,
+      complementa_renta: complementa_renta || null,
+      renta_complemento: renta_complemento || null,
+      cuando_comprar: cuando_comprar || null,
+      utm_source: utm_source || null,
+      utm_medium: utm_medium || null,
+      utm_campaign: utm_campaign || null,
+      doc_token: docToken,
+    };
+    await fetch(CRM_URL, {
+      method: 'POST',
+      headers: { 'apikey': CRM_KEY, 'Authorization': 'Bearer ' + CRM_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify(crmLead),
+    }).catch(() => null);
+  }
 
   // 2. Notification email to team
   const contratoLabel  = contrato === 'si' ? '✅ Sí' : contrato === 'no' ? '❌ No' : '—';
@@ -223,7 +231,9 @@ export default async function handler(req, res) {
   const rentaCompLabel = renta_complemento || '—';
   const cuandoComprarLabel = cuando_comprar === 'lo_antes_posible' ? '🔥 Lo antes posible' : cuando_comprar === 'dentro_3_meses' ? '📅 Dentro de 3 meses' : cuando_comprar === 'mas_3_meses' ? '📆 En más de 3 meses' : '—';
   const now = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
-  const producto = (fuente || '').toLowerCase().includes('mutuo') ? 'Mutuo Hipotecario' : 'Leasing DS120';
+  const fLower = (fuente || '').toLowerCase();
+  const isHipotecario = fLower.includes('hipotecario') || fLower.includes('mutuo') || fLower.includes('credito');
+  const producto = isHipotecario ? 'Credito Hipotecario' : 'Leasing DS120';
   const waPhone = (telefono || '').replace(/\D/g, '').replace(/^0/, '56');
 
   const html = `<!DOCTYPE html>
@@ -233,14 +243,21 @@ export default async function handler(req, res) {
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f2ee;padding:28px 16px">
 <tr><td align="center">
 <table width="100%" style="max-width:520px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08)">
-  <tr><td style="background:linear-gradient(135deg,#1B3A6B 0%,#2DB89E 100%);padding:22px 32px">
+  <tr><td style="background:${isHipotecario ? 'linear-gradient(135deg,#1B3A6B 0%,#C9871A 100%)' : 'linear-gradient(135deg,#1B3A6B 0%,#2DB89E 100%)'};padding:22px 32px">
     <p style="margin:0;color:rgba(255,255,255,0.65);font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase">Llave Propia · Nuevo Lead</p>
     <p style="margin:6px 0 0;color:#fff;font-size:22px;font-weight:700;line-height:1.2">${nombre}</p>
     <p style="margin:5px 0 0;color:rgba(255,255,255,0.6);font-size:12px">${producto} · ${now}</p>
   </td></tr>
   <tr><td style="padding:26px 32px">
     <table width="100%" cellpadding="0" cellspacing="0">
-      ${[
+      ${(isHipotecario ? [
+        ['📱 WhatsApp',             telefono || '—'],
+        ['✉️ Email',                email    || '—'],
+        ['💰 Renta líquida',        renta_liquida || renta || '—'],
+        ['🏠 Valor propiedad (UF)', monto_propiedad || '—'],
+        ['⚠️ En DICOM',             dicomLabel],
+        ['📌 Fuente',               fuente   || '—'],
+      ] : [
         ['📱 WhatsApp',             telefono || '—'],
         ['✉️ Email',                email    || '—'],
         ['💰 Renta mensual',        renta    || '—'],
@@ -254,7 +271,7 @@ export default async function handler(req, res) {
         ['⚠️ En DICOM',             dicomLabel],
         ['🗓️ Cuándo comprar',       cuandoComprarLabel],
         ['📌 Fuente',               fuente   || '—'],
-      ].map(([label, val]) => `
+      ]).map(([label, val]) => `
       <tr>
         <td style="padding:9px 0;border-bottom:1px solid #f0ece4;color:#9a8878;font-size:12px;font-weight:600;width:42%">${label}</td>
         <td style="padding:9px 0;border-bottom:1px solid #f0ece4;color:#1B3A6B;font-size:13px;font-weight:700">${val}</td>
@@ -290,7 +307,8 @@ export default async function handler(req, res) {
   });
 
   // 3. Pre-approval email to the lead (with CC to Vicente)
-  const isLeasing = !(fuente || '').toLowerCase().includes('mutuo');
+  const fuenteLower = (fuente || '').toLowerCase();
+  const isLeasing = !fuenteLower.includes('mutuo') && !fuenteLower.includes('hipotecario') && !fuenteLower.includes('credito');
   if (isLeasing && email) {
     const firstName = (nombre || '').trim().split(' ')[0] || nombre;
     const dicomVal = dicom === 'no' ? 'No ✅' : dicom === 'si' ? 'Sí ❌' : '—';
@@ -314,16 +332,16 @@ export default async function handler(req, res) {
 
     const headlineText = isCondicionado
       ? `${firstName}, tienes una oportunidad para tu casa propia`
-      : `Felicidades ${firstName}, estas pre-aprobado!`;
+      : `Felicidades ${firstName}, estás pre-aprobado!`;
     const subtitleText = isCondicionado
       ? 'Pre-aprobado condicionado para Leasing Habitacional'
       : 'Pre-aprobado para Leasing Habitacional';
     const introText = isCondicionado
-      ? `Segun la informacion que nos enviaste, <strong>podrias acceder al Leasing Habitacional con subsidio del Estado</strong>, condicionado a que complementes tu renta con otra persona. Para confirmar tu pre-aprobacion, necesitamos verificar tu documentacion.`
-      : `Segun la informacion que nos enviaste, <strong>calificas para comprar tu vivienda con subsidio del Estado</strong> a traves del Leasing Habitacional DS120. Para formalizar tu proceso de compra, necesitamos verificar tu documentacion.`;
+      ? `Según la información que nos enviaste, <strong>podrias acceder al Leasing Habitacional con subsidio del Estado</strong>, condicionado a que complementes tu renta con otra persona. Para confirmar tu pre-aprobación, necesitamos verificar tu documentación.`
+      : `Según la información que nos enviaste, <strong>calificas para comprar tu vivienda con subsidio del Estado</strong> a través del Leasing Habitacional DS120. Para formalizar tu proceso de compra, necesitamos verificar tu documentación.`;
     const urgencyText = isCondicionado
-      ? 'Los cupos para complementar renta son limitados. Confirma tu pre-aprobacion lo antes posible.'
-      : 'Tu pre-aprobacion tiene vigencia limitada. Asegura tu cupo enviando tus documentos ahora.';
+      ? 'Los cupos para complementar renta son limitados. Confirma tu pre-aprobación lo antes posible.'
+      : 'Tu pre-aprobación tiene vigencia limitada. Asegura tu cupo enviando tus documentos ahora.';
 
     const preApprovalHtml = `<div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;background:#FEFCF7;border-radius:16px;overflow:hidden;border:1px solid #EDE3D4">
   <div style="background:linear-gradient(135deg,#1B3A6B,#243870);padding:28px;text-align:center">
@@ -339,8 +357,8 @@ export default async function handler(req, res) {
 
     <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 24px"><tr><td align="center" style="background:#2DB89E;border-radius:16px;padding:32px 28px">
       <p style="font-size:24px;font-weight:900;color:#fff;margin:0 0 8px">${isCondicionado ? 'Confirma tu oportunidad' : 'Solo falta un paso'}</p>
-      <p style="font-size:15px;color:rgba(255,255,255,0.9);margin:0 0 24px;line-height:1.5">Revisa tu pre-aprobacion y sube tus documentos para avanzar con la compra de tu vivienda.</p>
-      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#fff;color:#1B3A6B;font-size:18px;font-weight:900;padding:18px 40px;border-radius:12px;text-decoration:none;letter-spacing:0.3px;box-shadow:0 4px 16px rgba(0,0,0,0.15)">REVISA TU PRE-APROBACION</a>
+      <p style="font-size:15px;color:rgba(255,255,255,0.9);margin:0 0 24px;line-height:1.5">Revisa tu pre-aprobación y sube tus documentos para avanzar con la compra de tu vivienda.</p>
+      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#fff;color:#1B3A6B;font-size:18px;font-weight:900;padding:18px 40px;border-radius:12px;text-decoration:none;letter-spacing:0.3px;box-shadow:0 4px 16px rgba(0,0,0,0.15)">REVISA TU PRE-APROBACIÓN</a>
       <p style="font-size:12px;color:rgba(255,255,255,0.7);margin:12px 0 0">Solo toma 5 minutos</p>
     </td></tr></table>
 
@@ -369,16 +387,16 @@ export default async function handler(req, res) {
     </div>
 
     <div style="text-align:center;margin:0 0 20px">
-      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#2DB89E;color:#fff;font-size:16px;font-weight:900;padding:16px 40px;border-radius:12px;text-decoration:none;box-shadow:0 4px 14px rgba(45,184,158,0.3)">VER MI PRE-APROBACION</a>
+      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#2DB89E;color:#fff;font-size:16px;font-weight:900;padding:16px 40px;border-radius:12px;text-decoration:none;box-shadow:0 4px 14px rgba(45,184,158,0.3)">VER MI PRE-APROBACIÓN</a>
     </div>
-    <p style="font-size:13px;color:#888;margin:0 0 16px;text-align:center">Tambien puedes enviarlos respondiendo este correo o por WhatsApp:</p>
+    <p style="font-size:13px;color:#888;margin:0 0 16px;text-align:center">También puedes enviarlos respondiendo este correo o por WhatsApp:</p>
     <div style="text-align:center;margin:0 0 8px">
       <a href="https://wa.me/${assignedTo === COMERCIAL_ID ? '56957852275' : '56962078510'}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;font-size:14px;font-weight:800;padding:12px 32px;border-radius:12px;text-decoration:none">WhatsApp</a>
     </div>
   </div>
   <div style="background:#F7F0E6;padding:18px 28px;text-align:center;border-top:1px solid #EDE3D4">
     <p style="font-size:13px;color:#9A8878;margin:0;line-height:1.6">Saludos,<br><strong style="color:#1B3A6B">Equipo Llave Propia</strong></p>
-    <p style="font-size:10px;color:#BBA88A;margin:10px 0 0;line-height:1.5">* Esta pre-aprobacion es preliminar y esta basada en la informacion declarada. La aprobacion definitiva esta sujeta a verificacion de antecedentes y evaluacion de la entidad financiera.</p>
+    <p style="font-size:10px;color:#BBA88A;margin:10px 0 0;line-height:1.5">* Esta pre-aprobación es preliminar y está basada en la información declarada. La aprobación definitiva está sujeta a verificación de antecedentes y evaluación de la entidad financiera.</p>
   </div>
 </div>`;
 
@@ -389,10 +407,106 @@ export default async function handler(req, res) {
         from: 'Llave Propia <notificaciones@proppi.cl>',
         to: [email],
         reply_to: ['rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl'],
-        subject: isCondicionado ? `${firstName}, tenemos novedades sobre tu evaluacion` : `Tu resultado de pre-evaluacion esta listo, ${firstName}`,
+        subject: isCondicionado ? `${firstName}, tenemos novedades sobre tu evaluación` : `Tu resultado de pre-evaluación está listo, ${firstName}`,
         html: preApprovalHtml
       })
     }).catch(() => null);
+  }
+
+  // 4. Send WhatsApp welcome template via Kapso
+  const KAPSO_API_KEY = (process.env.KAPSO_API_KEY || '').trim();
+  const BOT_PHONE_ID = (process.env.WHATSAPP_PHONE_ID || '').trim();
+  const KAPSO_BASE = 'https://api.kapso.ai/meta/whatsapp/v24.0';
+  // Normalize to 569XXXXXXXX (digits only, no +)
+  const rawDigits = (telefono || '').replace(/\D/g, '');
+  const botPhone = rawDigits.match(/^(?:56)?(9\d{8})$/)?.[0]
+    ? (rawDigits.startsWith('56') ? rawDigits : '56' + rawDigits.match(/(9\d{8})$/)[1])
+    : '';
+
+  // Check if WhatsApp flow is enabled
+  const SUPA_KEY_BOT = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
+  let waFlowActive = true;
+  try {
+    const cfgR = await fetch(`${process.env.SUPABASE_URL?.trim()}/rest/v1/bot_config?key=eq.followup_config&select=value`, {
+      headers: { apikey: SUPA_KEY_BOT, Authorization: 'Bearer ' + SUPA_KEY_BOT, 'Content-Type': 'application/json' }
+    });
+    const cfgRows = await cfgR.json();
+    if (cfgRows?.[0]?.value) {
+      const cfg = JSON.parse(cfgRows[0].value);
+      if (cfg.active === false) waFlowActive = false;
+    }
+  } catch(e) { console.error('Failed to check followup config:', e.message); }
+
+  if (KAPSO_API_KEY && BOT_PHONE_ID && botPhone && waFlowActive && !isHipotecarioLead) {
+    try {
+      const firstName = (nombre || '').trim().split(' ')[0] || nombre;
+      const templateResult = await fetch(`${KAPSO_BASE}/${BOT_PHONE_ID}/messages`, {
+        method: 'POST',
+        headers: { 'X-API-Key': KAPSO_API_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messaging_product: 'whatsapp',
+          to: botPhone,
+          type: 'template',
+          template: {
+            name: 'bienvenida_mas_comercial_fin',
+            language: { code: 'es_CL' },
+            components: [{
+              type: 'body',
+              parameters: [{ type: 'text', parameter_name: 'customer_name', text: firstName }],
+            }],
+          },
+        }),
+      });
+      const templateData = await templateResult.json();
+      console.log(`Welcome template sent to ${botPhone}:`, JSON.stringify(templateData));
+
+      // Create conversation + lead_profile for bot
+      const sbBot = { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json' };
+      const nowISO = new Date().toISOString();
+
+      // Save template message
+      await fetch(`${process.env.SUPABASE_URL?.trim()}/rest/v1/whatsapp_messages`, {
+        method: 'POST',
+        headers: sbBot,
+        body: JSON.stringify({ phone: botPhone, role: 'assistant', content: '[PLANTILLA: bienvenida_mas_comercial_fin]', bot_phone: BOT_PHONE_ID }),
+      });
+
+      // Create/update conversation
+      await fetch(`${process.env.SUPABASE_URL?.trim()}/rest/v1/whatsapp_conversations`, {
+        method: 'POST',
+        headers: { ...sbBot, Prefer: 'resolution=merge-duplicates' },
+        body: JSON.stringify({
+          phone: botPhone,
+          bot_phone: BOT_PHONE_ID,
+          bot_enabled: true,
+          name: nombre || null,
+          last_message: '[PLANTILLA: bienvenida_mas_comercial_fin]',
+          last_message_at: nowISO,
+          updated_at: nowISO,
+          template_sent_at: nowISO,
+          followup_count: 0,
+          reengagement_count: 0,
+          source: fuente || null,
+          assigned_name: EJECUTIVA_NAMES[assignedTo] || null,
+        }),
+      });
+
+      // Create lead_profile
+      await fetch(`${process.env.SUPABASE_URL?.trim()}/rest/v1/lead_profiles`, {
+        method: 'POST',
+        headers: { ...sbBot, Prefer: 'resolution=merge-duplicates' },
+        body: JSON.stringify({
+          phone: botPhone,
+          name: nombre,
+          employment_type: contrato === 'si' ? 'dependent' : 'unknown',
+          has_property_in_mind: tiene_propiedad_vista === 'si' ? 'true' : tiene_propiedad_vista === 'no' ? 'false' : 'unknown',
+          comuna: comuna_propiedad || null,
+          complements_income: complementa_renta === 'si' ? 'true' : complementa_renta === 'no' ? 'false' : 'unknown',
+        }),
+      });
+    } catch (e) {
+      console.error('WhatsApp welcome template error:', e);
+    }
   }
 
   const WA_MAP = { [KARINA_ID]: '56962078510', [COMERCIAL_ID]: '56957852275' };

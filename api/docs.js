@@ -150,17 +150,17 @@ export default async function handler(req, res) {
     <img src="https://www.llavepropia.cl/logo-lp.png" alt="Llave Propia" width="140" style="display:inline-block;height:auto;max-width:140px">
   </div>
   <div style="padding:32px 28px">
-    <p style="font-size:20px;font-weight:800;color:#1B3A6B;margin:0 0 16px">${firstName}, hay una actualizacion en tu proceso</p>
+    <p style="font-size:20px;font-weight:800;color:#1B3A6B;margin:0 0 16px">${firstName}, hay una actualización en tu proceso</p>
     <p style="font-size:15px;color:#1A150F;line-height:1.7;margin:0 0 20px">
-      Necesitamos verificar tu documentacion para avanzar con tu evaluacion de Leasing Habitacional. <strong>Tu pre-aprobacion esta pendiente de confirmacion.</strong>
+      Necesitamos verificar tu documentación para avanzar con tu evaluación de Leasing Habitacional. <strong>Tu pre-aprobación está pendiente de confirmación.</strong>
     </p>
     <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 24px"><tr><td align="center" style="background:#2DB89E;border-radius:14px;padding:28px 24px">
-      <p style="font-size:18px;font-weight:900;color:#fff;margin:0 0 8px">Confirma tu pre-aprobacion</p>
+      <p style="font-size:18px;font-weight:900;color:#fff;margin:0 0 8px">Confirma tu pre-aprobación</p>
       <p style="font-size:13px;color:rgba(255,255,255,0.85);margin:0 0 18px">Sube tus documentos para que podamos formalizar tu proceso.</p>
-      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#fff;color:#1B3A6B;font-size:16px;font-weight:900;padding:16px 36px;border-radius:12px;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,0.15)">VER MI PRE-APROBACION</a>
+      <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#fff;color:#1B3A6B;font-size:16px;font-weight:900;padding:16px 36px;border-radius:12px;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,0.15)">VER MI PRE-APROBACIÓN</a>
     </td></tr></table>
     <div style="background:#E5F7F4;border:1px solid rgba(45,184,158,0.3);border-radius:10px;padding:14px 18px;margin:0 0 24px">
-      <p style="font-size:13px;color:#1B3A6B;margin:0;line-height:1.6">Tambien puedes enviarlos respondiendo este correo o por <a href="https://wa.me/${waNum}" style="color:#25D366;font-weight:700;text-decoration:none">WhatsApp</a>.</p>
+      <p style="font-size:13px;color:#1B3A6B;margin:0;line-height:1.6">También puedes enviarlos respondiendo este correo o por <a href="https://wa.me/${waNum}" style="color:#25D366;font-weight:700;text-decoration:none">WhatsApp</a>.</p>
     </div>
   </div>
   <div style="background:#F7F0E6;padding:18px 28px;text-align:center;border-top:1px solid #EDE3D4">
@@ -175,7 +175,7 @@ export default async function handler(req, res) {
         to: [lead.email],
         cc: [ejecutivaEmailReq, 'rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl'],
         reply_to: ['rodrigo.canas@llavepropia.cl', ejecutivaEmailReq],
-        subject: `${firstName}, hay una actualizacion en tu proceso`,
+        subject: `${firstName}, hay una actualización en tu proceso`,
         html
       })
     });

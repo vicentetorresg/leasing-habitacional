@@ -70,25 +70,25 @@ export default async function handler(req, res) {
   </div>
   <div style="padding:32px 28px">
     <div style="background:linear-gradient(135deg,#FEF3E2,#FFF8EE);border:2px solid rgba(230,126,34,0.3);border-radius:14px;padding:20px 24px;margin:0 0 24px;text-align:center">
-      <p style="font-size:22px;font-weight:900;color:#e67e22;margin:0 0 4px">Tu pre-aprobacion sigue vigente</p>
-      <p style="font-size:13px;color:#1B3A6B;margin:0;font-weight:600">Pero necesitamos confirmarla con tu documentacion</p>
+      <p style="font-size:22px;font-weight:900;color:#e67e22;margin:0 0 4px">Tu pre-aprobación sigue vigente</p>
+      <p style="font-size:13px;color:#1B3A6B;margin:0;font-weight:600">Pero necesitamos confirmarla con tu documentación</p>
     </div>
 
     <p style="font-size:16px;color:#1A150F;line-height:1.7;margin:0 0 8px">
-      ${firstName}, hace unos dias te informamos que <strong>pre-calificaste para comprar tu vivienda con subsidio del Estado</strong> a traves del Leasing Habitacional.
+      ${firstName}, hace unos días te informamos que <strong>pre-calificaste para comprar tu vivienda con subsidio del Estado</strong> a través del Leasing Habitacional.
     </p>
     <p style="font-size:16px;color:#1A150F;line-height:1.7;margin:0 0 24px">
-      Aun no hemos recibido tus documentos. <strong>Sin ellos, tu pre-aprobacion no puede avanzar</strong> y podria vencer.
+      Aún no hemos recibido tus documentos. <strong>Sin ellos, tu pre-aprobación no puede avanzar</strong> y podría vencer.
     </p>
 
     ${uploadUrl ? `<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 24px"><tr><td align="center" style="background:#2DB89E;border-radius:16px;padding:32px 28px">
       <p style="font-size:22px;font-weight:900;color:#fff;margin:0 0 8px">No pierdas tu cupo</p>
-      <p style="font-size:14px;color:rgba(255,255,255,0.9);margin:0 0 22px;line-height:1.5">Confirma tu pre-aprobacion subiendo tus documentos. Solo toma 5 minutos.</p>
+      <p style="font-size:14px;color:rgba(255,255,255,0.9);margin:0 0 22px;line-height:1.5">Confirma tu pre-aprobación subiendo tus documentos. Solo toma 5 minutos.</p>
       <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#fff;color:#1B3A6B;font-size:18px;font-weight:900;padding:18px 40px;border-radius:12px;text-decoration:none;letter-spacing:0.3px;box-shadow:0 4px 16px rgba(0,0,0,0.15)">CONFIRMAR MI PRE-APROBACION</a>
     </td></tr></table>` : ''}
 
     <div style="background:#FEF3E2;border:1.5px solid rgba(230,126,34,0.25);border-radius:10px;padding:14px 18px;margin:0 0 24px;text-align:center">
-      <p style="font-size:14px;color:#1B3A6B;margin:0;font-weight:700;line-height:1.5">Cada dia que pasa es un dia mas pagando arriendo en vez de invertir en lo tuyo.</p>
+      <p style="font-size:14px;color:#1B3A6B;margin:0;font-weight:700;line-height:1.5">Cada día que pasa es un día más pagando arriendo en vez de invertir en lo tuyo.</p>
     </div>
 
     <p style="font-size:14px;font-weight:700;color:#1B3A6B;margin:0 0 12px">Documentos que necesitaremos verificar:</p>
@@ -111,7 +111,7 @@ export default async function handler(req, res) {
     ${uploadUrl ? `<div style="text-align:center;margin:0 0 20px">
       <a href="${uploadUrl}" target="_blank" style="display:inline-block;background:#2DB89E;color:#fff;font-size:16px;font-weight:900;padding:16px 40px;border-radius:12px;text-decoration:none;box-shadow:0 4px 14px rgba(45,184,158,0.3)">VER MI PRE-APROBACION</a>
     </div>` : ''}
-    <p style="font-size:13px;color:#888;margin:0 0 16px;text-align:center">Tambien puedes enviarlos respondiendo este correo o por WhatsApp:</p>
+    <p style="font-size:13px;color:#888;margin:0 0 16px;text-align:center">También puedes enviarlos respondiendo este correo o por WhatsApp:</p>
     <div style="text-align:center">
       <a href="https://wa.me/${waNum}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;font-size:14px;font-weight:800;padding:12px 32px;border-radius:12px;text-decoration:none">WhatsApp</a>
     </div>
@@ -130,7 +130,7 @@ export default async function handler(req, res) {
           to: [lead.email],
           cc: ['rodrigo.canas@llavepropia.cl', ejecutivaEmail, 'vicente@llavepropia.cl'],
           reply_to: ['rodrigo.canas@llavepropia.cl', ejecutivaEmail],
-          subject: `${firstName}, tu pre-aprobacion esta por vencer`,
+          subject: `${firstName}, tu pre-aprobación está por vencer`,
           html,
         }),
       });

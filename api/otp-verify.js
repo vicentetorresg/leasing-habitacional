@@ -76,7 +76,7 @@ export default async function handler(req, res) {
       from: 'Llave Propia <notificaciones@proppi.cl>',
       to: ['vicente@llavepropia.cl', 'rodrigo.canas@llavepropia.cl'],
       subject: `CRM: ${fullName} acaba de ingresar`,
-      html: `<p><strong>${fullName}</strong> (${email}) acaba de iniciar sesion en el CRM de Llave Propia.</p><p>Hora: ${now}</p>`,
+      html: `<p><strong>${fullName}</strong> (${email}) acaba de iniciar sesión en el CRM de Llave Propia.</p><p>Hora: ${now}</p>`,
     }),
   }).catch(() => {});
 
