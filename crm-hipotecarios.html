@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRM Hipotecarios — Llave Propia</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#1B3A6B;--navy-d:#122850;--navy-pale:#edf1f8;--teal:#2DB89E;--teal-d:#249e88;--teal-pale:#E5F7F4;--bg:#FEFCF7;--beige-1:#F7F0E6;--beige-2:#EDE3D4;--text:#1A150F;--text-s:#9A8878;--green:#2B7A4E;--red:#dc2626;--gray:#94a3b8}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.login-box{background:#fff;border-radius:16px;padding:40px 32px;max-width:380px;width:100%;box-shadow:0 4px 24px rgba(27,58,107,0.08);text-align:center;border:1px solid var(--beige-2)}
+.login-box .logo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.login-box .logo-sub{font-size:0.6rem;font-weight:800;color:var(--teal);letter-spacing:2px;text-transform:uppercase;margin-bottom:24px}
+.login-box h2{font-size:1.1rem;margin-bottom:16px;color:var(--navy)}
+.login-box p.desc{font-size:0.85rem;color:var(--text-s);margin-bottom:20px;line-height:1.5}
+.login-box input{width:100%;padding:14px 16px;border:1.5px solid var(--beige-2);border-radius:10px;font-size:18px;font-family:inherit;margin-bottom:12px;outline:none;text-align:center;letter-spacing:8px;font-weight:700}
+.login-box input:focus{border-color:var(--navy)}
+.login-box button{width:100%;padding:12px;background:var(--navy);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s}
+.login-box button:hover{background:var(--navy-d)}
+.login-box button:disabled{opacity:0.5;cursor:not-allowed}
+.btn-code{background:var(--teal)!important;margin-bottom:8px}
+.btn-code:hover{background:var(--teal-d)!important}
+.login-msg{font-size:13px;margin-top:8px;display:none}
+.login-msg.err{color:var(--red)}
+.login-msg.ok{color:var(--green)}
+
+.email-opt{width:100%;padding:14px 16px;border:1.5px solid var(--beige-2);border-radius:10px;font-size:15px;font-weight:600;font-family:inherit;background:#fff;color:var(--text);cursor:pointer;transition:all 0.15s;text-align:left}
+.email-opt:hover{border-color:var(--navy);background:var(--navy-pale)}
+.email-opt.picked{border-color:var(--teal);background:var(--teal-pale);color:var(--navy);box-shadow:0 0 0 3px rgba(45,184,158,0.15)}
+
+.app{display:none}
+.topbar{background:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--beige-2);position:sticky;top:0;z-index:10}
+.topbar .logo{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--navy)}
+.topbar .logo-sub{font-size:0.5rem;font-weight:800;color:var(--teal);letter-spacing:2px;text-transform:uppercase}
+.topbar-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.topbar-r span{font-size:13px;color:var(--text-s)}
+.btn-t{background:none;border:1px solid var(--beige-2);padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;color:var(--text-s);font-family:inherit}
+.btn-t:hover{background:var(--beige-1)}
+.btn-t.active{background:var(--navy-pale);border-color:var(--navy);color:var(--navy)}
+
+.container{max-width:1500px;margin:0 auto;padding:20px 16px}
+.stats{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.stat{background:#fff;border-radius:12px;padding:14px 18px;flex:1;min-width:110px;box-shadow:0 1px 4px rgba(0,0,0,0.04);border:1px solid var(--beige-2)}
+.stat-n{font-size:1.5rem;font-weight:800;color:var(--navy)}
+.stat-l{font-size:0.7rem;color:var(--text-s);margin-top:2px}
+
+.bulk-bar{display:none;background:var(--navy);color:#fff;padding:10px 20px;border-radius:10px;margin-bottom:12px;align-items:center;gap:12px;font-size:13px;font-weight:600}
+.bulk-bar.show{display:flex}
+.bulk-bar button{background:#fff;color:var(--navy);border:none;padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+
+.table-wrap{background:#fff;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,0.04);overflow:visible;border:1px solid var(--beige-2)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead{background:var(--beige-1)}
+th{padding:10px 10px;text-align:left;font-weight:700;color:var(--text-s);font-size:10px;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;border-bottom:1px solid var(--beige-2)}
+td{padding:8px 10px;border-bottom:1px solid var(--beige-1);vertical-align:middle}
+tr:hover{background:#fefbf5}
+tr.archived{opacity:0.5}
+tr.selected{background:var(--navy-pale)}
+
+.estado-dd{position:relative;display:inline-block}
+.estado-pill{border:none;border-radius:20px;padding:6px 24px 6px 10px;font-size:11px;font-family:inherit;cursor:pointer;font-weight:700;white-space:nowrap;transition:all 0.15s ease;box-shadow:0 1px 3px rgba(0,0,0,0.08);position:relative;user-select:none}
+.estado-pill::after{content:'';position:absolute;right:9px;top:50%;transform:translateY(-50%);border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;opacity:0.4}
+.estado-pill:hover{box-shadow:0 2px 8px rgba(0,0,0,0.12);filter:brightness(0.97)}
+.estado-menu{display:none;position:absolute;top:calc(100% + 4px);left:0;background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.15);padding:4px;z-index:50;min-width:180px;animation:fadeIn 0.12s ease}
+.estado-menu.open{display:block}
+.estado-opt{display:block;width:100%;border:none;background:none;padding:7px 12px;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;text-align:left;transition:all 0.1s;margin:1px 0}
+.estado-opt:hover{transform:scale(1.02)}
+.estado-opt.active{outline:2px solid rgba(0,0,0,0.15);outline-offset:-2px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
+.chk{width:16px;height:16px;cursor:pointer;accent-color:var(--navy)}
+
+.btn-sm{background:none;border:1px solid var(--beige-2);padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;color:var(--text-s);font-family:inherit;white-space:nowrap}
+.btn-sm:hover{background:var(--beige-1)}
+.btn-edit{border-color:var(--navy);color:var(--navy);font-weight:600}
+.btn-edit:hover{background:var(--navy-pale)}
+.btn-arch{color:#ea580c;border-color:#fed7aa}
+.btn-arch:hover{background:#fff7ed}
+.btn-rest{color:var(--green);border-color:#bbf7d0}
+.btn-rest:hover{background:#f0fdf4}
+
+.tel-link{color:var(--navy);text-decoration:none;font-weight:500}
+.tel-link:hover{text-decoration:underline}
+.no-leads{text-align:center;padding:60px 20px;color:var(--text-s)}
+
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:100;justify-content:center;align-items:center;padding:20px}
+.modal{background:#fff;border-radius:16px;padding:28px 24px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.15)}
+.modal h3{font-size:1.1rem;margin-bottom:16px;color:var(--navy)}
+.modal label{display:block;font-size:12px;font-weight:600;color:var(--text-s);margin:10px 0 4px}
+.modal input,.modal textarea,.modal select{width:100%;padding:10px 12px;border:1.5px solid var(--beige-2);border-radius:8px;font-size:14px;font-family:inherit;outline:none}
+.modal input:focus,.modal textarea:focus,.modal select:focus{border-color:var(--navy)}
+.modal textarea{resize:vertical;min-height:80px}
+.modal-btns{display:flex;gap:10px;margin-top:18px;justify-content:flex-end}
+.modal-btns button{padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;border:none}
+.btn-save{background:var(--navy);color:#fff}
+.btn-save:hover{background:var(--navy-d)}
+.btn-cancel{background:var(--beige-1);color:var(--text)}
+
+@media(max-width:768px){
+  .container{padding:12px 8px}
+  .stats{gap:6px}
+  .stat{padding:10px 12px;min-width:85px}
+  .stat-n{font-size:1.1rem}
+  table{font-size:11px}
+  th,td{padding:6px 6px}
+}
+</style>
+</head>
+<body>
+
+<div class="login-wrap" id="login">
+  <div class="login-box">
+    <div class="logo">Llave Propia</div>
+    <div class="logo-sub">Tu primera vivienda</div>
+    <h2>CRM Hipotecarios</h2>
+    <div id="step-request">
+      <p class="desc">¿Quién eres?</p>
+      <div id="login-email-btns" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+        <button type="button" class="email-opt" data-email="pia@llavepropia.cl" data-name="Pía" onclick="pickEmail(this)">Pía</button>
+        <button type="button" class="email-opt" data-email="rodrigo@llavepropia.cl" data-name="Rodrigo" onclick="pickEmail(this)">Rodrigo</button>
+        <button type="button" class="email-opt" data-email="vicente@llavepropia.cl" data-name="Vicente" onclick="pickEmail(this)">Vicente</button>
+      </div>
+      <input type="hidden" id="login-email" value="">
+      <button class="btn-code" id="btn-request" onclick="requestCode()" style="display:none">Enviar código a mi email</button>
+      <p class="login-msg" id="msg-request"></p>
+    </div>
+    <div id="step-verify" style="display:none">
+      <p class="desc">Ingresa el código de 6 dígitos que recibiste por email.</p>
+      <input type="text" id="login-code" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+      <button onclick="verifyCode()">Verificar código</button>
+      <p class="login-msg" id="msg-verify"></p>
+    </div>
+  </div>
+</div>
+
+<div class="app" id="app">
+  <div class="topbar">
+    <div>
+      <div class="logo">Llave Propia</div>
+      <div class="logo-sub">Tu primera vivienda</div>
+    </div>
+    <div class="topbar-r">
+      <button class="btn-t" id="btn-toggle-arch" onclick="toggleArchivados()">Ver archivados</button>
+      <span id="user-label" style="font-weight:600;color:var(--navy)"></span>
+      <button class="btn-t" onclick="doLogout()">Salir</button>
+    </div>
+  </div>
+  <div class="container">
+    <div class="stats" id="stats"></div>
+    <input type="text" id="search-input" placeholder="Buscar por nombre, teléfono o email..." oninput="renderTable()" style="width:100%;padding:10px 16px;border:1.5px solid var(--beige-2);border-radius:10px;font-size:13px;font-family:inherit;margin-bottom:12px;outline:none;background:#fff" onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='var(--beige-2)'">
+    <div class="bulk-bar" id="bulk-bar">
+      <span id="bulk-count">0 seleccionados</span>
+      <button onclick="bulkArchive()">Archivar seleccionados</button>
+      <button onclick="clearSelection()" style="background:var(--beige-2);color:var(--text-s)">Deseleccionar</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:30px"><input type="checkbox" class="chk" id="select-all" onchange="toggleSelectAll(this.checked)"></th>
+            <th>Fecha</th>
+            <th>Lead</th>
+            <th>Estado</th>
+            <th style="text-align:center">Aprobado</th>
+            <th style="text-align:center">Pagado</th>
+            <th style="text-align:center">Tickets</th>
+            <th>Notas</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="no-leads" id="no-leads" style="display:none">No hay leads.</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h3>Editar Lead</h3>
+    <input type="hidden" id="ed-id">
+    <label>Nombre</label><input type="text" id="ed-nombre">
+    <label>Telefono</label><input type="text" id="ed-telefono">
+    <label>Email</label><input type="email" id="ed-email">
+    <label>Renta líquida</label><input type="text" id="ed-renta">
+    <label>Valor propiedad</label><input type="text" id="ed-monto">
+    <label>Estado</label>
+    <select id="ed-estado">
+      <option value="no_contesta">Sin Contactar</option>
+      <option value="solicitando_documentos">Solicitando Documentos</option>
+      <option value="enviado_evaluar">Enviado a Evaluar</option>
+      <option value="seguimiento_bancos">Seguimiento Bancos</option>
+      <option value="credito_aprobado">Crédito Aprobado</option>
+      <option value="cobrar_honorarios">Cobrar Honorarios</option>
+      <option value="negocio_finalizado">Negocio Finalizado</option>
+      <option value="no_interesado">NO Interesado</option>
+    </select>
+    <label>Monto aprobado (UF)</label>
+    <input type="text" id="ed-monto-aprobado" placeholder="Ej: 3.500">
+    <label>Tickets enviados</label>
+    <input type="number" id="ed-tickets" min="0" placeholder="0">
+    <label>Notas</label><textarea id="ed-notas" placeholder="Escribe notas sobre este lead..."></textarea>
+    <label>Historial de cambios</label>
+    <div id="ed-log" style="background:var(--beige-1);border-radius:8px;padding:10px 12px;max-height:160px;overflow-y:auto;font-size:12px;color:var(--text-s);line-height:1.6"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveEdit()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var SUPA = 'https://unptkiyggkuxtkzedluv.supabase.co';
+var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVucHRraXlnZ2t1eHRremVkbHV2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTMxMTU1OCwiZXhwIjoyMDk0ODg3NTU4fQ.vx78MEuZFpc57IC9I36rmLHUvi8XbWAs3nk-HiQca4E';
+
+var ESTADOS = [
+  { value: 'no_contesta', label: 'Sin Contactar', bg: '#f1f5f9', color: '#64748b' },
+  { value: 'solicitando_documentos', label: 'Solicitando Docs', bg: '#dbeafe', color: '#1d4ed8' },
+  { value: 'enviado_evaluar', label: 'Enviado a Evaluar', bg: '#fef3c7', color: '#92400e' },
+  { value: 'seguimiento_bancos', label: 'Seguimiento Bancos', bg: '#e0e7ff', color: '#3730a3' },
+  { value: 'credito_aprobado', label: 'Crédito Aprobado', bg: '#d1fae5', color: '#065f46' },
+  { value: 'cobrar_honorarios', label: 'Cobrar Honorarios', bg: '#fce7f3', color: '#9d174d' },
+  { value: 'negocio_finalizado', label: 'Negocio Finalizado', bg: '#f0fdf4', color: '#15803d' },
+  { value: 'no_interesado', label: 'NO Interesado', bg: '#fee2e2', color: '#991b1b' }
+];
+
+var leads = [];
+var showArchived = false;
+var selected = {};
+var currentUser = localStorage.getItem('crm-hip-user') || '';
+
+/* Auth — code-based login */
+function pickEmail(btn) {
+  document.querySelectorAll('.email-opt').forEach(function(b) { b.classList.remove('picked'); });
+  btn.classList.add('picked');
+  document.getElementById('login-email').value = btn.dataset.email;
+  document.getElementById('btn-request').style.display = 'block';
+}
+
+function requestCode() {
+  var email = document.getElementById('login-email').value;
+  if (!email) { showMsg('msg-request', 'Selecciona tu email', true); return; }
+  var btn = document.getElementById('btn-request');
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+  fetch('/api/crm-login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'request', email: email })
+  }).then(function(r) { return r.json(); }).then(function(d) {
+    if (d.sent) {
+      localStorage.setItem('crm-hip-pending-email', email);
+      document.getElementById('step-request').style.display = 'none';
+      document.getElementById('step-verify').style.display = 'block';
+      document.getElementById('login-code').focus();
+    } else {
+      showMsg('msg-request', d.error || 'Error al enviar código', true);
+      btn.disabled = false;
+      btn.textContent = 'Enviar código de acceso';
+    }
+  }).catch(function() {
+    showMsg('msg-request', 'Error de conexión', true);
+    btn.disabled = false;
+    btn.textContent = 'Enviar código de acceso';
+  });
+}
+
+function verifyCode() {
+  var code = document.getElementById('login-code').value.trim();
+  if (code.length !== 6) { showMsg('msg-verify', 'Ingresa los 6 dígitos', true); return; }
+  fetch('/api/crm-login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'verify', code: code })
+  }).then(function(r) { return r.json(); }).then(function(d) {
+    if (d.valid) {
+      var email = d.email || localStorage.getItem('crm-hip-pending-email') || '';
+      localStorage.setItem('crm-hip-auth', '1');
+      localStorage.setItem('crm-hip-exp', Date.now() + 48 * 3600000);
+      localStorage.setItem('crm-hip-user', email);
+      localStorage.removeItem('crm-hip-pending-email');
+      currentUser = email;
+      showApp();
+    } else {
+      showMsg('msg-verify', d.error || 'Código inválido', true);
+    }
+  }).catch(function() {
+    showMsg('msg-verify', 'Error de conexión', true);
+  });
+}
+
+document.getElementById('login-code').addEventListener('keydown', function(e) { if (e.key === 'Enter') verifyCode(); });
+
+function showMsg(id, text, isErr) {
+  var el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'login-msg ' + (isErr ? 'err' : 'ok');
+  el.style.display = 'block';
+}
+
+function doLogout() { localStorage.removeItem('crm-hip-auth'); localStorage.removeItem('crm-hip-exp'); localStorage.removeItem('crm-hip-user'); location.reload(); }
+
+var USER_NAMES = {'pia@llavepropia.cl':'Pía','rodrigo@llavepropia.cl':'Rodrigo','vicente@llavepropia.cl':'Vicente'};
+function userName(email) { return USER_NAMES[email] || (email ? email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1) : ''); }
+
+function showApp() {
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  var label = document.getElementById('user-label');
+  if (currentUser) label.textContent = userName(currentUser);
+  loadLeads();
+}
+
+// Check session (localStorage, 24h)
+var exp = parseInt(localStorage.getItem('crm-hip-exp') || '0');
+if (localStorage.getItem('crm-hip-auth') === '1' && Date.now() < exp) {
+  currentUser = localStorage.getItem('crm-hip-user') || '';
+  showApp();
+}
+
+/* API */
+function api(path, opts) {
+  var h = { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Content-Type': 'application/json' };
+  if (opts && opts.prefer) h['Prefer'] = opts.prefer;
+  return fetch(SUPA + '/rest/v1/' + path, { method: (opts && opts.method) || 'GET', headers: h, body: (opts && opts.body) ? JSON.stringify(opts.body) : undefined });
+}
+
+function loadLeads() {
+  api('leasing_leads?fuente=ilike.*hipotecario*&order=created_at.desc&select=*')
+    .then(function(r) { return r.json(); })
+    .then(function(data) { leads = data; render(); });
+}
+
+function render() { renderStats(); renderTable(); renderBulk(); }
+
+function renderStats() {
+  var a = leads.filter(function(l) { return !l.archivado; });
+  var s = document.getElementById('stats');
+  s.innerHTML =
+    stat(a.length, 'Total Activos', '') +
+    stat(a.filter(function(l) { return !l.estado || l.estado === 'no_contesta'; }).length, 'Sin Contactar', '#64748b') +
+    stat(a.filter(function(l) { return l.estado === 'solicitando_documentos'; }).length, 'Solicitando Docs', '#1d4ed8') +
+    stat(a.filter(function(l) { return l.estado === 'enviado_evaluar'; }).length, 'En Evaluación', '#92400e') +
+    stat(a.filter(function(l) { return l.estado === 'seguimiento_bancos'; }).length, 'Seguimiento', '#3730a3') +
+    stat(a.filter(function(l) { return l.aprobado; }).length, 'Aprobados', '#2B7A4E') +
+    stat(a.filter(function(l) { return l.pagado; }).length, 'Pagados', '#9d174d');
+}
+function stat(n, label, color) {
+  return '<div class="stat"><div class="stat-n"' + (color ? ' style="color:' + color + '"' : '') + '>' + n + '</div><div class="stat-l">' + label + '</div></div>';
+}
+
+function renderTable() {
+  var q = (document.getElementById('search-input').value || '').toLowerCase().trim();
+  var f = leads.filter(function(l) {
+    if (showArchived ? !l.archivado : l.archivado) return false;
+    if (!q) return true;
+    return (l.nombre || '').toLowerCase().indexOf(q) !== -1 || (l.telefono || '').indexOf(q) !== -1 || (l.email || '').toLowerCase().indexOf(q) !== -1;
+  });
+  var tbody = document.getElementById('tbody');
+  if (!f.length) { tbody.innerHTML = ''; document.getElementById('no-leads').style.display = 'block'; return; }
+  document.getElementById('no-leads').style.display = 'none';
+
+  tbody.innerHTML = f.map(function(l) {
+    var d = new Date(l.created_at);
+    var fecha = d.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: '2-digit', timeZone: 'America/Santiago' });
+    var hora = d.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Santiago' });
+    var estado = l.estado || 'no_contesta';
+    var estadoInfo = ESTADOS.find(function(e) { return e.value === estado; }) || ESTADOS[0];
+    var ddOpts = ESTADOS.map(function(e) { return '<button class="estado-opt' + (estado === e.value ? ' active' : '') + '" style="background:' + e.bg + ';color:' + e.color + '" onclick="event.stopPropagation();selectEstado(\'' + l.id + '\',\'' + e.value + '\',this)">' + e.label + '</button>'; }).join('');
+    var archBtn = l.archivado ? '<button class="btn-sm btn-rest" onclick="toggleArchivo(\'' + l.id + '\',false)">Restaurar</button>' : '<button class="btn-sm btn-arch" onclick="toggleArchivo(\'' + l.id + '\',true)">Archivar</button>';
+    var notaText = l.notas ? (l.notas.length > 50 ? l.notas.substring(0, 50) + '...' : l.notas) : '';
+    var notaAuthor = l.last_modified_by ? '<span style="color:var(--teal);font-size:10px;font-weight:700">' + userName(l.last_modified_by) + '</span> ' : '';
+    var nota = l.notas ? notaAuthor + '<span style="color:#475569">' + esc(notaText) + '</span>' : '<span style="color:#cbd5e1">Sin notas</span>';
+    var sel = selected[l.id] ? ' checked' : '';
+    var selClass = selected[l.id] ? ' selected' : '';
+
+    var tel = (l.telefono || '').replace('+', '');
+
+    return '<tr class="' + (l.archivado ? 'archived' : '') + selClass + '">' +
+      '<td><input type="checkbox" class="chk chk-row" data-id="' + l.id + '"' + sel + ' onchange="toggleSelect(\'' + l.id + '\',this.checked)"></td>' +
+      '<td style="white-space:nowrap"><div style="font-weight:600;font-size:11px">' + fecha + '</div><div style="color:#94a3b8;font-size:10px">' + hora + '</div></td>' +
+      '<td><div style="font-weight:600;font-size:12px">' + esc(l.nombre) + '</div>' +
+        '<div style="font-size:10px;color:#94a3b8;margin-top:1px">' +
+          '<a class="tel-link" href="https://wa.me/' + tel + '" target="_blank" style="font-size:10px">' + esc(l.telefono || '') + '</a>' +
+          (l.email ? ' &middot; ' + esc(l.email) : '') +
+        '</div>' +
+        '<div style="font-size:10px;color:#94a3b8;margin-top:1px">' + esc(l.renta_liquida || l.renta || '') + (l.monto_propiedad ? ' &middot; ' + esc(l.monto_propiedad) : '') + (l.monto_aprobado_uf ? ' &middot; <strong style="color:#2B7A4E">Aprob: ' + esc(l.monto_aprobado_uf) + ' UF</strong>' : '') + '</div>' +
+      '</td>' +
+      '<td><div class="estado-dd"><div class="estado-pill" style="background:' + estadoInfo.bg + ';color:' + estadoInfo.color + '" onclick="event.stopPropagation();toggleEstadoMenu(this)">' + estadoInfo.label + '</div><div class="estado-menu">' + ddOpts + '</div></div></td>' +
+      '<td style="text-align:center"><input type="checkbox" class="chk" title="Aprobado"' + (l.aprobado ? ' checked' : '') + ' onchange="toggleField(\'' + l.id + '\',\'aprobado\',this.checked)"></td>' +
+      '<td style="text-align:center"><input type="checkbox" class="chk" title="Pagado"' + (l.pagado ? ' checked' : '') + ' onchange="toggleField(\'' + l.id + '\',\'pagado\',this.checked)"></td>' +
+      '<td style="text-align:center"><span style="font-weight:700;color:' + (l.tickets ? 'var(--navy)' : '#cbd5e1') + '">' + (l.tickets || 0) + '</span></td>' +
+      '<td style="font-size:11px;color:#475569;cursor:pointer;max-width:220px" onclick="openEdit(\'' + l.id + '\')" title="Click para editar">' + nota + '</td>' +
+      '<td style="white-space:nowrap"><button class="btn-sm btn-edit" onclick="openEdit(\'' + l.id + '\')">Editar</button> ' + archBtn + '</td>' +
+      '</tr>';
+  }).join('');
+}
+
+function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function findLead(id) { return leads.find(function(l) { return l.id === id; }); }
+function toggleEstadoMenu(pill) {
+  var menu = pill.nextElementSibling;
+  var wasOpen = menu.classList.contains('open');
+  closeAllMenus();
+  if (!wasOpen) menu.classList.add('open');
+}
+function selectEstado(id, val, btn) {
+  closeAllMenus();
+  cambiarEstado(id, val);
+  var l = findLead(id); if (l) l.estado = val;
+  render();
+}
+function closeAllMenus() {
+  document.querySelectorAll('.estado-menu.open').forEach(function(m) { m.classList.remove('open'); });
+}
+document.addEventListener('click', function() { closeAllMenus(); });
+
+/* Selection */
+function toggleSelect(id, val) { if (val) selected[id] = true; else delete selected[id]; renderBulk(); renderTable(); }
+function toggleSelectAll(val) {
+  var f = leads.filter(function(l) { return showArchived ? l.archivado : !l.archivado; });
+  selected = {};
+  if (val) f.forEach(function(l) { selected[l.id] = true; });
+  renderBulk(); renderTable();
+}
+function clearSelection() { selected = {}; document.getElementById('select-all').checked = false; renderBulk(); renderTable(); }
+function renderBulk() {
+  var count = Object.keys(selected).length;
+  var bar = document.getElementById('bulk-bar');
+  if (count > 0) { bar.classList.add('show'); document.getElementById('bulk-count').textContent = count + ' seleccionado' + (count > 1 ? 's' : ''); }
+  else { bar.classList.remove('show'); }
+}
+function getSelectedLeads() { return Object.keys(selected).map(function(id) { return findLead(id); }).filter(Boolean); }
+
+/* Bulk actions */
+function bulkArchive() {
+  var ids = Object.keys(selected);
+  if (!ids.length) return;
+  if (!confirm('Archivar ' + ids.length + ' lead(s)?')) return;
+  var promises = ids.map(function(id) { return api('leasing_leads?id=eq.' + id, { method: 'PATCH', body: { archivado: true }, prefer: 'return=minimal' }); });
+  Promise.all(promises).then(function() {
+    ids.forEach(function(id) { var l = findLead(id); if (l) l.archivado = true; });
+    clearSelection(); render();
+  });
+}
+
+/* Audit log */
+function logAction(leadId, action, detail) {
+  if (!currentUser) return;
+  api('crm_hipotecario_log', { method: 'POST', body: { lead_id: leadId, user_email: currentUser, action: action, detail: detail }, prefer: 'return=minimal' });
+}
+
+function loadLog(leadId) {
+  api('crm_hipotecario_log?lead_id=eq.' + leadId + '&order=created_at.desc&limit=20')
+    .then(function(r) { return r.json(); })
+    .then(function(rows) {
+      var el = document.getElementById('ed-log');
+      if (!rows.length) { el.innerHTML = '<span style="color:#bbb">Sin historial</span>'; return; }
+      el.innerHTML = rows.map(function(r) {
+        var d = new Date(r.created_at);
+        var ts = d.toLocaleDateString('es-CL', { day:'2-digit', month:'2-digit', timeZone:'America/Santiago' }) + ' ' + d.toLocaleTimeString('es-CL', { hour:'2-digit', minute:'2-digit', timeZone:'America/Santiago' });
+        return '<div style="margin-bottom:4px"><strong>' + userName(r.user_email) + '</strong> · <span style="color:#bbb">' + ts + '</span><br>' + esc(r.action + (r.detail ? ': ' + r.detail : '')) + '</div>';
+      }).join('');
+    });
+}
+
+/* CRUD */
+function cambiarEstado(id, v) {
+  var l = findLead(id);
+  var oldEstado = l ? (l.estado || 'no_contesta') : '';
+  var oldLabel = ESTADOS.find(function(e) { return e.value === oldEstado; });
+  var newLabel = ESTADOS.find(function(e) { return e.value === v; });
+  api('leasing_leads?id=eq.' + id, { method: 'PATCH', body: { estado: v, last_modified_by: currentUser, last_modified_at: new Date().toISOString() }, prefer: 'return=minimal' })
+    .then(function() { if (l) { l.estado = v; l.last_modified_by = currentUser; } renderStats(); });
+  logAction(id, 'Cambió estado', (oldLabel ? oldLabel.label : oldEstado) + ' → ' + (newLabel ? newLabel.label : v));
+}
+function toggleField(id, field, val) {
+  var b = {}; b[field] = val; b.last_modified_by = currentUser; b.last_modified_at = new Date().toISOString();
+  api('leasing_leads?id=eq.' + id, { method: 'PATCH', body: b, prefer: 'return=minimal' })
+    .then(function() { var l = findLead(id); if (l) { l[field] = val; l.last_modified_by = currentUser; } render(); });
+  logAction(id, (val ? 'Activó' : 'Desactivó') + ' ' + field.replace(/_/g, ' '));
+}
+function toggleArchivo(id, val) {
+  api('leasing_leads?id=eq.' + id, { method: 'PATCH', body: { archivado: val, last_modified_by: currentUser, last_modified_at: new Date().toISOString() }, prefer: 'return=minimal' })
+    .then(function() { var l = findLead(id); if (l) { l.archivado = val; l.last_modified_by = currentUser; } render(); });
+  logAction(id, val ? 'Archivó lead' : 'Restauró lead');
+}
+function toggleArchivados() {
+  showArchived = !showArchived;
+  var btn = document.getElementById('btn-toggle-arch');
+  btn.textContent = showArchived ? 'Ver activos' : 'Ver archivados';
+  btn.classList.toggle('active', showArchived);
+  clearSelection(); renderTable();
+}
+
+/* Edit modal */
+function openEdit(id) {
+  var l = findLead(id); if (!l) return;
+  document.getElementById('ed-id').value = id;
+  document.getElementById('ed-nombre').value = l.nombre || '';
+  document.getElementById('ed-telefono').value = l.telefono || '';
+  document.getElementById('ed-email').value = l.email || '';
+  document.getElementById('ed-renta').value = l.renta_liquida || l.renta || '';
+  document.getElementById('ed-monto').value = l.monto_propiedad || '';
+  document.getElementById('ed-estado').value = l.estado || 'no_contesta';
+  document.getElementById('ed-monto-aprobado').value = l.monto_aprobado_uf || '';
+  document.getElementById('ed-tickets').value = l.tickets || 0;
+  document.getElementById('ed-notas').value = l.notas || '';
+  document.getElementById('ed-log').innerHTML = '<span style="color:#bbb">Cargando...</span>';
+  document.getElementById('modal-bg').style.display = 'flex';
+  loadLog(id);
+}
+function closeModal() { document.getElementById('modal-bg').style.display = 'none'; }
+function saveEdit() {
+  var id = document.getElementById('ed-id').value;
+  var l = findLead(id);
+  var newEstado = document.getElementById('ed-estado').value;
+  var newNotas = document.getElementById('ed-notas').value.trim();
+  var b = {
+    nombre: document.getElementById('ed-nombre').value.trim(),
+    telefono: document.getElementById('ed-telefono').value.trim(),
+    email: document.getElementById('ed-email').value.trim(),
+    renta_liquida: document.getElementById('ed-renta').value.trim(),
+    monto_propiedad: document.getElementById('ed-monto').value.trim(),
+    estado: newEstado,
+    monto_aprobado_uf: document.getElementById('ed-monto-aprobado').value.trim(),
+    tickets: parseInt(document.getElementById('ed-tickets').value) || 0,
+    notas: newNotas,
+    last_modified_by: currentUser,
+    last_modified_at: new Date().toISOString()
+  };
+
+  // Log changes
+  if (l) {
+    var oldEstado = l.estado || 'no_contesta';
+    if (newEstado !== oldEstado) {
+      var oldL = ESTADOS.find(function(e) { return e.value === oldEstado; });
+      var newL = ESTADOS.find(function(e) { return e.value === newEstado; });
+      logAction(id, 'Cambió estado', (oldL ? oldL.label : oldEstado) + ' → ' + (newL ? newL.label : newEstado));
+    }
+    if (newNotas !== (l.notas || '')) {
+      logAction(id, 'Editó notas', newNotas.substring(0, 100));
+    }
+  }
+
+  api('leasing_leads?id=eq.' + id, { method: 'PATCH', body: b, prefer: 'return=minimal' })
+    .then(function() { if (l) Object.assign(l, b); closeModal(); render(); });
+}
+</script>
+</body>
+</html>
