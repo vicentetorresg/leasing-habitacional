@@ -7,6 +7,10 @@
     {
       "path": "/api/mailing-aprobados",
       "schedule": "0 14 * * 1,5"
+    },
+    {
+      "path": "/api/whatsapp-webhook?cron=followup",
+      "schedule": "0 14 * * *"
     }
   ],
   "cleanUrls": true,
@@ -26,9 +30,11 @@
     { "source": "/galeria", "destination": "/api/galeria" },
     { "source": "/marketplace", "destination": "/marketplace.html" },
     { "source": "/simulador-simple", "destination": "/simulador-simple.html" },
+    { "source": "/simulador-realiza", "destination": "/simulador-realiza.html" },
     { "source": "/firma-electronica", "destination": "/firma-dist/index" },
     { "source": "/firma-electronica/:path*", "destination": "/firma-dist/index" },
     { "source": "/bot-ia", "destination": "/bot-ia.html" },
+    { "source": "/alianza-intermedina", "destination": "/alianza-intermedina.html" },
     { "source": "/crm", "destination": "/crm-dist/index" },
     { "source": "/crm/:path*", "destination": "/crm-dist/index" }
   ],
