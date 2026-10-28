@@ -261,7 +261,6 @@ export default async function handler(req, res) {
         ['📱 WhatsApp',             telefono || '—'],
         ['✉️ Email',                email    || '—'],
         ['💰 Renta mensual',        renta    || '—'],
-        ['🏠 Arriendo actual',      arriendo || '—'],
         ['📋 Contrato indefinido',  contratoLabel],
         ...(vivienda ? [['🏡 Tiene vivienda propia', viviendaLabel]] : []),
         ['🏠 Propiedad vista',      propVistaLabel],
@@ -409,6 +408,102 @@ export default async function handler(req, res) {
         reply_to: ['rodrigo.canas@llavepropia.cl', 'vicente@llavepropia.cl'],
         subject: isCondicionado ? `${firstName}, tenemos novedades sobre tu evaluación` : `Tu resultado de pre-evaluación está listo, ${firstName}`,
         html: preApprovalHtml
+      })
+    }).catch(() => null);
+  }
+
+  // 3b. Welcome email for hipotecario leads (1-to-1, no CC)
+  if (!isLeasing && email) {
+    const firstNameH = (nombre || '').trim().split(' ')[0] || nombre;
+    const welcomeHtml = `<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#eef3f2;font-family:'Helvetica Neue',Arial,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#eef3f2;padding:28px 16px">
+<tr><td align="center">
+<table width="100%" style="max-width:560px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.06)">
+  <tr><td style="background:#1B2B3E;padding:28px 36px;text-align:center">
+    <img src="https://www.llavepropia.cl/logo-lp.png" alt="Llave Propia" width="150" style="display:inline-block;height:auto;max-width:150px">
+  </td></tr>
+  <tr><td style="padding:32px 36px 0">
+    <p style="margin:0 0 18px;font-size:21px;font-weight:700;color:#1B2B3E;line-height:1.3">Hola ${firstNameH},</p>
+    <p style="margin:0 0 16px;font-size:15px;color:#444;line-height:1.75">
+      Recibimos tu solicitud de credito hipotecario. Nuestro equipo ya tiene tus datos y se pondra en contacto contigo.
+    </p>
+    <p style="margin:0 0 24px;font-size:15px;color:#444;line-height:1.75">
+      Para iniciar la evaluacion, requerimos la siguiente documentacion:
+    </p>
+  </td></tr>
+  <tr><td style="padding:0 36px">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border:1.5px solid #c8e2dc;border-radius:10px;overflow:hidden;margin:0 0 14px">
+      <tr><td style="background:#2BA89C;padding:10px 18px">
+        <p style="margin:0;color:#fff;font-size:12px;font-weight:700;letter-spacing:1px">TRABAJADORES DEPENDIENTES</p>
+      </td></tr>
+      <tr><td style="padding:16px 18px;background:#f7fbfa">
+        <table width="100%" cellpadding="0" cellspacing="0">
+          ${['Copia de cedula de identidad (ambos lados)','6 ultimas liquidaciones de sueldo','Certificado de cotizaciones AFP (ultimos 24 meses con RUT del empleador)','Informe de deudas CMF'].map(doc => `
+          <tr><td style="padding:5px 0;border-bottom:1px solid #e5eeec">
+            <table cellpadding="0" cellspacing="0"><tr>
+              <td style="width:20px;vertical-align:top;padding-top:3px;color:#2BA89C;font-size:13px;font-weight:700">&#8226;</td>
+              <td style="padding-left:6px;font-size:13px;color:#333;line-height:1.55">${doc}</td>
+            </tr></table>
+          </td></tr>`).join('')}
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+  <tr><td style="padding:0 36px">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border:1.5px solid #c8d4d8;border-radius:10px;overflow:hidden;margin:0 0 24px">
+      <tr><td style="background:#1B2B3E;padding:10px 18px">
+        <p style="margin:0;color:#fff;font-size:12px;font-weight:700;letter-spacing:1px">TRABAJADORES INDEPENDIENTES</p>
+      </td></tr>
+      <tr><td style="padding:16px 18px;background:#f7fafb">
+        <table width="100%" cellpadding="0" cellspacing="0">
+          ${['Copia de cedula de identidad (ambos lados)','Carpeta tributaria (empresa y personal)','Malla societaria o escritura con porcentaje de participacion','Boletas de honorarios de los ultimos 6 periodos','Informe de deudas CMF','Balances 2024-2025','Formulario 22 compacto 2024-2025 (personal y de la empresa)'].map(doc => `
+          <tr><td style="padding:5px 0;border-bottom:1px solid #e5eaed">
+            <table cellpadding="0" cellspacing="0"><tr>
+              <td style="width:20px;vertical-align:top;padding-top:3px;color:#1B2B3E;font-size:13px;font-weight:700">&#8226;</td>
+              <td style="padding-left:6px;font-size:13px;color:#333;line-height:1.55">${doc}</td>
+            </tr></table>
+          </td></tr>`).join('')}
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+  <tr><td style="padding:0 36px">
+    <p style="margin:0 0 10px;font-size:14px;color:#444;line-height:1.7">
+      Puedes enviar tus documentos respondiendo este correo a <strong style="color:#1B2B3E">contacto@llavepropia.cl</strong>, o directamente por WhatsApp:
+    </p>
+  </td></tr>
+  <tr><td style="padding:16px 36px 0" align="center">
+    <table cellpadding="0" cellspacing="0" style="background:#25D366;border-radius:14px;box-shadow:0 4px 18px rgba(37,211,102,0.3)">
+      <tr><td style="padding:18px 44px" align="center">
+        <a href="https://wa.me/56976302641?text=Hola%2C%20quiero%20enviar%20mis%20documentos%20para%20el%20credito%20hipotecario" target="_blank" style="color:#fff;text-decoration:none;display:block;text-align:center">
+          <p style="margin:0 0 2px;font-size:18px;font-weight:800">Hablar con ejecutiva</p>
+          <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.8);font-weight:600">Iniciar evaluacion por WhatsApp</p>
+        </a>
+      </td></tr>
+    </table>
+  </td></tr>
+  <tr><td style="padding:28px 36px 28px">
+    <hr style="border:none;border-top:1px solid #e0e8e6;margin:0 0 18px">
+    <p style="margin:0;font-size:13px;color:#1B2B3E;font-weight:700">Equipo Llave Propia</p>
+    <p style="margin:3px 0 0;font-size:12px;color:#999">contacto@llavepropia.cl · <a href="https://www.llavepropia.cl" style="color:#2BA89C">llavepropia.cl</a></p>
+  </td></tr>
+</table>
+</td></tr>
+</table>
+</body></html>`;
+
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: 'Llave Propia <notificaciones@proppi.cl>',
+        to: [email],
+        reply_to: ['contacto@llavepropia.cl', 'pia@llavepropia.cl'],
+        subject: 'Tu solicitud de credito hipotecario — Llave Propia',
+        html: welcomeHtml
       })
     }).catch(() => null);
   }
