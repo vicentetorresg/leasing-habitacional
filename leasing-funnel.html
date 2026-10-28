@@ -878,7 +878,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
       var urgBorder = 'rgba(230,160,30,0.5)';
       var urgColor = '#8B6914';
       var html = '<div style="background:' + urgBg + ';border:2px solid ' + urgBorder + ';border-radius:14px;padding:18px 18px;margin:0 0 14px;text-align:center;width:100%">' +
-        '<p style="font-size:18px;font-weight:900;color:' + urgColor + ';margin:0 0 4px">⏳ Tu postulacion aun no esta completa</p>' +
+        '<p style="font-size:18px;font-weight:900;color:' + urgColor + ';margin:0 0 4px">⏳ Tu postulación aún no está completa</p>' +
         '<p style="font-size:13px;color:#5A4A38;margin:0;font-weight:600">Revisa tu monto estimado y confirma para avanzar. Los cupos son limitados.</p>' +
       '</div>';
 
@@ -897,7 +897,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
         var cuotaClp = Math.round(fin.cuota);
 
         html += '<div class="fin-card">' +
-          '<p style="font-size:13px;font-weight:600;margin:0 0 6px;color:#5A4A38">Segun tu renta, podrias optar a una vivienda de hasta:</p>' +
+          '<p style="font-size:13px;font-weight:600;margin:0 0 6px;color:#5A4A38">Según tu renta, podrías optar a una vivienda de hasta:</p>' +
           '<div class="fin-max">' + maxUF.toLocaleString('es-CL') + ' UF</div>' +
           '<div class="fin-clp">~$' + maxCLP.toLocaleString('es-CL') + '</div>' +
           '<div style="margin:14px 0 0;border-top:1px solid rgba(0,0,0,0.08);padding-top:12px">' +
@@ -909,16 +909,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
         '</div>';
       } else {
         html += '<div class="fin-card">' +
-          '<p style="font-size:14px;font-weight:600;text-align:center;margin:0;color:#5A4A38">Segun tus datos, no encontramos financiamiento disponible en el rango DS120. Contactanos de todas formas para evaluar tu caso.</p>' +
+          '<p style="font-size:14px;font-weight:600;text-align:center;margin:0;color:#5A4A38">Según tus datos, no encontramos financiamiento disponible en el rango DS120. Contáctanos de todas formas para evaluar tu caso.</p>' +
         '</div>';
       }
 
-      html += '<p style="font-size:11px;margin:8px 0 0;text-align:center;color:#9a8878">* Estimacion referencial, sujeta a evaluacion bancaria y aprobacion de subsidio.</p>';
+      html += '<p style="font-size:11px;margin:8px 0 0;text-align:center;color:#9a8878">* Estimación referencial, sujeta a evaluación bancaria y aprobación de subsidio.</p>';
 
       // Declaration checkbox
       html += '<label class="fin-confirm" id="fin-confirm-' + uid + '" onclick="var cb=this.querySelector(\'input\');if(event.target!==cb){cb.checked=!cb.checked;cb.dispatchEvent(new Event(\'change\'));}">' +
         '<input type="checkbox" onchange="toggleFinWA(\'' + uid + '\',this.checked)">' +
-        '<span>Estoy de acuerdo con el monto estimado y me comprometo a enviar mis documentos</span>' +
+        '<span>Estoy de acuerdo con el monto estimado y me comprometo a enviar mis documentos para la evaluación</span>' +
       '</label>';
 
       // WhatsApp button (visible but locked until checkbox)
