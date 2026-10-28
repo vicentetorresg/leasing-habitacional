@@ -1,3 +1,9 @@
 crm/
 node_modules/
 reel/
+api/push-subscribe.js
+api/send-email.js
+api/welcome-hipotecario.js
+api/send-doc-reminder.js
+api/new-vivienda.js
+api/send-vivienda-match.js

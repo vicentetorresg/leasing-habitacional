@@ -115,6 +115,24 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
 
+  // --- Lead flag sub-action ---
+  if (req.query.action === 'flag') {
+    const { email: flagEmail, field } = req.body || {};
+    if (!flagEmail || !field) return res.status(400).json({ error: 'Missing email or field' });
+    const allowed = ['acepto_monto', 'click_whatsapp'];
+    if (!allowed.includes(field)) return res.status(400).json({ error: 'Invalid field' });
+    const SUPA_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const CRM_KEY = process.env.CRM_SERVICE_ROLE_KEY;
+    const mkHeaders = (key) => ({ 'apikey': key, 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' });
+    const body = JSON.stringify({ [field]: true });
+    const enc = encodeURIComponent(flagEmail.trim().toLowerCase());
+    await Promise.allSettled([
+      fetch(`https://unptkiyggkuxtkzedluv.supabase.co/rest/v1/leasing_leads?email=eq.${enc}&order=created_at.desc&limit=1`, { method: 'PATCH', headers: mkHeaders(SUPA_KEY), body }),
+      CRM_KEY ? fetch(`https://evuxdhvvarfxredghvpu.supabase.co/rest/v1/leads?email=eq.${enc}&order=created_at.desc&limit=1`, { method: 'PATCH', headers: mkHeaders(CRM_KEY), body }) : Promise.resolve()
+    ]);
+    return res.status(200).json({ ok: true });
+  }
+
   const { nombre, telefono, email, arriendo, renta, dicom, contrato, vivienda, tiene_propiedad_vista, comuna_propiedad, precio_propiedad_ok, complementa_renta, renta_complemento, cuando_comprar, fuente, utm_source, utm_medium, utm_campaign, renta_liquida, monto_propiedad } = req.body || {};
   if (!nombre || !telefono) return res.status(400).json({ error: 'Faltan campos' });
 

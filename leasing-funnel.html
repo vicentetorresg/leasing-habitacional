@@ -785,7 +785,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
   function flagLead(field) {
     var email = __lastFormData && __lastFormData.email;
     if (!email) return;
-    fetch('/api/lead-flag', {
+    fetch('/api/new-lead?action=flag', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: email, field: field })
