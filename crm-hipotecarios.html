@@ -842,12 +842,14 @@ function saveNextTask() {
   if (!openLeadId) return;
   var btn = document.getElementById('next-task-btn');
   btn.disabled = true; btn.textContent = '...';
-  api('leasing_leads?id=eq.' + openLeadId, { method: 'PATCH', body: { next_task: content || null }, prefer: 'return=representation' })
+  if (!content) return (btn.disabled = false, btn.textContent = 'Guardar', void 0);
+  api('leasing_leads?id=eq.' + openLeadId, { method: 'PATCH', body: { next_task: null }, prefer: 'return=representation' })
     .then(function(r) { return r.json(); })
     .then(function() {
       btn.disabled = false;
       btn.textContent = '✓ Guardado';
       btn.style.background = 'linear-gradient(135deg,#22875a,#2da06a)';
+      input.value = '';
       input.style.borderColor = '#22875a';
       setTimeout(function() {
         btn.textContent = 'Guardar';
@@ -855,9 +857,10 @@ function saveNextTask() {
         input.style.borderColor = 'var(--beige-2)';
       }, 2000);
       var l = findLead(openLeadId);
-      if (l) l.next_task = content || null;
+      if (l) l.next_task = null;
       renderTable();
-      logAction(openLeadId, 'Actualizo proxima tarea', content ? content.substring(0, 80) : '(vacia)');
+      logAction(openLeadId, 'Proxima tarea', content);
+      loadDrawerLog(openLeadId);
     })
     .catch(function() {
       btn.disabled = false;
