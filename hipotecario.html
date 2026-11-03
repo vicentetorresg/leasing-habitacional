@@ -136,17 +136,17 @@ nav.sc{background:rgba(254,252,247,0.97);backdrop-filter:blur(16px);padding:12px
 .cs-opt.blocked:hover{background:#fef2f2}
 
 /* dark custom select */
-.cs-d .cs-trigger{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15);color:#fff}
-.cs-d .cs-trigger.placeholder{color:rgba(255,255,255,0.4)}
-.cs-d .cs-trigger::after{border-top-color:rgba(255,255,255,0.4)}
+.cs-d .cs-trigger{background:#f8f7f4;border-color:var(--beige-2);color:var(--navy)}
+.cs-d .cs-trigger.placeholder{color:#aaa}
+.cs-d .cs-trigger::after{border-top-color:var(--text-s)}
 .cs-d .cs-trigger:hover{border-color:var(--navy)}
-.cs-d.open .cs-trigger{background:rgba(255,255,255,0.12);border-color:var(--navy)}
-.cs-d .cs-opts{background:#1e293b;border-color:var(--navy)}
-.cs-d .cs-opt{color:rgba(255,255,255,0.8);border-bottom-color:rgba(255,255,255,0.08)}
-.cs-d .cs-opt:hover{background:rgba(27,58,107,0.3);color:#fff}
-.cs-d .cs-opt.selected{background:rgba(45,184,158,0.2);color:var(--teal)}
-.cs-d .cs-opt.blocked{color:#f87171}
-.cs-d .cs-opt.blocked:hover{background:rgba(220,38,38,0.15)}
+.cs-d.open .cs-trigger{background:#fff;border-color:var(--navy)}
+.cs-d .cs-opts{background:#fff;border-color:var(--navy)}
+.cs-d .cs-opt{color:var(--text);border-bottom-color:var(--beige-1)}
+.cs-d .cs-opt:hover{background:var(--teal-pale);color:var(--navy)}
+.cs-d .cs-opt.selected{background:var(--teal-pale);color:var(--teal)}
+.cs-d .cs-opt.blocked{color:var(--red,#b91c1c);font-weight:700}
+.cs-d .cs-opt.blocked:hover{background:#fef2f2}
 
 .f-btn{width:100%;height:54px;border:none;border-radius:var(--rs);font-size:0.95rem;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;transition:var(--t);display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:0.3px;background:var(--navy);color:#fff;margin-top:8px}
 .f-btn:hover{background:var(--navy-d);box-shadow:0 10px 28px rgba(27,58,107,0.3);transform:translateY(-2px)}
@@ -179,7 +179,7 @@ nav.sc{background:rgba(254,252,247,0.97);backdrop-filter:blur(16px);padding:12px
 .phone-wrap{position:relative;display:flex;align-items:center}
 .phone-prefix{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:16px;font-weight:700;color:var(--text);pointer-events:none;z-index:1}
 .phone-input{padding-left:52px!important}
-.phone-wrap-d .phone-prefix{color:#64748b}
+.phone-wrap-d .phone-prefix{color:var(--text-s)}
 
 .scroll-hint{display:none;flex-direction:column;align-items:center;gap:6px;margin-top:28px;cursor:pointer}
 .scroll-hint span{font-size:0.82rem;font-weight:700;color:var(--navy);letter-spacing:0.3px}
@@ -215,20 +215,20 @@ nav.sc{background:rgba(254,252,247,0.97);backdrop-filter:blur(16px);padding:12px
 .tl-step p{font-size:0.88rem;color:rgba(255,255,255,0.55);line-height:1.65}
 .tl-step .tl-highlight{color:var(--teal);font-weight:700}
 
-.dark-form{background:var(--navy-d);padding:80px 40px}
+.dark-form{background:#fff;padding:80px 40px;border:1.5px solid var(--beige-2);box-shadow:0 8px 40px rgba(27,58,107,0.08)}
 .dark-form .fc2{max-width:520px;margin:0 auto}
-.fc2 h3{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#fff;margin-bottom:6px;text-align:center}
-.fc2 .sub{color:rgba(255,255,255,0.5);font-size:0.88rem;text-align:center;margin-bottom:20px}
-.fc2 .f-field-lbl{color:rgba(255,255,255,0.8)}
-.fc2 .f-input{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15);color:#fff;box-shadow:none}
-.fc2 .f-input::placeholder{color:rgba(255,255,255,0.4)}
-.fc2 .f-input:focus{background:rgba(255,255,255,0.12);border-color:var(--teal)}
-.fc2 .f-btn{background:var(--teal);color:#fff}
-.fc2 .f-btn:hover{background:var(--teal-m);box-shadow:0 10px 28px rgba(45,184,158,0.4)}
-.fc2 .f-privacy{color:rgba(255,255,255,0.35)}
-.fc2 .f-err{background:rgba(220,38,38,0.15);border-color:rgba(220,38,38,0.3);color:#f87171}
-.fc2 .f-success h3{color:#fff}
-.fc2 .f-success p{color:rgba(255,255,255,0.6)}
+.fc2 h3{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--navy);margin-bottom:6px;text-align:center}
+.fc2 .sub{color:var(--text-m);font-size:0.88rem;text-align:center;margin-bottom:20px}
+.fc2 .f-field-lbl{color:var(--navy)}
+.fc2 .f-input{background:#f8f7f4;border-color:var(--beige-2);color:var(--navy);box-shadow:none}
+.fc2 .f-input::placeholder{color:#aaa}
+.fc2 .f-input:focus{background:#fff;border-color:var(--teal)}
+.fc2 .f-btn{background:var(--navy);color:#fff}
+.fc2 .f-btn:hover{background:var(--navy-d);box-shadow:0 10px 28px rgba(27,58,107,0.3)}
+.fc2 .f-privacy{color:var(--text-s)}
+.fc2 .f-err{background:#fef2f2;border-color:#fca5a5;color:#b91c1c}
+.fc2 .f-success h3{color:var(--navy)}
+.fc2 .f-success p{color:var(--text-m)}
 .fc2 .f-success-icon{background:var(--teal)}
 
 footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24px}
@@ -333,20 +333,31 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24
               <label class="f-field-lbl">Email <span style="color:#ef4444">*</span></label>
               <input class="f-input" type="email" id="f1-email" placeholder="tucorreo@email.com" autocomplete="email">
             </div>
+            <div class="f-row">
+              <div class="f-field">
+                <label class="f-field-lbl">RUT <span style="color:#ef4444">*</span></label><span style="display:block;font-size:10px;color:#888;margin-bottom:2px;line-height:1.3">Lo usamos para pre-calificarte en el sistema bancario</span>
+                <input class="f-input rut-input" type="text" id="f1-rut" placeholder="12.345.678-9" maxlength="12">
+              </div>
+              <div class="f-field">
+                <label class="f-field-lbl">Edad <span style="color:#ef4444">*</span></label>
+                <input class="f-input" type="number" id="f1-edad" placeholder="Ej: 35" min="18" max="99">
+              </div>
+            </div>
             <div class="f-field">
-              <label class="f-field-lbl">WhatsApp <span style="color:#ef4444">*</span></label>
+              <label class="f-field-lbl">Teléfono <span style="color:#ef4444">*</span></label>
               <div class="phone-wrap">
                 <span class="phone-prefix">+56</span>
                 <input class="f-input phone-input" type="tel" id="f1-tel" placeholder="9 1234 5678" autocomplete="tel" maxlength="15">
               </div>
+              <span style="display:block;font-size:11px;color:#888;margin-top:4px"><b>Te contactaremos a este número, asegúrate de que sea correcto.</b></span>
             </div>
             <div class="f-field">
               <label class="f-field-lbl">Renta líquida mensual <span style="color:#ef4444">*</span></label>
               <div class="cs" data-target="f1-renta">
                 <div class="cs-trigger placeholder">Selecciona un rango</div>
                 <div class="cs-opts">
-                  <div class="cs-opt blocked" data-value="bajo-1500000">Menos de $1.500.000</div>
-                  <div class="cs-opt" data-value="1500000-1800000">$1.500.000 - $1.800.000</div>
+                  <div class="cs-opt blocked" data-value="bajo-1650000">Menos de $1.650.000</div>
+                  <div class="cs-opt" data-value="1650000-1800000">$1.650.000 - $1.800.000</div>
                   <div class="cs-opt" data-value="1800000-2100000">$1.800.000 - $2.100.000</div>
                   <div class="cs-opt" data-value="2100000-2400000">$2.100.000 - $2.400.000</div>
                   <div class="cs-opt" data-value="2400000-2700000">$2.400.000 - $2.700.000</div>
@@ -357,7 +368,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24
                 </div>
                 <input type="hidden" id="f1-renta" value="">
               </div>
-              <div class="f-err" id="f1-renta-err">Para este servicio necesitas una renta líquida de al menos $1.500.000 mensuales.</div>
+              <div class="f-err" id="f1-renta-err">Para este servicio necesitas una renta líquida de al menos $1.650.000 mensuales.</div>
             </div>
             <div class="f-field">
               <label class="f-field-lbl">Valor propiedad (UF) <span style="color:#ef4444">*</span></label>
@@ -377,7 +388,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24
               <div class="f-err" id="f1-monto-err">No podemos atender propiedades bajo 2.000 UF. Para ese rango te recomendamos evaluar un Leasing Habitacional.</div>
             </div>
             <div class="f-field">
-              <label class="f-field-lbl">¿Estás en DICOM? <span style="color:#ef4444">*</span></label>
+              <label class="f-field-lbl">¿Estás en DICOM actualmente? <span style="color:#ef4444">*</span></label>
               <div class="cs" data-target="f1-dicom">
                 <div class="cs-trigger placeholder">Selecciona</div>
                 <div class="cs-opts">
@@ -388,6 +399,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24
               </div>
               <div class="f-err" id="f1-dicom-err">Lamentablemente, los bancos no otorgan creditos hipotecarios a personas con deudas impagas en DICOM.</div>
             </div>
+            <label style="display:flex;align-items:flex-start;gap:8px;margin-top:14px;cursor:pointer;font-size:11px;line-height:1.4;color:#555;user-select:none"><input type="checkbox" id="f1-confirm" style="margin-top:2px;accent-color:#b45309;min-width:16px;min-height:16px"><span>Confirmo que los datos ingresados son <strong>verdaderos</strong> y que tengo <strong>real interés</strong> en ser contactado/a para avanzar con mi evaluación.<br><strong style="color:#1a1a1a;text-transform:uppercase;font-size:11px">Solo deja tus datos si estás realmente interesado.</strong></span></label>
             <button class="f-btn" id="f1-btn" onclick="doSubmit('f1')">Cotizar mi crédito &#8594;</button>
           </div>
           <p class="f-privacy">Tus datos están seguros. No compartimos tu información.</p>
@@ -487,13 +499,13 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24
     <h2 class="sec-title">¿Listo para encontrar tu crédito ideal?</h2>
     <p style="font-size:1rem;color:var(--text-m);line-height:1.75">Cotizamos en <strong>distintos bancos</strong>. Solo cobramos por la gestión <strong>contra aprobación bancaria</strong>.</p>
   </div>
-  <div class="dark-form" style="background:var(--navy-d);border-radius:var(--rl);padding:48px 40px">
+  <div class="dark-form" style="border-radius:var(--rl);padding:48px 40px">
     <div class="fc2">
       <h3>Completa tus datos</h3>
       <p class="sub">Cotizamos en distintos bancos. Solo cobramos contra aprobación.</p>
-      <div style="background:rgba(45,184,158,0.12);border:1px solid rgba(45,184,158,0.25);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
+      <div style="background:var(--teal-pale);border:1px solid rgba(45,184,158,0.3);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
         <span style="font-size:1.2rem">&#128176;</span>
-        <span style="font-size:0.82rem;font-weight:700;color:rgba(255,255,255,0.9);line-height:1.3">Cobramos solo contra aprobación bancaria. Sin aprobación, <strong style="color:var(--teal)">no pagas nada</strong></span>
+        <span style="font-size:0.82rem;font-weight:700;color:var(--navy);line-height:1.3">Cobramos solo contra aprobación bancaria. Sin aprobación, <strong style="color:var(--teal)">no pagas nada</strong></span>
       </div>
       <div id="f2-content">
         <div class="f-stack">
@@ -511,20 +523,31 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24
             <label class="f-field-lbl">Email <span style="color:#ef4444">*</span></label>
             <input class="f-input" type="email" id="f2-email" placeholder="tucorreo@email.com" autocomplete="email">
           </div>
+          <div class="f-row">
+            <div class="f-field">
+              <label class="f-field-lbl">RUT <span style="color:#ef4444">*</span></label><span style="display:block;font-size:10px;color:#888;margin-bottom:2px;line-height:1.3">Lo usamos para pre-calificarte en el sistema bancario</span>
+              <input class="f-input rut-input" type="text" id="f2-rut" placeholder="12.345.678-9" maxlength="12">
+            </div>
+            <div class="f-field">
+              <label class="f-field-lbl">Edad <span style="color:#ef4444">*</span></label>
+              <input class="f-input" type="number" id="f2-edad" placeholder="Ej: 35" min="18" max="99">
+            </div>
+          </div>
           <div class="f-field">
-            <label class="f-field-lbl">WhatsApp <span style="color:#ef4444">*</span></label>
+            <label class="f-field-lbl">Teléfono <span style="color:#ef4444">*</span></label>
             <div class="phone-wrap phone-wrap-d">
               <span class="phone-prefix">+56</span>
               <input class="f-input phone-input" type="tel" id="f2-tel" placeholder="9 1234 5678" autocomplete="tel" maxlength="15">
             </div>
+            <span style="display:block;font-size:11px;color:#888;margin-top:4px"><b>Te contactaremos a este número, asegúrate de que sea correcto.</b></span>
           </div>
           <div class="f-field">
             <label class="f-field-lbl">Renta líquida mensual <span style="color:#ef4444">*</span></label>
             <div class="cs cs-d" data-target="f2-renta">
               <div class="cs-trigger placeholder">Selecciona un rango</div>
               <div class="cs-opts">
-                <div class="cs-opt blocked" data-value="bajo-1500000">Menos de $1.500.000</div>
-                <div class="cs-opt" data-value="1500000-1800000">$1.500.000 - $1.800.000</div>
+                <div class="cs-opt blocked" data-value="bajo-1650000">Menos de $1.650.000</div>
+                <div class="cs-opt" data-value="1650000-1800000">$1.650.000 - $1.800.000</div>
                 <div class="cs-opt" data-value="1800000-2100000">$1.800.000 - $2.100.000</div>
                 <div class="cs-opt" data-value="2100000-2400000">$2.100.000 - $2.400.000</div>
                 <div class="cs-opt" data-value="2400000-2700000">$2.400.000 - $2.700.000</div>
@@ -535,7 +558,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24
               </div>
               <input type="hidden" id="f2-renta" value="">
             </div>
-            <div class="f-err" id="f2-renta-err">Para este servicio necesitas una renta líquida de al menos $1.500.000 mensuales.</div>
+            <div class="f-err" id="f2-renta-err">Para este servicio necesitas una renta líquida de al menos $1.650.000 mensuales.</div>
           </div>
           <div class="f-field">
             <label class="f-field-lbl">Valor propiedad (UF) <span style="color:#ef4444">*</span></label>
@@ -555,7 +578,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24
             <div class="f-err" id="f2-monto-err">No podemos atender propiedades bajo 2.000 UF. Para ese rango te recomendamos evaluar un Leasing Habitacional.</div>
           </div>
           <div class="f-field">
-            <label class="f-field-lbl">¿Estás en DICOM? <span style="color:#ef4444">*</span></label>
+            <label class="f-field-lbl">¿Estás en DICOM actualmente? <span style="color:#ef4444">*</span></label>
             <div class="cs cs-d" data-target="f2-dicom">
               <div class="cs-trigger placeholder">Selecciona</div>
               <div class="cs-opts">
@@ -566,6 +589,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24
             </div>
             <div class="f-err" id="f2-dicom-err">Lamentablemente, los bancos no otorgan creditos hipotecarios a personas con deudas impagas en DICOM.</div>
           </div>
+          <label style="display:flex;align-items:flex-start;gap:8px;margin-top:14px;cursor:pointer;font-size:11px;line-height:1.4;color:#555;user-select:none"><input type="checkbox" id="f2-confirm" style="margin-top:2px;accent-color:#b45309;min-width:16px;min-height:16px"><span>Confirmo que los datos ingresados son <strong>verdaderos</strong> y que tengo <strong>real interés</strong> en ser contactado/a para avanzar con mi evaluación.<br><strong style="color:#1a1a1a;text-transform:uppercase;font-size:11px">Solo deja tus datos si estás realmente interesado.</strong></span></label>
           <button class="f-btn" id="f2-btn" onclick="doSubmit('f2')">Cotizar mi crédito hipotecario &#8594;</button>
         </div>
         <p class="f-privacy">Tus datos están seguros. No compartimos tu información.</p>
@@ -627,6 +651,7 @@ footer{background:var(--navy-d);color:rgba(255,255,255,0.6);padding:40px 40px 24
   <div class="f-bot">
     <p>&copy; 2026 Llave Propia. Todos los derechos reservados.</p>
     <p>Asesoría en crédito hipotecario &middot; Chile</p>
+    <p style="margin-top:8px"><a href="/hipotecario-politicas" style="color:var(--text-s);text-decoration:underline;font-size:0.78rem">Términos y Condiciones · Política de Privacidad</a></p>
   </div>
 </footer>
 
@@ -689,12 +714,12 @@ document.addEventListener('click', function(e) {
   document.querySelectorAll('.cs.open').forEach(function(el) { el.classList.remove('open'); el.classList.remove('open-up'); });
 });
 
-function checkRenta(p) { document.getElementById(p + '-renta-err').style.display = (document.getElementById(p + '-renta').value === 'bajo-1500000') ? 'block' : 'none'; }
+function checkRenta(p) { document.getElementById(p + '-renta-err').style.display = (document.getElementById(p + '-renta').value === 'bajo-1650000') ? 'block' : 'none'; }
 function checkMonto(p) { document.getElementById(p + '-monto-err').style.display = (document.getElementById(p + '-monto').value === 'bajo-2000') ? 'block' : 'none'; }
 function checkDicom(p) { document.getElementById(p + '-dicom-err').style.display = (document.getElementById(p + '-dicom').value === 'si') ? 'block' : 'none'; }
 function updateButton(p) {
   var btn = document.getElementById(p + '-btn');
-  btn.disabled = (document.getElementById(p + '-renta').value === 'bajo-1500000' || document.getElementById(p + '-monto').value === 'bajo-2000' || document.getElementById(p + '-dicom').value === 'si');
+  btn.disabled = (document.getElementById(p + '-renta').value === 'bajo-1650000' || document.getElementById(p + '-monto').value === 'bajo-2000' || document.getElementById(p + '-dicom').value === 'si');
 }
 
 function getSelectedText(id) {
@@ -703,6 +728,43 @@ function getSelectedText(id) {
   var sel = cs.querySelector('.cs-opt.selected');
   return sel ? sel.textContent : '';
 }
+
+/* RUT formatting */
+function formatRut(v) {
+  var clean = v.replace(/[^0-9kK]/g, '').toUpperCase();
+  if (clean.length < 2) return clean;
+  var body = clean.slice(0, -1);
+  var dv = clean.slice(-1);
+  var formatted = '';
+  for (var i = body.length - 1, c = 0; i >= 0; i--, c++) {
+    if (c > 0 && c % 3 === 0) formatted = '.' + formatted;
+    formatted = body[i] + formatted;
+  }
+  return formatted + '-' + dv;
+}
+function validarRut(rut) {
+  var clean = rut.replace(/[^0-9kK]/g, '').toUpperCase();
+  if (clean.length < 2) return false;
+  var body = clean.slice(0, -1);
+  var dv = clean.slice(-1);
+  var sum = 0, mul = 2;
+  for (var i = body.length - 1; i >= 0; i--) {
+    sum += parseInt(body[i]) * mul;
+    mul = mul === 7 ? 2 : mul + 1;
+  }
+  var expected = 11 - (sum % 11);
+  var dvCalc = expected === 11 ? '0' : expected === 10 ? 'K' : String(expected);
+  return dv === dvCalc;
+}
+document.querySelectorAll('.rut-input').forEach(function(input) {
+  input.addEventListener('input', function() {
+    var pos = this.selectionStart;
+    var oldLen = this.value.length;
+    this.value = formatRut(this.value);
+    var newLen = this.value.length;
+    this.setSelectionRange(pos + (newLen - oldLen), pos + (newLen - oldLen));
+  });
+});
 
 /* phone formatting */
 document.querySelectorAll('.phone-input').forEach(function(input) {
@@ -723,6 +785,8 @@ function doSubmit(prefix) {
   var nombre = document.getElementById(prefix + '-nombre').value.trim();
   var apellido = document.getElementById(prefix + '-apellido').value.trim();
   var email = document.getElementById(prefix + '-email').value.trim();
+  var rutVal = document.getElementById(prefix + '-rut').value.trim();
+  var edadVal = document.getElementById(prefix + '-edad').value.trim();
   var rawTel = document.getElementById(prefix + '-tel').value.replace(/\D/g, '').replace(/^0+/, '');
   if (rawTel.startsWith('569') && rawTel.length >= 11) rawTel = rawTel.slice(2);
   else if (rawTel.startsWith('56') && rawTel.length >= 11) rawTel = rawTel.slice(2);
@@ -731,11 +795,21 @@ function doSubmit(prefix) {
   var monto = document.getElementById(prefix + '-monto').value;
   var dicom = document.getElementById(prefix + '-dicom').value;
 
-  if (!nombre || !apellido || !email || rawTel.length < 9 || !renta || !monto || !dicom) {
+  if (!nombre || !apellido || !email || !rutVal || !edadVal || rawTel.length < 9 || !renta || !monto || !dicom) {
     alert('Por favor completa todos los campos. El WhatsApp debe tener 9 dígitos.');
     return;
   }
-  if (renta === 'bajo-1500000' || monto === 'bajo-2000' || dicom === 'si') {
+  if (!validarRut(rutVal)) {
+    alert('El RUT ingresado no es válido. Verifica e intenta nuevamente.');
+    return;
+  }
+  var edadNum = parseInt(edadVal);
+  if (isNaN(edadNum) || edadNum < 18 || edadNum > 99) {
+    alert('La edad debe ser entre 18 y 99 años.');
+    return;
+  }
+  var confirmChk = document.getElementById(prefix + '-confirm'); if (confirmChk && !confirmChk.checked) { alert('Debes confirmar que los datos son verdaderos y que deseas ser contactado/a.'); return; }
+  if (renta === 'bajo-1650000' || monto === 'bajo-2000' || dicom === 'si') {
     alert('No podemos atender tu solicitud. Revisa los campos marcados.');
     return;
   }
@@ -748,6 +822,12 @@ function doSubmit(prefix) {
   var rentaText = getSelectedText(prefix + '-renta');
   var montoText = getSelectedText(prefix + '-monto');
 
+  // Capture UTM params
+  var params = new URLSearchParams(window.location.search);
+  var utmSource = params.get('utm_source') || '';
+  var utmMedium = params.get('utm_medium') || '';
+  var utmCampaign = params.get('utm_campaign') || '';
+
   // Save to Supabase via /api/new-lead
   fetch('/api/new-lead', {
     method: 'POST',
@@ -756,11 +836,16 @@ function doSubmit(prefix) {
       nombre: nombreCompleto,
       email: email,
       telefono: teléfono,
+      rut: formatRut(rutVal),
+      edad: edadNum,
       renta: rentaText,
       renta_liquida: rentaText,
       monto_propiedad: montoText,
       dicom: dicom,
-      fuente: 'Credito Hipotecario'
+      fuente: 'Credito Hipotecario',
+      utm_source: utmSource,
+      utm_medium: utmMedium,
+      utm_campaign: utmCampaign
     })
   }).catch(function() {});
 

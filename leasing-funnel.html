@@ -108,7 +108,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
 .f-radio-lbl input{display:none}
 .f-radio-lbl:has(input:checked){background:var(--teal-pale);border-color:var(--teal);color:var(--teal)}
 .dicom-block{background:rgba(220,38,38,0.08);border:1.5px solid rgba(220,38,38,0.35);border-radius:10px;padding:10px 14px;margin-top:6px;color:#dc2626;font-size:0.83rem;font-weight:600;line-height:1.45;display:flex;align-items:flex-start;gap:7px}
-.prop-blocked-msg{background:rgba(220,38,38,0.08);border:2px solid rgba(220,38,38,0.45);border-radius:10px;padding:12px 14px;margin-top:10px;color:#dc2626;font-size:0.85rem;font-weight:700;line-height:1.5;display:flex;align-items:flex-start;gap:7px}
+.prop-blocked-msg{background:rgba(220,38,38,0.08);border:2px solid rgba(220,38,38,0.45);border-radius:10px;padding:12px 14px;margin-top:10px;color:#dc2626;font-size:0.85rem;font-weight:700;line-height:1.5}
 
 /* HERO FORM CARD */
 .hero-fc{background:#fff;border:1px solid var(--beige-2);border-radius:var(--rl);padding:32px 28px;box-shadow:0 24px 60px var(--shadow);position:relative;overflow:hidden;opacity:0;transform:translateY(36px) scale(0.97);animation:fadeUp .8s .3s forwards cubic-bezier(0.22,1,0.36,1);scroll-margin-top:80px}
@@ -170,10 +170,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
 .precio-pill.selected .pp-clp{color:var(--teal)}
 .fin-card{background:#fff;border-radius:16px;border:2px solid var(--teal);box-shadow:0 8px 32px rgba(45,184,158,0.15);padding:24px 20px;margin:16px 0;text-align:center}
 .fin-card-d{background:rgba(255,255,255,0.06);border-color:rgba(45,184,158,0.4)}
-.fin-max{font-size:36px;font-weight:900;color:var(--navy);line-height:1.1;margin:8px 0 2px}
+.fin-max{font-size:38px;font-weight:900;color:var(--navy);line-height:1.1;margin:8px 0 4px}
 .fin-card-d .fin-max{color:#fff}
-.fin-clp{font-size:15px;color:var(--text-m);font-weight:600}
-.fin-card-d .fin-clp{color:rgba(255,255,255,0.7)}
+.fin-clp{font-size:14px;color:var(--text-m);font-weight:600}
+.fin-card-d .fin-clp{color:rgba(255,255,255,0.5)}
 .fin-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--beige-2);font-size:13px}
 .fin-card-d .fin-row{border-color:rgba(255,255,255,0.1)}
 .fin-row:last-child{border-bottom:none}
@@ -183,14 +183,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
 .fin-card-d .fin-val{color:#fff}
 .fin-val small{display:block;font-weight:500;font-size:11px;color:var(--text-s)}
 .fin-card-d .fin-val small{color:rgba(255,255,255,0.4)}
-.fin-cuota{color:var(--teal)!important;font-size:15px}
-.fin-confirm{display:flex;align-items:center;gap:12px;margin:20px 0 0;padding:16px 18px;background:linear-gradient(135deg,rgba(90,114,216,0.08),rgba(58,207,184,0.08));border-radius:12px;border:2px solid rgba(90,114,216,0.25);cursor:pointer;text-align:left;user-select:none;transition:border-color 0.2s,background 0.2s}
+.fin-cuota{color:var(--teal)!important;font-size:15px;font-weight:700}
+@keyframes urgPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,180,50,0.4)}50%{box-shadow:0 0 20px 6px rgba(255,180,50,0.25)}}
+.fin-urgency{animation:urgPulse 2s ease-in-out infinite}
+.fin-confirm{display:flex;align-items:center;gap:12px;margin:20px 0 0;padding:18px 20px;background:linear-gradient(135deg,rgba(90,114,216,0.08),rgba(58,207,184,0.08));border-radius:14px;border:2.5px solid rgba(90,114,216,0.35);cursor:pointer;text-align:left;user-select:none;transition:border-color 0.2s,background 0.2s,transform 0.15s}
 .fin-confirm:hover{border-color:rgba(90,114,216,0.5);background:linear-gradient(135deg,rgba(90,114,216,0.12),rgba(58,207,184,0.12))}
 .fin-confirm.checked{border-color:var(--teal);background:linear-gradient(135deg,rgba(45,184,158,0.1),rgba(45,184,158,0.05))}
 .fin-card-d .fin-confirm{background:rgba(255,255,255,0.06);border-color:rgba(90,114,216,0.3)}
 .fin-card-d .fin-confirm:hover{background:rgba(255,255,255,0.1);border-color:rgba(90,114,216,0.5)}
-.fin-confirm input{accent-color:#5A72D8;min-width:20px;min-height:20px;flex-shrink:0;cursor:pointer}
-.fin-confirm span{font-size:13px;line-height:1.5;color:var(--navy);font-weight:700}
+.fin-confirm:active{transform:scale(0.98)}
+.fin-confirm input{accent-color:#5A72D8;min-width:24px;min-height:24px;flex-shrink:0;cursor:pointer}
+.fin-confirm span{font-size:14px;line-height:1.5;color:var(--navy);font-weight:700}
 .fin-card-d .fin-confirm span{color:rgba(255,255,255,0.85)}
 .fin-wa-wrap{margin-top:14px;width:100%;transition:opacity 0.3s,filter 0.3s}
 .fin-wa-wrap.locked{opacity:0.35;filter:grayscale(0.5);pointer-events:none}
@@ -279,7 +282,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
 
   <!-- FORM -->
   <div class="hero-fc" id="hfc">
-    <div class="hero-fc-tag">Gratuito &middot; Sin compromiso &middot; Respuesta rapida</div>
     <h3>¿Quieres comprar tu casa propia?<br>Ve si calificas</h3>
     <p class="sub">Dejanos tus datos. Te evaluamos y contactamos rapido — sin costo.</p>
     <div id="hf-content">
@@ -293,11 +295,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
         <div id="hf-rest" class="hf-preview">
         <div id="hf-califica-msg" style="display:none;margin:16px 0 12px;padding:12px 16px;background:linear-gradient(135deg,#D5F5E3,#e8f7f5);border-radius:10px;border:1.5px solid rgba(45,184,158,0.3);text-align:center"><span style="font-size:15px;font-weight:800;color:#2B7A4E">Tu propiedad califica</span><br><span style="font-size:12px;color:#1B3A6B;font-weight:600">Completa tus datos para verificar si puedes acceder al beneficio</span></div>
         <div class="f-field"><label class="f-field-lbl">Nombre completo <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="hf-n" placeholder="Ej: Ana Garcia Lopez" autocomplete="name" tabindex="-1"></div>
-        <div class="f-field"><label class="f-field-lbl">WhatsApp <span style="color:#c0392b">*</span></label><input class="f-input" type="tel" id="hf-t" placeholder="+56 9 XXXX XXXX" name="phone" autocomplete="tel" tabindex="-1"></div>
+        <div class="f-field"><label class="f-field-lbl">📱 Teléfono <span style="color:#c0392b">*</span></label><input class="f-input" type="tel" id="hf-t" placeholder="+56 9 XXXX XXXX" name="phone" autocomplete="tel" tabindex="-1"><span style="display:block;font-size:11px;color:#888;margin-top:4px"><b>Te contactaremos a este número, asegúrate de que sea correcto.</b></span></div>
         <div class="f-field"><label class="f-field-lbl">Correo electronico <span style="color:#c0392b">*</span></label><input class="f-input" type="email" id="hf-e" placeholder="tucorreo@email.com" autocomplete="email" tabindex="-1"></div>
-        <div class="f-field"><label class="f-field-lbl">Sueldo liquido mensual <span style="color:#c0392b">*</span></label><div class="cs cs-renta" data-target="hf-r" data-form="hf"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-r" value=""></div></div>
-        <div class="dicom-block" id="hf-renta-err" style="display:none">La renta minima requerida es $850.000 liquidos mensuales.</div>
-        <div class="f-group"><label>¿Puedes complementar renta con alguien? *<br><span style="font-weight:600;font-size:11px;color:#666">Pareja, familiar, amigo/a, etc. Esto permite acceder a propiedades de mayor valor.</span></label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="si" tabindex="-1"> Si, puedo complementar renta</label><label class="f-radio-lbl"><input type="radio" name="complementa-hf" value="no" tabindex="-1"> No, solo con mi renta</label></div><div id="hf-complementa-quien-wrap" style="display:none;margin-top:10px;background:#f7faf9;border:1.5px solid #ccc;border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">¿Con quién complementas? <span style="color:#c0392b">*</span></label><input class="f-input" type="text" id="hf-complementa-quien" placeholder="Ej: Mi pareja, hermano/a, primo/a, amigo/a, padre/madre..." style="border:1.5px solid #ccc;background:#fff"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.5px">Sueldo liquido de esa persona <span style="color:#c0392b">*</span></label><div class="cs cs-renta-comp" data-target="hf-rc" data-form="hf"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-rc" value=""></div><div class="dicom-block" id="hf-renta-comp-err" style="display:none">La renta minima de quien complementa es $850.000 liquidos mensuales.</div></div><div class="dicom-block" id="hf-complementa-msg" style="display:none">Con tu rango de renta, es <strong>obligatorio</strong> complementar con otra persona para acceder al Leasing Habitacional.</div></div>
+        <div class="f-group" style="background:#FFF8E8;border-radius:10px;padding:14px 16px;border:1.5px solid rgba(200,160,60,0.3);margin-top:14px"><label style="font-weight:800;color:#1B3A6B;font-size:13px">💰 Renta del titular <span style="color:#c0392b">*</span></label><div class="cs cs-renta" data-target="hf-r" data-form="hf"><div class="cs-trigger placeholder" tabindex="-1">Tu sueldo líquido mensual</div><div class="cs-opts"></div><input type="hidden" id="hf-r" value=""></div><div class="dicom-block" id="hf-renta-err" style="display:none">La renta minima requerida es $850.000 liquidos mensuales.</div></div>
+        <div style="text-align:center;margin:6px 0;font-size:20px;color:#2DB89E;font-weight:900">+</div>
+        <div class="f-group" style="background:#e8f7f5;border-radius:10px;padding:14px 16px;border:1.5px solid rgba(45,184,158,0.3)"><label style="font-weight:800;color:#1B3A6B;font-size:13px">👥 Renta del complemento <span style="color:#c0392b">* OBLIGATORIO</span><br><span style="font-weight:600;font-size:11px;color:#666">Pareja, familiar, amigo/a, padre/madre, etc. Así tendrás mayor monto aprobado.</span></label><input type="hidden" name="complementa-hf" value="si"><div style="margin-top:10px;background:#f7faf9;border:1.5px solid #ccc;border-radius:10px;padding:12px 14px"><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">¿Con quién complementas? <span style="color:#c0392b">*</span></label><div class="cs cs-quien" data-target="hf-complementa-quien" data-form="hf"><div class="cs-trigger placeholder" tabindex="-1">Selecciona relación</div><div class="cs-opts"></div><input type="hidden" id="hf-complementa-quien" value=""></div><label style="display:block;font-size:12px;font-weight:800;color:var(--navy);margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.5px">Sueldo líquido de esa persona <span style="color:#c0392b">*</span></label><div class="cs cs-renta-comp" data-target="hf-rc" data-form="hf"><div class="cs-trigger placeholder" tabindex="-1">Selecciona un rango</div><div class="cs-opts"></div><input type="hidden" id="hf-rc" value=""></div><div class="dicom-block" id="hf-renta-comp-err" style="display:none">La renta minima de quien complementa es $850.000 liquidos mensuales.</div></div><div class="dicom-block" id="hf-complementa-msg" style="display:none"></div></div>
         <div class="f-group"><label>¿Estás en DICOM? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="dicom-hf" value="no" onchange="handleDicom('hf','no')" tabindex="-1"> No estoy en DICOM</label><label class="f-radio-lbl"><input type="radio" name="dicom-hf" value="si" onchange="handleDicom('hf','si')" tabindex="-1"> Si estoy en DICOM</label></div><div class="dicom-block" id="hf-dicom-err" style="display:none">Mientras figures en DICOM no es posible acceder al Leasing Habitacional.</div></div>
         <div class="f-group"><label>¿Tienes contrato indefinido? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="contrato-hf" value="si" onchange="handleContrato('hf','si')" tabindex="-1"> Si, tengo contrato indefinido</label><label class="f-radio-lbl"><input type="radio" name="contrato-hf" value="no" onchange="handleContrato('hf','no')" tabindex="-1"> No tengo contrato indefinido</label></div><div class="dicom-block" id="hf-contrato-err" style="display:none">Se requiere contrato indefinido para acceder al Leasing Habitacional.</div></div>
         <div class="f-group"><label>¿Tú o tu cónyuge tiene una vivienda actualmente? *</label><div class="f-radios"><label class="f-radio-lbl"><input type="radio" name="vivienda-hf" value="no" onchange="handleVivienda('hf','no')" tabindex="-1"> No, no tengo (o tenemos) una vivienda</label><label class="f-radio-lbl"><input type="radio" name="vivienda-hf" value="si" onchange="handleVivienda('hf','si')" tabindex="-1"> Si, tengo una vivienda</label></div><div class="dicom-block" id="hf-vivienda-err" style="display:none">El Leasing Habitacional es solo para personas sin vivienda propia.</div></div>
@@ -396,13 +398,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
     var vivienda = document.querySelector('input[name="vivienda-' + formId + '"]:checked');
     var rentaEl  = document.getElementById(formId + '-r');
     var blocked = false, msg = '';
-    var compRadio = document.querySelector('input[name="complementa-' + formId + '"]:checked');
-    var needsComp = rentaEl && rentaComplementaObligatoria.indexOf(rentaEl.value) !== -1;
     if      (dicom    && dicom.value    === 'si')              { blocked = true; msg = 'No puedes continuar — estas en DICOM'; }
     else if (rentaEl  && rentaEl.value  === 'Menos de $850.000'){ blocked = true; msg = 'No puedes continuar — renta minima $850.000'; }
-    else if (needsComp && compRadio && compRadio.value === 'no'){ blocked = true; msg = 'Con tu renta, es obligatorio complementar con otra persona'; }
     var rcEl = document.getElementById(formId + '-rc');
-    if (!blocked && compRadio && compRadio.value === 'si' && rcEl && rcEl.value === 'Menos de $850.000') { blocked = true; msg = 'La persona que complementa no alcanza la renta minima ($850.000)'; }
+    if (!blocked && rcEl && rcEl.value === 'Menos de $850.000') { blocked = true; msg = 'La persona que complementa no alcanza la renta minima ($850.000)'; }
     if (contrato && contrato.value === 'no')              { blocked = true; msg = 'Se requiere contrato indefinido para continuar'; }
     else if (vivienda && vivienda.value === 'si')              { blocked = true; msg = 'El DS120 es solo para personas sin vivienda propia'; }
     if (blocked) {
@@ -426,13 +425,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
     aTrack('field_complete', formId, 'renta', val);
     var err = document.getElementById(formId + '-renta-err');
     if (err) err.style.display = val === 'Menos de $850.000' ? 'flex' : 'none';
-    var compMsg = document.getElementById(formId + '-complementa-msg');
-    var needsComp = rentaComplementaObligatoria.indexOf(val) !== -1;
-    var compSi = document.querySelector('input[name="complementa-' + formId + '"][value="si"]');
-    if (compMsg) compMsg.style.display = (needsComp && !(compSi && compSi.checked)) ? 'block' : 'none';
-    if (needsComp && compSi && !compSi.checked) {
-      compSi.checked = true; compSi.dispatchEvent(new Event('change', {bubbles:true}));
-    }
     updateButtonState(formId);
   }
 
@@ -549,7 +541,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
       if (hidden) hidden.value = 'menos_2000_uf';
       toggleFormRest(formId, true);
     } else {
-      if (err) err.style.display = 'flex';
+      if (err) err.style.display = 'block';
       if (hidden) hidden.value = '';
       toggleFormRest(formId, false);
     }
@@ -568,26 +560,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
     updateButtonState(formId);
   }
 
-  // complementa radio handler
-  document.addEventListener('change', function(e) {
-    var radio = e.target;
-    if (!radio.name || !radio.name.startsWith('complementa-')) return;
-    var formId = radio.name.replace('complementa-', '');
-    var quienWrap = document.getElementById(formId + '-complementa-quien-wrap');
-    if (quienWrap) quienWrap.style.display = radio.value === 'si' ? 'block' : 'none';
-    if (radio.value === 'no') {
-      var rcEl = document.getElementById(formId + '-rc');
-      if (rcEl) rcEl.value = '';
-      var rcErr = document.getElementById(formId + '-renta-comp-err');
-      if (rcErr) rcErr.style.display = 'none';
-    }
-    var compMsg = document.getElementById(formId + '-complementa-msg');
-    if (compMsg && radio.value === 'si') compMsg.style.display = 'none';
-    var rentaEl = document.getElementById(formId + '-r');
-    var needsComp = rentaEl && rentaComplementaObligatoria.indexOf(rentaEl.value) !== -1;
-    if (compMsg && radio.value === 'no' && needsComp) compMsg.style.display = 'block';
-    updateButtonState(formId);
-  });
+  // complementa radio handler removed — complementa renta is now always mandatory
 
   // Precio range pills
   var precioRanges = [
@@ -656,6 +629,29 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
         optsEl.appendChild(opt);
       });
     });
+    // Build "con quién complementas" selects
+    var quienOpts = ['Cónyuge','Conviviente civil','Pareja con hijo en común','Padre','Madre','Hermano o hermana','Hijo o hija','Tercero'];
+    document.querySelectorAll('.cs-quien').forEach(function(cs) {
+      var optsEl = cs.querySelector('.cs-opts');
+      var hidden = cs.querySelector('input[type="hidden"]');
+      var trigger = cs.querySelector('.cs-trigger');
+      optsEl.innerHTML = '';
+      quienOpts.forEach(function(q) {
+        var opt = document.createElement('div');
+        opt.className = 'cs-opt';
+        opt.textContent = q;
+        opt.onclick = function(e) {
+          e.stopPropagation();
+          hidden.value = q;
+          trigger.textContent = q;
+          trigger.classList.remove('placeholder');
+          optsEl.querySelectorAll('.cs-opt').forEach(function(o){o.classList.remove('selected')});
+          opt.classList.add('selected');
+          cs.classList.remove('open');
+        };
+        optsEl.appendChild(opt);
+      });
+    });
   }
   buildCustomSelects();
 
@@ -719,24 +715,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
 
   var WA_SVG = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
 
-  // ─── DS120 financing calculator (from simulador-simple) ───
-  var DS120_TABLE=[[388,438,488,563],[388,438,488,563],[387,437,487,562],[387,437,487,562],[386,436,486,561],[386,436,486,561],[386,436,486,561],[385,435,485,560],[385,435,485,560],[385,435,485,560],[384,434,484,559],[384,434,484,559],[383,433,483,558],[383,433,483,558],[383,433,483,558],[382,432,482,557],[382,432,482,557],[382,432,482,557],[381,431,481,556],[381,431,481,556],[380,430,480,555],[380,430,480,555],[380,430,480,555],[379,429,479,554],[379,429,479,554],[379,429,479,554],[378,428,478,553],[378,428,478,553],[377,427,477,552],[377,427,477,552],[377,427,477,552],[376,426,476,551],[376,426,476,551],[376,426,476,551],[375,425,475,550],[375,425,475,550],[374,424,474,549],[374,424,474,549],[374,424,474,549],[373,423,473,548],[373,423,473,548],[373,423,473,548],[372,422,472,547],[372,422,472,547],[371,421,471,546],[371,421,471,546],[371,421,471,546],[370,420,470,545],[370,420,470,545],[370,420,470,545],[369,419,469,544],[369,419,469,544],[368,418,468,543],[368,418,468,543],[368,418,468,543],[367,417,467,542],[367,417,467,542],[367,417,467,542],[366,416,466,541],[366,416,466,541],[365,415,465,540],[365,415,465,540],[365,415,465,540],[364,414,464,539],[364,414,464,539],[364,414,464,539],[363,413,463,538],[363,413,463,538],[362,412,462,537],[362,412,462,537],[362,412,462,537],[361,411,461,536],[361,411,461,536],[361,411,461,536],[360,410,460,535],[360,410,460,535],[359,409,459,534],[359,409,459,534],[359,409,459,534],[358,408,458,533],[358,408,458,533],[358,408,458,533],[357,407,457,532],[357,407,457,532],[356,406,456,531],[356,406,456,531],[356,406,456,531],[355,405,455,530],[355,405,455,530],[355,405,455,530],[354,404,454,529],[354,404,454,529],[353,403,453,528],[353,403,453,528],[353,403,453,528],[352,402,452,527],[352,402,452,527],[352,402,452,527],[351,401,451,526],[351,401,451,526],[350,400,450,525],[350,400,450,525]];
+  // Casa Pronta financing logic
+  var FIN_PLAZO = 20, FIN_MIN_UF = 900, FIN_TOPE_UF = 2000;
+  var FIN_TASA = 0.10; // 10% anual fija
 
-  var FIN_TASA=0.097, FIN_PLAZO=20, FIN_MIN_UF=900, FIN_LTV_MAX=0.85, FIN_CRED_MIN=450, FIN_CRED_MAX=1700, FIN_PIE_MIN=0.05, FIN_R_DIV=0.25, FIN_R_CARGA=0.50;
-
-  function finSubsidio(ufValue) {
-    var i = Math.floor(ufValue) - 900;
-    if (i < 0) return 0;
-    if (i < DS120_TABLE.length) return DS120_TABLE[i][0];
-    var lastSubs = DS120_TABLE[DS120_TABLE.length-1][0];
-    var extra = i - DS120_TABLE.length + 1;
-    return Math.max(125, lastSubs - Math.floor(extra * 0.45));
-  }
-
-  function finCuota(monto) {
-    var n = FIN_PLAZO * 12, r = Math.pow(1 + FIN_TASA, 1/12) - 1;
-    return monto * (r * Math.pow(1+r, n)) / (Math.pow(1+r, n) - 1);
-  }
+  function finSubsidio(vp) { return Math.ceil(Math.max(Math.min(725 - vp * 0.375, 425), 125)); }
+  function finTasa(vp) { return FIN_TASA; }
+  function finPmt(r, n, pv) { if (r === 0) return pv / n; return pv * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1); }
 
   function rentaMidpoint(rangoStr) {
     if (!rangoStr) return 0;
@@ -752,26 +737,26 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
       '$1.700.001 – $1.800.000': 1750000,
       '$1.800.001 – $1.900.000': 1850000,
       '$1.900.001 – $2.000.000': 1950000,
-      'Mas de $2.000.000': 2200000
+      'Más de $2.000.000': 2200000
     };
     return map[rangoStr] || 0;
   }
 
   function calcFinanciamiento(rentaTotal, ufValor) {
-    var tope = 2000;
-    var maxCuotaMes = Math.min(FIN_R_DIV * rentaTotal, FIN_R_CARGA * rentaTotal);
     var found = null;
-    for (var n = tope; n >= FIN_MIN_UF; n--) {
-      var val = n * ufValor;
-      var subs = finSubsidio(n) * ufValor;
-      var topeCred = Math.min(val * FIN_LTV_MAX, FIN_CRED_MAX * ufValor);
-      var pie = Math.max(val * FIN_PIE_MIN, val - subs - topeCred);
-      var cred = Math.max(0, val - pie - subs);
-      var credUF = cred / ufValor;
-      if (credUF < FIN_CRED_MIN || credUF > FIN_CRED_MAX * 1.0001) continue;
-      var cuotaMes = finCuota(cred);
-      if (cuotaMes <= maxCuotaMes) {
-        found = { uf: n, clp: val, subs: finSubsidio(n), subsClp: subs, pie: pie, pieUF: pie/ufValor, piePct: pie/val, cred: cred, credUF: credUF, cuota: cuotaMes };
+    for (var vp = FIN_TOPE_UF; vp >= FIN_MIN_UF; vp--) {
+      var pie = vp * 0.05;
+      var sub = finSubsidio(vp);
+      var cred = vp - pie - sub;
+      if (cred <= 0) continue;
+      var tasa = finTasa(vp);
+      var tasaMes = tasa / 12;
+      var n = FIN_PLAZO * 12;
+      var cuotaSS = finPmt(tasaMes, n, cred);
+      var cuotaPesos = cuotaSS * ufValor;
+      var rentaReq = cuotaPesos * 4;
+      if (rentaTotal >= rentaReq) {
+        found = { uf: vp, clp: vp * ufValor, subs: sub, subsClp: sub * ufValor, pie: pie * ufValor, pieUF: pie, piePct: 0.05, cred: cred * ufValor, credUF: cred, cuota: Math.round(cuotaPesos), tasa: tasa };
         break;
       }
     }
@@ -780,16 +765,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
 
   // Store form data globally for financing step
   var __lastFormData = {};
+  var __formSubmitted = false;
 
 
   function flagLead(field) {
     var email = __lastFormData && __lastFormData.email;
-    if (!email) return;
+    var telefono = __lastFormData && __lastFormData.telefono;
+    if (!email && !telefono) return;
+    console.log('[flagLead]', field, email, telefono);
     fetch('/api/new-lead?action=flag', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email, field: field })
-    }).catch(function(){});
+      body: JSON.stringify({ email: email || '', telefono: telefono || '', field: field })
+    }).then(function(r){ return r.json(); }).then(function(d){ console.log('[flagLead] resp', d); }).catch(function(e){ console.error('[flagLead] err', e); });
   }
 
   function toggleFinWA(uid, checked) {
@@ -802,16 +790,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
     if (label) label.classList.toggle('checked', checked);
     if (checked) {
       flagLead('acepto_monto');
-      var stickyBar = document.getElementById('wa-sticky');
-      if (stickyBar) {
-        stickyBar.style.display = 'block';
-        var stickyLink = stickyBar.querySelector('a[href*="wa.me"]');
-        if (stickyLink && window.__WA_NUM) stickyLink.href = stickyLink.href.replace(/56962078510|56957852275/, window.__WA_NUM);
-      }
     }
   }
 
   async function doForm(prefix, src) {
+    if (__formSubmitted) return;
     var btn = document.getElementById(prefix+'-btn');
     if (btn && btn.disabled) return;
     var n = document.getElementById(prefix+'-n').value.trim();
@@ -840,21 +823,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
     var precioVal = precioSel ? precioSel.value : '';
     if (!precioVal) { alert('Por favor indica si la propiedad vale menos de 2.000 UF.'); return; }
     var precioLabel = precioVal;
-    var comp = document.querySelector('input[name="complementa-'+prefix+'"]:checked');
     var compQuien = document.getElementById(prefix+'-complementa-quien');
-    var compVal = comp ? comp.value : '';
-    var compQuienVal = (comp && comp.value === 'si' && compQuien) ? compQuien.value.trim() : '';
-    if (compVal === 'si' && !compQuienVal) { alert('Por favor indica con quien complementas renta.'); return; }
+    var compQuienVal = compQuien ? compQuien.value.trim() : '';
+    if (!compQuienVal) { alert('Por favor indica con quién complementas renta.'); return; }
+    var complementaRenta = 'Sí — ' + compQuienVal;
     var rcEl = document.getElementById(prefix+'-rc');
-    var rentaCompVal = (compVal === 'si' && rcEl) ? rcEl.value : '';
-    if (compVal === 'si' && (!rentaCompVal || rentaCompVal === 'Menos de $850.000')) { alert('Por favor indica el sueldo liquido de quien complementa (minimo $850.000).'); return; }
-    var complementaRenta = compVal === 'si' ? ('Si' + (compQuienVal ? ' — ' + compQuienVal : '')) : compVal === 'no' ? 'No' : '';
+    var rentaCompVal = rcEl ? rcEl.value : '';
+    if (!rentaCompVal || rentaCompVal === 'Menos de $850.000') { alert('Por favor indica el sueldo líquido de quien complementa (mínimo $850.000).'); return; }
     var cuandoEl = document.querySelector('input[name="cuando-'+prefix+'"]:checked');
     if (!cuandoEl) { alert('Por favor indica cuando piensas comprar.'); return; }
-    if (btn) { btn.disabled = true; btn.textContent = 'Cargando...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Calculando tu financiamiento...'; btn.style.opacity = '0.7'; btn.style.pointerEvents = 'none'; }
+    __formSubmitted = true;
     setHfStep(3);
     __lastFormData = { renta: r ? r.value : '', rentaComp: rentaCompVal || '', email: e, telefono: t };
-    await saveLead({nombre:n, telefono:t, email:e, renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, renta_complemento:rentaCompVal||'', cuando_comprar:cuandoEl.value, fuente:src, utm_source:_utm.source||'', utm_medium:_utm.medium||'', utm_campaign:_utm.campaign||''});
+    var _rt = rentaMidpoint(r?r.value:'') + rentaMidpoint(rentaCompVal||'');
+    var _fin = calcFinanciamiento(_rt, window.__ufValor || 41232);
+    await saveLead({nombre:n, telefono:t, email:e, renta:r?r.value:'', dicom:d.value, contrato:c.value, vivienda:viv.value, tiene_propiedad_vista:'si', comuna_propiedad:comunaPropVal, precio_propiedad_ok:precioLabel, complementa_renta:complementaRenta, renta_complemento:rentaCompVal||'', cuando_comprar:cuandoEl.value, fuente:src, utm_source:_utm.source||'', utm_medium:_utm.medium||'', utm_campaign:_utm.campaign||'', valor_vivienda_uf:_fin?Math.round(_fin.uf - _fin.pieUF):null, valor_financiamiento_uf:_fin?Math.round(_fin.credUF):null});
 
     // Show success with financing
     var content = document.getElementById('hf-content');
@@ -873,18 +857,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
       var rentaTotal = rentaMidpoint(rentaStr) + rentaMidpoint(rentaCompStr);
       var fin = calcFinanciamiento(rentaTotal, ufVal);
 
-      // Urgency banner
-      var urgBg = 'linear-gradient(135deg,#FFF8E1,#FFF3CD)';
-      var urgBorder = 'rgba(230,160,30,0.5)';
-      var urgColor = '#8B6914';
-      var html = '<div style="background:' + urgBg + ';border:2px solid ' + urgBorder + ';border-radius:14px;padding:18px 18px;margin:0 0 14px;text-align:center;width:100%">' +
-        '<p style="font-size:18px;font-weight:900;color:' + urgColor + ';margin:0 0 4px">⏳ Tu postulación aún no está completa</p>' +
-        '<p style="font-size:13px;color:#5A4A38;margin:0;font-weight:600">Revisa tu monto estimado y confirma para avanzar. Los cupos son limitados.</p>' +
-      '</div>';
+      var html = '';
 
       // Name + result heading
-      html += '<h3 style="font-size:17px;margin:0 0 10px;text-align:center;color:#1A150F">' +
-        (firstName ? firstName + ', este es tu resultado' : 'Este es tu resultado') + '</h3>';
+      html += '<h3 style="font-size:28px;font-weight:900;margin:0 0 18px;text-align:center;color:#1A150F">' +
+        (firstName ? '<strong>' + firstName + ', este es tu resultado</strong>' : '<strong>Este es tu resultado</strong>') + '</h3>';
 
       if (fin) {
         var maxUF = fin.uf;
@@ -892,18 +869,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
         var subsUF = Math.round(fin.subs);
         var subsClp = Math.round(fin.subsClp);
         var pieClp = Math.round(fin.pie);
-        var piePct = Math.round(fin.piePct * 100);
+        var pieUF = Math.round(fin.pieUF);
         var credClp = Math.round(fin.cred);
+        var credUF = Math.round(fin.credUF);
         var cuotaClp = Math.round(fin.cuota);
+        var netoUF = maxUF - pieUF;
+        var netoCLP = Math.round(netoUF * (maxCLP / maxUF));
 
         html += '<div class="fin-card">' +
-          '<p style="font-size:13px;font-weight:600;margin:0 0 6px;color:#5A4A38">Según tu renta, podrías optar a una vivienda de hasta:</p>' +
-          '<div class="fin-max">' + maxUF.toLocaleString('es-CL') + ' UF</div>' +
-          '<div class="fin-clp">~$' + maxCLP.toLocaleString('es-CL') + '</div>' +
+          '<p style="font-size:16px;font-weight:700;margin:0 0 8px;color:#5A4A38">Según tu renta y tu complemento, podrías optar a una vivienda de hasta:</p>' +
+          '<div class="fin-max">~$' + netoCLP.toLocaleString('es-CL') + '</div>' +
+          '<div class="fin-clp">' + netoUF.toLocaleString('es-CL') + ' UF</div>' +
+          '<div style="margin:12px auto 0;background:linear-gradient(135deg,#2DB89E,#25A08A);color:#fff;font-size:22px;font-weight:900;letter-spacing:1px;padding:10px 28px;border-radius:10px;display:inline-block;text-align:center">SIN PIE</div>' +
           '<div style="margin:14px 0 0;border-top:1px solid rgba(0,0,0,0.08);padding-top:12px">' +
-            '<div class="fin-row"><span class="fin-lbl">Subsidio DS120</span><span class="fin-val">' + subsUF + ' UF (~$' + subsClp.toLocaleString('es-CL') + ')</span></div>' +
-            '<div class="fin-row"><span class="fin-lbl">Pie minimo (' + piePct + '%)</span><span class="fin-val">$' + pieClp.toLocaleString('es-CL') + '</span></div>' +
-            '<div class="fin-row"><span class="fin-lbl">Credito hipotecario</span><span class="fin-val">$' + credClp.toLocaleString('es-CL') + '</span></div>' +
+            '<div class="fin-row"><span class="fin-lbl" style="font-weight:700">Subsidio DS120</span><span class="fin-val">' + subsUF + ' UF (~$' + subsClp.toLocaleString('es-CL') + ')</span></div>' +
+            '<div class="fin-row"><span class="fin-lbl" style="font-weight:700">Pie (5%)</span><span class="fin-val"><s style="opacity:0.45">$' + pieClp.toLocaleString('es-CL') + '</s> <span style="color:#2DB89E;font-weight:900">$0</span></span></div>' +
+            '<div class="fin-row"><span class="fin-lbl" style="font-weight:700">Crédito hipotecario</span><span class="fin-val">' + credUF + ' UF (~$' + credClp.toLocaleString('es-CL') + ')</span></div>' +
             '<div class="fin-row" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(0,0,0,0.08)"><span class="fin-lbl" style="font-weight:700">Cuota mensual estimada</span><span class="fin-cuota">$' + cuotaClp.toLocaleString('es-CL') + '</span></div>' +
           '</div>' +
         '</div>';
@@ -915,16 +896,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:f
 
       html += '<p style="font-size:11px;margin:8px 0 0;text-align:center;color:#9a8878">* Estimación referencial, sujeta a evaluación bancaria y aprobación de subsidio.</p>';
 
+      // Question + checkbox
+      html += '<div style="margin:20px 0 0;padding:20px;background:linear-gradient(135deg,#FFF8E8,#FFF3CD);border:2.5px solid #E6A01E;border-radius:14px;text-align:center">' +
+        '<p style="font-size:20px;font-weight:900;margin:0 0 4px;color:#7A5A00">¿Te sirve este monto?</p>' +
+        '<p style="font-size:14px;font-weight:900;margin:0 0 14px;color:#1a1a1a"><strong>SOLO AVANZA SI TE SIRVE, tenemos muchas solicitudes</strong></p>' +
+      '</div>';
+
       // Declaration checkbox
-      html += '<label class="fin-confirm" id="fin-confirm-' + uid + '" onclick="var cb=this.querySelector(\'input\');if(event.target!==cb){cb.checked=!cb.checked;cb.dispatchEvent(new Event(\'change\'));}">' +
-        '<input type="checkbox" onchange="toggleFinWA(\'' + uid + '\',this.checked)">' +
-        '<span>Estoy de acuerdo con el monto estimado y me comprometo a enviar mis documentos para la evaluación</span>' +
-      '</label>';
+      html += '<div class="fin-confirm" id="fin-confirm-' + uid + '" onclick="var cb=this.querySelector(\'input\');cb.checked=!cb.checked;cb.dispatchEvent(new Event(\'change\'));">' +
+        '<input type="checkbox" onchange="toggleFinWA(\'' + uid + '\',this.checked)" onclick="event.stopPropagation()">' +
+        '<span style="font-size:14px;font-weight:800">Sí, me sirve. Quiero avanzar con mi evaluación.</span>' +
+      '</div>';
 
       // WhatsApp button (visible but locked until checkbox)
       html += '<div id="fin-wa-' + uid + '" class="fin-wa-wrap locked">';
-      html += '<p style="font-size:14px;font-weight:700;text-align:center;margin:0 0 10px;' + (dark ? 'color:rgba(255,255,255,0.8)' : 'color:#1B3A6B') + '">Para avanzar con el proceso, envia tus documentos por WhatsApp 👇</p>';
-      html += '<a href="https://wa.me/' + waNum + '?text=Hola%2C%20escribo%20para%20enviar%20mis%20documentos%20y%20formalizar%20evaluaci%C3%B3n%20para%20comprar%20una%20vivienda" class="f-wa-btn wa-doc-btn" data-form="' + uid + '" target="_blank" rel="noopener" style="width:100%;justify-content:center">' + WA_SVG + ' Enviar mis documentos por WhatsApp</a>';
+      html += '<p style="font-size:15px;font-weight:800;text-align:center;margin:0 0 12px;color:#1B3A6B">Envia tus documentos por WhatsApp para formalizar 👇</p>';
+      html += '<a href="https://wa.me/' + waNum + '?text=Hola%2C%20escribo%20para%20enviar%20mis%20documentos%20y%20formalizar%20evaluaci%C3%B3n%20para%20comprar%20una%20vivienda" class="f-wa-btn wa-doc-btn" data-form="' + uid + '" target="_blank" rel="noopener" style="width:100%;justify-content:center">' + WA_SVG + ' Enviar mis documentos AHORA</a>';
       html += '</div>';
 
 
