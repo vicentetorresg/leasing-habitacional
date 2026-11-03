@@ -158,6 +158,7 @@ const Advisor = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterMonth, setFilterMonth] = useState('all');
   const [filterAdvisor, setFilterAdvisor] = useState('all');
+  const [filterPriority, setFilterPriority] = useState('all');
   const [ejecutivasList, setEjecutivasList] = useState<{ user_id: string; full_name: string }[]>([]);
   const [filterEjecutivas, setFilterEjecutivas] = useState<Set<string>>(new Set());
   const [projectsList, setProjectsList] = useState<string[]>([]);
@@ -278,6 +279,10 @@ const Advisor = () => {
     // Regular advisors only see their own leads
     if (!isAdminOrEjecutiva) {
       query = query.eq('advisor_id', user.id);
+    }
+    // Ejecutivas only see leads assigned to them
+    if (role === 'ejecutiva') {
+      query = query.eq('assigned_to', user.id);
     }
 
     const { data } = await query;
@@ -572,8 +577,11 @@ const Advisor = () => {
         const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
         return key === filterMonth;
       });
+  const priorityFilteredLeads = filterPriority === 'all'
+    ? monthFilteredLeads
+    : monthFilteredLeads.filter(l => (l.priority || 'media') === filterPriority);
   const visibleLeads = searchQuery.trim()
-    ? monthFilteredLeads.filter(l => {
+    ? priorityFilteredLeads.filter(l => {
         const q = searchQuery.toLowerCase();
         return (
           l.name.toLowerCase().includes(q) ||
@@ -581,7 +589,7 @@ const Advisor = () => {
           (l.email && l.email.toLowerCase().includes(q))
         );
       })
-    : monthFilteredLeads;
+    : priorityFilteredLeads;
   const kanbanStatuses = showArchived ? ADVISOR_STATUSES : VISIBLE_STATUSES;
 
   // Available months for filter
@@ -703,6 +711,8 @@ const Advisor = () => {
         ejecutivasList={ejecutivasList}
         filterEjecutivas={filterEjecutivas}
         setFilterEjecutivas={setFilterEjecutivas}
+        filterPriority={filterPriority}
+        setFilterPriority={setFilterPriority}
       />
         <div className="p-6 space-y-6">
           <h2 className="text-xl font-black text-foreground">📊 Resumen de Asesorías</h2>
@@ -863,6 +873,8 @@ const Advisor = () => {
         ejecutivasList={ejecutivasList}
         filterEjecutivas={filterEjecutivas}
         setFilterEjecutivas={setFilterEjecutivas}
+        filterPriority={filterPriority}
+        setFilterPriority={setFilterPriority}
       />
 
       {/* Kanban Board */}
@@ -1155,7 +1167,7 @@ const Advisor = () => {
       <Dialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>🗑️ ¿Estás seguro que quieres eliminar este lead?</DialogTitle>
+            <DialogTitle className="pr-8">🗑️ ¿Estás seguro que quieres eliminar este lead?</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
             Se eliminará permanentemente el lead y todos sus datos asociados. Esta acción no se puede deshacer.
@@ -1299,6 +1311,7 @@ function TopBar({
   role, signOut, displayName, email, roleLabel, showArchived, setShowArchived, showStats, setShowStats, leadsCount, searchQuery, setSearchQuery, allLeads, filterMonth, setFilterMonth, availableMonths,
   isAdminOrEjecutiva, advisors, filterAdvisor, setFilterAdvisor, onAddLead,
   ejecutivasList, filterEjecutivas, setFilterEjecutivas,
+  filterPriority, setFilterPriority,
 }: {
   role: string | null; signOut: () => void;
   displayName: string; email: string; roleLabel: string;
@@ -1316,6 +1329,7 @@ function TopBar({
   ejecutivasList?: { user_id: string; full_name: string }[];
   filterEjecutivas?: Set<string>;
   setFilterEjecutivas?: (v: Set<string>) => void;
+  filterPriority?: string; setFilterPriority?: (v: string) => void;
 }) {
   return (
     <div className="px-4 py-2 border-b border-border bg-card space-y-2">
@@ -1447,6 +1461,29 @@ function TopBar({
                     className={`px-2 py-0.5 rounded-full text-[10px] font-bold transition-colors ${active ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
                   >
                     {ej.full_name.split(' ')[0]}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+          {setFilterPriority && (
+            <div className="flex items-center gap-1 ml-1">
+              <span className="text-[10px] text-muted-foreground font-bold mr-0.5">Prioridad:</span>
+              {([
+                { key: 'all', label: 'Todas', color: '' },
+                { key: 'alta', label: 'Alta', color: 'bg-green-500' },
+                { key: 'media', label: 'Media', color: 'bg-gray-400' },
+                { key: 'baja', label: 'Baja', color: 'bg-red-500' },
+              ] as const).map(p => {
+                const active = filterPriority === p.key;
+                return (
+                  <button
+                    key={p.key}
+                    onClick={() => setFilterPriority(p.key)}
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-bold transition-colors flex items-center gap-1 ${active ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
+                  >
+                    {p.color && <span className={`inline-block w-2 h-2 rounded-full ${p.color}`} />}
+                    {p.label}
                   </button>
                 );
               })}
