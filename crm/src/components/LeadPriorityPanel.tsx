@@ -278,6 +278,7 @@ interface LeadPriorityPanelProps {
   onLeadUpdated?: () => void;
   onCallDialogOpenChange?: (open: boolean) => void;
   executiveEditorMode?: boolean;
+  onNoteDirtyChange?: (dirty: boolean) => void;
 }
 
 interface AdvisorProfile {
@@ -449,7 +450,7 @@ function InlineEditableText({ value, field, leadId, className, prefix, placehold
 
 const CAMILA_ID = "cc526f22-fe9e-4d84-abdf-4456780e030c";
 
-const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, onArchive, animationKey, onCallClick, onLeadUpdated, onCallDialogOpenChange, executiveEditorMode }: LeadPriorityPanelProps & { animationKey?: string }) => {
+const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, onArchive, animationKey, onCallClick, onLeadUpdated, onCallDialogOpenChange, executiveEditorMode, onNoteDirtyChange }: LeadPriorityPanelProps & { animationKey?: string }) => {
   const { user, role, fullName } = useAuth();
   const { isDemo } = useDemoMode();
   const [showDemoCall, setShowDemoCall] = useState(false);
@@ -519,6 +520,7 @@ const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, onArchive, an
   useEffect(() => {
     callNotesRef.current = '';
     setHasCallNotes(false);
+    onNoteDirtyChange?.(false);
     if (callNotesTextareaRef.current) callNotesTextareaRef.current.value = '';
   }, [lead?.id]);
 
@@ -607,6 +609,17 @@ const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, onArchive, an
       setEjecutivaName(found?.full_name ?? null);
       onLeadUpdated?.();
       toast.success('Ejecutiva actualizada');
+      // Sync to bot-ia whatsapp_conversations
+      if (lead.phone && found?.full_name) {
+        const botPhone = lead.phone.replace('+', '');
+        const BOT_SUPA = 'https://unptkiyggkuxtkzedluv.supabase.co';
+        const BOT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVucHRraXlnZ2t1eHRremVkbHV2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTMxMTU1OCwiZXhwIjoyMDk0ODg3NTU4fQ.vx78MEuZFpc57IC9I36rmLHUvi8XbWAs3nk-HiQca4E';
+        fetch(`${BOT_SUPA}/rest/v1/whatsapp_conversations?phone=eq.${botPhone}`, {
+          method: 'PATCH',
+          headers: { apikey: BOT_KEY, Authorization: `Bearer ${BOT_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+          body: JSON.stringify({ assigned_name: found.full_name }),
+        }).catch(() => {});
+      }
     } else {
       toast.error('Error al cambiar ejecutiva');
     }
@@ -618,6 +631,7 @@ const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, onArchive, an
     await onAction(lead.id, action, undefined, callNotesRef.current || undefined);
     callNotesRef.current = '';
     setHasCallNotes(false);
+    onNoteDirtyChange?.(false);
     if (callNotesTextareaRef.current) callNotesTextareaRef.current.value = '';
   };
 
@@ -632,6 +646,7 @@ const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, onArchive, an
     setSelectedAdvisor('');
     callNotesRef.current = '';
     setHasCallNotes(false);
+    onNoteDirtyChange?.(false);
     if (callNotesTextareaRef.current) callNotesTextareaRef.current.value = '';
   };
 
@@ -855,7 +870,7 @@ const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, onArchive, an
             onChange={e => {
               callNotesRef.current = e.target.value;
               const has = e.target.value.trim().length > 0;
-              if (has !== hasCallNotes) setHasCallNotes(has);
+              if (has !== hasCallNotes) { setHasCallNotes(has); onNoteDirtyChange?.(has); }
             }}
             placeholder="📝 Notas de la llamada..."
             rows={2}
@@ -874,6 +889,7 @@ const LeadPriorityPanel = ({ lead, isFlashing, onAction, onDelete, onArchive, an
                 });
                 callNotesRef.current = '';
                 setHasCallNotes(false);
+                onNoteDirtyChange?.(false);
                 if (callNotesTextareaRef.current) callNotesTextareaRef.current.value = '';
                 fetchNotes(lead.id);
               }}
@@ -1215,14 +1231,23 @@ function EditableLeadGrid({ lead, userRole, onSaved }: { lead: Lead; userRole?: 
       {renderField('source', 'Fuente', formatSource(lead.source))}
       <DetailItem label="Plataforma" value={(() => { const u = (lead.utm_source || '').toLowerCase(); const s = (lead.source || '').toLowerCase(); if (s.startsWith('dm tiktok')) return '💬 DM TikTok'; if (s.startsWith('dm meta')) return '💬 DM Meta'; if (u.includes('facebook') || u.includes('fb') || u.includes('ig') || u.includes('meta')) return '📘 META'; if (u.includes('tiktok') || u.includes('tt')) return '🎵 TikTok'; if (u.includes('google')) return '🔍 Google'; if (u) return u; if (s.startsWith('meta ads')) return '📘 META'; if (s.startsWith('tiktok ads')) return '🎵 TikTok'; return '🌐 Orgánico'; })()} />
       {(lead as any).arriendo && <DetailItem label="Arriendo actual" value={(lead as any).arriendo} />}
-      {(lead as any).contrato != null && <DetailItem label="Contrato indefinido" value={(lead as any).contrato === 'si' ? '✅ Sí' : '❌ No'} />}
+      {(lead as any).tipo_trabajador && <DetailItem label="Tipo trabajador" value={(lead as any).tipo_trabajador === 'dependiente' ? '👔 Dependiente' : '📋 Independiente'} />}
+      {(lead as any).tipo_trabajador === 'independiente' && (lead as any).tipo_ingreso_independiente && <DetailItem label="Tipo ingreso" value={{ boletas_honorarios: 'Boletas de honorarios', facturas_rut: 'Facturas con RUT', socio_empresa: 'Socio empresa' }[(lead as any).tipo_ingreso_independiente as string] || (lead as any).tipo_ingreso_independiente} />}
+      {(lead as any).tipo_trabajador === 'independiente' && (lead as any).antiguedad_independiente && <DetailItem label="Antigüedad indep." value={{ entre_1_2_anos: '1-2 años', mas_2_anos: 'Más de 2 años' }[(lead as any).antiguedad_independiente as string] || (lead as any).antiguedad_independiente} />}
+      {(lead as any).tipo_trabajador === 'independiente' && (lead as any).acredita_ingresos && <DetailItem label="Acredita ingresos" value={{ boletas_honorarios: 'Boletas de honorarios', dai_balance: 'DAI y balance' }[(lead as any).acredita_ingresos as string] || (lead as any).acredita_ingresos} />}
+      {(lead as any).tipo_trabajador !== 'independiente' && (lead as any).contrato != null && <DetailItem label="Contrato indefinido" value={(lead as any).contrato === 'si' ? '✅ Sí' : '❌ No'} />}
       {(lead as any).vivienda != null && <DetailItem label="Tiene vivienda" value={(lead as any).vivienda === 'si' ? '⚠️ Sí' : '✅ No'} />}
       {(lead as any).tiene_propiedad_vista && <DetailItem label="Propiedad vista" value={(lead as any).tiene_propiedad_vista === 'si' ? '✅ Sí' : '❌ No'} />}
       {(lead as any).comuna_propiedad && <DetailItem label="Dirección y comuna" value={(lead as any).comuna_propiedad} />}
       {(lead as any).precio_propiedad_ok && <DetailItem label="Valor propiedad" value={(lead as any).precio_propiedad_ok} />}
       {(lead as any).complementa_renta && <DetailItem label="Complementa renta" value={(lead as any).complementa_renta} />}
       {(lead as any).renta_complemento && <DetailItem label="Renta complemento" value={(lead as any).renta_complemento} />}
+      {lead.valor_vivienda_uf && <DetailItem label="Monto vivienda" value={<span className="text-blue-700 font-bold">{lead.valor_vivienda_uf} UF</span>} highlight />}
+      {lead.valor_financiamiento_uf && <DetailItem label="Financiamiento" value={<span className="text-green-700 font-bold">{lead.valor_financiamiento_uf} UF</span>} highlight />}
       {(lead as any).cuando_comprar && <DetailItem label="Cuándo comprar" value={(lead as any).cuando_comprar === 'lo_antes_posible' ? '🔥 Lo antes posible' : (lead as any).cuando_comprar === 'dentro_3_meses' ? 'Dentro de 3 meses' : (lead as any).cuando_comprar === 'mas_3_meses' ? 'En más de 3 meses' : (lead as any).cuando_comprar} />}
+      <DetailItem label="Aceptó monto" value={lead.acepto_monto ? <span className="text-green-600">✅ Aceptó monto</span> : <span className="text-yellow-500">⚠️ No validó monto</span>} />
+      <DetailItem label="Click WhatsApp" value={lead.click_whatsapp ? <span className="text-green-600">✅ Click WhatsApp</span> : <span className="text-red-400">❌ Sin click WhatsApp</span>} />
+      <DetailItem label="Click WA Mail" value={(lead as any).click_whatsapp_mail ? <span className="text-green-600">✅ Sí — {new Date((lead as any).click_whatsapp_mail).toLocaleString('es-CL', { timeZone: 'America/Santiago', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span> : <span className="text-gray-400">—</span>} />
       {renderField('email', 'Email', lead.email || '—')}
       {renderField('phone', 'Teléfono', lead.phone)}
     </div>
