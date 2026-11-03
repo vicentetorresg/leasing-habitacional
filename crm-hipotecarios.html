@@ -845,13 +845,29 @@ function saveNextTask() {
   api('leasing_leads?id=eq.' + openLeadId, { method: 'PATCH', body: { next_task: content || null }, prefer: 'return=representation' })
     .then(function(r) { return r.json(); })
     .then(function() {
-      btn.disabled = false; btn.textContent = 'Guardar';
+      btn.disabled = false;
+      btn.textContent = '✓ Guardado';
+      btn.style.background = 'linear-gradient(135deg,#22875a,#2da06a)';
+      input.style.borderColor = '#22875a';
+      setTimeout(function() {
+        btn.textContent = 'Guardar';
+        btn.style.background = 'linear-gradient(135deg,var(--teal),#30c9aa)';
+        input.style.borderColor = 'var(--beige-2)';
+      }, 2000);
       var l = findLead(openLeadId);
       if (l) l.next_task = content || null;
       renderTable();
       logAction(openLeadId, 'Actualizo proxima tarea', content ? content.substring(0, 80) : '(vacia)');
     })
-    .catch(function() { btn.disabled = false; btn.textContent = 'Guardar'; });
+    .catch(function() {
+      btn.disabled = false;
+      btn.textContent = '✗ Error';
+      btn.style.background = 'linear-gradient(135deg,#d93025,#e04030)';
+      setTimeout(function() {
+        btn.textContent = 'Guardar';
+        btn.style.background = 'linear-gradient(135deg,var(--teal),#30c9aa)';
+      }, 2000);
+    });
 }
 
 /* ═══════ DRAWER LOG ═══════ */
